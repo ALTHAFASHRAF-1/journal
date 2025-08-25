@@ -148,15 +148,48 @@
         }
         
         .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        
-        .logo-image {
-            height: 40px;
-            width: auto;
-        }
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo-image {
+    height: 40px;
+    width: auto;
+}
+
+.logo-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.logo-text {
+    line-height: 1;
+    margin: 0;
+}
+
+.logo-subtitle {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin: 0;
+    line-height: 1;
+    font-weight: 400;
+}
+
+@media (max-width: 768px) {
+    .logo-image {
+        height: 32px;
+    }
+    
+    .logo-text {
+        font-size: 1rem;
+    }
+    
+    .logo-subtitle {
+        font-size: 0.65rem;
+    }
+}
         
         .dropdown {
             position: relative;
@@ -239,14 +272,16 @@
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
-                        <div class="logo-container">
-                            <img src="https://dqdhiu.netlify.app/logo.jpg" alt="Islamic Insight Logo" class="logo-image">
-                            <h1 class="logo-text text-xl font-bold text-black-900 academic-title">
-                                ISLAMIC INSIGHT
-                            </h1>
-                        </div>
-                    </div>
-                </div>
+    <div class="logo-container">
+        <img src="https://dqdhiu.netlify.app/logo.jpg" alt="Islamic Insight Logo" class="logo-image">
+        <div class="logo-text-container">
+            <h1 class="logo-text text-xl font-bold text-black-900 academic-title">
+                ISLAMIC INSIGHT
+            </h1>
+            <p class="logo-subtitle">Journal of Islamic Studies</p>
+        </div>
+    </div>
+</div>
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:block">
@@ -377,12 +412,11 @@
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
                 <!-- Journal covers - Left side -->
-                <div class="lg:col-span-1 p-6 flex justify-center items-start bg-gray-50">
-                    <div class="flex flex-col sm:flex-row lg:flex-col gap-4">
-                        <img src="vol7no2.jpg" alt="Islamic Insight Journal Cover" class="w-32 h-40 object-cover rounded-lg shadow-md mx-auto">
-                        <img src="https://dqdhiu.netlify.app/logo.jpg" alt="Islamic Insight Logo" class="w-32 h-40 object-cover rounded-lg shadow-md mx-auto">
-                    </div>
-                </div>
+               <div class="lg:col-span-1 p-6 flex justify-center items-start bg-gray-50">
+    <div class="flex justify-center">
+        <img src="vol7no2.jpg" alt="Islamic Insight Journal Cover" class="w-40 h-52 object-cover rounded-lg shadow-md">
+    </div>
+</div>
                 
                 <!-- Content - Right side -->
                 <div class="lg:col-span-2 p-6">
