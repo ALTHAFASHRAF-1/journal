@@ -20,212 +20,321 @@
     <!-- JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
     
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: #1a202c;
-        }
-        
-        .academic-title {
-            font-family: 'Crimson Text', serif;
-        }
-        
-        .article-content h1, .article-content h2, .article-content h3 {
-            font-family: 'Crimson Text', serif;
-            font-weight: 600;
-        }
-        
-        .article-content p {
-            margin-bottom: 1rem;
-            text-align: justify;
-            line-height: 1.7;
-        }
-        
-        .article-content h2 {
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-            color: #2d3748;
-        }
-        
-        .article-content h3 {
-            margin-top: 1.5rem;
-            margin-bottom: 0.75rem;
-            font-size: 1.25rem;
-            color: #4a5568;
-        }
-        
-        .citation-box {
-            background: #f7fafc;
-            border-left: 4px solid #4299e1;
-            padding: 1rem;
-            margin: 1rem 0;
-            font-style: italic;
-        }
-        
-        @media (max-width: 768px) {
-            .article-content {
-                font-size: 0.95rem;
-            }
-            
-            .article-content h2 {
-                font-size: 1.3rem;
-            }
-            
-            .article-content h3 {
-                font-size: 1.1rem;
-            }
-        }
-        
-        .mobile-menu {
-            transition: all 0.3s ease;
-        }
-        
-        .article-card {
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        
-        .article-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        
-        .modal {
-            backdrop-filter: blur(4px);
-        }
-        
-        .search-container {
-            position: relative;
-        }
-        
-        .search-results {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            max-height: 400px;
-            overflow-y: auto;
-            z-index: 50;
-        }
-        
-        .badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-right: 0.5rem;
-            margin-bottom: 0.25rem;
-        }
-        
-        .badge-blue { background: #ebf8ff; color: #2b6cb0; }
-        .badge-green { background: #f0fff4; color: #2f855a; }
-        .badge-red { background: #fff5f5; color: #c53030; }
-        .badge-purple { background: #faf5ff; color: #6b46c1; }
-        .badge-yellow { background: #fffaf0; color: #b7791f; }
-        
-        .pdf-content {
-            display: none;
-        }
-        
-        .article-image {
-            height: 200px;
-            background-size: cover;
-            background-position: center;
-            border-radius: 8px 8px 0 0;
-        }
-        
-        .featured-article-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 8px 8px 0 0;
-        }
-        
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        
-        .logo-image {
-            height: 40px;
-            width: auto;
-        }
-        
-        .dropdown {
-            position: relative;
-        }
-        
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background-color: white;
-            min-width: 160px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            border-radius: 0.5rem;
-            z-index: 1000;
-            border: 1px solid #e2e8f0;
-        }
-        
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-        
-        .dropdown-content a {
-            color: #374151;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            transition: background-color 0.2s;
-        }
-        
-        .dropdown-content a:hover {
-            background-color: #f3f4f6;
-        }
-        
-        .dropdown-content a:first-child {
-            border-radius: 0.5rem 0.5rem 0 0;
-        }
-        
-        .dropdown-content a:last-child {
-            border-radius: 0 0 0.5rem 0.5rem;
-        }
-        
-        @media (max-width: 768px) {
-            .logo-image {
-                height: 32px;
-            }
-            
-            .logo-text {
-                font-size: 1rem;
-            }
-        }
-    </style>
+       <style>
+body {
+font-family: 'Inter', sans-serif;
+line-height: 1.6;
+color: #1a202c;
+}
+
+.academic-title {
+font-family: 'Crimson Text', serif;
+}
+
+.article-content h1, .article-content h2, .article-content h3 {
+font-family: 'Crimson Text', serif;
+font-weight: 600;
+}
+
+.article-content p {
+margin-bottom: 1rem;
+text-align: justify;
+line-height: 1.7;
+}
+
+.article-content h2 {
+margin-top: 2rem;
+margin-bottom: 1rem;
+font-size: 1.5rem;
+color: #2d3748;
+}
+
+.article-content h3 {
+margin-top: 1.5rem;
+margin-bottom: 0.75rem;
+font-size: 1.25rem;
+color: #4a5568;
+}
+
+.citation-box {
+background: #f7fafc;
+border-left: 4px solid #4299e1;
+padding: 1rem;
+margin: 1rem 0;
+font-style: italic;
+}
+
+@media (max-width: 768px) {
+.article-content {
+font-size: 0.95rem;
+}
+
+.article-content h2 {
+font-size: 1.3rem;
+}
+
+.article-content h3 {
+font-size: 1.1rem;
+}
+}
+
+.mobile-menu {
+transition: all 0.3s ease;
+}
+
+.article-card {
+transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.article-card:hover {
+transform: translateY(-2px);
+box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.modal {
+backdrop-filter: blur(4px);
+}
+
+.search-container {
+position: relative;
+}
+
+.search-results {
+position: absolute;
+top: 100%;
+left: 0;
+right: 0;
+background: white;
+border: 1px solid #e2e8f0;
+border-radius: 0.5rem;
+box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+max-height: 400px;
+overflow-y: auto;
+z-index: 50;
+}
+
+.badge {
+display: inline-block;
+padding: 0.25rem 0.75rem;
+border-radius: 9999px;
+font-size: 0.75rem;
+font-weight: 600;
+margin-right: 0.5rem;
+margin-bottom: 0.25rem;
+}
+
+.badge-blue { background: #ebf8ff; color: #2b6cb0; }
+.badge-green { background: #f0fff4; color: #2f855a; }
+.badge-red { background: #fff5f5; color: #c53030; }
+.badge-purple { background: #faf5ff; color: #6b46c1; }
+.badge-yellow { background: #fffaf0; color: #b7791f; }
+
+.pdf-content {
+display: none;
+}
+
+.article-image {
+height: 200px;
+background-size: cover;
+background-position: center;
+border-radius: 8px 8px 0 0;
+}
+
+.featured-article-image {
+width: 100%;
+height: 200px;
+object-fit: cover;
+border-radius: 8px 8px 0 0;
+}
+
+.logo-container {
+display: flex;
+align-items: center;
+gap: 0.75rem;
+}
+
+.logo-image {
+height: 40px;
+width: auto;
+}
+
+.logo-text-container {
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+}
+
+.logo-text {
+line-height: 1;
+margin: 0;
+}
+
+.logo-subtitle {
+font-size: 0.75rem;
+color: #6b7280;
+margin: 0;
+line-height: 1;
+font-weight: 400;
+}
+
+@media (max-width: 768px) {
+.logo-image {
+height: 32px;
+}
+
+.logo-text {
+font-size: 1rem;
+}
+
+.logo-subtitle {
+font-size: 0.65rem;
+}
+}
+
+.dropdown {
+position: relative;
+}
+
+.dropdown-content {
+display: none;
+position: absolute;
+top: 100%;
+right: 0;
+background-color: white;
+min-width: 160px;
+box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+border-radius: 0.5rem;
+z-index: 1000;
+border: 1px solid #e2e8f0;
+}
+
+.dropdown:hover .dropdown-content {
+display: block;
+}
+
+.dropdown-content a {
+color: #374151;
+padding: 12px 16px;
+text-decoration: none;
+display: block;
+transition: background-color 0.2s;
+}
+
+.dropdown-content a:hover {
+background-color: #f3f4f6;
+}
+
+.dropdown-content a:first-child {
+border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.dropdown-content a:last-child {
+border-radius: 0 0 0.5rem 0.5rem;
+}
+
+@media (max-width: 768px) {
+.logo-image {
+height: 32px;
+}
+
+.logo-text {
+font-size: 1rem;
+}
+}
+
+/* Add this to your existing <style> section */
+.current-issue-card {
+transition: all 0.3s ease;
+}
+
+.current-issue-card:hover {
+transform: translateY(-2px);
+box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.journal-cover-container {
+background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+@media (max-width: 1024px) {
+.journal-cover-container {
+background: #f8fafc;
+}
+}
+
+.current-issue-image-container {
+    width: 100%;
+    height: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.current-issue-image {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 1024px) {
+    .current-issue-image-container {
+        height: 200px;
+    }
+}        
+
+.current-issue-image-container {
+    width: 100%;
+    height: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.current-issue-image {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 1024px) {
+    .current-issue-image-container {
+        height: 200px;
+    }
+}    
+
+.nav-right {
+    margin-left: auto; 
+}
+
+</style>
 </head>
 
 <body class="bg-gray-50">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-sm sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <div class="logo-container">
-                            <img src="https://dqdhiu.netlify.app/logo.jpg" alt="Islamic Insight Logo" class="logo-image">
-                            <h1 class="logo-text text-xl font-bold text-black-900 academic-title">
-                                ISLAMIC INSIGHT
-                            </h1>
-                        </div>
-                    </div>
-                </div>
+<!-- Navigation -->
+<nav class="bg-white shadow-sm sticky top-0 z-40">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-16">
+<div class="flex items-center">
+<div class="flex-shrink-0">
+<div class="logo-container">
+<img src="https://dqdhiu.netlify.app/logo.jpg" alt="Islamic Insight Logo" class="logo-image">
+<div class="logo-text-container">
+<h1 class="logo-text text-xl font-bold text-black-900 academic-title">
+ISLAMIC INSIGHT
+</h1>
+<p class="logo-subtitle">Journal of Islamic Studies</p>
+</div>
+</div>
+</div>
+</div>
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:block">
