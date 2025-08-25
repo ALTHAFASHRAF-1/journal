@@ -208,6 +208,27 @@
                 font-size: 1rem;
             }
         }
+
+        /* Add this to your existing <style> section */
+.current-issue-card {
+    transition: all 0.3s ease;
+}
+
+.current-issue-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.journal-cover-container {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+@media (max-width: 1024px) {
+    .journal-cover-container {
+        background: #f8fafc;
+    }
+}
+        
     </style>
 </head>
 
@@ -345,60 +366,49 @@
     </div>
 </section>
 
-    <!-- Combined Publications and Featured Articles Section -->
-    <section id="publications" class="py-12 sm:py-16 lg:py-20 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Grid container for desktop side-by-side layout -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-                
-               
-
 <!-- Current Issue Section -->
-<section id="publications" class="py-12 sm:py-16 lg:py-20 bg-gray-50">
+<section id="featured" class="py-12 sm:py-16 lg:py-20 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Current Issue Section -->
-        <div id="featured">
-            <div class="text-center mb-8">
-                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold academic-title text-gray-900 mb-4">
-                    Current Issue
-                </h2>
-            </div>
-            
-            <!-- Horizontal layout for current issue -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
-                    <!-- Journal covers - Left side -->
-                    <div class="lg:col-span-1 p-6 flex justify-center items-start">
-                        <div class="flex flex-col sm:flex-row lg:flex-col gap-4">
-                            <img src="vol7no2.jpg" alt="Islamic Insight Journal Cover" class="w-32 h-40 object-cover rounded-lg shadow-md">
-                            <img src="https://dqdhiu.netlify.app/logo.jpg" alt="Islamic Insight Logo" class="w-32 h-40 object-cover rounded-lg shadow-md">
-                        </div>
+        <div class="text-center mb-8">
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold academic-title text-gray-900 mb-4">
+                Current Issue
+            </h2>
+        </div>
+        
+        <!-- Horizontal layout for current issue -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
+                <!-- Journal covers - Left side -->
+                <div class="lg:col-span-1 p-6 flex justify-center items-start bg-gray-50">
+                    <div class="flex flex-col sm:flex-row lg:flex-col gap-4">
+                        <img src="vol7no2.jpg" alt="Islamic Insight Journal Cover" class="w-32 h-40 object-cover rounded-lg shadow-md mx-auto">
+                        <img src="https://dqdhiu.netlify.app/logo.jpg" alt="Islamic Insight Logo" class="w-32 h-40 object-cover rounded-lg shadow-md mx-auto">
+                    </div>
+                </div>
+                
+                <!-- Content - Right side -->
+                <div class="lg:col-span-2 p-6">
+                    <h3 class="text-xl sm:text-2xl font-semibold academic-title text-gray-900 mb-4">
+                        Vol. 7 No. 2 (2024): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES
+                    </h3>
+                    
+                    <p class="text-gray-700 mb-6 leading-relaxed text-justify">
+                        Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world. It welcomes original scholarship across various disciplines, encompassing textual analysis of the Quran and Hadith, Islamic legal and theological discourse, philosophy, comparative religion, social sciences, and the historical and cultural experiences of Muslims. Notably, IIJIS employs a rigorous double-blind peer review process to ensure the quality of published works.
+                    </p>
+                    
+                    <div class="mb-6">
+                        <p class="text-sm text-gray-600">
+                            <i class="far fa-calendar-alt mr-2"></i><strong>Published:</strong> 2024-12-01
+                        </p>
                     </div>
                     
-                    <!-- Content - Right side -->
-                    <div class="lg:col-span-2 p-6">
-                        <h3 class="text-xl sm:text-2xl font-semibold academic-title text-gray-900 mb-4">
-                            Vol. 7 No. 2 (2024): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES
-                        </h3>
-                        
-                        <p class="text-gray-700 mb-6 leading-relaxed">
-                            Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world. It welcomes original scholarship across various disciplines, encompassing textual analysis of the Quran and Hadith, Islamic legal and theological discourse, philosophy, comparative religion, social sciences, and the historical and cultural experiences of Muslims. Notably, IIJIS employs a rigorous double-blind peer review process to ensure the quality of published works.
-                        </p>
-                        
-                        <div class="mb-6">
-                            <p class="text-sm text-gray-600">
-                                <strong>Published:</strong> 2024-12-01
-                            </p>
-                        </div>
-                        
-                        <div class="flex justify-between items-center">
-                            <button 
-                                onclick="openArticle(2)" 
-                                class="text-blue-900 hover:text-blue-700 font-medium transition-colors"
-                            >
-                                Read More <i class="fas fa-arrow-right ml-1"></i>
-                            </button>
-                        </div>
+                    <div class="flex justify-between items-center">
+                        <button 
+                            onclick="openArticle(2)" 
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                        >
+                            View Articles <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -406,54 +416,69 @@
     </div>
 </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="py-12 sm:py-16 lg:py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold academic-title text-gray-900 mb-4">
-                   Contact Us
-                </h2>
-                
-            </div>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <div>
-                   
+   <!-- Contact Section -->
+<section id="contact" class="py-12 sm:py-16 lg:py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold academic-title text-gray-900 mb-4">
+                Contact Us
+            </h2>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div>
+                <div class="space-y-6">
+                    <div class="flex items-start space-x-4">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-map-marker-alt text-blue-600 text-xl mt-1"></i>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-900 mb-2">Address</p>
+                            <p class="text-gray-600">
+                                Editor, Islamic Insight Journal of Islamic Studies, Darul Huda Islamic
+                                University, Chemmad, P.B.NO. 3, Tirurangadi (PO), Malappuram (Dt.),
+                                676306 (PIN), Kerala, India.
+                            </p>
+                        </div>
+                    </div>
                     
-                    <div class="space-y-4">
-                        <div class="flex items-start">
-                           
-                            <div>
-                                <p class="font-medium text-gray-900">Address</p>
-                                <p class="text-gray-600">Editor, Islamic Insight Journal of Islamic Studies, Darul Huda Islamic
-                    University, Chemmad, P.B.NO. 3, Tirurangadi (PO), Malappuram (Dt.),
-                    676306 (PIN), Kerala, India.</p>
-                            </div>
+                    <div class="flex items-start space-x-4">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-envelope text-blue-600 text-xl mt-1"></i>
                         </div>
-                        <div class="flex items-start">
-                           
-                            <div>
-                                <p class="font-medium text-gray-900">Email</p>
-                                <p class="text-gray-600">islamicinsight@dhiu.in</p>
-                            </div>
+                        <div>
+                            <p class="font-medium text-gray-900 mb-2">Email</p>
+                            <p class="text-gray-600">islamicinsight@dhiu.in</p>
                         </div>
-                        
-                        <div class="flex items-start">
-                            
-                            <div>
-                                <p class="font-medium text-gray-900">Website</p>
-                                <p class="text-gray-600">www.islamicinsight.in</p>
-                            </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-globe text-blue-600 text-xl mt-1"></i>
                         </div>
-                        
-                        
+                        <div>
+                            <p class="font-medium text-gray-900 mb-2">Website</p>
+                            <p class="text-gray-600">www.islamicinsight.in</p>
+                        </div>
                     </div>
                 </div>
-                
-                
+            </div>
+            
+            <div class="bg-gray-50 rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Get in Touch</h3>
+                <p class="text-gray-600 mb-4">
+                    For submissions, inquiries, or collaboration opportunities, please reach out to us using the contact information provided.
+                </p>
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                    <p class="text-sm text-blue-800">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        We welcome original research articles and scholarly contributions in Islamic studies.
+                    </p>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
 
     <!-- Footer -->
