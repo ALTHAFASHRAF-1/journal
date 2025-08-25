@@ -353,7 +353,7 @@
                 
                
 
-                <!-- Current Issue Section -->
+<!-- Current Issue Section -->
 <section id="publications" class="py-12 sm:py-16 lg:py-20 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Current Issue Section -->
@@ -364,8 +364,43 @@
                 </h2>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="featured-articles-grid">
-                <!-- Featured articles will be populated by JavaScript -->
+            <!-- Horizontal layout for current issue -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
+                    <!-- Journal covers - Left side -->
+                    <div class="lg:col-span-1 p-6 flex justify-center items-start">
+                        <div class="flex flex-col sm:flex-row lg:flex-col gap-4">
+                            <img src="vol7no2.jpg" alt="Islamic Insight Journal Cover" class="w-32 h-40 object-cover rounded-lg shadow-md">
+                            <img src="https://dqdhiu.netlify.app/logo.jpg" alt="Islamic Insight Logo" class="w-32 h-40 object-cover rounded-lg shadow-md">
+                        </div>
+                    </div>
+                    
+                    <!-- Content - Right side -->
+                    <div class="lg:col-span-2 p-6">
+                        <h3 class="text-xl sm:text-2xl font-semibold academic-title text-gray-900 mb-4">
+                            Vol. 7 No. 2 (2024): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES
+                        </h3>
+                        
+                        <p class="text-gray-700 mb-6 leading-relaxed">
+                            Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world. It welcomes original scholarship across various disciplines, encompassing textual analysis of the Quran and Hadith, Islamic legal and theological discourse, philosophy, comparative religion, social sciences, and the historical and cultural experiences of Muslims. Notably, IIJIS employs a rigorous double-blind peer review process to ensure the quality of published works.
+                        </p>
+                        
+                        <div class="mb-6">
+                            <p class="text-sm text-gray-600">
+                                <strong>Published:</strong> 2024-12-01
+                            </p>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <button 
+                                onclick="openArticle(2)" 
+                                class="text-blue-900 hover:text-blue-700 font-medium transition-colors"
+                            >
+                                Read More <i class="fas fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -541,17 +576,16 @@
         const closeModal = document.getElementById('close-modal');
         const contactForm = document.getElementById('contact-form');
 
-        // Initialize the application
+      // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
-    renderFeaturedArticles();
-    // Remove renderPublications() call since we're not using the separate publications grid anymore
+    // Remove renderFeaturedArticles() since we're using static HTML now
     setupEventListeners();
 });
 
-// Comment out or remove the renderPublications function since it's not needed anymore
+// Comment out the renderFeaturedArticles function since we're using static HTML
 /*
-function renderPublications() {
-    // This function is no longer needed
+function renderFeaturedArticles() {
+    // This function is no longer needed for the current issue section
 }
 */
 
