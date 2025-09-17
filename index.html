@@ -232,17 +232,6 @@ border-radius: 0.5rem 0.5rem 0 0;
 border-radius: 0 0 0.5rem 0.5rem;
 }
 
-@media (max-width: 768px) {
-.logo-image {
-height: 32px;
-}
-
-.logo-text {
-font-size: 1rem;
-}
-}
-
-/* Add this to your existing <style> section */
 .current-issue-card {
 transition: all 0.3s ease;
 }
@@ -286,34 +275,241 @@ background: #f8fafc;
     }
 }        
 
-.current-issue-image-container {
-    width: 100%;
-    height: 280px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.current-issue-image {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-@media (max-width: 1024px) {
-    .current-issue-image-container {
-        height: 200px;
-    }
-}    
-
 .nav-right {
     margin-left: auto;
 }
 
+/* Enhanced Search Styles */
+.search-icon {
+    color: #2563eb;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+}
+
+.search-icon:hover {
+    color: #1d4ed8;
+    background-color: #f3f4f6;
+}
+
+.navbar-search-container {
+    position: relative;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-search-input {
+    width: 0;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.875rem;
+}
+
+.navbar-search-input.expanded {
+    width: 280px;
+    opacity: 1;
+    padding: 0.75rem 1rem;
+    border: 2px solid #3b82f6;
+    border-radius: 0.5rem;
+    background: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.navbar-search-results {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    max-height: 350px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+/* Mobile Search Enhancements */
+.mobile-nav-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.mobile-search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.mobile-search-input {
+    width: 0;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.875rem;
+}
+
+.mobile-search-input.expanded {
+    width: 200px;
+    opacity: 1;
+    padding: 0.625rem 0.875rem;
+    border: 2px solid #3b82f6;
+    border-radius: 0.5rem;
+    background: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    position: relative;
+    right: 0;
+    top: 0;
+    transform: none;
+}
+
+.mobile-search-results {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    left: -120px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+/* Responsive Search Adjustments */
+@media (max-width: 1200px) {
+    .navbar-search-input.expanded {
+        width: 240px;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-search-input.expanded {
+        width: 180px;
+    }
+    
+    .mobile-search-results {
+        left: -100px;
+    }
+}
+
+@media (max-width: 640px) {
+    .mobile-search-input.expanded {
+        width: 160px;
+    }
+    
+    .mobile-search-results {
+        left: -80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .mobile-search-input.expanded {
+        width: 140px;
+    }
+    
+    .mobile-search-results {
+        left: -60px;
+    }
+}
+
+/* Hide navigation items when search is expanded */
+.nav-items.hidden-for-search {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+/* Search Results Styling */
+.search-result-item {
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid #f3f4f6;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.search-result-item:hover {
+    background-color: #f8fafc;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+    border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.search-result-item:first-child {
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+/* Mobile Menu Button Enhancement */
+.mobile-menu-btn {
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+}
+
+.mobile-menu-btn:hover {
+    background-color: #f3f4f6;
+}
+
+/* Combined Home and About Section */
+.hero-about-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+    .desktop-hero-about {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: calc(100vh - 4rem);
+        align-items: stretch;
+    }
+}
+
+@media (max-width: 1023px) {
+    .mobile-hero-about .hero-section {
+        min-height: auto;
+        padding: 3rem 0;
+    }
+}
+
+/* Enhanced Responsive Typography */
+@media (max-width: 768px) {
+    .logo-text {
+        font-size: 0.9rem;
+    }
+    
+    .logo-subtitle {
+        font-size: 0.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-text {
+        font-size: 0.85rem;
+    }
+    
+    .logo-subtitle {
+        font-size: 0.55rem;
+    }
+}
 </style>
 </head>
 
@@ -338,7 +534,9 @@ ISLAMIC INSIGHT
 
 <!-- Desktop Navigation - Moved to right -->
 <div class="hidden md:block nav-right">
-<div class="flex items-baseline space-x-8">
+<div class="flex items-center space-x-6">
+<!-- Navigation Items -->
+<div id="nav-items" class="nav-items flex items-baseline space-x-6">
 <a href="#home" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Home</a>
 <a href="#publications" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Call For Paper</a>
 <a href="#featured" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Current Issue</a>
@@ -351,13 +549,45 @@ ISLAMIC INSIGHT
 </div>
 </div>
 </div>
+
+<!-- Search Container -->
+<div class="navbar-search-container">
+<input
+type="text"
+id="navbar-search-input"
+placeholder="Search articles, authors..."
+class="navbar-search-input"
+>
+<button id="search-toggle-btn" class="search-icon">
+<i id="search-icon" class="fas fa-search text-lg"></i>
+</button>
+<div id="navbar-search-results" class="navbar-search-results hidden"></div>
+</div>
+</div>
 </div>
 
-<!-- Mobile menu button - Moved to right -->
+<!-- Mobile menu button and search - Moved to right -->
 <div class="md:hidden nav-right">
-<button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-900 focus:outline-none">
-<i class="fas fa-bars text-xl"></i>
-</button>
+    <div class="mobile-nav-container">
+        <!-- Mobile Search Container -->
+        <div class="mobile-search-container">
+            <input
+                type="text"
+                id="mobile-search-input"
+                placeholder="Search..."
+                class="mobile-search-input"
+            >
+            <button id="mobile-search-toggle-btn" class="search-icon">
+                <i id="mobile-search-icon" class="fas fa-search text-lg"></i>
+            </button>
+            <div id="mobile-search-results" class="mobile-search-results hidden"></div>
+        </div>
+        
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="mobile-menu-btn text-gray-700 hover:text-blue-900 focus:outline-none">
+            <i class="fas fa-bars text-lg"></i>
+        </button>
+    </div>
 </div>
 </div>
 </div>
@@ -374,85 +604,104 @@ ISLAMIC INSIGHT
 <a href="#contact" class="block px-3 py-2 pl-6 text-sm font-medium text-gray-600 hover:text-blue-900 transition-colors">Contact</a>
 </div>
 </div>
+</nav>
 
-<!-- Home Section -->
-<section id="home" class="bg-gradient-to-br from-blue-900 to-blue-800 text-white py-16 sm:py-20 lg:py-24">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-<div class="text-center">
-<h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold academic-title mb-6">
-Islamic Insight Journal
-</h2>
-<p class="text-lg sm:text-xl lg:text-2xl mb-8 max-w-3xl mx-auto">
-International, peer-reviewed cross-disciplinary journal
-</p>
+<!-- Combined Home and About Section -->
+<section id="home" class="hero-about-container">
+<!-- Desktop Version: Side by side -->
+<div class="desktop-hero-about hidden lg:grid">
+    <!-- Left Side: Hero Content -->
+    <div class="bg-gradient-to-br from-blue-900 to-blue-800 text-white flex items-center justify-center">
+        <div class="text-center px-6 py-8">
+            <h2 class="text-3xl xl:text-4xl font-bold academic-title mb-4">
+                Islamic Insight Journal
+            </h2>
+            <p class="text-lg xl:text-xl mb-6 max-w-md mx-auto">
+                International, peer-reviewed cross-disciplinary journal
+            </p>
+        </div>
+    </div>
+    
+    <!-- Right Side: About Content -->
+    <div class="bg-white flex items-center justify-center p-6">
+        <div class="max-w-lg">
+            <h3 class="text-2xl xl:text-3xl font-bold academic-title text-gray-900 mb-6 text-center">
+                About Our Journal
+            </h3>
+            <h4 class="text-lg xl:text-xl font-semibold academic-title text-gray-900 mb-4">
+                Islamic Insight
+            </h4>
+            <p class="text-gray-700 text-sm xl:text-base leading-relaxed text-justify">
+                Islamic Insight is an international, peer-reviewed cross-disciplinary journal dedicated to publishing original scholarship of exceptional quality on all aspects of Islam and the Muslim world. The journal provides a forum for high quality research works that contribute substantively to contemporary discourse in Islamic studies in all its richness and complexities.
+            </p>
+        </div>
+    </div>
+</div>
 
-<!-- Search Bar -->
-<div class="max-w-md mx-auto search-container">
-<div class="relative">
-<input
-type="text"
-id="search-input"
-placeholder="Search articles, authors, keywords..."
-class="w-full px-4 py-3 pl-10 pr-4 text-gray-900 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
->
-<div class="absolute inset-y-0 left-0 pl-3 flex items-center">
-<i class="fas fa-search text-gray-400"></i>
-</div>
-</div>
-<div id="search-results" class="search-results hidden"></div>
-</div>
-</div>
+<!-- Mobile/Tablet Version: Stacked -->
+<div class="mobile-hero-about lg:hidden">
+    <!-- Hero Section -->
+    <div class="hero-section bg-gradient-to-br from-blue-900 to-blue-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="text-center">
+                <h2 class="text-3xl sm:text-4xl font-bold academic-title mb-4">
+                    Islamic Insight Journal
+                </h2>
+                <p class="text-lg sm:text-xl mb-6 max-w-3xl mx-auto">
+                    International, peer-reviewed cross-disciplinary journal
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- About Section -->
+    <div class="bg-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-8">
+                <h3 class="text-2xl sm:text-3xl font-bold academic-title text-gray-900 mb-4">
+                    About Our Journal
+                </h3>
+            </div>
+            <div class="max-w-4xl mx-auto">
+                <h4 class="text-xl font-semibold academic-title text-gray-900 mb-4">
+                    Islamic Insight
+                </h4>
+                <p class="text-gray-700 mb-6 leading-relaxed text-justify">
+                    Islamic Insight is an international, peer-reviewed cross-disciplinary journal dedicated to publishing original scholarship of exceptional quality on all aspects of Islam and the Muslim world. Inasmuch as it caters for a robust scholarly engagement with Islam in light of cutting-edge developments in the humanities and social sciences, the journal provides a forum for high quality research works that contribute substantively to contemporary discourse in Islamic studies in all its richness and complexities. The journal is very keen on articles, research communications, and book reviews that deal with Islam and the Islamic tradition in its many facets and manifestations and exploit perspectives and analytics that straddle disciplines and frontiers of knowledge.
+                </p>
+            </div>
+        </div>
+    </div>
 </div>
 </section>
 
-<!-- About Section -->
-<section id="about" class="py-12 sm:py-16 lg:py-20 bg-white">
+<!-- Call for Papers Section -->
+<section id="publications" class="py-12 sm:py-16 lg:py-20 bg-gray-50">
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-<div class="text-center mb-12">
-<h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold academic-title text-gray-900 mb-4">
-About Our Journal
-</h2>
+<div class="max-w-4xl mx-auto">
+<div class="bg-blue-50 border-l-4 border-blue-500 rounded-lg p-8">
+<div class="flex items-center mb-6">
+<i class="fas fa-bullhorn text-blue-500 text-2xl mr-4"></i>
+<h2 class="text-2xl sm:text-3xl font-bold academic-title text-blue-900">Call For Papers</h2>
 </div>
-
-<!-- Main content grid: 70% About + 30% Call for Papers -->
-<div class="grid grid-cols-1 lg:grid-cols-10 gap-8">
-<!-- About content - 70% on desktop -->
-<div class="lg:col-span-7">
-<h3 class="text-xl sm:text-2xl font-semibold academic-title text-gray-900 mb-6">
-Islamic Insight
-</h3>
-<p class="text-gray-700 mb-6">
-Islamic Insight is an international, peer-reviewed cross-disciplinary journal dedicated to publishing original scholarship of exceptional quality on all aspects of Islam and the Muslim world. Inasmuch as it caters for a robust scholarly engagement with Islam in light of cutting-edge developments in the humanities and social sciences, the journal provides a forum for high quality research works that contribute substantively to contemporary discourse in Islamic studies in all its richness and complexities. The journal is very keen on articles, research communications, and book reviews that deal
-with Islam and the Islamic tradition in its many facets and manifestations and exploit perspectives and analytics that straddle disciplines and frontiers of knowledge.
+<p class="text-gray-700 mb-6 leading-relaxed">
+We are pleased to invite original research articles for the upcoming issue of Islamic Insight, a biannual peer-reviewed journal published by the Kulliyyah of Qur'an and Sunnah, Darul Huda Islamic University, Kerala, India. Islamic Insight welcomes high-quality, interdisciplinary research in areas related to Islamic revealed knowledge and the Muslim world.
 </p>
-</div>
-
-<!-- Call for Papers notification - 30% on desktop -->
-<div class="lg:col-span-3">
-<div class="bg-blue-50 border-l-4 border-blue-500 rounded-lg p-6 sticky top-24">
-<div class="flex items-center mb-4">
-<i class="fas fa-bullhorn text-blue-500 text-xl mr-3"></i>
-<h4 class="text-lg font-semibold text-blue-900">Call For Papers</h4>
-</div>
-<p class="text-sm text-gray-700 mb-4">
-We are pleased to invite original research articles for the upcoming issue of Islamic Insight...
-</p>
-<div class="text-xs text-gray-600 mb-3">
-<i class="far fa-calendar-alt mr-1"></i> Deadline: Mid-June 2025
+<div class="text-sm text-gray-600 mb-6">
+<i class="far fa-calendar-alt mr-2"></i> <strong>Deadline:</strong> Mid-June 2025
 </div>
 <button 
 onclick="openArticle(1)" 
-class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded transition-colors">
-Read More
+class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
+Read More Details <i class="fas fa-arrow-right ml-2"></i>
 </button>
-</div>
 </div>
 </div>
 </div>
 </section>
 
 <!-- Current Issue Section -->
-<section id="featured" class="py-12 sm:py-16 lg:py-20 bg-gray-50">
+<section id="featured" class="py-12 sm:py-16 lg:py-20 bg-white">
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 <div class="text-center mb-8">
 <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold academic-title text-gray-900 mb-4">
@@ -503,7 +752,7 @@ View Articles <i class="fas fa-arrow-right ml-2"></i>
 
 
 <!-- Footer -->
-<footer class="bg-gray-900 text-white py-8">
+<footer id="contact" class="bg-gray-900 text-white py-8">
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 <!-- Left side - Contact Info -->
@@ -622,16 +871,12 @@ imageUrl: "vol7no2.jpg",
 },
 ];
 
-
-
 // Combine all articles for search functionality
 const allArticles = [...featuredArticles, ...publications];
 
 // DOM Elements
 const featuredArticlesGrid = document.getElementById('featured-articles-grid');
 const publicationsGrid = document.getElementById('publications-grid');
-const searchInput = document.getElementById('search-input');
-const searchResults = document.getElementById('search-results');
 const mobileMenuBtn = document.getElementById('mobile-menu-btn');
 const mobileMenu = document.getElementById('mobile-menu');
 const articleModal = document.getElementById('article-modal');
@@ -639,127 +884,27 @@ const modalContent = document.getElementById('modal-content');
 const closeModal = document.getElementById('close-modal');
 const contactForm = document.getElementById('contact-form');
 
+// Enhanced search elements
+const searchToggleBtn = document.getElementById('search-toggle-btn');
+const navbarSearchInput = document.getElementById('navbar-search-input');
+const navbarSearchResults = document.getElementById('navbar-search-results');
+const searchIcon = document.getElementById('search-icon');
+const navItems = document.getElementById('nav-items');
+
+// Mobile search elements
+const mobileSearchToggleBtn = document.getElementById('mobile-search-toggle-btn');
+const mobileSearchInput = document.getElementById('mobile-search-input');
+const mobileSearchResults = document.getElementById('mobile-search-results');
+const mobileSearchIcon = document.getElementById('mobile-search-icon');
+
+// Search state tracking
+let isDesktopSearchExpanded = false;
+let isMobileSearchExpanded = false;
+
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
-// Remove renderFeaturedArticles() since we're using static HTML now
 setupEventListeners();
 });
-
-// Comment out the renderFeaturedArticles function since we're using static HTML
-/*
-function renderFeaturedArticles() {
-   // This function is no longer needed for the current issue section
-}
-*/
-
-// Render featured articles with images
-function renderFeaturedArticles() {
-featuredArticlesGrid.innerHTML = '';
-
-featuredArticles.forEach(article => {
-const articleCard = createFeaturedArticleCard(article);
-featuredArticlesGrid.appendChild(articleCard);
-});
-}
-
-// Render publications without images
-function renderPublications() {
-publicationsGrid.innerHTML = '';
-
-publications.forEach(article => {
-const articleCard = createPublicationCard(article);
-publicationsGrid.appendChild(articleCard);
-});
-}
-
-// Create featured article card with image
-function createFeaturedArticleCard(article) {
-const div = document.createElement('div');
-div.className = 'article-card bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden';
-
-const badgeColors = ['badge-blue', 'badge-green', 'badge-red', 'badge-purple', 'badge-yellow'];
-const categoryBadges = article.categories.map((category, index) => 
-`<span class="badge ${badgeColors[index % badgeColors.length]}">${category}</span>`
-).join('');
-
-div.innerHTML = `
-               <div class="article-image" style="background-image: url('${article.imageUrl}');"></div>
-               <div class="p-6">
-                   <div class="mb-4">
-                       ${categoryBadges}
-                   </div>
-                   <h3 class="text-xl font-semibold academic-title text-gray-900 mb-3 line-clamp-2">
-                       ${article.title}
-                   </h3>
-                   <p class="text-sm text-gray-600 mb-3">
-                       <i class="far fa-calendar-alt"></i> ${article.date}
-                   </p>
-                   <p class="text-gray-700 mb-4 line-clamp-3">
-                       ${article.abstract}
-                   </p>
-                   <div class="flex flex-wrap gap-1 mb-4">
-                       ${article.keywords.slice(0, 3).map(keyword => 
-                           `<span class="text-xs bg-gray-100 text-gray-600 rounded-full px-2 py-1">${keyword}</span>`
-                       ).join('')}
-                   </div>
-                   <div class="flex justify-between items-center">
-                       <button 
-                           onclick="openArticle(${article.id})" 
-                           class="text-blue-900 hover:text-blue-700 font-medium transition-colors"
-                       >
-                           Read More <i class="fas fa-arrow-right ml-1"></i>
-                       </button>
-                       
-                   </div>
-               </div>
-           `;
-
-return div;
-}
-
-// Create publication card without image
-function createPublicationCard(article) {
-const div = document.createElement('div');
-div.className = 'article-card bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden';
-
-const badgeColors = ['badge-blue', 'badge-green', 'badge-red', 'badge-purple', 'badge-yellow'];
-const categoryBadges = article.categories.map((category, index) => 
-`<span class="badge ${badgeColors[index % badgeColors.length]}">${category}</span>`
-).join('');
-
-div.innerHTML = `
-               <div class="p-6">
-                   <div class="mb-4">
-                       ${categoryBadges}
-                   </div>
-                   <h3 class="text-xl font-semibold academic-title text-gray-900 mb-3 line-clamp-2">
-                       ${article.title}
-                   </h3>
-                   <p class="text-sm text-gray-600 mb-3">
-                        <i class="far fa-calendar-alt"></i> ${article.date}
-                   </p>
-                   <p class="text-gray-700 mb-4 line-clamp-3">
-                       ${article.abstract}
-                   </p>
-                   <div class="flex flex-wrap gap-1 mb-4">
-                       ${article.keywords.slice(0, 3).map(keyword => 
-                           `<span class="text-xs bg-gray-100 text-gray-600 rounded-full px-2 py-1">${keyword}</span>`
-                       ).join('')}
-                   </div>
-                   <div class="flex justify-between items-center">
-                       <button 
-                           onclick="openArticle(${article.id})" 
-                           class="text-blue-900 hover:text-blue-700 font-medium transition-colors"
-                       >
-                           Read More <i class="fas fa-arrow-right ml-1"></i>
-                       </button>
-                       
-                   </div>
-               </div>
-           `;
-
-return div;
-}
 
 // Setup event listeners
 function setupEventListeners() {
@@ -768,18 +913,53 @@ mobileMenuBtn.addEventListener('click', function() {
 mobileMenu.classList.toggle('hidden');
 });
 
-// Search functionality
-searchInput.addEventListener('input', handleSearch);
-searchInput.addEventListener('focus', function() {
-if (searchInput.value.trim()) {
-searchResults.classList.remove('hidden');
+// Desktop navbar search functionality
+searchToggleBtn.addEventListener('click', toggleNavbarSearch);
+navbarSearchInput.addEventListener('input', handleNavbarSearch);
+navbarSearchInput.addEventListener('focus', function() {
+if (navbarSearchInput.value.trim()) {
+navbarSearchResults.classList.remove('hidden');
 }
+});
+
+// Mobile search functionality
+if (mobileSearchToggleBtn) {
+    mobileSearchToggleBtn.addEventListener('click', toggleMobileSearch);
+    mobileSearchInput.addEventListener('input', handleMobileSearch);
+    mobileSearchInput.addEventListener('focus', function() {
+        if (mobileSearchInput.value.trim()) {
+            mobileSearchResults.classList.remove('hidden');
+        }
+    });
+}
+
+// Enhanced keyboard support for search
+navbarSearchInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        toggleNavbarSearch();
+    }
+});
+
+mobileSearchInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        toggleMobileSearch();
+    }
 });
 
 // Close search results when clicking outside
 document.addEventListener('click', function(e) {
-if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
-searchResults.classList.add('hidden');
+// Desktop search
+if (!navbarSearchInput.contains(e.target) && 
+    !navbarSearchResults.contains(e.target) && 
+    !searchToggleBtn.contains(e.target)) {
+    navbarSearchResults.classList.add('hidden');
+}
+
+// Mobile search
+if (!mobileSearchInput.contains(e.target) && 
+    !mobileSearchResults.contains(e.target) && 
+    !mobileSearchToggleBtn.contains(e.target)) {
+    mobileSearchResults.classList.add('hidden');
 }
 });
 
@@ -813,12 +993,50 @@ mobileMenu.classList.add('hidden');
 });
 }
 
-// Search functionality
-function handleSearch() {
-const query = searchInput.value.toLowerCase().trim();
+// Enhanced toggle navbar search with better state management
+function toggleNavbarSearch() {
+isDesktopSearchExpanded = !isDesktopSearchExpanded;
+
+if (isDesktopSearchExpanded) {
+// Expand search
+navbarSearchInput.classList.add('expanded');
+navItems.classList.add('hidden-for-search');
+searchIcon.className = 'fas fa-times text-lg';
+navbarSearchInput.focus();
+} else {
+// Collapse search
+navbarSearchInput.classList.remove('expanded');
+navItems.classList.remove('hidden-for-search');
+searchIcon.className = 'fas fa-search text-lg';
+navbarSearchResults.classList.add('hidden');
+navbarSearchInput.value = '';
+}
+}
+
+// Enhanced toggle mobile search with proper cross functionality
+function toggleMobileSearch() {
+isMobileSearchExpanded = !isMobileSearchExpanded;
+
+if (isMobileSearchExpanded) {
+// Expand search
+mobileSearchInput.classList.add('expanded');
+mobileSearchIcon.className = 'fas fa-times text-lg';
+mobileSearchInput.focus();
+} else {
+// Collapse search
+mobileSearchInput.classList.remove('expanded');
+mobileSearchIcon.className = 'fas fa-search text-lg';
+mobileSearchResults.classList.add('hidden');
+mobileSearchInput.value = '';
+}
+}
+
+// Handle navbar search with improved filtering
+function handleNavbarSearch() {
+const query = navbarSearchInput.value.toLowerCase().trim();
 
 if (!query) {
-searchResults.classList.add('hidden');
+navbarSearchResults.classList.add('hidden');
 return;
 }
 
@@ -830,31 +1048,87 @@ article.keywords.some(keyword => keyword.toLowerCase().includes(query)) ||
 article.categories.some(category => category.toLowerCase().includes(query));
 });
 
-displaySearchResults(filteredArticles, query);
+displayNavbarSearchResults(filteredArticles, query);
 }
 
-// Display search results
-function displaySearchResults(results, query) {
+// Enhanced display navbar search results
+function displayNavbarSearchResults(results, query) {
 if (results.length === 0) {
-searchResults.innerHTML = `
-                   <div class="p-4 text-center text-gray-500">
-                       No articles found for "${query}"
-                   </div>
-               `;
+navbarSearchResults.innerHTML = `
+    <div class="p-4 text-center text-gray-500">
+        <i class="fas fa-search text-2xl mb-2 text-gray-400"></i>
+        <p>No articles found for "<strong>${query}</strong>"</p>
+    </div>
+`;
 } else {
-searchResults.innerHTML = results.map(article => `
-                   <div class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer" onclick="openArticle(${article.id})">
-                       <h4 class="font-medium text-gray-900 mb-1">${article.title}</h4>
-                       <p class="text-sm text-gray-600 mb-2">${article.authors}</p>
-                       <p class="text-xs text-gray-500">${article.abstract.substring(0, 100)}...</p>
-                   </div>
-               `).join('');
+navbarSearchResults.innerHTML = results.map(article => `
+    <div class="search-result-item" onclick="openArticle(${article.id}); toggleNavbarSearch();">
+        <h4 class="font-semibold text-gray-900 mb-1 text-sm">${highlightSearchTerm(article.title, query)}</h4>
+        ${article.authors ? `<p class="text-sm text-gray-600 mb-2">${highlightSearchTerm(article.authors, query)}</p>` : ''}
+        <p class="text-xs text-gray-500">${highlightSearchTerm(article.abstract.substring(0, 120), query)}...</p>
+        <div class="flex flex-wrap gap-1 mt-2">
+            ${article.categories.slice(0, 2).map(cat => `<span class="badge badge-blue text-xs">${cat}</span>`).join('')}
+        </div>
+    </div>
+`).join('');
 }
 
-searchResults.classList.remove('hidden');
+navbarSearchResults.classList.remove('hidden');
 }
 
-// Open article in modal
+// Handle mobile search with improved filtering
+function handleMobileSearch() {
+    const query = mobileSearchInput.value.toLowerCase().trim();
+
+    if (!query) {
+        mobileSearchResults.classList.add('hidden');
+        return;
+    }
+
+    const filteredArticles = allArticles.filter(article => {
+        return article.title.toLowerCase().includes(query) ||
+            article.authors.toLowerCase().includes(query) ||
+            article.abstract.toLowerCase().includes(query) ||
+            article.keywords.some(keyword => keyword.toLowerCase().includes(query)) ||
+            article.categories.some(category => category.toLowerCase().includes(query));
+    });
+
+    displayMobileSearchResults(filteredArticles, query);
+}
+
+// Enhanced display mobile search results
+function displayMobileSearchResults(results, query) {
+    if (results.length === 0) {
+        mobileSearchResults.innerHTML = `
+            <div class="p-3 text-center text-gray-500 text-sm">
+                <i class="fas fa-search text-lg mb-1 text-gray-400"></i>
+                <p>No articles found for "<strong>${query}</strong>"</p>
+            </div>
+        `;
+    } else {
+        mobileSearchResults.innerHTML = results.map(article => `
+            <div class="search-result-item text-sm" onclick="openArticle(${article.id}); toggleMobileSearch();">
+                <h4 class="font-semibold text-gray-900 mb-1">${highlightSearchTerm(article.title, query)}</h4>
+                ${article.authors ? `<p class="text-xs text-gray-600 mb-1">${highlightSearchTerm(article.authors, query)}</p>` : ''}
+                <p class="text-xs text-gray-500">${highlightSearchTerm(article.abstract.substring(0, 100), query)}...</p>
+                <div class="flex flex-wrap gap-1 mt-1">
+                    ${article.categories.slice(0, 2).map(cat => `<span class="badge badge-blue text-xs">${cat}</span>`).join('')}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    mobileSearchResults.classList.remove('hidden');
+}
+
+// Highlight search terms in results
+function highlightSearchTerm(text, query) {
+    if (!query) return text;
+    const regex = new RegExp(`(${query})`, 'gi');
+    return text.replace(regex, '<mark class="bg-yellow-200 px-1 rounded">$1</mark>');
+}
+
+// Open article in modal with enhanced functionality
 function openArticle(articleId) {
 const article = allArticles.find(a => a.id === articleId);
 if (!article) return;
@@ -862,154 +1136,46 @@ if (!article) return;
 let imageHtml = '';
 if (article.imageUrl) {
 imageHtml = `
-                   <div class="mb-6">
-                       <img src="${article.imageUrl}" alt="${article.title}" class="w-full rounded-lg">
-                   </div>
-               `;
+    <div class="mb-6">
+        <img src="${article.imageUrl}" alt="${article.title}" class="w-full rounded-lg shadow-sm">
+    </div>
+`;
 }
 
 modalContent.innerHTML = `
-               ${imageHtml}
-               <div class="mb-6">
-                   <div class="mb-4">
-                       ${article.categories.map(category => `<span class="badge badge-blue">${category}</span>`).join('')}
-                   </div>
-                   <h1 class="text-2xl sm:text-3xl font-bold academic-title text-gray-900 mb-4">
-                       ${article.title}
-                   </h1>
-                   <div class="text-gray-600 mb-4">
-                       <p class="font-medium">${article.authors}</p>
-                       <p class="text-sm">${article.journal}, ${article.volume}, ${article.pages} <i class="far fa-calendar-alt"></i> ${article.date}</p>
-                       
-                   </div>
-                   <div class="flex flex-wrap gap-2 mb-6">
-                       ${article.keywords.map(keyword => `<span class="text-xs bg-gray-100 text-gray-600 rounded-full px-2 py-1">${keyword}</span>`).join('')}
-                   </div>
-                   
-                   <div class="mb-6">
-                       
-                       
-                   </div>
-               </div>
-               <div class="article-content prose max-w-none">
-                   ${article.fullContent}
-               </div>
-           `;
+    ${imageHtml}
+    <div class="mb-6">
+        <div class="mb-4">
+            ${article.categories.map(category => `<span class="badge badge-blue">${category}</span>`).join('')}
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-bold academic-title text-gray-900 mb-4">
+            ${article.title}
+        </h1>
+        <div class="text-gray-600 mb-4">
+            <p class="font-medium">${article.authors}</p>
+            <p class="text-sm">${article.journal}, ${article.volume}, ${article.pages} <i class="far fa-calendar-alt"></i> ${article.date}</p>
+        </div>
+        <div class="flex flex-wrap gap-2 mb-6">
+            ${article.keywords.map(keyword => `<span class="text-xs bg-gray-100 text-gray-600 rounded-full px-2 py-1">${keyword}</span>`).join('')}
+        </div>
+    </div>
+    <div class="article-content prose max-w-none">
+        ${article.fullContent}
+    </div>
+`;
 
 articleModal.classList.remove('hidden');
-searchResults.classList.add('hidden');
+navbarSearchResults.classList.add('hidden');
+mobileSearchResults.classList.add('hidden');
+
+// Reset search states
+if (isDesktopSearchExpanded) toggleNavbarSearch();
+if (isMobileSearchExpanded) toggleMobileSearch();
 }
 
 // Close article modal
 function closeArticleModal() {
 articleModal.classList.add('hidden');
-}
-
-// Download PDF
-function downloadPDF(articleId) {
-const article = allArticles.find(a => a.id === articleId);
-if (!article) return;
-
-// Create PDF using jsPDF
-const { jsPDF } = window.jspdf;
-const doc = new jsPDF();
-
-// Set font
-doc.setFont("times", "normal");
-
-// Title
-doc.setFontSize(16);
-doc.setFont("times", "bold");
-const title = doc.splitTextToSize(article.title, 170);
-doc.text(title, 20, 20);
-
-// Authors
-doc.setFontSize(12);
-doc.setFont("times", "normal");
-doc.text(`Authors: ${article.authors}`, 20, 35 + (title.length - 1) * 7);
-
-// Journal info
-doc.text(`${article.journal}, ${article.volume}, ${article.pages} (${article.date})`, 20, 45 + (title.length - 1) * 7);
-doc.text(`DOI: ${article.doi}`, 20, 55 + (title.length - 1) * 7);
-
-// Abstract
-doc.setFont("times", "bold");
-doc.text("Abstract", 20, 70 + (title.length - 1) * 7);
-doc.setFont("times", "normal");
-const abstractText = doc.splitTextToSize(article.abstract, 170);
-doc.text(abstractText, 20, 80 + (title.length - 1) * 7);
-
-// Keywords
-doc.setFont("times", "bold");
-doc.text("Keywords", 20, 95 + (title.length - 1) * 7 + abstractText.length * 5);
-doc.setFont("times", "normal");
-doc.text(article.keywords.join(', '), 20, 105 + (title.length - 1) * 7 + abstractText.length * 5);
-
-// Content
-let yPosition = 120 + (title.length - 1) * 7 + abstractText.length * 5;
-
-// Parse HTML content to text
-const tempDiv = document.createElement('div');
-tempDiv.innerHTML = article.fullContent;
-
-const headings = tempDiv.querySelectorAll('h2');
-const paragraphs = tempDiv.querySelectorAll('p');
-
-headings.forEach((heading, index) => {
-if (yPosition > 250) {
-doc.addPage();
-yPosition = 20;
-}
-
-doc.setFont("times", "bold");
-doc.setFontSize(14);
-const headingText = doc.splitTextToSize(heading.textContent, 170);
-doc.text(headingText, 20, yPosition);
-yPosition += headingText.length * 7 + 5;
-
-// Find related paragraphs (this is a simplified approach)
-const nextHeading = headings[index + 1];
-let currentElement = heading.nextElementSibling;
-
-while (currentElement && currentElement !== nextHeading) {
-if (currentElement.tagName === 'P') {
-if (yPosition > 250) {
-doc.addPage();
-yPosition = 20;
-}
-
-doc.setFont("times", "normal");
-doc.setFontSize(11);
-const paragraphText = doc.splitTextToSize(currentElement.textContent, 170);
-doc.text(paragraphText, 20, yPosition);
-yPosition += paragraphText.length * 5 + 5;
-}
-currentElement = currentElement.nextElementSibling;
-}
-});
-
-// Save the PDF
-doc.save(`${article.title.replace(/[^a-z0-9]/gi, '_')}.pdf`);
-}
-
-// Share article
-function shareArticle(articleId) {
-const article = allArticles.find(a => a.id === articleId);
-if (!article) return;
-
-if (navigator.share) {
-navigator.share({
-title: article.title,
-text: article.abstract,
-url: window.location.href
-});
-} else {
-// Fallback: copy to clipboard
-const shareText = `${article.title}\n\n${article.abstract}\n\n${window.location.href}`;
-navigator.clipboard.writeText(shareText).then(() => {
-alert('Article details copied to clipboard!');
-});
-}
 }
 
 // Handle contact form submission
