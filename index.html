@@ -917,7 +917,7 @@ fullContent: `
 },
 ];
 
-// Articles Data - Fix the abstract
+// Articles Data - Current issue that should redirect to index1.html
 const featuredArticles = [
 {
 id: 2,
@@ -932,6 +932,7 @@ categories: ["Current Issue","Latest"],
 abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world...",
 keywords: [""],
 imageUrl: "vol7no2.jpg",
+redirectToIndex1: true // Flag to indicate this should redirect to index1.html
 },
 ];
 
@@ -1115,7 +1116,7 @@ article.categories.some(category => category.toLowerCase().includes(query));
 displayNavbarSearchResults(filteredArticles, query);
 }
 
-// Enhanced display navbar search results
+// Enhanced display navbar search results with redirect functionality
 function displayNavbarSearchResults(results, query) {
 if (results.length === 0) {
 navbarSearchResults.innerHTML = `
@@ -1126,7 +1127,7 @@ navbarSearchResults.innerHTML = `
 `;
 } else {
 navbarSearchResults.innerHTML = results.map(article => `
-    <div class="search-result-item" onclick="openArticle(${article.id}); toggleNavbarSearch();">
+    <div class="search-result-item" onclick="handleArticleClick(${article.id}); toggleNavbarSearch();">
         <h4 class="font-semibold text-gray-900 mb-1 text-sm">${highlightSearchTerm(article.title, query)}</h4>
         ${article.authors ? `<p class="text-sm text-gray-600 mb-2">${highlightSearchTerm(article.authors, query)}</p>` : ''}
         <p class="text-xs text-gray-500">${highlightSearchTerm(article.abstract.substring(0, 120), query)}...</p>
@@ -1160,7 +1161,7 @@ function handleMobileSearch() {
     displayMobileSearchResults(filteredArticles, query);
 }
 
-// Enhanced display mobile search results
+// Enhanced display mobile search results with redirect functionality
 function displayMobileSearchResults(results, query) {
     if (results.length === 0) {
         mobileSearchResults.innerHTML = `
@@ -1171,7 +1172,7 @@ function displayMobileSearchResults(results, query) {
         `;
     } else {
         mobileSearchResults.innerHTML = results.map(article => `
-            <div class="search-result-item text-sm" onclick="openArticle(${article.id}); toggleMobileSearch();">
+            <div class="search-result-item text-sm" onclick="handleArticleClick(${article.id}); toggleMobileSearch();">
                 <h4 class="font-semibold text-gray-900 mb-1">${highlightSearchTerm(article.title, query)}</h4>
                 ${article.authors ? `<p class="text-xs text-gray-600 mb-1">${highlightSearchTerm(article.authors, query)}</p>` : ''}
                 <p class="text-xs text-gray-500">${highlightSearchTerm(article.abstract.substring(0, 100), query)}...</p>
@@ -1185,6 +1186,20 @@ function displayMobileSearchResults(results, query) {
     mobileSearchResults.classList.remove('hidden');
 }
 
+// New function to handle article clicks with redirect logic
+function handleArticleClick(articleId) {
+    const article = allArticles.find(a => a.id === articleId);
+    if (!article) return;
+
+    // Check if this article should redirect to index1.html (current issue)
+    if (article.redirectToIndex1) {
+        location.href = 'index1.html';
+    } else {
+        // Open in modal for other articles (like Call for Papers)
+        openArticle(articleId);
+    }
+}
+
 // Highlight search terms in results
 function highlightSearchTerm(text, query) {
     if (!query) return text;
@@ -1192,7 +1207,7 @@ function highlightSearchTerm(text, query) {
     return text.replace(regex, '<mark class="bg-yellow-200 px-1 rounded">$1</mark>');
 }
 
-// Open article in modal with enhanced functionality
+// Open article in modal with enhanced functionality (for non-redirecting articles)
 function openArticle(articleId) {
 const article = allArticles.find(a => a.id === articleId);
 if (!article) return;
