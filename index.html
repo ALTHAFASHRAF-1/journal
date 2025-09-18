@@ -474,15 +474,43 @@ background: #f8fafc;
     flex-direction: column;
 }
 
-/* Reduced Hero Section Styles */
+/* Updated Hero Section with Banner Background - Same Dimensions as Original */
 .hero-section {
-    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
     color: white;
     padding: 2rem 0;
     min-height: 25vh;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Desktop Banner Background */
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://dqdhiu.netlify.app/desktop-banner.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -2;
+}
+
+/* Optional overlay for better text readability */
+.hero-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(30, 58, 138, 0.6);
+    z-index: -1;
 }
 
 /* About and Call for Papers Section */
@@ -528,6 +556,13 @@ background: #f8fafc;
     justify-content: space-between;
 }
 
+/* Enhanced text positioning for banner */
+.hero-content {
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
 @media (max-width: 1024px) {
     .hero-section {
         padding: 2rem 0;
@@ -557,6 +592,10 @@ background: #f8fafc;
     .hero-section {
         padding: 1.5rem 0;
         min-height: 18vh;
+    }
+    
+    .hero-section::before {
+        background-image: url('https://dqdhiu.netlify.app/mobile-banner.jpg');
     }
     
     .hero-section h2 {
@@ -589,6 +628,7 @@ background: #f8fafc;
     }
 }
 </style>
+
 </head>
 
 <body class="bg-gray-50">
@@ -684,12 +724,12 @@ class="navbar-search-input"
 </div>
 </nav>
 
-<!-- Updated Home Section with Reduced Hero Height -->
+<!-- Updated Home Section with Banner Background -->
 <section id="home" class="hero-about-container">
-    <!-- Hero Section - Reduced Height Blue Background -->
+    <!-- Hero Section - Now with Banner Background -->
     <div class="hero-section">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
+            <div class="text-center hero-content">
                 <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold academic-title mb-4">
                     Islamic Insight Journal
                 </h2>
