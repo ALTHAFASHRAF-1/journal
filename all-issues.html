@@ -17,7 +17,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <style>
+<style>
 body {
 font-family: 'Inter', sans-serif;
 line-height: 1.6;
@@ -248,6 +248,7 @@ background: #f8fafc;
 }
 }
 
+/* Updated Current Issue Image Styles - Desktop */
 .current-issue-image-container {
     width: 100%;
     height: 280px;
@@ -266,11 +267,70 @@ background: #f8fafc;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Mobile Responsive Adjustments for All Issues Images */
 @media (max-width: 1024px) {
     .current-issue-image-container {
         height: 200px;
     }
-}        
+    
+    .current-issue-image {
+        max-width: 90%;
+        max-height: 90%;
+    }
+}
+
+@media (max-width: 768px) {
+    .current-issue-image-container {
+        height: 180px;
+        padding: 0.5rem;
+    }
+    
+    .current-issue-image {
+        max-width: 85%;
+        max-height: 85%;
+        border-radius: 6px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+}
+
+@media (max-width: 640px) {
+    .current-issue-image-container {
+        height: 160px;
+        padding: 0.25rem;
+    }
+    
+    .current-issue-image {
+        max-width: 80%;
+        max-height: 80%;
+        border-radius: 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    .current-issue-image-container {
+        height: 140px;
+        padding: 0.25rem;
+    }
+    
+    .current-issue-image {
+        max-width: 75%;
+        max-height: 75%;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* Ensure consistent grid layout for all screen sizes */
+@media (max-width: 1024px) {
+    .grid.lg\\:grid-cols-3 {
+        grid-template-columns: 1fr;
+    }
+    
+    .lg\\:col-span-1,
+    .lg\\:col-span-2 {
+        grid-column: span 1;
+    }
+}
 
 .nav-right {
     margin-left: auto;
