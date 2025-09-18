@@ -467,39 +467,74 @@ background: #f8fafc;
     background-color: #f3f4f6;
 }
 
-/* Updated Home and About Section - Stacked Layout */
+/* Updated Hero and About/Call for Papers Layout */
 .hero-about-container {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-/* Hero Section Styles */
+/* Reduced Hero Section Styles */
 .hero-section {
     background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
     color: white;
-    padding: 4rem 0;
-    min-height: 50vh;
+    padding: 2rem 0;
+    min-height: 25vh;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* About Section Styles */
-.about-section {
+/* About and Call for Papers Section */
+.about-callforpapers-section {
     background: white;
-    padding: 4rem 0;
+    padding: 3rem 0;
     flex: 1;
+}
+
+.about-content h3 {
+    font-size: 1.875rem;
+    margin-bottom: 1.5rem;
+}
+
+.about-content h4 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.callforpapers-content {
+    position: sticky;
+    top: 2rem;
+}
+
+@media (max-width: 1024px) {
+    .hero-section {
+        padding: 2rem 0;
+        min-height: 20vh;
+    }
+    
+    .about-callforpapers-section {
+        padding: 2rem 0;
+    }
+    
+    .callforpapers-content {
+        position: static;
+        margin-top: 2rem;
+    }
 }
 
 @media (max-width: 768px) {
     .hero-section {
-        padding: 3rem 0;
-        min-height: 40vh;
+        padding: 1.5rem 0;
+        min-height: 18vh;
     }
     
-    .about-section {
-        padding: 3rem 0;
+    .hero-section h2 {
+        font-size: 2rem !important;
+    }
+    
+    .hero-section p {
+        font-size: 1rem !important;
     }
 }
 
@@ -619,43 +654,68 @@ class="navbar-search-input"
 </div>
 </nav>
 
-<!-- Updated Home and About Section - Stacked Layout -->
+<!-- Updated Home Section with Reduced Hero Height -->
 <section id="home" class="hero-about-container">
-    <!-- Hero Section - Blue Background -->
+    <!-- Hero Section - Reduced Height Blue Background -->
     <div class="hero-section">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-bold academic-title mb-6">
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold academic-title mb-4">
                     Islamic Insight Journal
                 </h2>
-                <p class="text-xl sm:text-2xl lg:text-3xl mb-8 max-w-4xl mx-auto opacity-90">
+                <p class="text-lg sm:text-xl lg:text-2xl mb-4 max-w-4xl mx-auto opacity-90">
                     International, peer-reviewed cross-disciplinary journal
                 </p>
             </div>
         </div>
     </div>
     
-    <!-- About Section - White Background -->
-    <div id="about" class="about-section">
+    <!-- About and Call for Papers Section - Side by Side -->
+    <div id="about" class="about-callforpapers-section">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="max-w-4xl mx-auto">
-                <div class="text-center mb-12">
-                    <h3 class="text-3xl sm:text-4xl lg:text-5xl font-bold academic-title text-gray-900 mb-8">
-                        About Our Journal
-                    </h3>
-                </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 
-                <div class="space-y-8">
-                    <div>
-                        <h4 class="text-2xl sm:text-3xl font-semibold academic-title text-gray-900 mb-6">
-                            Islamic Insight
-                        </h4>
-                        <p class="text-gray-700 text-lg leading-relaxed text-justify mb-6">
-                            Islamic Insight is an international, peer-reviewed cross-disciplinary journal dedicated to publishing original scholarship of exceptional quality on all aspects of Islam and the Muslim world. Inasmuch as it caters for a robust scholarly engagement with Islam in light of cutting-edge developments in the humanities and social sciences, the journal provides a forum for high quality research works that contribute substantively to contemporary discourse in Islamic studies in all its richness and complexities.
+                <!-- About Journal - Left Side -->
+                <div class="about-content">
+                    <div class="text-left">
+                        <h3 class="text-2xl sm:text-3xl font-bold academic-title text-gray-900 mb-6">
+                            About Our Journal
+                        </h3>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="text-xl sm:text-2xl font-semibold academic-title text-gray-900 mb-4">
+                                Islamic Insight
+                            </h4>
+                            <p class="text-gray-700 text-base leading-relaxed text-justify mb-4">
+                                Islamic Insight is an international, peer-reviewed cross-disciplinary journal dedicated to publishing original scholarship of exceptional quality on all aspects of Islam and the Muslim world. Inasmuch as it caters for a robust scholarly engagement with Islam in light of cutting-edge developments in the humanities and social sciences, the journal provides a forum for high quality research works that contribute substantively to contemporary discourse in Islamic studies in all its richness and complexities.
+                            </p>
+                            <p class="text-gray-700 text-base leading-relaxed text-justify">
+                                The journal is very keen on articles, research communications, and book reviews that deal with Islam and the Islamic tradition in its many facets and manifestations and exploit perspectives and analytics that straddle disciplines and frontiers of knowledge.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Call for Papers - Right Side -->
+                <div class="callforpapers-content">
+                    <div class="bg-blue-50 border-l-4 border-blue-500 rounded-lg p-6">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-bullhorn text-blue-500 text-xl mr-3"></i>
+                            <h3 class="text-xl sm:text-2xl font-bold academic-title text-blue-900">Call For Papers</h3>
+                        </div>
+                        <p class="text-gray-700 mb-4 leading-relaxed text-sm">
+                            We are pleased to invite original research articles for the upcoming issue of Islamic Insight, a biannual peer-reviewed journal published by the Kulliyyah of Qur'an and Sunnah, Darul Huda Islamic University, Kerala, India. Islamic Insight welcomes high-quality, interdisciplinary research in areas related to Islamic revealed knowledge and the Muslim world.
                         </p>
-                        <p class="text-gray-700 text-lg leading-relaxed text-justify">
-                            The journal is very keen on articles, research communications, and book reviews that deal with Islam and the Islamic tradition in its many facets and manifestations and exploit perspectives and analytics that straddle disciplines and frontiers of knowledge.
-                        </p>
+                        <div class="text-sm text-gray-600 mb-4">
+                            <i class="far fa-calendar-alt mr-2"></i> <strong>Deadline:</strong> Mid-June 2025
+                        </div>
+                        <button 
+                            onclick="openArticle(1)" 
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm w-full">
+                            Read More Details <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -663,33 +723,8 @@ class="navbar-search-input"
     </div>
 </section>
 
-<!-- Call for Papers Section -->
-<section id="publications" class="py-12 sm:py-16 lg:py-20 bg-gray-50">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-<div class="max-w-4xl mx-auto">
-<div class="bg-blue-50 border-l-4 border-blue-500 rounded-lg p-8">
-<div class="flex items-center mb-6">
-<i class="fas fa-bullhorn text-blue-500 text-2xl mr-4"></i>
-<h2 class="text-2xl sm:text-3xl font-bold academic-title text-blue-900">Call For Papers</h2>
-</div>
-<p class="text-gray-700 mb-6 leading-relaxed">
-We are pleased to invite original research articles for the upcoming issue of Islamic Insight, a biannual peer-reviewed journal published by the Kulliyyah of Qur'an and Sunnah, Darul Huda Islamic University, Kerala, India. Islamic Insight welcomes high-quality, interdisciplinary research in areas related to Islamic revealed knowledge and the Muslim world.
-</p>
-<div class="text-sm text-gray-600 mb-6">
-<i class="far fa-calendar-alt mr-2"></i> <strong>Deadline:</strong> Mid-June 2025
-</div>
-<button 
-onclick="openArticle(1)" 
-class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
-Read More Details <i class="fas fa-arrow-right ml-2"></i>
-</button>
-</div>
-</div>
-</div>
-</section>
-
 <!-- Current Issue Section -->
-<section id="featured" class="py-12 sm:py-16 lg:py-20 bg-white">
+<section id="featured" class="py-12 sm:py-16 lg:py-20 bg-gray-50">
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 <div class="text-center mb-8">
 <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold academic-title text-gray-900 mb-4">
