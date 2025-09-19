@@ -875,61 +875,68 @@ class="navbar-search-input"
     <script>
         // Sample articles data for Vol. 7 No. 1 (2024)
         const articlesData = [
-            {
-                id: 1,
-                title: "Islamic Financial Ethics in Contemporary Banking Systems",
-                author: "Dr. Ahmad Hassan Al-Rashid",
-                abstract: "This study examines the application of Islamic financial principles in modern banking systems, exploring how traditional Islamic ethics can be integrated into contemporary financial practices while maintaining regulatory compliance and market competitiveness.",
-                date: "2024-11-15",
-                keywords: ["Islamic finance", "banking ethics", "Sharia compliance", "financial systems"],
-                pages: "1-24"
-            },
-            {
-                id: 2,
-                title: "Women's Rights in Islamic Jurisprudence: A Contemporary Analysis",
-                author: "Prof. Aisha Fatima Al-Zahra",
-                abstract: "An comprehensive analysis of women's rights within Islamic jurisprudence, examining classical interpretations and their modern applications in contemporary Muslim societies, with particular attention to education, employment, and social participation.",
-                date: "2024-11-10",
-                keywords: ["women's rights", "Islamic jurisprudence", "gender studies", "contemporary Islam"],
-                pages: "25-48"
-            },
-            {
-                id: 3,
-                title: "Environmental Stewardship in Islamic Teachings",
-                author: "Dr. Muhammad Ibrahim Al-Masri",
-                abstract: "This research explores the concept of environmental stewardship (khalifa) in Islamic teachings, analyzing how traditional Islamic principles can inform contemporary environmental policies and sustainable development practices.",
-                date: "2024-11-05",
-                keywords: ["environmental ethics", "Islamic teachings", "sustainability", "khalifa"],
-                pages: "49-68"
-            },
-            {
-                id: 4,
-                title: "Interfaith Dialogue in the Quran: Principles and Applications",
-                author: "Dr. Sara Abdullah Al-Hijazi",
-                abstract: "A textual analysis of Quranic verses related to interfaith dialogue, examining the principles of religious pluralism and peaceful coexistence as outlined in Islamic scripture and their relevance to modern interfaith relations.",
-                date: "2024-10-28",
-                keywords: ["interfaith dialogue", "Quran", "religious pluralism", "peaceful coexistence"],
-                pages: "69-92"
-            },
-            {
-                id: 5,
-                title: "Digital Technology and Islamic Education Methodologies",
-                author: "Prof. Omar Hassan Al-Baghdadi",
-                abstract: "An investigation into the integration of digital technologies in Islamic educational institutions, analyzing how modern pedagogical tools can enhance traditional Islamic teaching methods while preserving authentic religious instruction.",
-                date: "2024-10-20",
-                keywords: ["digital education", "Islamic pedagogy", "educational technology", "religious instruction"],
-                pages: "93-116"
-            },
-            {
-                id: 6,
-                title: "Social Justice Concepts in Early Islamic Society",
-                author: "Dr. Layla Ahmed Al-Andalusi",
-                abstract: "A historical analysis of social justice principles in early Islamic society during the time of Prophet Muhammad and the Rashidun Caliphate, exploring their implementation and relevance to contemporary social justice movements.",
-                date: "2024-10-15",
-                keywords: ["social justice", "early Islam", "Rashidun Caliphate", "Islamic history"],
-                pages: "117-140"
-            }
-        ];
+    {
+        id: 1,
+        title: "Islamic Financial Ethics in Contemporary Banking Systems",
+        author: "Dr. Ahmad Hassan Al-Rashid",
+        abstract: "This study examines the application of Islamic financial principles in modern banking systems...",
+        date: "2024-11-15",
+        keywords: ["Islamic finance", "banking ethics", "Sharia compliance", "financial systems"],
+        pages: "1-24",
+        htmlFile: "islamic-financial-ethics.html"  // Add this line
+    },
+    {
+        id: 2,
+        title: "Women's Rights in Islamic Jurisprudence: A Contemporary Analysis",
+        author: "Prof. Aisha Fatima Al-Zahra",
+        abstract: "An comprehensive analysis of women's rights within Islamic jurisprudence...",
+        date: "2024-11-10",
+        keywords: ["women's rights", "Islamic jurisprudence", "gender studies", "contemporary Islam"],
+        pages: "25-48",
+        htmlFile: "womens-rights-jurisprudence.html"  // Add this line
+    },
+    {
+        id: 3,
+        title: "Environmental Stewardship in Islamic Teachings",
+        author: "Dr. Muhammad Ibrahim Al-Masri",
+        abstract: "This research explores the concept of environmental stewardship (khalifa)...",
+        date: "2024-11-05",
+        keywords: ["environmental ethics", "Islamic teachings", "sustainability", "khalifa"],
+        pages: "49-68",
+        htmlFile: "environmental-stewardship.html"  // Add this line
+    },
+    {
+        id: 4,
+        title: "Interfaith Dialogue in the Quran: Principles and Applications",
+        author: "Dr. Sara Abdullah Al-Hijazi",
+        abstract: "A textual analysis of Quranic verses related to interfaith dialogue...",
+        date: "2024-10-28",
+        keywords: ["interfaith dialogue", "Quran", "religious pluralism", "peaceful coexistence"],
+        pages: "69-92",
+        htmlFile: "interfaith-dialogue-quran.html"  // Add this line
+    },
+    {
+        id: 5,
+        title: "Digital Technology and Islamic Education Methodologies",
+        author: "Prof. Omar Hassan Al-Baghdadi",
+        abstract: "An investigation into the integration of digital technologies...",
+        date: "2024-10-20",
+        keywords: ["digital education", "Islamic pedagogy", "educational technology", "religious instruction"],
+        pages: "93-116",
+        htmlFile: "digital-islamic-education.html"  // Add this line
+    },
+    {
+        id: 6,
+        title: "Social Justice Concepts in Early Islamic Society",
+        author: "Dr. Layla Ahmed Al-Andalusi",
+        abstract: "A historical analysis of social justice principles in early Islamic society...",
+        date: "2024-10-15",
+        keywords: ["social justice", "early Islam", "Rashidun Caliphate", "Islamic history"],
+        pages: "117-140",
+        htmlFile: "social-justice-early-islam.html"  // Add this line
+    }
+];
+
 
       // DOM Elements
 const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -1257,10 +1264,11 @@ function loadArticles(articlesToShow = null) {
 
                 <div class="article-footer">
                     <div class="flex justify-between items-center">
-                        <button onclick="viewArticle(${article.id})" 
-                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                            Read More <i class="fas fa-arrow-right ml-2"></i>
-                        </button>
+                        <a href="${article.htmlFile}" 
+   class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors text-center">
+    Read More <i class="fas fa-arrow-right ml-2"></i>
+</a>
+
 
                         <div class="flex space-x-2">
                             <button onclick="downloadPDF(${article.id})" 
@@ -1312,9 +1320,14 @@ function formatDate(dateString) {
 }
 
 function viewArticle(articleId) {
-    console.log(`Viewing article ${articleId}`);
-    alert(`Opening article ${articleId}. In a real implementation, this would navigate to the full article page.`);
+    const article = articlesData.find(a => a.id === articleId);
+    if (article && article.htmlFile) {
+        window.location.href = article.htmlFile;
+    } else {
+        console.error(`Article with ID ${articleId} not found or missing HTML file`);
+    }
 }
+
 
 function downloadPDF(articleId) {
     console.log(`Downloading PDF for article ${articleId}`);
