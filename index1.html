@@ -469,10 +469,12 @@ background: #f8fafc;
 }
 
 /* Responsive Layout */
+/* Update the existing .main-layout rule */
 .main-layout {
     display: grid;
     grid-template-columns: 1fr 300px;
     gap: 2rem;
+    align-items: start; /* Add this line */
 }
 
 @media (max-width: 1024px) {
@@ -537,6 +539,113 @@ background: #f8fafc;
         font-size: 0.55rem;
     }
 }
+/* Mobile Layout Fixes */
+@media (max-width: 1024px) {
+    .main-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .journal-sidebar {
+        order: -1; /* This moves the sidebar to top on mobile */
+    }
+    
+    /* Make journal info card more compact on mobile */
+    .journal-info-card {
+        margin-bottom: 1rem;
+    }
+    
+    .journal-cover {
+        height: 200px; /* Reduce height on tablets */
+    }
+}
+
+@media (max-width: 768px) {
+    .journal-sidebar {
+        position: static; /* Remove sticky positioning on mobile */
+        order: -1;
+        margin-bottom: 2rem;
+    }
+    
+    .journal-info-card {
+        margin-bottom: 0;
+    }
+    
+    .journal-cover {
+        height: 180px; /* Further reduce height on mobile */
+    }
+    
+    /* Compact padding for mobile */
+    .journal-info-card .p-6 {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .main-layout {
+        gap: 1rem;
+    }
+    
+    .journal-sidebar {
+        margin-bottom: 1.5rem;
+    }
+    
+    .journal-cover {
+        height: 160px; /* Even smaller on small screens */
+    }
+    
+    /* Ensure articles section takes remaining space */
+    .articles-section {
+        min-height: auto;
+    }
+    
+    /* Make article cards stack properly */
+    #articlesGrid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .journal-cover {
+        height: 140px; /* Smallest size for very small screens */
+    }
+    
+    .journal-sidebar {
+        margin-bottom: 1rem;
+    }
+    
+    /* Further compact the journal info card */
+    .journal-info-card .space-y-3 {
+        gap: 0.5rem;
+    }
+    
+    .journal-info-card .text-sm {
+        font-size: 0.75rem;
+    }
+}
+/* Article Grid Mobile Improvements */
+@media (max-width: 768px) {
+    #articlesGrid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .article-card {
+        margin-bottom: 0.5rem;
+    }
+    
+    .article-card .p-6 {
+        padding: 1rem;
+    }
+    
+    .article-card h3 {
+        font-size: 1.125rem;
+        line-height: 1.4;
+    }
+}        
 </style>
 
 </head>
