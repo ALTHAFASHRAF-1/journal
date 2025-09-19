@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vol. 5 No. 2 (2022) - Islamic Insight Journal</title>
+    <title>Islamic Insight Journal</title>
     <meta name="description" content="Academic Research Journal - Peer-reviewed scholarly publications and research articles">
     <meta name="keywords" content="academic journal, research papers, scholarly articles, peer review, scientific publications">
     <meta name="author" content="Academic Research Journal">
@@ -22,312 +22,725 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 
     <style>
-        :root {
-            --primary-color: #1f2937;
-            --secondary-color: #374151;
-            --accent-color: #3b82f6;
-            --light-gray: #f9fafb;
-            --border-color: #e5e7eb;
-        }
+body {
+font-family: 'Inter', sans-serif;
+line-height: 1.6;
+color: #1a202c;
+}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+.academic-title {
+font-family: 'Crimson Text', serif;
+}
 
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: var(--primary-color);
-            background-color: #ffffff;
-            overflow-x: hidden;
-        }
+.article-content h1, .article-content h2, .article-content h3 {
+font-family: 'Crimson Text', serif;
+font-weight: 600;
+}
 
-        .academic-title {
-            font-family: 'Crimson Text', serif;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
+.article-content p {
+margin-bottom: 1rem;
+text-align: justify;
+line-height: 1.7;
+}
 
-        /* Article Card Styles - Matching current issue cards */
-        .article-card {
-            transition: all 0.3s ease;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
+.article-content h2 {
+margin-top: 2rem;
+margin-bottom: 1rem;
+font-size: 1.5rem;
+color: #2d3748;
+}
 
-        .article-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-        }
+.article-content h3 {
+margin-top: 1.5rem;
+margin-bottom: 0.75rem;
+font-size: 1.25rem;
+color: #4a5568;
+}
 
-        .article-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
+.citation-box {
+background: #f7fafc;
+border-left: 4px solid #4299e1;
+padding: 1rem;
+margin: 1rem 0;
+font-style: italic;
+}
 
-        .article-description {
-            flex-grow: 1;
-        }
+@media (max-width: 768px) {
+.article-content {
+font-size: 0.95rem;
+}
 
-        .article-footer {
-            margin-top: auto;
-            padding-top: 1rem;
-        }
+.article-content h2 {
+font-size: 1.3rem;
+}
 
-        /* Search Styles */
-        .search-container {
-            position: relative;
-        }
+.article-content h3 {
+font-size: 1.1rem;
+}
+}
 
-        .search-results {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-top: none;
-            border-radius: 0 0 8px 8px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            max-height: 300px;
-            overflow-y: auto;
-            z-index: 1000;
-            display: none;
-        }
+.mobile-menu {
+transition: all 0.3s ease;
+}
 
-        .search-result-item {
-            padding: 12px 16px;
-            cursor: pointer;
-            border-bottom: 1px solid #f3f4f6;
-        }
+.article-card {
+transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
-        .search-result-item:hover {
-            background-color: #f9fafb;
-        }
+.article-card:hover {
+transform: translateY(-2px);
+box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
 
-        .search-result-item:last-child {
-            border-bottom: none;
-        }
+.modal {
+backdrop-filter: blur(4px);
+}
 
-        /* Logo Styles */
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+.search-container {
+position: relative;
+}
 
-        .logo-image {
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
-        }
+.search-results {
+position: absolute;
+top: 100%;
+left: 0;
+right: 0;
+background: white;
+border: 1px solid #e2e8f0;
+border-radius: 0.5rem;
+box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+max-height: 400px;
+overflow-y: auto;
+z-index: 50;
+}
 
-        .logo-text-container {
-            display: flex;
-            flex-direction: column;
-        }
+.badge {
+display: inline-block;
+padding: 0.25rem 0.75rem;
+border-radius: 9999px;
+font-size: 0.75rem;
+font-weight: 600;
+margin-right: 0.5rem;
+margin-bottom: 0.25rem;
+}
 
-        .logo-text {
-            font-size: 1.125rem;
-            font-weight: 700;
-            color: #1f2937;
-            line-height: 1.2;
-        }
+.badge-blue { background: #ebf8ff; color: #2b6cb0; }
+.badge-green { background: #f0fff4; color: #2f855a; }
+.badge-red { background: #fff5f5; color: #c53030; }
+.badge-purple { background: #faf5ff; color: #6b46c1; }
+.badge-yellow { background: #fffaf0; color: #b7791f; }
 
-        .logo-subtitle {
-            font-size: 0.75rem;
-            color: #6b7280;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+.pdf-content {
+display: none;
+}
 
-        @media (max-width: 768px) {
-            .logo-image {
-                width: 32px;
-                height: 32px;
-            }
+.article-image {
+height: 200px;
+background-size: cover;
+background-position: center;
+border-radius: 8px 8px 0 0;
+}
 
-            .logo-text {
-                font-size: 1rem;
-            }
+.featured-article-image {
+width: 100%;
+height: 200px;
+object-fit: cover;
+border-radius: 8px 8px 0 0;
+}
 
-            .logo-subtitle {
-                font-size: 0.6875rem;
-            }
-        }
+.logo-container {
+display: flex;
+align-items: center;
+gap: 0.75rem;
+}
 
-        /* Enhanced Search Styles */
-        .search-icon {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #9ca3af;
-            pointer-events: none;
-        }
+.logo-image {
+height: 40px;
+width: auto;
+}
 
-        .search-input {
-            padding-left: 40px;
-        }
+.logo-text-container {
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+}
 
-        .clear-search {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: #9ca3af;
-            cursor: pointer;
-            padding: 4px;
-            border-radius: 4px;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
+.logo-text {
+line-height: 1;
+margin: 0;
+}
 
-        .clear-search.visible {
-            opacity: 1;
-        }
+.logo-subtitle {
+font-size: 0.75rem;
+color: #6b7280;
+margin: 0;
+line-height: 1;
+font-weight: 400;
+}
 
-        .clear-search:hover {
-            color: #6b7280;
-            background-color: #f3f4f6;
-        }
+@media (max-width: 768px) {
+.logo-image {
+height: 32px;
+}
 
-        /* Responsive Layout */
-        .main-layout {
-            display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 2rem;
-        }
+.logo-text {
+font-size: 1rem;
+}
 
-        @media (max-width: 1024px) {
-            .main-layout {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
+.logo-subtitle {
+font-size: 0.65rem;
+}
+}
 
-            .journal-sidebar {
-                order: -1;
-            }
-        }
+.dropdown {
+position: relative;
+}
 
-        /* Journal Issue Sidebar Styles */
-        .journal-sidebar {
-            position: sticky;
-            top: 100px;
-            height: fit-content;
-        }
+.dropdown-content {
+display: none;
+position: absolute;
+top: 100%;
+right: 0;
+background-color: white;
+min-width: 160px;
+box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+border-radius: 0.5rem;
+z-index: 1000;
+border: 1px solid #e2e8f0;
+}
 
-        .journal-info-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e5e7eb;
-            overflow: hidden;
-        }
+.dropdown:hover .dropdown-content {
+display: block;
+}
 
-        .journal-cover {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-        }
+.dropdown-content a {
+color: #374151;
+padding: 12px 16px;
+text-decoration: none;
+display: block;
+transition: background-color 0.2s;
+}
 
-        /* Animation for cards */
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
+.dropdown-content a:hover {
+background-color: #f3f4f6;
+}
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+.dropdown-content a:first-child {
+border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.dropdown-content a:last-child {
+border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.current-issue-card {
+transition: all 0.3s ease;
+}
+
+.current-issue-card:hover {
+transform: translateY(-2px);
+box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.journal-cover-container {
+background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+@media (max-width: 1024px) {
+.journal-cover-container {
+background: #f8fafc;
+}
+}
+
+.current-issue-image-container {
+    width: 100%;
+    height: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.current-issue-image {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 1024px) {
+    .current-issue-image-container {
+        height: 200px;
+    }
+}        
+
+.nav-right {
+    margin-left: auto;
+}
+
+/* Enhanced Search Styles */
+.search-icon {
+    color: #2563eb;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+}
+
+.search-icon:hover {
+    color: #1d4ed8;
+    background-color: #f3f4f6;
+}
+
+.navbar-search-container {
+    position: relative;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-search-input {
+    width: 0;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.875rem;
+}
+
+.navbar-search-input.expanded {
+    width: 280px;
+    opacity: 1;
+    padding: 0.75rem 1rem;
+    border: 2px solid #3b82f6;
+    border-radius: 0.5rem;
+    background: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.navbar-search-results {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    max-height: 350px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+/* Mobile Search Enhancements */
+.mobile-nav-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.mobile-search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.mobile-search-input {
+    width: 0;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.875rem;
+}
+
+.mobile-search-input.expanded {
+    width: 200px;
+    opacity: 1;
+    padding: 0.625rem 0.875rem;
+    border: 2px solid #3b82f6;
+    border-radius: 0.5rem;
+    background: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    position: relative;
+    right: 0;
+    top: 0;
+    transform: none;
+}
+
+.mobile-search-results {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    left: -120px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+/* Responsive Search Adjustments */
+@media (max-width: 1200px) {
+    .navbar-search-input.expanded {
+        width: 240px;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-search-input.expanded {
+        width: 180px;
+    }
+    
+    .mobile-search-results {
+        left: -100px;
+    }
+}
+
+@media (max-width: 640px) {
+    .mobile-search-input.expanded {
+        width: 160px;
+    }
+    
+    .mobile-search-results {
+        left: -80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .mobile-search-input.expanded {
+        width: 140px;
+    }
+    
+    .mobile-search-results {
+        left: -60px;
+    }
+}
+
+/* Hide navigation items when search is expanded */
+.nav-items.hidden-for-search {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+/* Search Results Styling */
+.search-result-item {
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid #f3f4f6;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.search-result-item:hover {
+    background-color: #f8fafc;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+    border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.search-result-item:first-child {
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+/* Mobile Menu Button Enhancement */
+.mobile-menu-btn {
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+}
+
+.mobile-menu-btn:hover {
+    background-color: #f3f4f6;
+}
+
+/* Responsive Layout */
+/* Update the existing .main-layout rule */
+.main-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+    align-items: start; /* Add this line */
+}
+
+@media (max-width: 1024px) {
+    .main-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .journal-sidebar {
+        order: -1;
+    }
+}
+
+/* Journal Issue Sidebar Styles */
+.journal-sidebar {
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+}
+
+.journal-info-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+}
+
+.journal-cover {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+/* Animation for cards */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Enhanced Responsive Typography */
+@media (max-width: 768px) {
+    .logo-text {
+        font-size: 0.9rem;
+    }
+    
+    .logo-subtitle {
+        font-size: 0.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-text {
+        font-size: 0.85rem;
+    }
+    
+    .logo-subtitle {
+        font-size: 0.55rem;
+    }
+}
+/* Mobile Layout Fixes */
+@media (max-width: 1024px) {
+    .main-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .journal-sidebar {
+        order: -1; /* This moves the sidebar to top on mobile */
+    }
+    
+    /* Make journal info card more compact on mobile */
+    .journal-info-card {
+        margin-bottom: 1rem;
+    }
+    
+    .journal-cover {
+        height: 200px; /* Reduce height on tablets */
+    }
+}
+
+@media (max-width: 768px) {
+    .journal-sidebar {
+        position: static; /* Remove sticky positioning on mobile */
+        order: -1;
+        margin-bottom: 2rem;
+    }
+    
+    .journal-info-card {
+        margin-bottom: 0;
+    }
+    
+    .journal-cover {
+        height: 180px; /* Further reduce height on mobile */
+    }
+    
+    /* Compact padding for mobile */
+    .journal-info-card .p-6 {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .main-layout {
+        gap: 1rem;
+    }
+    
+    .journal-sidebar {
+        margin-bottom: 1.5rem;
+    }
+    
+    .journal-cover {
+        height: 160px; /* Even smaller on small screens */
+    }
+    
+    /* Ensure articles section takes remaining space */
+    .articles-section {
+        min-height: auto;
+    }
+    
+    /* Make article cards stack properly */
+    #articlesGrid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .journal-cover {
+        height: 140px; /* Smallest size for very small screens */
+    }
+    
+    .journal-sidebar {
+        margin-bottom: 1rem;
+    }
+    
+    /* Further compact the journal info card */
+    .journal-info-card .space-y-3 {
+        gap: 0.5rem;
+    }
+    
+    .journal-info-card .text-sm {
+        font-size: 0.75rem;
+    }
+}
+/* Article Grid Mobile Improvements */
+@media (max-width: 768px) {
+    #articlesGrid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .article-card {
+        margin-bottom: 0.5rem;
+    }
+    
+    .article-card .p-6 {
+        padding: 1rem;
+    }
+    
+    .article-card h3 {
+        font-size: 1.125rem;
+        line-height: 1.4;
+    }
+}        
+</style>
+
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="bg-white shadow-sm sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <div class="logo-container">
-                            <img src="logo.png" alt="Islamic Insight Logo" class="logo-image">
-                            <div class="logo-text-container">
-                                <h1 class="logo-text text-xl font-bold text-black-900 academic-title">
-                                ISLAMIC INSIGHT
-                                </h1>
-                                <p class="logo-subtitle">
-                                Journal of Islamic Studies
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+ <!-- Navigation -->
+<nav class="bg-white shadow-sm sticky top-0 z-40">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-16">
+<div class="flex items-center">
+<div class="flex-shrink-0">
+<div class="logo-container">
+<img src="logo.png" alt="Islamic Insight Logo" class="logo-image">
+<div class="logo-text-container">
+<h1 class="logo-text text-xl font-bold text-black-900 academic-title">
+ISLAMIC INSIGHT
+</h1>
+<p class="logo-subtitle">Journal of Islamic Studies</p>
+</div>
+</div>
+</div>
+</div>
 
-                    <!-- Desktop Navigation -->
-                    <div class="hidden md:block ml-10">
-                        <div class="flex items-baseline space-x-4">
-                            <a href="index.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Home</a>
-                            <a href="#featured" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Current Issue</a>
-                            <a href="#publications" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Archives</a>
-                            <a href="#about" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">About</a>
-                            <a href="#editorial" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Editorial Board</a>
-                            <a href="#guidelines" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Submission Guidelines</a>
-                            <a href="#contact" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Contact</a>
-                        </div>
-                    </div>
-                </div>
+<!-- Desktop Navigation - Moved to right -->
+<div class="hidden md:block nav-right">
+<div class="flex items-center space-x-6">
+<!-- Navigation Items -->
+<div id="nav-items" class="nav-items flex items-baseline space-x-6">
+<a href="index.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Home</a>
+<a href="#featured" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Current Issue</a>
+<a href="#publications" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Archives</a>
+<a href="all-issues.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">All Issues</a>
+<div class="dropdown">
+<a href="#about" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">About</a>
+<div class="dropdown-content">
+<a href="editors.html">Editorial Team</a>
+<a href="#contact">Contact</a>
+</div>
+</div>
+</div>
 
-                <!-- Search and Mobile Menu -->
-                <div class="flex items-center space-x-4">
-                    <!-- Enhanced Search Bar -->
-                    <div class="search-container relative">
-                        <div class="relative">
-                            <i class="fas fa-search search-icon"></i>
-                            <input 
-                                type="text" 
-                                id="searchInput" 
-                                placeholder="Search articles, authors, keywords..." 
-                                class="search-input bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64 transition-all"
-                                autocomplete="off"
-                            >
-                            <button id="clearSearch" class="clear-search">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                        <div id="searchResults" class="search-results"></div>
-                    </div>
+<!-- Search Container -->
+<div class="navbar-search-container">
+<input
+type="text"
+id="navbar-search-input"
+placeholder="Search articles, authors..."
+class="navbar-search-input"
+>
+<button id="search-toggle-btn" class="search-icon">
+<i id="search-icon" class="fas fa-search text-lg"></i>
+</button>
+<div id="navbar-search-results" class="navbar-search-results hidden"></div>
+</div>
+</div>
+</div>
 
-                    <!-- Mobile menu button -->
-                    <div class="md:hidden">
-                        <button type="button" id="mobile-menu-button" class="text-gray-700 hover:text-blue-900 focus:outline-none focus:text-blue-900 p-2">
-                            <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                                <path class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mobile menu -->
-            <div class="md:hidden hidden" id="mobile-menu">
-                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
-                    <a href="index.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Home</a>
-                    <a href="#featured" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Current Issue</a>
-                    <a href="#publications" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Archives</a>
-                    <a href="#about" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">About</a>
-                    <a href="#editorial" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Editorial Board</a>
-                    <a href="#guidelines" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Submission Guidelines</a>
-                    <a href="#contact" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Contact</a>
-                </div>
-            </div>
+<!-- Mobile menu button and search - Moved to right -->
+<div class="md:hidden nav-right">
+    <div class="mobile-nav-container">
+        <!-- Mobile Search Container -->
+        <div class="mobile-search-container">
+            <input
+                type="text"
+                id="mobile-search-input"
+                placeholder="Search..."
+                class="mobile-search-input"
+            >
+            <button id="mobile-search-toggle-btn" class="search-icon">
+                <i id="mobile-search-icon" class="fas fa-search text-lg"></i>
+            </button>
+            <div id="mobile-search-results" class="mobile-search-results hidden"></div>
         </div>
-    </nav>
+        
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="mobile-menu-btn text-gray-700 hover:text-blue-900 focus:outline-none">
+            <i class="fas fa-bars text-lg"></i>
+        </button>
+    </div>
+</div>
+</div>
+</div>
+
+<!-- Mobile Navigation -->
+<div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+<div class="px-2 pt-2 pb-3 space-y-1">
+<a href="index.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Home</a>
+<a href="#featured" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Current Issue</a>
+<a href="#publications" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Archives</a>
+<a href="all-issues.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">All Issues</a>
+<a href="#about" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">About</a>
+<a href="editors.html" class="block px-3 py-2 pl-6 text-sm font-medium text-gray-600 hover:text-blue-900 transition-colors">Editorial Team</a>
+<a href="#contact" class="block px-3 py-2 pl-6 text-sm font-medium text-gray-600 hover:text-blue-900 transition-colors">Contact</a>
+</div>
+</div>
+</nav>
 
     <!-- Main Content -->
     <main class="min-h-screen bg-gray-50">
@@ -515,297 +928,413 @@
             }
         ];
 
-        // Enhanced search functionality
-        let currentSearchTerm = '';
-        let searchTimeout;
+       // DOM Elements
+const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+const mobileMenu = document.getElementById('mobile-menu');
 
-        // Mobile menu functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const searchInput = document.getElementById('searchInput');
-            const searchResults = document.getElementById('searchResults');
-            const clearSearchButton = document.getElementById('clearSearch');
+// Enhanced search elements
+const searchToggleBtn = document.getElementById('search-toggle-btn');
+const navbarSearchInput = document.getElementById('navbar-search-input');
+const navbarSearchResults = document.getElementById('navbar-search-results');
+const searchIcon = document.getElementById('search-icon');
+const navItems = document.getElementById('nav-items');
 
-            // Mobile menu toggle
-            if (mobileMenuButton && mobileMenu) {
-                mobileMenuButton.addEventListener('click', function() {
-                    mobileMenu.classList.toggle('hidden');
-                });
-            }
+// Mobile search elements
+const mobileSearchToggleBtn = document.getElementById('mobile-search-toggle-btn');
+const mobileSearchInput = document.getElementById('mobile-search-input');
+const mobileSearchResults = document.getElementById('mobile-search-results');
+const mobileSearchIcon = document.getElementById('mobile-search-icon');
 
-            // Enhanced search functionality
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    const searchTerm = this.value.trim();
-                    currentSearchTerm = searchTerm;
+// Search state tracking
+let isDesktopSearchExpanded = false;
+let isMobileSearchExpanded = false;
+let currentSearchTerm = '';
+let searchTimeout;
 
-                    // Show/hide clear button
-                    if (clearSearchButton) {
-                        if (searchTerm.length > 0) {
-                            clearSearchButton.classList.add('visible');
-                        } else {
-                            clearSearchButton.classList.remove('visible');
-                        }
-                    }
+// Initialize the application
+document.addEventListener('DOMContentLoaded', function() {
+    setupEventListeners();
+    loadArticles();
+});
 
-                    // Debounce search
-                    clearTimeout(searchTimeout);
-                    searchTimeout = setTimeout(() => {
-                        performSearch(searchTerm);
-                    }, 300);
-                });
-
-                searchInput.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape') {
-                        clearSearch();
-                    }
-                });
-
-                // Click outside to close search results
-                document.addEventListener('click', function(e) {
-                    if (!e.target.closest('.search-container')) {
-                        hideSearchResults();
-                    }
-                });
-            }
-
-            // Clear search functionality
-            if (clearSearchButton) {
-                clearSearchButton.addEventListener('click', clearSearch);
-            }
-
-            // Load articles on page load
-            loadArticles();
+// Setup event listeners
+function setupEventListeners() {
+    // Mobile menu toggle
+    if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
         });
+    }
 
-        function performSearch(searchTerm) {
-            const searchResults = document.getElementById('searchResults');
-
-            if (!searchTerm || searchTerm.length < 2) {
-                hideSearchResults();
-                loadArticles(); // Show all articles
-                return;
+    // Desktop navbar search functionality
+    if (searchToggleBtn) {
+        searchToggleBtn.addEventListener('click', toggleNavbarSearch);
+    }
+    
+    if (navbarSearchInput) {
+        navbarSearchInput.addEventListener('input', handleNavbarSearch);
+        navbarSearchInput.addEventListener('focus', function() {
+            if (navbarSearchInput.value.trim()) {
+                navbarSearchResults.classList.remove('hidden');
             }
-
-            // Filter articles and authors
-            const filteredArticles = articlesData.filter(article => {
-                const titleMatch = article.title.toLowerCase().includes(searchTerm.toLowerCase());
-                const authorMatch = article.author.toLowerCase().includes(searchTerm.toLowerCase());
-                const keywordMatch = article.keywords.some(keyword => 
-                    keyword.toLowerCase().includes(searchTerm.toLowerCase())
-                );
-                const abstractMatch = article.abstract.toLowerCase().includes(searchTerm.toLowerCase());
-
-                return titleMatch || authorMatch || keywordMatch || abstractMatch;
-            });
-
-            // Show search results dropdown
-            displaySearchResults(filteredArticles, searchTerm);
-
-            // Filter displayed articles
-            loadArticles(filteredArticles);
-        }
-
-        function displaySearchResults(results, searchTerm) {
-            const searchResultsContainer = document.getElementById('searchResults');
-
-            if (results.length === 0) {
-                searchResultsContainer.innerHTML = '<div class="search-result-item text-gray-500">No results found</div>';
-            } else {
-                const resultsHTML = results.slice(0, 5).map(article => `
-                    <div class="search-result-item" onclick="scrollToArticle(${article.id})">
-                        <div class="font-medium text-sm">${highlightText(article.title, searchTerm)}</div>
-                        <div class="text-xs text-gray-600">${article.author}</div>
-                    </div>
-                `).join('');
-
-                searchResultsContainer.innerHTML = resultsHTML;
+        });
+        navbarSearchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                toggleNavbarSearch();
             }
+        });
+    }
 
-            searchResultsContainer.style.display = 'block';
-        }
+    // Mobile search functionality
+    if (mobileSearchToggleBtn) {
+        mobileSearchToggleBtn.addEventListener('click', toggleMobileSearch);
+    }
+    
+    if (mobileSearchInput) {
+        mobileSearchInput.addEventListener('input', handleMobileSearch);
+        mobileSearchInput.addEventListener('focus', function() {
+            if (mobileSearchInput.value.trim()) {
+                mobileSearchResults.classList.remove('hidden');
+            }
+        });
+        mobileSearchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                toggleMobileSearch();
+            }
+        });
+    }
 
-        function hideSearchResults() {
-            const searchResults = document.getElementById('searchResults');
-            if (searchResults) {
-                searchResults.style.display = 'none';
+    // Close search results when clicking outside
+    document.addEventListener('click', function(e) {
+        // Desktop search
+        if (navbarSearchInput && navbarSearchResults && searchToggleBtn) {
+            if (!navbarSearchInput.contains(e.target) && 
+                !navbarSearchResults.contains(e.target) && 
+                !searchToggleBtn.contains(e.target)) {
+                navbarSearchResults.classList.add('hidden');
             }
         }
 
-        function clearSearch() {
-            const searchInput = document.getElementById('searchInput');
-            const clearSearchButton = document.getElementById('clearSearch');
-
-            if (searchInput) {
-                searchInput.value = '';
-                currentSearchTerm = '';
-            }
-
-            if (clearSearchButton) {
-                clearSearchButton.classList.remove('visible');
-            }
-
-            hideSearchResults();
-            loadArticles(); // Show all articles
-        }
-
-        function highlightText(text, searchTerm) {
-            if (!searchTerm) return text;
-            const regex = new RegExp(`(${searchTerm})`, 'gi');
-            return text.replace(regex, '<mark class="bg-yellow-200">$1</mark>');
-        }
-
-        function scrollToArticle(articleId) {
-            hideSearchResults();
-            const articleElement = document.getElementById(`article-${articleId}`);
-            if (articleElement) {
-                articleElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                articleElement.classList.add('ring-2', 'ring-blue-500');
-                setTimeout(() => {
-                    articleElement.classList.remove('ring-2', 'ring-blue-500');
-                }, 2000);
+        // Mobile search
+        if (mobileSearchInput && mobileSearchResults && mobileSearchToggleBtn) {
+            if (!mobileSearchInput.contains(e.target) && 
+                !mobileSearchResults.contains(e.target) && 
+                !mobileSearchToggleBtn.contains(e.target)) {
+                mobileSearchResults.classList.add('hidden');
             }
         }
+    });
 
-        // Load and display articles
-        function loadArticles(articlesToShow = null) {
-            const articlesGrid = document.getElementById('articlesGrid');
-            const articles = articlesToShow || articlesData;
-
-            if (articles.length === 0) {
-                articlesGrid.innerHTML = `
-                    <div class="col-span-full text-center py-12">
-                        <div class="text-gray-400 mb-4">
-                            <i class="fas fa-search text-4xl"></i>
-                        </div>
-                        <h3 class="text-lg font-medium text-gray-600 mb-2">No articles found</h3>
-                        <p class="text-gray-500">Try adjusting your search terms or browse all articles.</p>
-                        <button onclick="clearSearch()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
-                            Clear Search
-                        </button>
-                    </div>
-                `;
-                return;
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                // Close mobile menu if open
+                if (mobileMenu) {
+                    mobileMenu.classList.add('hidden');
+                }
             }
+        });
+    });
+}
 
-            const articlesHTML = articles.map((article, index) => `
-                <div id="article-${article.id}" class="article-card bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden fade-in" style="animation-delay: ${index * 0.1}s">
-                    <div class="p-6 article-content">
-                        <h3 class="text-xl font-semibold academic-title text-gray-900 mb-3 leading-tight">
-                            ${currentSearchTerm ? highlightText(article.title, currentSearchTerm) : article.title}
-                        </h3>
+// Enhanced toggle navbar search with better state management
+function toggleNavbarSearch() {
+    isDesktopSearchExpanded = !isDesktopSearchExpanded;
 
-                        <div class="mb-3">
-                            <p class="text-sm font-medium text-blue-600">
-                                ${currentSearchTerm ? highlightText(article.author, currentSearchTerm) : article.author}
-                            </p>
-                        </div>
+    if (isDesktopSearchExpanded) {
+        // Expand search
+        navbarSearchInput.classList.add('expanded');
+        navItems.classList.add('hidden-for-search');
+        searchIcon.className = 'fas fa-times text-lg';
+        navbarSearchInput.focus();
+    } else {
+        // Collapse search
+        navbarSearchInput.classList.remove('expanded');
+        navItems.classList.remove('hidden-for-search');
+        searchIcon.className = 'fas fa-search text-lg';
+        navbarSearchResults.classList.add('hidden');
+        navbarSearchInput.value = '';
+        currentSearchTerm = '';
+        loadArticles(); // Show all articles
+    }
+}
 
-                        <div class="mb-4 text-sm text-gray-600">
-                            <i class="far fa-calendar-alt mr-2"></i>
-                            <span>${formatDate(article.date)}</span>
-                            <span class="mx-2">•</span>
-                            <span>Pages ${article.pages}</span>
-                        </div>
+// Enhanced toggle mobile search with proper cross functionality
+function toggleMobileSearch() {
+    isMobileSearchExpanded = !isMobileSearchExpanded;
 
-                        <div class="article-description">
-                            <p class="text-gray-700 text-sm leading-relaxed mb-4">
-                                ${currentSearchTerm ? highlightText(article.abstract, currentSearchTerm) : article.abstract}
-                            </p>
+    if (isMobileSearchExpanded) {
+        // Expand search
+        mobileSearchInput.classList.add('expanded');
+        mobileSearchIcon.className = 'fas fa-times text-lg';
+        mobileSearchInput.focus();
+    } else {
+        // Collapse search
+        mobileSearchInput.classList.remove('expanded');
+        mobileSearchIcon.className = 'fas fa-search text-lg';
+        mobileSearchResults.classList.add('hidden');
+        mobileSearchInput.value = '';
+        currentSearchTerm = '';
+        loadArticles(); // Show all articles
+    }
+}
 
-                            <div class="mb-4">
-                                <div class="flex flex-wrap gap-2">
-                                    ${article.keywords.map(keyword => 
-                                        `<span class="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full">
-                                            ${currentSearchTerm ? highlightText(keyword, currentSearchTerm) : keyword}
-                                        </span>`
-                                    ).join('')}
-                                </div>
-                            </div>
-                        </div>
+// Handle navbar search with improved filtering
+function handleNavbarSearch() {
+    const query = navbarSearchInput.value.toLowerCase().trim();
+    currentSearchTerm = query;
 
-                        <div class="article-footer">
-                            <div class="flex justify-between items-center">
-                                <button onclick="viewArticle(${article.id})" 
-                                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                                    Read More <i class="fas fa-arrow-right ml-2"></i>
-                                </button>
+    if (!query) {
+        navbarSearchResults.classList.add('hidden');
+        loadArticles();
+        return;
+    }
 
-                                <div class="flex space-x-2">
-                                    <button onclick="downloadPDF(${article.id})" 
-                                            class="text-gray-600 hover:text-blue-600 transition-colors" 
-                                            title="Download PDF">
-                                        <i class="fas fa-download"></i>
-                                    </button>
-                                    <button onclick="shareArticle(${article.id})" 
-                                            class="text-gray-600 hover:text-blue-600 transition-colors" 
-                                            title="Share Article">
-                                        <i class="fas fa-share-alt"></i>
-                                    </button>
-                                </div>
-                            </div>
+    const filteredArticles = articlesData.filter(article => {
+        return article.title.toLowerCase().includes(query) ||
+            article.author.toLowerCase().includes(query) ||
+            article.abstract.toLowerCase().includes(query) ||
+            article.keywords.some(keyword => keyword.toLowerCase().includes(query));
+    });
+
+    displayNavbarSearchResults(filteredArticles, query);
+    loadArticles(filteredArticles);
+}
+
+// Enhanced display navbar search results
+function displayNavbarSearchResults(results, query) {
+    if (results.length === 0) {
+        navbarSearchResults.innerHTML = `
+            <div class="p-4 text-center text-gray-500">
+                <i class="fas fa-search text-2xl mb-2 text-gray-400"></i>
+                <p>No articles found for "<strong>${query}</strong>"</p>
+            </div>
+        `;
+    } else {
+        navbarSearchResults.innerHTML = results.slice(0, 5).map(article => `
+            <div class="search-result-item" onclick="scrollToArticle(${article.id});">
+                <h4 class="font-semibold text-gray-900 mb-1 text-sm">${highlightSearchTerm(article.title, query)}</h4>
+                <p class="text-sm text-gray-600 mb-2">${highlightSearchTerm(article.author, query)}</p>
+                <p class="text-xs text-gray-500">${highlightSearchTerm(article.abstract.substring(0, 120), query)}...</p>
+            </div>
+        `).join('');
+    }
+
+    navbarSearchResults.classList.remove('hidden');
+}
+
+// Handle mobile search with improved filtering
+function handleMobileSearch() {
+    const query = mobileSearchInput.value.toLowerCase().trim();
+    currentSearchTerm = query;
+
+    if (!query) {
+        mobileSearchResults.classList.add('hidden');
+        loadArticles();
+        return;
+    }
+
+    const filteredArticles = articlesData.filter(article => {
+        return article.title.toLowerCase().includes(query) ||
+            article.author.toLowerCase().includes(query) ||
+            article.abstract.toLowerCase().includes(query) ||
+            article.keywords.some(keyword => keyword.toLowerCase().includes(query));
+    });
+
+    displayMobileSearchResults(filteredArticles, query);
+    loadArticles(filteredArticles);
+}
+
+// Enhanced display mobile search results
+function displayMobileSearchResults(results, query) {
+    if (results.length === 0) {
+        mobileSearchResults.innerHTML = `
+            <div class="p-3 text-center text-gray-500 text-sm">
+                <i class="fas fa-search text-lg mb-1 text-gray-400"></i>
+                <p>No articles found for "<strong>${query}</strong>"</p>
+            </div>
+        `;
+    } else {
+        mobileSearchResults.innerHTML = results.slice(0, 5).map(article => `
+            <div class="search-result-item text-sm" onclick="scrollToArticle(${article.id});">
+                <h4 class="font-semibold text-gray-900 mb-1">${highlightSearchTerm(article.title, query)}</h4>
+                <p class="text-xs text-gray-600 mb-1">${highlightSearchTerm(article.author, query)}</p>
+                <p class="text-xs text-gray-500">${highlightSearchTerm(article.abstract.substring(0, 100), query)}...</p>
+            </div>
+        `).join('');
+    }
+
+    mobileSearchResults.classList.remove('hidden');
+}
+
+// Highlight search terms in results
+function highlightSearchTerm(text, query) {
+    if (!query) return text;
+    const regex = new RegExp(`(${query})`, 'gi');
+    return text.replace(regex, '<mark class="bg-yellow-200 px-1 rounded">$1</mark>');
+}
+
+function scrollToArticle(articleId) {
+    if (navbarSearchResults) navbarSearchResults.classList.add('hidden');
+    if (mobileSearchResults) mobileSearchResults.classList.add('hidden');
+    
+    const articleElement = document.getElementById(`article-${articleId}`);
+    if (articleElement) {
+        articleElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        articleElement.classList.add('ring-2', 'ring-blue-500');
+        setTimeout(() => {
+            articleElement.classList.remove('ring-2', 'ring-blue-500');
+        }, 2000);
+    }
+}
+
+// Load and display articles
+function loadArticles(articlesToShow = null) {
+    const articlesGrid = document.getElementById('articlesGrid');
+    const articles = articlesToShow || articlesData;
+
+    if (articles.length === 0) {
+        articlesGrid.innerHTML = `
+            <div class="col-span-full text-center py-12">
+                <div class="text-gray-400 mb-4">
+                    <i class="fas fa-search text-4xl"></i>
+                </div>
+                <h3 class="text-lg font-medium text-gray-600 mb-2">No articles found</h3>
+                <p class="text-gray-500">Try adjusting your search terms or browse all articles.</p>
+                <button onclick="clearSearch()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                    Clear Search
+                </button>
+            </div>
+        `;
+        return;
+    }
+
+    const articlesHTML = articles.map((article, index) => `
+        <div id="article-${article.id}" class="article-card bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden fade-in" style="animation-delay: ${index * 0.1}s">
+            <div class="p-6 article-content">
+                <h3 class="text-xl font-semibold academic-title text-gray-900 mb-3 leading-tight">
+                    ${currentSearchTerm ? highlightSearchTerm(article.title, currentSearchTerm) : article.title}
+                </h3>
+
+                <div class="mb-3">
+                    <p class="text-sm font-medium text-blue-600">
+                        ${currentSearchTerm ? highlightSearchTerm(article.author, currentSearchTerm) : article.author}
+                    </p>
+                </div>
+
+                <div class="mb-4 text-sm text-gray-600">
+                    <i class="far fa-calendar-alt mr-2"></i>
+                    <span>${formatDate(article.date)}</span>
+                    <span class="mx-2">•</span>
+                    <span>Pages ${article.pages}</span>
+                </div>
+
+                <div class="article-description">
+                    <p class="text-gray-700 text-sm leading-relaxed mb-4">
+                        ${currentSearchTerm ? highlightSearchTerm(article.abstract, currentSearchTerm) : article.abstract}
+                    </p>
+
+                    <div class="mb-4">
+                        <div class="flex flex-wrap gap-2">
+                            ${article.keywords.map(keyword => 
+                                `<span class="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full">
+                                    ${currentSearchTerm ? highlightSearchTerm(keyword, currentSearchTerm) : keyword}
+                                </span>`
+                            ).join('')}
                         </div>
                     </div>
                 </div>
-            `).join('');
 
-            articlesGrid.innerHTML = articlesHTML;
-        }
+                <div class="article-footer">
+                    <div class="flex justify-between items-center">
+                        <button onclick="viewArticle(${article.id})" 
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                            Read More <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
 
-        // Utility functions
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            return date.toLocaleDateString('en-US', options);
-        }
+                        <div class="flex space-x-2">
+                            <button onclick="downloadPDF(${article.id})" 
+                                    class="text-gray-600 hover:text-blue-600 transition-colors" 
+                                    title="Download PDF">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button onclick="shareArticle(${article.id})" 
+                                    class="text-gray-600 hover:text-blue-600 transition-colors" 
+                                    title="Share Article">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
 
-        function viewArticle(articleId) {
-            // Simulate article view - in real implementation, this would navigate to article page
-            console.log(`Viewing article ${articleId}`);
-            alert(`Opening article ${articleId}. In a real implementation, this would navigate to the full article page.`);
-        }
+    articlesGrid.innerHTML = articlesHTML;
+}
 
-        function downloadPDF(articleId) {
-            // Simulate PDF download
-            console.log(`Downloading PDF for article ${articleId}`);
-            alert(`Downloading PDF for article ${articleId}. In a real implementation, this would trigger a PDF download.`);
-        }
+function clearSearch() {
+    if (navbarSearchInput) {
+        navbarSearchInput.value = '';
+        navbarSearchInput.classList.remove('expanded');
+    }
+    if (mobileSearchInput) {
+        mobileSearchInput.value = '';
+        mobileSearchInput.classList.remove('expanded');
+    }
+    if (navItems) navItems.classList.remove('hidden-for-search');
+    if (searchIcon) searchIcon.className = 'fas fa-search text-lg';
+    if (mobileSearchIcon) mobileSearchIcon.className = 'fas fa-search text-lg';
+    if (navbarSearchResults) navbarSearchResults.classList.add('hidden');
+    if (mobileSearchResults) mobileSearchResults.classList.add('hidden');
+    
+    currentSearchTerm = '';
+    isDesktopSearchExpanded = false;
+    isMobileSearchExpanded = false;
+    loadArticles();
+}
 
-        function shareArticle(articleId) {
-            // Simulate article sharing
-            const article = articlesData.find(a => a.id === articleId);
-            if (article && navigator.share) {
-                navigator.share({
-                    title: article.title,
-                    text: article.abstract.substring(0, 200) + '...',
-                    url: window.location.href + '#article-' + articleId
-                });
-            } else {
-                // Fallback to copying URL to clipboard
-                const url = window.location.href + '#article-' + articleId;
-                navigator.clipboard.writeText(url).then(() => {
-                    alert('Article link copied to clipboard!');
-                }).catch(() => {
-                    alert('Could not copy link. Please manually copy the URL.');
-                });
-            }
-        }
+// Utility functions
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+}
 
-        // Smooth scrolling for navigation links
-        document.addEventListener('DOMContentLoaded', function() {
-            const links = document.querySelectorAll('a[href^="#"]');
-            links.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href').substring(1);
-                    const targetElement = document.getElementById(targetId);
-                    if (targetElement) {
-                        targetElement.scrollIntoView({ behavior: 'smooth' });
-                    }
-                });
-            });
+function viewArticle(articleId) {
+    console.log(`Viewing article ${articleId}`);
+    alert(`Opening article ${articleId}. In a real implementation, this would navigate to the full article page.`);
+}
+
+function downloadPDF(articleId) {
+    console.log(`Downloading PDF for article ${articleId}`);
+    alert(`Downloading PDF for article ${articleId}. In a real implementation, this would trigger a PDF download.`);
+}
+
+function shareArticle(articleId) {
+    const article = articlesData.find(a => a.id === articleId);
+    if (article && navigator.share) {
+        navigator.share({
+            title: article.title,
+            text: article.abstract.substring(0, 200) + '...',
+            url: window.location.href + '#article-' + articleId
         });
-    </script>
+    } else {
+        const url = window.location.href + '#article-' + articleId;
+        navigator.clipboard.writeText(url).then(() => {
+            alert('Article link copied to clipboard!');
+        }).catch(() => {
+            alert('Could not copy link. Please manually copy the URL.');
+        });
+    }
+}
+</script>
 </body>
 </html>
