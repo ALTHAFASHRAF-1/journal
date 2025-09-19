@@ -3,1079 +3,809 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Academic Research Journal - Peer-reviewed scholarly publications across multiple disciplines">
+    <title>Vol. 7 No. 1 (2024) - Islamic Insight Journal</title>
+    <meta name="description" content="Academic Research Journal - Peer-reviewed scholarly publications and research articles">
     <meta name="keywords" content="academic journal, research papers, scholarly articles, peer review, scientific publications">
     <meta name="author" content="Academic Research Journal">
-    <title>Islamic Insight</title>
-     <link rel="icon" type="image/png" href="logo1.png">
-    
-    <!-- CSS Libraries -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- JavaScript Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-    
-        <style>
-body {
-font-family: 'Inter', sans-serif;
-line-height: 1.6;
-color: #1a202c;
-}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 
-.academic-title {
-font-family: 'Crimson Text', serif;
-}
+    <style>
+        :root {
+            --primary-color: #1f2937;
+            --secondary-color: #374151;
+            --accent-color: #3b82f6;
+            --light-gray: #f9fafb;
+            --border-color: #e5e7eb;
+        }
 
-.article-content h1, .article-content h2, .article-content h3 {
-font-family: 'Crimson Text', serif;
-font-weight: 600;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-.article-content p {
-margin-bottom: 1rem;
-text-align: justify;
-line-height: 1.7;
-}
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--primary-color);
+            background-color: #ffffff;
+            overflow-x: hidden;
+        }
 
-.article-content h2 {
-margin-top: 2rem;
-margin-bottom: 1rem;
-font-size: 1.5rem;
-color: #2d3748;
-}
+        .academic-title {
+            font-family: 'Crimson Text', serif;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
 
-.article-content h3 {
-margin-top: 1.5rem;
-margin-bottom: 0.75rem;
-font-size: 1.25rem;
-color: #4a5568;
-}
+        /* Article Card Styles - Matching current issue cards */
+        .article-card {
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
 
-.citation-box {
-background: #f7fafc;
-border-left: 4px solid #4299e1;
-padding: 1rem;
-margin: 1rem 0;
-font-style: italic;
-}
+        .article-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
 
-@media (max-width: 768px) {
-.article-content {
-font-size: 0.95rem;
-}
+        .article-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
 
-.article-content h2 {
-font-size: 1.3rem;
-}
+        .article-description {
+            flex-grow: 1;
+        }
 
-.article-content h3 {
-font-size: 1.1rem;
-}
-}
+        .article-footer {
+            margin-top: auto;
+            padding-top: 1rem;
+        }
 
-.mobile-menu {
-transition: all 0.3s ease;
-}
+        /* Search Styles */
+        .search-container {
+            position: relative;
+        }
 
-.article-card {
-transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
 
-.article-card:hover {
-transform: translateY(-2px);
-box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
+        .search-result-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #f3f4f6;
+        }
 
-.modal {
-backdrop-filter: blur(4px);
-}
+        .search-result-item:hover {
+            background-color: #f9fafb;
+        }
 
-.search-container {
-position: relative;
-}
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
 
-.search-results {
-position: absolute;
-top: 100%;
-left: 0;
-right: 0;
-background: white;
-border: 1px solid #e2e8f0;
-border-radius: 0.5rem;
-box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-max-height: 400px;
-overflow-y: auto;
-z-index: 50;
-}
+        /* Logo Styles */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-.badge {
-display: inline-block;
-padding: 0.25rem 0.75rem;
-border-radius: 9999px;
-font-size: 0.75rem;
-font-weight: 600;
-margin-right: 0.5rem;
-margin-bottom: 0.25rem;
-}
+        .logo-image {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
 
-.badge-blue { background: #ebf8ff; color: #2b6cb0; }
-.badge-green { background: #f0fff4; color: #2f855a; }
-.badge-red { background: #fff5f5; color: #c53030; }
-.badge-purple { background: #faf5ff; color: #6b46c1; }
-.badge-yellow { background: #fffaf0; color: #b7791f; }
+        .logo-text-container {
+            display: flex;
+            flex-direction: column;
+        }
 
-.pdf-content {
-display: none;
-}
+        .logo-text {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #1f2937;
+            line-height: 1.2;
+        }
 
-.article-image {
-height: 200px;
-background-size: cover;
-background-position: center;
-border-radius: 8px 8px 0 0;
-}
+        .logo-subtitle {
+            font-size: 0.75rem;
+            color: #6b7280;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
-.featured-article-image {
-width: 100%;
-height: 200px;
-object-fit: cover;
-border-radius: 8px 8px 0 0;
-}
+        @media (max-width: 768px) {
+            .logo-image {
+                width: 32px;
+                height: 32px;
+            }
 
-.logo-container {
-display: flex;
-align-items: center;
-gap: 0.75rem;
-}
+            .logo-text {
+                font-size: 1rem;
+            }
 
-.logo-image {
-height: 40px;
-width: auto;
-}
+            .logo-subtitle {
+                font-size: 0.6875rem;
+            }
+        }
 
-.logo-text-container {
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-}
+        /* Enhanced Search Styles */
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            pointer-events: none;
+        }
 
-.logo-text {
-line-height: 1;
-margin: 0;
-}
+        .search-input {
+            padding-left: 40px;
+        }
 
-.logo-subtitle {
-font-size: 0.75rem;
-color: #6b7280;
-margin: 0;
-line-height: 1;
-font-weight: 400;
-}
+        .clear-search {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
 
-@media (max-width: 768px) {
-.logo-image {
-height: 32px;
-}
+        .clear-search.visible {
+            opacity: 1;
+        }
 
-.logo-text {
-font-size: 1rem;
-}
+        .clear-search:hover {
+            color: #6b7280;
+            background-color: #f3f4f6;
+        }
 
-.logo-subtitle {
-font-size: 0.65rem;
-}
-}
+        /* Responsive Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+        }
 
-.dropdown {
-position: relative;
-}
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
 
-.dropdown-content {
-display: none;
-position: absolute;
-top: 100%;
-right: 0;
-background-color: white;
-min-width: 160px;
-box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-border-radius: 0.5rem;
-z-index: 1000;
-border: 1px solid #e2e8f0;
-}
+            .journal-sidebar {
+                order: -1;
+            }
+        }
 
-.dropdown:hover .dropdown-content {
-display: block;
-}
+        /* Journal Issue Sidebar Styles */
+        .journal-sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
 
-.dropdown-content a {
-color: #374151;
-padding: 12px 16px;
-text-decoration: none;
-display: block;
-transition: background-color 0.2s;
-}
+        .journal-info-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
 
-.dropdown-content a:hover {
-background-color: #f3f4f6;
-}
+        .journal-cover {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
 
-.dropdown-content a:first-child {
-border-radius: 0.5rem 0.5rem 0 0;
-}
+        /* Animation for cards */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
 
-.dropdown-content a:last-child {
-border-radius: 0 0 0.5rem 0.5rem;
-}
-
-@media (max-width: 768px) {
-.logo-image {
-height: 32px;
-}
-
-.logo-text {
-font-size: 1rem;
-}
-}
-
-/* Add this to your existing <style> section */
-.current-issue-card {
-transition: all 0.3s ease;
-}
-
-.current-issue-card:hover {
-transform: translateY(-2px);
-box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-}
-
-.journal-cover-container {
-background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-}
-
-@media (max-width: 1024px) {
-.journal-cover-container {
-background: #f8fafc;
-}
-}
-
-.current-issue-image-container {
-    width: 100%;
-    height: 280px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.current-issue-image {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-@media (max-width: 1024px) {
-    .current-issue-image-container {
-        height: 200px;
-    }
-}        
-
-.current-issue-image-container {
-    width: 100%;
-    height: 280px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.current-issue-image {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-@media (max-width: 1024px) {
-    .current-issue-image-container {
-        height: 200px;
-    }
-}    
-
-.nav-right {
-    margin-left: auto; 
-}
-
-</style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
-
-<body class="bg-gray-50">
-<!-- Navigation -->
-<nav class="bg-white shadow-sm sticky top-0 z-40">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-<div class="flex justify-between items-center h-16">
-<div class="flex items-center">
-<div class="flex-shrink-0">
-<div class="logo-container">
-<img src="https://dqdhiu.netlify.app/logo.jpg" alt="Islamic Insight Logo" class="logo-image">
-<div class="logo-text-container">
-<h1 class="logo-text text-xl font-bold text-black-900 academic-title">
-ISLAMIC INSIGHT
-</h1>
-<p class="logo-subtitle">Journal of Islamic Studies</p>
-</div>
-</div>
-</div>
-</div>
-                
-               <!-- Desktop Navigation -->
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-8">
-                        <a href="#home" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Home</a>
-                        <a href="#publications" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">All Articles</a>
-                        <a href="#featured" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Current Issue</a>
-                        <a href="all-issues.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">All Issues</a>
-                        <div class="dropdown">
-                            <a href="#about" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors cursor-pointer">
-                                About <i class="fas fa-chevron-down ml-1 text-xs"></i>
-                            </a>
-                            <div class="dropdown-content">
-                                <a href="editors.html">Editorial Team</a>
-                                <a href="#contact">Contact</a>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="logo-container">
+                            <img src="logo.png" alt="Islamic Insight Logo" class="logo-image">
+                            <div class="logo-text-container">
+                                <h1 class="logo-text text-xl font-bold text-black-900 academic-title">
+                                ISLAMIC INSIGHT
+                                </h1>
+                                <p class="logo-subtitle">
+                                Journal of Islamic Studies
+                                </p>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Desktop Navigation -->
+                    <div class="hidden md:block ml-10">
+                        <div class="flex items-baseline space-x-4">
+                            <a href="index.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Home</a>
+                            <a href="#featured" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Current Issue</a>
+                            <a href="#publications" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Archives</a>
+                            <a href="#about" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">About</a>
+                            <a href="#editorial" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Editorial Board</a>
+                            <a href="#guidelines" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Submission Guidelines</a>
+                            <a href="#contact" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Contact</a>
+                        </div>
+                    </div>
                 </div>
-                
-                <!-- Mobile menu button -->
-                <div class="md:hidden">
-                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-900 focus:outline-none">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
+
+                <!-- Search and Mobile Menu -->
+                <div class="flex items-center space-x-4">
+                    <!-- Enhanced Search Bar -->
+                    <div class="search-container relative">
+                        <div class="relative">
+                            <i class="fas fa-search search-icon"></i>
+                            <input 
+                                type="text" 
+                                id="searchInput" 
+                                placeholder="Search articles, authors, keywords..." 
+                                class="search-input bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64 transition-all"
+                                autocomplete="off"
+                            >
+                            <button id="clearSearch" class="clear-search">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div id="searchResults" class="search-results"></div>
+                    </div>
+
+                    <!-- Mobile menu button -->
+                    <div class="md:hidden">
+                        <button type="button" id="mobile-menu-button" class="text-gray-700 hover:text-blue-900 focus:outline-none focus:text-blue-900 p-2">
+                            <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                                <path class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Mobile Navigation -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
-            <div class="px-2 pt-2 pb-3 space-y-1">
-                <a href="#home" class="block px-3 py-2 text-gray-700 hover:text-blue-900 transition-colors">Home</a>
-                <a href="#publications" class="block px-3 py-2 text-gray-700 hover:text-blue-900 transition-colors">All Articles</a>
-                <a href="#featured" class="block px-3 py-2 text-gray-700 hover:text-blue-900 transition-colors">Current Issue</a>
-                <a href="all-issues.html" class="block px-3 py-2 text-gray-700 hover:text-blue-900 transition-colors">All Issues</a>
-                <a href="#about" class="block px-3 py-2 text-gray-700 hover:text-blue-900 transition-colors">About</a>
-                <a href="editors.html" class="block px-3 py-2 pl-6 text-gray-600 hover:text-blue-900 transition-colors">Editorial Team</a>
-                <a href="#contact" class="block px-3 py-2 pl-6 text-gray-600 hover:text-blue-900 transition-colors">Contact</a>
+
+            <!-- Mobile menu -->
+            <div class="md:hidden hidden" id="mobile-menu">
+                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
+                    <a href="index.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Home</a>
+                    <a href="#featured" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Current Issue</a>
+                    <a href="#publications" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Archives</a>
+                    <a href="#about" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">About</a>
+                    <a href="#editorial" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Editorial Board</a>
+                    <a href="#guidelines" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Submission Guidelines</a>
+                    <a href="#contact" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Contact</a>
+                </div>
             </div>
         </div>
     </nav>
 
-    <!-- Home Section -->
-    <section id="home" class="bg-gradient-to-br from-blue-900 to-blue-800 text-white py-16 sm:py-20 lg:py-24">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold academic-title mb-6">
-                    Islamic Insight Journal
-                </h2>
-                <p class="text-lg sm:text-xl lg:text-2xl mb-8 max-w-3xl mx-auto">
-                    International, peer-reviewed cross-disciplinary journal
+    <!-- Main Content -->
+    <main class="min-h-screen bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Page Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold academic-title text-gray-900 mb-4">
+                    Vol. 7 No. 1 (2024)
+                </h1>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES
                 </p>
-                
-                <!-- Search Bar -->
-                <div class="max-w-md mx-auto search-container">
-                    <div class="relative">
-                        <input
-                            type="text"
-                            id="search-input"
-                            placeholder="Search articles, authors, keywords..."
-                            class="w-full px-4 py-3 pl-10 pr-4 text-gray-900 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
-                            <i class="fas fa-search text-gray-400"></i>
+            </div>
+
+            <!-- 75/25 Layout -->
+            <div class="main-layout">
+                <!-- Articles Section (75%) -->
+                <section class="articles-section">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6" id="articlesGrid">
+                        <!-- Articles will be populated by JavaScript -->
+                    </div>
+                </section>
+
+                <!-- Journal Information Sidebar (25%) -->
+                <aside class="journal-sidebar">
+                    <div class="journal-info-card">
+                        <img src="https://dqdhiu.netlify.app/vol7no1.jpg" 
+                             alt="Journal Cover" 
+                             class="journal-cover">
+
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold academic-title text-gray-900 mb-4">
+                                Journal Information
+                            </h3>
+
+                            <div class="space-y-3 text-sm text-gray-600">
+                                <div class="flex items-center">
+                                    <i class="fas fa-calendar-alt mr-3 text-blue-600"></i>
+                                    <span><strong>Published:</strong> 2024-06-01</span>
+                                </div>
+
+                                <div class="flex items-center">
+                                    <i class="fas fa-bookmark mr-3 text-blue-600"></i>
+                                    <span><strong>Volume:</strong> 7, Number 1</span>
+                                </div>
+
+                                <div class="flex items-center">
+                                    <i class="fas fa-language mr-3 text-blue-600"></i>
+                                    <span><strong>Languages:</strong> English, Arabic</span>
+                                </div>
+
+                                <div class="flex items-center">
+                                    <i class="fas fa-eye mr-3 text-blue-600"></i>
+                                    <span><strong>Open Access</strong></span>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 pt-4 border-t border-gray-200">
+                                <p class="text-sm text-gray-700 leading-relaxed">
+                                    Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual platform for disseminating exceptional academic research on Islam and the Muslim world.
+                                </p>
+                            </div>
+
+                            <div class="mt-6">
+                                <button onclick="location.href='index.html'" 
+                                        class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                                    <i class="fas fa-home mr-2"></i>Back to Home
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div id="search-results" class="search-results hidden"></div>
-                </div>
+                </aside>
             </div>
         </div>
-    </section>
-    
-    
-
-    
-
-    <!-- Publications Section (Articles without Images) -->
-    <section id="publications" class="py-12 sm:py-16 lg:py-20 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold academic-title text-gray-900 mb-4">
-                    All Articles
-                </h2>
-                
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8" id="publications-grid">
-                <!-- Publications will be populated by JavaScript -->
-            </div>
-        </div>
-    </section>
-    
-    <!-- Featured Articles with Images -->
-    <section id="featured" class="py-12 sm:py-16 lg:py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold academic-title text-gray-900 mb-4">
-                    Current Issue
-                </h2>
-               
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8" id="featured-articles-grid">
-                <!-- Featured articles will be populated by JavaScript -->
-            </div>
-        </div>
-    </section>
-
-    
+    </main>
 
     <!-- Footer -->
-<footer class="bg-gray-900 text-white py-8">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-<!-- Left side - Contact Info -->
-<div class="lg:col-span-1">
-<div class="text-center lg:text-center">
-<h3 class="text-xl font-semibold academic-title mb-6">Contact Us</h3>
-
-<div class="space-y-6 text-left max-w-md mx-auto">
-<div>
-<p class="font-medium text-gray-300 mb-2">Address</p>
-<p class="text-gray-400 text-sm">
-Editor, Islamic Insight Journal of Islamic Studies, Darul Huda Islamic
-University, Chemmad, P.B.NO. 3, Tirurangadi (PO), Malappuram (Dt.),
-676306 (PIN), Kerala, India.
-</p>
-</div>
-
-<div>
-<p class="font-medium text-gray-300 mb-2">Email</p>
-<p class="text-gray-400 text-sm">islamicinsight@dhiu.in</p>
-</div>
-
-<div>
-<p class="font-medium text-gray-300 mb-2">Website</p>
-<p class="text-gray-400 text-sm">www.islamicinsight.in</p>
-</div>
-</div>
-</div>
-</div>
-
-<!-- Right side - Empty -->
-<div class="lg:col-span-1">
-<!-- Empty space as requested -->
-</div>
-</div>
-
-<!-- Bottom section -->
-<div class="mt-8 pt-6 border-t border-gray-700">
-<div class="text-center mb-4">
-<h4 class="text-lg font-semibold academic-title mb-2">Islamic Insight</h4>
-<p class="text-gray-400 text-sm mb-4">
-International, peer-reviewed cross-disciplinary journal
-</p>
-</div>
-
-<div class="text-center">
-<p class="text-gray-500 text-xs">
-© 2025 Islamic Insight. All rights reserved.
-</p>
-</div>
-</div>
-</div>
-</footer>
-
-    <!-- Article Modal -->
-    <div id="article-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden modal">
-        <div class="flex items-start justify-center min-h-screen pt-4 px-4 pb-20">
-            <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-screen overflow-hidden">
-                <div class="flex justify-between items-center p-6 border-b border-gray-200">
-                    <h3 class="text-lg font-semibold text-gray-900">Details</h3>
-                    <button id="close-modal" class="text-gray-400 hover:text-gray-600">
-                        <i class="fas fa-times text-xl"></i>
-                    </button>
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="logo-container mb-4">
+                        <img src="logo.png" alt="Islamic Insight Logo" class="logo-image">
+                        <div class="logo-text-container">
+                            <h1 class="logo-text text-white">ISLAMIC INSIGHT</h1>
+                            <p class="logo-subtitle text-gray-300">Journal of Islamic Studies</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-4">
+                        A peer-reviewed academic journal dedicated to advancing scholarly research in Islamic studies through rigorous academic discourse and innovative research methodologies.
+                    </p>
                 </div>
-                
-                <div class="overflow-y-auto max-h-screen pb-20">
-                    <div class="p-6" id="modal-content">
-                        <!-- Content will be populated by JavaScript -->
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#about" class="text-gray-300 hover:text-white transition-colors">About Journal</a></li>
+                        <li><a href="#editorial" class="text-gray-300 hover:text-white transition-colors">Editorial Board</a></li>
+                        <li><a href="#guidelines" class="text-gray-300 hover:text-white transition-colors">Submission Guidelines</a></li>
+                        <li><a href="#contact" class="text-gray-300 hover:text-white transition-colors">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fas fa-envelope text-xl"></i>
+                        </a>
                     </div>
                 </div>
             </div>
+
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
+                <p>&copy; 2024 Islamic Insight Journal. All rights reserved.</p>
+            </div>
         </div>
-    </div>
+    </footer>
 
     <script>
-    
-    // Additional publications for the Publications section (without images)
-        const publications = [
+        // Sample articles data for Vol. 7 No. 1 (2024)
+        const articlesData = [
             {
                 id: 1,
-                title: "THE KHUFF IN MUSLIM RITUAL THOUGHT: THE CURIOUS CASE OF A BOOT’S RELIGIOUS IDENTITY",
-                authors: "Hamza A. Dudgeon (Doctoral student at Emory University's Islamic Civilizations Studies (ICIVS) program, Georgia)",
-                journal: "Islamic Insight",
-                date: "2024-06-30",
-                volume: "Vol. 7 No. 1 ",
-                pages: "pp. 30-50",
-                doi: "",
-                categories: ["Abstract"],
-                abstract: "Typically, Islamic footwear is not casual conversation that one might have in the elevator, even amongst Islamic Studies academics. Slippers, leather socks, boots, moccasins, or whatever one may want to call them, the “khuffayn” are generally regarded as no more than a footnote by academics.",
-                keywords: ["Khuffayn", "Ritual Studies", "Islamic Law", "Fiqh, Shia Studies", "Ibadi Studies", "Islamic Theology", "Islamic Footwear"],
-                fullContent: `
-                    <h2>Abstract</h2>
-                    <p>Typically, Islamic footwear is not casual conversation that one might have in the elevator, even amongst Islamic Studies academics. Slippers, leather socks, boots, moccasins, or whatever one may want to call them, the “khuffayn” are generally regarded as no more than a footnote by academics. Often, it is merely gleamed over as a mundane snippet of Ṭahāra (purity), and not deeply investigated. The reality is that the issue of footwear in medieval and contemporary Islam is surrounded by nuanced discussion and debate. Investigating the Qurʾān, medieval Ḥadīth literature, various books of Islamic law, and theological treatises, the researcher discovered that not only do the khuffayn have legal ramifications, but also creedal. Some of the books examined are the Ṣaḥīḥayn, Shamāʾil Tirmidhi, Kitāb al-Āthār of Abū Ḥanīfa, The Muwaṭṭāʾ, The Musnad of Imam Shāfiʿī, Al- ʿAqīda aṭ-Ṭaḥāwīya, Abū Ḥanīfa’s al-Fiqh al-Akbar, and so on. The mass mention of the khuffayn indicates that it was an important topic to the authors writing it down. The researcher wanted to know what exactly the physical khuff was? And how Sunni Muslims conceptualized footwear’s legal and theological implications from the medieval period until now? This adds to the ongoing debate between the supremacy of ritual vs. theology. Through analyzing the medieval passages that the researcher used, it became apparent that in the early period, the khuffayn were never physically described. They were so common that the reader was assumed to be quite familiar with the footwear. In the stipulations of the jurists as to what components the khuffayn may consist of, or what basic elements constitutes a khuff, we are able to paint a partial picture as to what they might’ve been. Furthermore, in the later medieval period (11th - 17th centuries) we start to see more of a physical description of the khuffayn. The descriptions indicate that the khuffayn were probably a type of leather moccasin-boots, which had some universality in the Near East, and even East Africa. It is not until the 19th century that footwear besides the khuffayn and Jarmūq (galosh) are mentioned. Shoes appear in the Ḥanafī encyclopedic text Ḥāshiya Ibn ʿĀbidīn. Contemporary Sunnis think about footwear and purity in a very different way. The researcher demonstrate textually how late Sunni traditionalists, and different revisionist groups conceive of modern footwear, both legally and theologically, which often diverges significantly from medieval conceptualizations. However, in the medieval period up until our contemporary time, wiping over the khuff has been a ritual that marks sectarian identity so much so that it is considered a part of Islamic creed to affirm or reject the practice. So, is wiping over the khuff a ritual or theologizing? Perhaps, both.</p>
-                    <br>
-                    <a style="color:blue" href="#">NO PDF</a>
-                    <br>
-                   <br>
-                    <br>
-                `
+                title: "Islamic Financial Ethics in Contemporary Banking Systems",
+                author: "Dr. Ahmad Hassan Al-Rashid",
+                abstract: "This study examines the application of Islamic financial principles in modern banking systems, exploring how traditional Islamic ethics can be integrated into contemporary financial practices while maintaining regulatory compliance and market competitiveness.",
+                date: "2024-11-15",
+                keywords: ["Islamic finance", "banking ethics", "Sharia compliance", "financial systems"],
+                pages: "1-24"
             },
-             {
-                id: 2,
-                title: "THE CONCEPT OF ‘PERFECT HUMAN’ IN THE METAPHYSICAL ANTHROPOLOGY OF SADREDDIN AL-KONEVI",
-                authors: "Shameerali Hudawi Pallath (HoD, Department of Civilizational Studies, Darul Huda Islamic University, Kerala, India)",
-                journal: "Islamic Insight",
-                date: "2024-06-30",
-                volume: "Vol. 7 No. 1 ",
-                pages: "pp. 30-50",
-                doi: "",
-                categories: ["Abstract"],
-                abstract: "Being one of the most important figures among the theoreticians of the Gnostic doctrine ‘perfect man’, Konevi has paid a significant attention to its delineation in his monumental masterpiece ‘Miftah alghayb (Key to the unseen).",
-                keywords: ["Perfect Man", "Ontological Perfection", "Metaphysical Anthropology", "Sufistic World View"],
-                fullContent: `
-                    <h2>Abstract</h2>
-                    <p>Being one of the most important figures among the theoreticians of the Gnostic doctrine ‘perfect man’, Konevi has paid a significant attention to its delineation in his monumental masterpiece ‘Miftah alghayb (Key to the unseen). Though Ibn Arabi, father of the Sufi theoretical gnosis, develops the concept of perfect man in the first chapter of Fusus al-Hikam, Konevi takes this Gnostic anthropology into new levels of philosophical explanations and ontological reflections in the light of Ibn Sina’s al-Isharat, especially Khwaja Nasirudhin al-Tusi’s commentary on it. In the last quarter of Miftah al-ghayb, Konevi expounds on the special qualities of the ‘Perfect Man’ and notes that he will know the answers to sixteen key questions of paramount onto-theological significance. Konevi’s metaphysical anthropology exerted enduring influence on the subsequent generations of the Islamic world through the works of his students Qutb al-Din al-Shirazi, Fakhr-al-Din Iraqi and his foremost commentator Mulla Fanari. Thanks to these towering figures, later philosophical discourses took an Akbarian/Avicennian turn ina;most all Islamicate lands stretching from the Ottoman Turkey, North Africa and Iran to India, China, the Balkans and elsewhere. This paper aims to study the significance of Konevi’s concept of ‘Perfect Human’ in his masterpiece Miftah al Ghayb , its impact on the later Islamic civilization and its relevance in a postmodern setting.</p>
-                    <br>
-                    <a style="color:blue" #">NO PDF</a>
-                    <br>
-                   <br>
-                    <br>
-                `
-            },
-             {
-                id: 3,
-                title: "FATHIMA MERNISSI'S CRITIQUE OF THE COMPANIONS OF PROPHET MUHAMMAD (PBUH): AN ANALYSIS OF MISOGYNISTIC HADITH AND THE CASE OF ABŪ BAKRAH (R)",
-                authors: "Muhammed Afsal VM",
-                journal: "Islamic Insight",
-                date: "2024-06-30",
-                volume: "Vol. 7 No. 1 ",
-                pages: "pp. 30-50",
-                doi: "",
-                categories: ["Abstract"],
-                abstract: "This academic article examines the prominent Moroccan feminist writer and sociologist, Fatima Mernissi's, critical analysis of various aspects within Islām ic history, with a specific focus on her critique of the Companions of Prophet Muḥammad (PBUH).",
-                keywords: ["Fathima Mernissi", "Gender Equality", "Moroccan Feminist", "Islāmic History", "Companions of Prophet Muhammad", "Misogyny", "Misogynistic Ḥadīth", "Abū Bakra"],
-                fullContent: `
-                    <h2>Abstract</h2>
-                    <p>This academic article examines the prominent Moroccan feminist writer and sociologist, Fatima Mernissi's, critical analysis of various aspects within Islām ic history, with a specific focus on her critique of the Companions of Prophet Muḥammad (PBUH). Mernissi's work challenges traditional interpretations of Islām ic texts, advocates for gender equality, and highlights potential instances of misogyny and gender oppression within Islām ic society. This article explores her examination of ‘misogynistic Ḥadīth’—a term she introduced—and analyzes the case of Abū Bakra (RA), a Companion whose credibility as a Ḥadīth narrator has been questioned due to his involvement in a case of false testimony. By critically evaluating Mernissi's claims and considering alternative perspectives, this article seeks to offer a comprehensive understanding and analysis of misogynistic Ḥadīth and the case of Abū Bakra (RA).</p>
-                    <br>
-                    <a style="color:blue" href="#">NO PDF</a>
-                    <br>
-                   <br>
-                    <br>
-                `
-            },
-             {
-                id: 4,
-                title: "THE QUR’ĀN AND GERONTOLOGY: A COMPARATIVE ANALYSIS",
-                authors: "Mahir NP. Koorantak (Ph.D. Scholar, Necmettin Erbakan University, Konya, Turkey)",
-                journal: "Islamic Insight",
-                date: "2024-06-30",
-                volume: "Vol. 7 No. 1 ",
-                pages: "pp. 30-50",
-                doi: "",
-                categories: ["Abstract"],
-                abstract: "The global ageing population is expanding at an unprecedented rate, posing profound challenges on both societal and individual fronts. By 2050, older adults are projected to account for 16% of the global population, according to the World Population Ageing report.",
-                keywords: ["Gerontology", "Qur’ān", "Ageing", "Elderly Care", "Islamic Ethics"],
-                fullContent: `
-                    <h2>Abstract</h2>
-                    <p>The global ageing population is expanding at an unprecedented rate, posing profound challenges on both societal and individual fronts. By 2050, older adults are projected to account for 16% of the global population, according to the World Population Ageing report. This demographic is often vulnerable to a range of physical, cognitive, and emotional challenges, further compounded by social neglect. Gerontology, the scientific study of ageing, provides insights into the biological, psychological, and social dimensions of this phenomenon. This research examines ageing through the unique perspective of the Qur’ān, exploring its ethical, spiritual, and societal teachings. By analysing Qur’ānic verses, the study highlights the moral and practical responsibilities outlined in Islamic tradition, such as compassion, respect, and care for the elderly. A comparative analysis reveals significant parallels between Qur’ānic principles and contemporary gerontological frameworks, offering a compelling case for their integration. The Qur’ānic perspective not only underscores the importance of honouring and supporting the elderly but also positions their wisdom and experiences as valuable contributions to societal progress. Moreover, the findings stress the need for developing sustainable care systems that merge Islamic values with modern methodologies. This synthesis provides a holistic approach to elderly care, addressing both the spiritual and practical needs of older individuals, particularly amidst the rising demand for institutionalized support. </p>
-                    <br>
-                    <a style="color:blue" href="#">NO PDF</a>
-                    <br>
-                   <br>
-                    <br>
-                `
-            },
-             {
-                id: 5,
-                title: "البدِيعيات وتأثيرها في شيوع البلاغة وتبسيطها للعامّة",
-                authors: "محمد شرف الدين (باحث الدكتوراه في قسم البحوث والدراسات العربية, كلّية تونجان الحكومية بترور، تحت جامعة كاليكوت), د/ جابر كي تي (مشرف البحث والأستاذ المشارك في قسم البحوث والدراسات العربية, كلّية تونجان الحكومية بترور، تحت جامعة كاليكوت)", 
-                journal: "Islamic Insight",
-                date: "2024-06-30",
-                volume: "Vol. 7 No. 1 ",
-                pages: "pp. 30-50",
-                doi: "",
-                categories: ["Abstract"],
-                abstract: "تسلّط هذه الدراسة الضوءَ على البديعيات باعتبارها وسيلةً شعريّة جميلة وفعّالة في تعليم البلاغة وتبسيطها للجمهور، فقد استطاعت هذه المنظومات أن تنقُل البلاغة من الكتب إلى الحياة، فصارت تُتداوَل وتُنشد، وتُغنّى أحيانًا، وقد ساعد في ترسيخ مفاهيمها في أذهان الناس بطريقة محبّبة وسهلة، وهكذا أصبحت البديعيات جسرًا بين الفنّ والعلم، وبين البلاغة والنفوس،.",
-                keywords: ["البديعيات", "البلاغة", "القصيدة", "ابن المعتز", "صفيُّ الدين الحِلّي"],
-                fullContent: `
-                    <h2>Abstract</h2>
-                    <p>تسلّط هذه الدراسة الضوءَ على البديعيات باعتبارها وسيلةً شعريّة جميلة وفعّالة في تعليم البلاغة وتبسيطها للجمهور، فقد استطاعت هذه المنظومات أن تنقُل البلاغة من الكتب إلى الحياة، فصارت تُتداوَل وتُنشد، وتُغنّى أحيانًا، وقد ساعد في ترسيخ مفاهيمها في أذهان الناس بطريقة محبّبة وسهلة، وهكذا أصبحت البديعيات جسرًا بين الفنّ والعلم، وبين البلاغة والنفوس، حيث جمعت بين التعليم والتذوّق معًا، وتسعى الدراسة إلى بيانِ كيفية إتيانِ البديعيات من البلاغة بعلمٍ قابلٍ للفهم عوامّ الناس، لا محتكرًا للعلماء والمتخصّصين، فهي تقدّم البلاغةَ في صورة تطبيقية محسوسة، وتُعيد إحياءها شعريًّا بأسلوب يجمع بين المتعة والمعرفة، وتوضح الدراسة كيف أثّرت هذه القصائد في انتشار البلاغة وتيسير فهمها للناس عبر الأجيال.</p>
-                    <br>
-                    <a style="color:blue" href="#">NO PDF</a>
-                    <br>
-                   <br>
-                    <br>
-                `
-            },
-        ];
-        
-        // Articles Data
-        const featuredArticles = [
             {
-                id: 0,
-                title: "Vol. 7 No. 2 (2024): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
-                authors: "",
-                journal: "Islamic Insight",
-                date: "2024-12-01",
-                volume: "",
-                pages: "",
-                doi: "",
-                categories: ["Current"],
-                abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabi) platform for disseminating exceptional academic research on Islam and the Muslim world. It welcomes original scholarship across various disciplines, encompassing textual analysis of the Quran and Hadith, Islamic legal and theological discourse, philosophy, comparative religion, social sciences, and the historical and cultural experiences of Muslims. Notably, IIJIS employs a rigorous double-blind peer review process to ensure the quality of published works.",
-                keywords: [""],
-                imageUrl: "vol7no2.jpg",
-                fullContent: `
-                   
-                    <p>Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabi) platform for disseminating exceptional academic research on Islam and the Muslim world. It welcomes original scholarship across various disciplines, encompassing textual analysis of the Quran and Hadith, Islamic legal and theological discourse, philosophy, comparative religion, social sciences, and the historical and cultural experiences of Muslims. Notably, IIJIS employs a rigorous double-blind peer review process to ensure the quality of published works.</p>
-                    
-                    <h2>Articles</h2>
-                    <button onclick="location.href='index1.html'" style="font-size:24px;color:blue;">SHOW ALL <i class="fa fa-book"></i></button>
-                    <br>
-                    <br>
-                    <br>
-                  <a href="#">1.WESTERN SĪRAH LITERATURE FROM INCEPTION TO CONTEMPORARY DEVELOPMENTS: A HISTORICAL ANALYSIS (Irshad E V)</a>
-                  <br>
-                    <a href="#">2.ḤADĪTH OF SELF-KNOWING BETWEEN SUFIS AND ḤADĪTH SCHOLARS
-                    Muhammad Gufran-ul-Haque</a>
-                    <br>
-                    <a href="#">3.FACTORS OF CIVILISATIONAL ADVANCEMENT IN THE QURʾĀN: INSIGHTS FROM AL-BŪṬĪ
-                    Muhammed Rashid AT</a>
-                    <br>
-                    <a href="#">4.PRICE ANALYSIS OF ḤAJJ: COSTS, SUBSIDIES, INFLATION, AND SOCIAL INFLUENCES IN INDIA
-                    Dr. Shujaat Ahmad Qureshi</a>
-                    <br>
-                    <a href="#">5.Behind The Story: Ethical Readings of Qur’ānic Narratives.
-                    Mohammed Niyas P</a>
-                   
-                `
+                id: 2,
+                title: "Women's Rights in Islamic Jurisprudence: A Contemporary Analysis",
+                author: "Prof. Aisha Fatima Al-Zahra",
+                abstract: "An comprehensive analysis of women's rights within Islamic jurisprudence, examining classical interpretations and their modern applications in contemporary Muslim societies, with particular attention to education, employment, and social participation.",
+                date: "2024-11-10",
+                keywords: ["women's rights", "Islamic jurisprudence", "gender studies", "contemporary Islam"],
+                pages: "25-48"
             },
+            {
+                id: 3,
+                title: "Environmental Stewardship in Islamic Teachings",
+                author: "Dr. Muhammad Ibrahim Al-Masri",
+                abstract: "This research explores the concept of environmental stewardship (khalifa) in Islamic teachings, analyzing how traditional Islamic principles can inform contemporary environmental policies and sustainable development practices.",
+                date: "2024-11-05",
+                keywords: ["environmental ethics", "Islamic teachings", "sustainability", "khalifa"],
+                pages: "49-68"
+            },
+            {
+                id: 4,
+                title: "Interfaith Dialogue in the Quran: Principles and Applications",
+                author: "Dr. Sara Abdullah Al-Hijazi",
+                abstract: "A textual analysis of Quranic verses related to interfaith dialogue, examining the principles of religious pluralism and peaceful coexistence as outlined in Islamic scripture and their relevance to modern interfaith relations.",
+                date: "2024-10-28",
+                keywords: ["interfaith dialogue", "Quran", "religious pluralism", "peaceful coexistence"],
+                pages: "69-92"
+            },
+            {
+                id: 5,
+                title: "Digital Technology and Islamic Education Methodologies",
+                author: "Prof. Omar Hassan Al-Baghdadi",
+                abstract: "An investigation into the integration of digital technologies in Islamic educational institutions, analyzing how modern pedagogical tools can enhance traditional Islamic teaching methods while preserving authentic religious instruction.",
+                date: "2024-10-20",
+                keywords: ["digital education", "Islamic pedagogy", "educational technology", "religious instruction"],
+                pages: "93-116"
+            },
+            {
+                id: 6,
+                title: "Social Justice Concepts in Early Islamic Society",
+                author: "Dr. Layla Ahmed Al-Andalusi",
+                abstract: "A historical analysis of social justice principles in early Islamic society during the time of Prophet Muhammad and the Rashidun Caliphate, exploring their implementation and relevance to contemporary social justice movements.",
+                date: "2024-10-15",
+                keywords: ["social justice", "early Islam", "Rashidun Caliphate", "Islamic history"],
+                pages: "117-140"
+            }
         ];
 
-        
+        // Enhanced search functionality
+        let currentSearchTerm = '';
+        let searchTimeout;
 
-        // Combine all articles for search functionality
-        const allArticles = [...featuredArticles, ...publications];
-
-        // DOM Elements
-        const featuredArticlesGrid = document.getElementById('featured-articles-grid');
-        const publicationsGrid = document.getElementById('publications-grid');
-        const searchInput = document.getElementById('search-input');
-        const searchResults = document.getElementById('search-results');
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const articleModal = document.getElementById('article-modal');
-        const modalContent = document.getElementById('modal-content');
-        const closeModal = document.getElementById('close-modal');
-        const contactForm = document.getElementById('contact-form');
-
-        // Initialize the application
+        // Mobile menu functionality
         document.addEventListener('DOMContentLoaded', function() {
-            renderFeaturedArticles();
-            renderPublications();
-            setupEventListeners();
-        });
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+            const clearSearchButton = document.getElementById('clearSearch');
 
-        // Render featured articles with images
-        function renderFeaturedArticles() {
-            featuredArticlesGrid.innerHTML = '';
-            
-            featuredArticles.forEach(article => {
-                const articleCard = createFeaturedArticleCard(article);
-                featuredArticlesGrid.appendChild(articleCard);
-            });
-        }
-
-        // Render publications without images
-        function renderPublications() {
-            publicationsGrid.innerHTML = '';
-            
-            publications.forEach(article => {
-                const articleCard = createPublicationCard(article);
-                publicationsGrid.appendChild(articleCard);
-            });
-        }
-
-       // Create featured article card with image
-        function createFeaturedArticleCard(article) {
-            const div = document.createElement('div');
-            div.className = 'article-card bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden';
-            
-            const badgeColors = ['badge-blue', 'badge-green', 'badge-red', 'badge-purple', 'badge-yellow'];
-            const categoryBadges = article.categories.map((category, index) => 
-                `<span class="badge ${badgeColors[index % badgeColors.length]}">${category}</span>`
-            ).join('');
-            
-            div.innerHTML = `
-                <div class="article-image" style="background-image: url('${article.imageUrl}');"></div>
-                <div class="p-6">
-                    <div class="mb-4">
-                        ${categoryBadges}
-                    </div>
-                    <h3 class="text-xl font-semibold academic-title text-gray-900 mb-3 line-clamp-2">
-                        ${article.title}
-                    </h3>
-                    <p class="text-sm text-gray-600 mb-3">
-                        <i class="far fa-calendar-alt"></i> ${article.date}
-                    </p>
-                    <p class="text-gray-700 mb-4 line-clamp-3">
-                        ${article.abstract}
-                    </p>
-                    <div class="flex flex-wrap gap-1 mb-4">
-                        ${article.keywords.slice(0, 3).map(keyword => 
-                            `<span class="text-xs bg-gray-100 text-gray-600 rounded-full px-2 py-1">${keyword}</span>`
-                        ).join('')}
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <button 
-                            onclick="openArticle(${article.id})" 
-                             class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded transition-colors">
-Read More
-                        </button>
-                        
-                    </div>
-                </div>
-            `;
-            
-            return div;
-        }
-
-        // Create publication card without image
-        function createPublicationCard(article) {
-            const div = document.createElement('div');
-            div.className = 'article-card bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden';
-            
-            const badgeColors = ['badge-blue', 'badge-green', 'badge-red', 'badge-purple', 'badge-yellow'];
-            const categoryBadges = article.categories.map((category, index) => 
-                `<span class="badge ${badgeColors[index % badgeColors.length]}">${category}</span>`
-            ).join('');
-            
-            div.innerHTML = `
-                <div class="p-6">
-                    <div class="mb-4">
-                        ${categoryBadges}
-                    </div>
-                    <h3 class="text-xl font-semibold academic-title text-gray-900 mb-3 line-clamp-2">
-                        ${article.title}
-                    </h3>
-                    <p class="text-sm text-gray-600 mb-3">
-                         <i class="far fa-calendar-alt"></i> ${article.date}
-                    </p>
-                    <p class="text-gray-700 mb-4 line-clamp-3">
-                        ${article.abstract}
-                    </p>
-                    <div class="flex flex-wrap gap-1 mb-4">
-                        ${article.keywords.slice(0, 3).map(keyword => 
-                            `<span class="text-xs bg-gray-100 text-gray-600 rounded-full px-2 py-1">${keyword}</span>`
-                        ).join('')}
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <button 
-                            onclick="openArticle(${article.id})" 
-                             class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded transition-colors">
-Read More
-                        </button>
-                        
-                    </div>
-                </div>
-            `;
-            
-            return div;
-        }
-
-        // Setup event listeners
-        function setupEventListeners() {
             // Mobile menu toggle
-            mobileMenuBtn.addEventListener('click', function() {
-                mobileMenu.classList.toggle('hidden');
-            });
-
-            // Search functionality
-            searchInput.addEventListener('input', handleSearch);
-            searchInput.addEventListener('focus', function() {
-                if (searchInput.value.trim()) {
-                    searchResults.classList.remove('hidden');
-                }
-            });
-
-            // Close search results when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
-                    searchResults.classList.add('hidden');
-                }
-            });
-
-            // Modal close
-            closeModal.addEventListener('click', closeArticleModal);
-            articleModal.addEventListener('click', function(e) {
-                if (e.target === articleModal) {
-                    closeArticleModal();
-                }
-            });
-
-            // Contact form
-            if (contactForm) {
-                contactForm.addEventListener('submit', handleContactForm);
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
             }
 
-            // Smooth scrolling for navigation links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                        // Close mobile menu if open
-                        mobileMenu.classList.add('hidden');
+            // Enhanced search functionality
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.trim();
+                    currentSearchTerm = searchTerm;
+
+                    // Show/hide clear button
+                    if (clearSearchButton) {
+                        if (searchTerm.length > 0) {
+                            clearSearchButton.classList.add('visible');
+                        } else {
+                            clearSearchButton.classList.remove('visible');
+                        }
+                    }
+
+                    // Debounce search
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        performSearch(searchTerm);
+                    }, 300);
+                });
+
+                searchInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        clearSearch();
                     }
                 });
-            });
-        }
 
-        // Search functionality
-        function handleSearch() {
-            const query = searchInput.value.toLowerCase().trim();
-            
-            if (!query) {
-                searchResults.classList.add('hidden');
+                // Click outside to close search results
+                document.addEventListener('click', function(e) {
+                    if (!e.target.closest('.search-container')) {
+                        hideSearchResults();
+                    }
+                });
+            }
+
+            // Clear search functionality
+            if (clearSearchButton) {
+                clearSearchButton.addEventListener('click', clearSearch);
+            }
+
+            // Load articles on page load
+            loadArticles();
+        });
+
+        function performSearch(searchTerm) {
+            const searchResults = document.getElementById('searchResults');
+
+            if (!searchTerm || searchTerm.length < 2) {
+                hideSearchResults();
+                loadArticles(); // Show all articles
                 return;
             }
 
-            const filteredArticles = allArticles.filter(article => {
-                return article.title.toLowerCase().includes(query) ||
-                       article.authors.toLowerCase().includes(query) ||
-                       article.abstract.toLowerCase().includes(query) ||
-                       article.keywords.some(keyword => keyword.toLowerCase().includes(query)) ||
-                       article.categories.some(category => category.toLowerCase().includes(query));
+            // Filter articles and authors
+            const filteredArticles = articlesData.filter(article => {
+                const titleMatch = article.title.toLowerCase().includes(searchTerm.toLowerCase());
+                const authorMatch = article.author.toLowerCase().includes(searchTerm.toLowerCase());
+                const keywordMatch = article.keywords.some(keyword => 
+                    keyword.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+                const abstractMatch = article.abstract.toLowerCase().includes(searchTerm.toLowerCase());
+
+                return titleMatch || authorMatch || keywordMatch || abstractMatch;
             });
 
-            displaySearchResults(filteredArticles, query);
+            // Show search results dropdown
+            displaySearchResults(filteredArticles, searchTerm);
+
+            // Filter displayed articles
+            loadArticles(filteredArticles);
         }
 
-        // Display search results
-        function displaySearchResults(results, query) {
+        function displaySearchResults(results, searchTerm) {
+            const searchResultsContainer = document.getElementById('searchResults');
+
             if (results.length === 0) {
-                searchResults.innerHTML = `
-                    <div class="p-4 text-center text-gray-500">
-                        No articles found for "${query}"
-                    </div>
-                `;
+                searchResultsContainer.innerHTML = '<div class="search-result-item text-gray-500">No results found</div>';
             } else {
-                searchResults.innerHTML = results.map(article => `
-                    <div class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer" onclick="openArticle(${article.id})">
-                        <h4 class="font-medium text-gray-900 mb-1">${article.title}</h4>
-                        <p class="text-sm text-gray-600 mb-2">${article.authors}</p>
-                        <p class="text-xs text-gray-500">${article.abstract.substring(0, 100)}...</p>
+                const resultsHTML = results.slice(0, 5).map(article => `
+                    <div class="search-result-item" onclick="scrollToArticle(${article.id})">
+                        <div class="font-medium text-sm">${highlightText(article.title, searchTerm)}</div>
+                        <div class="text-xs text-gray-600">${article.author}</div>
                     </div>
                 `).join('');
+
+                searchResultsContainer.innerHTML = resultsHTML;
             }
-            
-            searchResults.classList.remove('hidden');
+
+            searchResultsContainer.style.display = 'block';
         }
 
-        // Open article in modal
-        function openArticle(articleId) {
-            const article = allArticles.find(a => a.id === articleId);
-            if (!article) return;
-            
-            let imageHtml = '';
-            if (article.imageUrl) {
-                imageHtml = `
-                    <div class="mb-6">
-                        <img src="${article.imageUrl}" alt="${article.title}" class="w-full rounded-lg">
+        function hideSearchResults() {
+            const searchResults = document.getElementById('searchResults');
+            if (searchResults) {
+                searchResults.style.display = 'none';
+            }
+        }
+
+        function clearSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const clearSearchButton = document.getElementById('clearSearch');
+
+            if (searchInput) {
+                searchInput.value = '';
+                currentSearchTerm = '';
+            }
+
+            if (clearSearchButton) {
+                clearSearchButton.classList.remove('visible');
+            }
+
+            hideSearchResults();
+            loadArticles(); // Show all articles
+        }
+
+        function highlightText(text, searchTerm) {
+            if (!searchTerm) return text;
+            const regex = new RegExp(`(${searchTerm})`, 'gi');
+            return text.replace(regex, '<mark class="bg-yellow-200">$1</mark>');
+        }
+
+        function scrollToArticle(articleId) {
+            hideSearchResults();
+            const articleElement = document.getElementById(`article-${articleId}`);
+            if (articleElement) {
+                articleElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                articleElement.classList.add('ring-2', 'ring-blue-500');
+                setTimeout(() => {
+                    articleElement.classList.remove('ring-2', 'ring-blue-500');
+                }, 2000);
+            }
+        }
+
+        // Load and display articles
+        function loadArticles(articlesToShow = null) {
+            const articlesGrid = document.getElementById('articlesGrid');
+            const articles = articlesToShow || articlesData;
+
+            if (articles.length === 0) {
+                articlesGrid.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <div class="text-gray-400 mb-4">
+                            <i class="fas fa-search text-4xl"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-600 mb-2">No articles found</h3>
+                        <p class="text-gray-500">Try adjusting your search terms or browse all articles.</p>
+                        <button onclick="clearSearch()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                            Clear Search
+                        </button>
                     </div>
                 `;
+                return;
             }
 
-            modalContent.innerHTML = `
-                ${imageHtml}
-                <div class="mb-6">
-                    <div class="mb-4">
-                        ${article.categories.map(category => `<span class="badge badge-blue">${category}</span>`).join('')}
-                    </div>
-                    <h1 class="text-2xl sm:text-3xl font-bold academic-title text-gray-900 mb-4">
-                        ${article.title}
-                    </h1>
-                    <div class="text-gray-600 mb-4">
-                        <p class="font-medium">${article.authors}</p>
-                        <p class="text-sm">${article.journal}, ${article.volume}, ${article.pages} <i class="far fa-calendar-alt"></i> ${article.date}</p>
-                        
-                    </div>
-                    <div class="flex flex-wrap gap-2 mb-6">
-                        ${article.keywords.map(keyword => `<span class="text-xs bg-gray-100 text-gray-600 rounded-full px-2 py-1">${keyword}</span>`).join('')}
-                    </div>
-                    
-                    <div class="mb-6">
-                        
-                        
+            const articlesHTML = articles.map((article, index) => `
+                <div id="article-${article.id}" class="article-card bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden fade-in" style="animation-delay: ${index * 0.1}s">
+                    <div class="p-6 article-content">
+                        <h3 class="text-xl font-semibold academic-title text-gray-900 mb-3 leading-tight">
+                            ${currentSearchTerm ? highlightText(article.title, currentSearchTerm) : article.title}
+                        </h3>
+
+                        <div class="mb-3">
+                            <p class="text-sm font-medium text-blue-600">
+                                ${currentSearchTerm ? highlightText(article.author, currentSearchTerm) : article.author}
+                            </p>
+                        </div>
+
+                        <div class="mb-4 text-sm text-gray-600">
+                            <i class="far fa-calendar-alt mr-2"></i>
+                            <span>${formatDate(article.date)}</span>
+                            <span class="mx-2">•</span>
+                            <span>Pages ${article.pages}</span>
+                        </div>
+
+                        <div class="article-description">
+                            <p class="text-gray-700 text-sm leading-relaxed mb-4">
+                                ${currentSearchTerm ? highlightText(article.abstract, currentSearchTerm) : article.abstract}
+                            </p>
+
+                            <div class="mb-4">
+                                <div class="flex flex-wrap gap-2">
+                                    ${article.keywords.map(keyword => 
+                                        `<span class="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full">
+                                            ${currentSearchTerm ? highlightText(keyword, currentSearchTerm) : keyword}
+                                        </span>`
+                                    ).join('')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="article-footer">
+                            <div class="flex justify-between items-center">
+                                <button onclick="viewArticle(${article.id})" 
+                                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                    Read More <i class="fas fa-arrow-right ml-2"></i>
+                                </button>
+
+                                <div class="flex space-x-2">
+                                    <button onclick="downloadPDF(${article.id})" 
+                                            class="text-gray-600 hover:text-blue-600 transition-colors" 
+                                            title="Download PDF">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button onclick="shareArticle(${article.id})" 
+                                            class="text-gray-600 hover:text-blue-600 transition-colors" 
+                                            title="Share Article">
+                                        <i class="fas fa-share-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="article-content prose max-w-none">
-                    ${article.fullContent}
-                </div>
-            `;
+            `).join('');
 
-            articleModal.classList.remove('hidden');
-            searchResults.classList.add('hidden');
+            articlesGrid.innerHTML = articlesHTML;
         }
 
-        // Close article modal
-        function closeArticleModal() {
-            articleModal.classList.add('hidden');
+        // Utility functions
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
         }
 
-        // Download PDF
+        function viewArticle(articleId) {
+            // Simulate article view - in real implementation, this would navigate to article page
+            console.log(`Viewing article ${articleId}`);
+            alert(`Opening article ${articleId}. In a real implementation, this would navigate to the full article page.`);
+        }
+
         function downloadPDF(articleId) {
-            const article = allArticles.find(a => a.id === articleId);
-            if (!article) return;
-
-            // Create PDF using jsPDF
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            // Set font
-            doc.setFont("times", "normal");
-            
-            // Title
-            doc.setFontSize(16);
-            doc.setFont("times", "bold");
-            const title = doc.splitTextToSize(article.title, 170);
-            doc.text(title, 20, 20);
-            
-            // Authors
-            doc.setFontSize(12);
-            doc.setFont("times", "normal");
-            doc.text(`Authors: ${article.authors}`, 20, 35 + (title.length - 1) * 7);
-            
-            // Journal info
-            doc.text(`${article.journal}, ${article.volume}, ${article.pages} (${article.date})`, 20, 45 + (title.length - 1) * 7);
-            doc.text(`DOI: ${article.doi}`, 20, 55 + (title.length - 1) * 7);
-            
-            // Abstract
-            doc.setFont("times", "bold");
-            doc.text("Abstract", 20, 70 + (title.length - 1) * 7);
-            doc.setFont("times", "normal");
-            const abstractText = doc.splitTextToSize(article.abstract, 170);
-            doc.text(abstractText, 20, 80 + (title.length - 1) * 7);
-            
-            // Keywords
-            doc.setFont("times", "bold");
-            doc.text("Keywords", 20, 95 + (title.length - 1) * 7 + abstractText.length * 5);
-            doc.setFont("times", "normal");
-            doc.text(article.keywords.join(', '), 20, 105 + (title.length - 1) * 7 + abstractText.length * 5);
-            
-            // Content
-            let yPosition = 120 + (title.length - 1) * 7 + abstractText.length * 5;
-            
-            // Parse HTML content to text
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = article.fullContent;
-            
-            const headings = tempDiv.querySelectorAll('h2');
-            const paragraphs = tempDiv.querySelectorAll('p');
-            
-            headings.forEach((heading, index) => {
-                if (yPosition > 250) {
-                    doc.addPage();
-                    yPosition = 20;
-                }
-                
-                doc.setFont("times", "bold");
-                doc.setFontSize(14);
-                const headingText = doc.splitTextToSize(heading.textContent, 170);
-                doc.text(headingText, 20, yPosition);
-                yPosition += headingText.length * 7 + 5;
-                
-                // Find related paragraphs (this is a simplified approach)
-                const nextHeading = headings[index + 1];
-                let currentElement = heading.nextElementSibling;
-                
-                while (currentElement && currentElement !== nextHeading) {
-                    if (currentElement.tagName === 'P') {
-                        if (yPosition > 250) {
-                            doc.addPage();
-                            yPosition = 20;
-                        }
-                        
-                        doc.setFont("times", "normal");
-                        doc.setFontSize(11);
-                        const paragraphText = doc.splitTextToSize(currentElement.textContent, 170);
-                        doc.text(paragraphText, 20, yPosition);
-                        yPosition += paragraphText.length * 5 + 5;
-                    }
-                    currentElement = currentElement.nextElementSibling;
-                }
-            });
-            
-            // Save the PDF
-            doc.save(`${article.title.replace(/[^a-z0-9]/gi, '_')}.pdf`);
+            // Simulate PDF download
+            console.log(`Downloading PDF for article ${articleId}`);
+            alert(`Downloading PDF for article ${articleId}. In a real implementation, this would trigger a PDF download.`);
         }
 
-        // Share article
         function shareArticle(articleId) {
-            const article = allArticles.find(a => a.id === articleId);
-            if (!article) return;
-            
-            if (navigator.share) {
+            // Simulate article sharing
+            const article = articlesData.find(a => a.id === articleId);
+            if (article && navigator.share) {
                 navigator.share({
                     title: article.title,
-                    text: article.abstract,
-                    url: window.location.href
+                    text: article.abstract.substring(0, 200) + '...',
+                    url: window.location.href + '#article-' + articleId
                 });
             } else {
-                // Fallback: copy to clipboard
-                const shareText = `${article.title}\n\n${article.abstract}\n\n${window.location.href}`;
-                navigator.clipboard.writeText(shareText).then(() => {
-                    alert('Article details copied to clipboard!');
+                // Fallback to copying URL to clipboard
+                const url = window.location.href + '#article-' + articleId;
+                navigator.clipboard.writeText(url).then(() => {
+                    alert('Article link copied to clipboard!');
+                }).catch(() => {
+                    alert('Could not copy link. Please manually copy the URL.');
                 });
             }
         }
 
-        // Handle contact form submission
-        function handleContactForm(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(contactForm);
-            const name = formData.get('name') || document.getElementById('name').value;
-            const email = formData.get('email') || document.getElementById('email').value;
-            const subject = formData.get('subject') || document.getElementById('subject').value;
-            const message = formData.get('message') || document.getElementById('message').value;
-            
-            // Simulate form submission
-            alert('Thank you for your message! We will get back to you soon.');
-            contactForm.reset();
-        }
+        // Smooth scrolling for navigation links
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('a[href^="#"]');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>
