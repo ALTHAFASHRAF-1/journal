@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Appearance of al-Dajjāl and the Descent of Masīḥ Īsā: An Analytical Study of Mushkilah Aḥadīth - Islamic Insight Journal</title>
+    <meta name="description" content="An analytical study of Mushkilah Aḥadīth examining the controversial topics of the appearance of al-Dajjāl and the descent of Masīḥ Īsā as signs of the Last Day in Islamic eschatology.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #1a202c;
+        }
+        
+        .academic-title {
+            font-family: 'Crimson Text', serif;
+        }
+        
+        .article-content h1, 
+        .article-content h2, 
+        .article-content h3 {
+            font-family: 'Crimson Text', serif;
+            font-weight: 600;
+        }
+        
+        .article-content p {
+            margin-bottom: 1rem;
+            text-align: justify;
+            line-height: 1.7;
+        }
+        
+        .article-content h2 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: #2d3748;
+        }
+        
+        .article-content h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+            color: #4a5568;
+        }
+        
+        .citation-box {
+            background: #f7fafc;
+            border-left: 4px solid #4299e1;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-style: italic;
+        }
+        
+        .hadith-quote {
+            background: #f8fafc;
+            border-left: 4px solid #22c55e;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .quranic-verse {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .logo-image {
+            height: 40px;
+            width: auto;
+        }
+        
+        .logo-text-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .logo-text {
+            line-height: 1;
+            margin: 0;
+        }
+        
+        .logo-subtitle {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin: 0;
+            line-height: 1;
+            font-weight: 400;
+        }
+        
+        .pdf-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.95);
+            backdrop-filter: blur(5px);
+        }
+        
+        .pdf-modal-content {
+            position: relative;
+            margin: auto;
+            padding: 0;
+            width: 95%;
+            height: 95%;
+            max-width: 1200px;
+            margin-top: 1%;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .pdf-header {
+            background: #1f2937;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .pdf-title {
+            font-size: 1rem;
+            font-weight: 600;
+            flex-grow: 1;
+            margin-right: 1rem;
+        }
+        
+        .pdf-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .pdf-button {
+            background: #374151;
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .pdf-button:hover {
+            background: #4b5563;
+        }
+        
+        .pdf-close {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 1rem;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .pdf-close:hover {
+            background: #dc2626;
+        }
+        
+        .pdf-viewer-container {
+            position: relative;
+            height: calc(100% - 70px);
+            background: #f3f4f6;
+        }
+        
+        .pdf-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
+        
+        .pdf-fallback {
+            display: none;
+            padding: 2rem;
+            text-align: center;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #f9fafb;
+        }
+        
+        .pdf-fallback.active {
+            display: flex;
+        }
+        
+        .fallback-content {
+            max-width: 400px;
+        }
+        
+        .fallback-icon {
+            font-size: 4rem;
+            color: #9ca3af;
+            margin-bottom: 1rem;
+        }
+        
+        .fallback-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        
+        .fallback-description {
+            color: #6b7280;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .download-button {
+            background: #3b82f6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        
+        .download-button:hover {
+            background: #2563eb;
+        }
+        
+        .author-info {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .article-metadata {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .keyword-tag {
+            background: #ebf8ff;
+            color: #2b6cb0;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .arabic-text {
+            font-family: 'Traditional Arabic', 'Al Bayan', 'Geeza Pro', serif;
+            font-size: 1.1em;
+            direction: rtl;
+            text-align: right;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .logo-image {
+                height: 32px;
+            }
+            .logo-text {
+                font-size: 1rem;
+            }
+            .logo-subtitle {
+                font-size: 0.65rem;
+            }
+            .pdf-modal-content {
+                width: 98%;
+                height: 98%;
+                margin-top: 1%;
+            }
+            .pdf-title {
+                font-size: 0.875rem;
+            }
+            .pdf-button {
+                padding: 0.375rem;
+                font-size: 0.75rem;
+            }
+            .pdf-controls {
+                gap: 0.25rem;
+            }
+            .pdf-header {
+                padding: 0.75rem;
+            }
+            .fallback-icon {
+                font-size: 3rem;
+            }
+            .fallback-title {
+                font-size: 1.25rem;
+            }
+        }
+        
+        /* iOS Safari specific fixes */
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
+            .pdf-iframe {
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="logo-container">
+                            <img src="logo.png" alt="Islamic Insight Logo" class="logo-image">
+                            <div class="logo-text-container">
+                                <h1 class="logo-text text-xl font-bold text-black-900 academic-title">ISLAMIC INSIGHT</h1>
+                                <p class="logo-subtitle">Journal of Islamic Studies</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Home</a>
+                    <a href="index.html#featured" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Current Issue</a>
+                    <a href="index.html#publications" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Archives</a>
+                    <a href="all-issues.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">All Issues</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="min-h-screen bg-gray-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            
+            <!-- Article Header -->
+            <article class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <div class="p-8">
+                    
+                    <!-- Article Title -->
+                    <h1 class="text-3xl md:text-4xl font-bold academic-title text-gray-900 mb-6 leading-tight">
+                        The Appearance of al-Dajjāl and the Descent of Masīḥ Īsā: An Analytical Study of Mushkilah Aḥadīth
+                    </h1>
+                    
+                    <!-- Author Information -->
+                    <div class="author-info">
+                        <h3 class="text-lg font-semibold mb-2">Authors</h3>
+                        <div class="space-y-2">
+                            <div>
+                                <p class="text-gray-700 font-medium">Adedeji, Luqman Lekan</p>
+                                <p class="text-sm text-gray-600">Department of Arts Education, University of Lagos, Nigeria</p>
+                                <p class="text-sm text-gray-500">Email: ladedeji@unilag.edu.ng</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-700 font-medium">Ayoade Abdul Hakeem</p>
+                                <p class="text-sm text-gray-600">Research Scholar, International Islamic University Malaysia</p>
+                                <p class="text-sm text-gray-500">Email: ayoadeabdulhakeem@yahoo.com</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Article Metadata -->
+                    <div class="article-metadata">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <span class="font-semibold text-gray-700">Published:</span>
+                                <span class="text-gray-600">2022</span>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-gray-700">Pages:</span>
+                                <span class="text-gray-600">39-53</span>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-gray-700">Volume:</span>
+                                <span class="text-gray-600">Vol. 5, No. 1 (2022)</span>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-gray-700">ISSN:</span>
+                                <span class="text-gray-600">2581-3269</span>
+                            </div>
+                            <div class="md:col-span-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-semibold text-gray-700 mr-2">PDF:</span>
+                                    <button onclick="openPDF()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors">
+                                        <i class="fas fa-file-pdf mr-1"></i>
+                                        View PDF
+                                    </button>
+                                    <a href="https://dqdhiu.netlify.app/file/18-Article%20Text-60-1-10-20230221.pdf">
+                                 
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Keywords -->
+                    <div class="keywords">
+                        <span class="keyword-tag">Appearance of al-Dajjāl</span>
+                        <span class="keyword-tag">Descent of Masīḥ</span>
+                        <span class="keyword-tag">Mushkilah Aḥadīth</span>
+                        <span class="keyword-tag">Ṣaḥīḥ al-Bukhārī</span>
+                        <span class="keyword-tag">Authenticity</span>
+                    </div>
+                    
+                    <!-- Article Content -->
+                    <div class="article-content mt-8">
+                        
+                        <!-- Abstract -->
+                        <section class="mb-8">
+                            <h2>Abstract</h2>
+                            <p>The appearance of al-Dajjāl and the descent of Masīḥ Īsā is an integral part of the Islamic belief system according to the Last Day. Many debates have arisen around this topic generating arguments and counter arguments among the scholars of Islam. Naturally, there are two parties holding their opinions and providing scholarly evidences to support the stand. This study focuses on the Mushkilah Aḥadīth on the appearance of al-Dajjāl and the descent of Masīḥ Īsā, analysing the standpoints of both proponents and opponents. It attempts to critically reveal the strength and weakness of each submission. And the researcher reaches into conclusion based on the analytical study of Mushkilah Aḥadīth.</p>
+                        </section>
+                        
+                        <!-- Introduction -->
+                        <section class="mb-8">
+                            <h2>Introduction</h2>
+                            <p>The appearance of Masīḥ ad-Dajjal and the descent of Masīḥ Īsā are considered among the major indications of the Last Hour. Masīḥ al-Dajjal is the impostor, who is supposed to precede the real Masīḥ Īsā before the End of Times, leading the people astray by imitating some strange deeds and by entering Jerusalem, after which he will be slayed by Masīḥ Īsā. A number of authentic aḥadīth of the Prophet (PBUH) attests to this. However, Muslim scholars differ in their opinions as to the reality of the text of such ahadith. While some denied the authenticity of these ahadith, claiming that there is no expressive statement in the Qūr'ān to justify the issue, others uphold the reality of the matter as contained in the authentic ahadith and the interpretation of the relevant verses of the Qūr'ān.</p>
+                            
+                            <p>The study sheds lights on the reality of this matter through the exploration and analysis of different opinions of both the classical and contemporary scholars of ḥadīth and Mufāssirs (commentators of the Qūr'ān).</p>
+                        </section>
+                        
+                        <!-- The Genesis of the Controversy -->
+                        <section class="mb-8">
+                            <h2>The Genesis of the Controversy</h2>
+                            <p>The controversy over the descent of Prophet Īsā as a sign of the Last Hour was triggered in the mid-20th century, by the fatwa of international ulamāʼ issued by Sheikh al-Azhar Mahmūd Shaltut, which stated that Prophet Īsā is already dead and will never descend at the End of Times. This contradicts the commonly held belief of the Muslims that Prophet Īsā was neither killed nor crucified, but was saved and raised to heaven by Allah, and his descent will be one of the major signs of the Last Hour. This is contained in the following noble verses:</p>
+                            
+                            <div class="quranic-verse">
+                                <p>They said (in boast) "We killed Christ Jesus the son of Mary the Apostle of Allah"; but they killed him not nor crucified him but so it was made to appear to them and those who differ therein are full of doubts with no (certain) knowledge but only conjecture to follow for of a surety they killed him not.. Nay Allah raised him up unto Himself; and Allah is exalted in Power Wise (4:157-158)</p>
+                            </div>
+                            
+                            <p>Both parties differ in their interpretations of the Qurʼanic verses on the death of Prophet Īsā as follow:</p>
+                            
+                            <div class="quranic-verse">
+                                <p>Behold! Allah said: "O Jesus! I will take thee and raise thee to myself (3:55)</p>
+                            </div>
+                            
+                            <div class="quranic-verse">
+                                <p>I was a witness over them whilst I dwelt amongst them; when Thou didst take me up thou was the Watcher over them and Thou art a Witness to all things. (5: 117)</p>
+                            </div>
+                            
+                            <p>The bone of contention revolves around the interpretation of tawaffa in 3: 55. The antagonists of the descent of Prophet Īsā render tawaffa as "death". They argue that the common Qurʼanic usage of tawaffa is death as in Qul yatawaffakum malakul maut Say: "The Angel of Death put in charge of you will (duly) take your souls" (32:11)</p>
+                        </section>
+                        
+                        <!-- Quranic Point of View -->
+                        <section class="mb-8">
+                            <h2>Qūr'ānic Point of View</h2>
+                            <p>The foremost issue posed by the antagonists is that there are no indications in the noble Qūr'ān to support the appearance of al-Dajjāl (Anti-Christ) and the descent of Masih Īsā. The proponents provide the following answer: Beside the fact that great Mufassirun have indicated a number of verses in the Qūr'ān on this issue, the authentic ḥadīth of the Prophet (PBUH) is equally "wahy" (revelation from Allah) as stated in the noble verse: "Nor does he speak from (his own) inclination. It is not but a revelation revealed." As a result, his authentic ḥadīth is enough an evidence to justify the appearance of al-Dajjāl and the descent of Masih Īsā as two of major indications of the Last Hour as contained in many authentic aḥadīth, such as the following:</p>
+                            
+                            <div class="hadith-quote">
+                                <h3 class="font-semibold mb-2">Hudhaifa b. Usaid al-Ghifari reported:</h3>
+                                <p>Allah's Messenger (PBUH) came to us all of a sudden as we were (busy in a discussion). He said: What do you discuss about? They (the Companions) said. We are discussing about the Last Hour. Thereupon he said: It will not come until you see ten signs before and (in this connection) he made a mention of the smoke, Dajjal, the beast, the rising of the sun from the west, the descent of Jesus son of Mary (Allah be pleased with him), the Gog and Magog, and land-slides in three places, one in the east, one in the west and one in Arabia at the end of which fire would burn forth from the Yemen, and would drive people to the place of their assembly (ṣaḥīḥ al-mūslīm#2901).</p>
+                            </div>
+                            
+                            <p>In the above ḥadīth, related by Imam Muslim, appearance of al-Dajjāl and descent of Masīḥ Īsā were mentioned by the Prophet (PBUH) among the ten signs of the Last Hour.</p>
+                        </section>
+                        
+                        <!-- Dajjal and Descent of Masih Isa in Ahadith -->
+                        <section class="mb-8">
+                            <h2>Dajjāl and Descent of Masīḥ Īsā in Aḥadīth</h2>
+                            <p>There are a number of authentic aḥadith of the Prophet (PBUH) on the appearance of al-Dajjāl and the descent of Masīḥ Īsā. Many of these aḥadith are contained in the sound collections of ḥadith (siḥaḥ sittah), such as Al-Bukhārī and Muslim. However, some issues are raised against the authenticity of these aḥadith by the antagonists.</p>
+                            
+                            <div class="hadith-quote">
+                                <h3 class="font-semibold mb-2">Narrated Abu Huraira:</h3>
+                                <p>Allah's Messenger (PBUH) said, "By Him in Whose Hands my soul is, surely (Jesus,) the son of Mary will soon descend amongst you and will judge mankind justly (as a Just Ruler); he will break the Cross and kill the pigs and there will be no Jizya (i.e. taxation taken from non-Muslims). Money will be in abundance so that nobody will accept it, and a single prostration to Allah (in prayer) will be better than the whole world and whatever is in it." (Ṣaḥīḥ al-Bukhārī#3448)</p>
+                            </div>
+                            
+                            <h3>The Dream of the Prophet (PBUH)</h3>
+                            <p>Another issue posed by the antagonists is that the aḥadith of the Prophet (PBUH) on his dream in which he saw al-Dajjāl performing tawaf is in contradiction with his ahadith barring al-Dajjāl from entering Makkah and Madinah.</p>
+                            
+                            <div class="hadith-quote">
+                                <h3 class="font-semibold mb-2">Narrated Abu Bakra:</h3>
+                                <p>The Prophet (PBUH) said, "The terror caused by Al-Masih Al-Dajjāl will not enter Medina and at that time, Medina will have seven gates and there will be two angels at each gate (guarding them)" (ṣaḥīḥ al-Bukhārī#7125).</p>
+                            </div>
+                        </section>
+                        
+                        <!-- The Appearance of Thirty al-Dajjals -->
+                        <section class="mb-8">
+                            <h2>The Appearance of Thirty al-Dajjāls</h2>
+                            <p>Another issue raised by the antagonists is that if al-Dajjāl is real, why Prophet (PBUH) refers to thirty al-Dajjāls in other ahadith. For instance, the following ahadith:</p>
+                            
+                            <div class="hadith-quote">
+                                <h3 class="font-semibold mb-2">Abu Huraira reported Allah's Messenger (PBUH) as saying:</h3>
+                                <p>The Last Hour would not come until Dajjālūn and liars have appeared nearly thirty in number, and each one of them would claim that he is a messenger of Allah (ṣaḥīḥ al-muslim#157).</p>
+                            </div>
+                            
+                            <p>The answer provided for this question is that, reference to thirty ad-Dajjāls in these ahadith is not in any way contradictory to the appearance of the major al-Dajjāl that will appear at the Last Hour. The Prophet (PBUH) gave a particular description of him thus:</p>
+                            
+                            <div class="hadith-quote">
+                                <h3 class="font-semibold mb-2">Narrated Anas:</h3>
+                                <p>The Prophet (PBUH) said, "No prophet was sent but that he warned his followers against the one-eyed liar (Al-Dajjāl). Beware! He is blind in one eye, and your Lord is not so, and there will be written between his (Al-Dajjāl's) eyes (the word) Kafir (i.e., disbeliever)." (ṣaḥīḥ al-Bukhārī#7131).</p>
+                            </div>
+                        </section>
+                        
+                        <!-- The Authenticity of Ahadith on Dajjal -->
+                        <section class="mb-8">
+                            <h2>The Authenticity of Aḥadīth on Dajjāl</h2>
+                            <p>The antagonists claim that all aḥadith on the appearance of al-Dajjāl and descent of Masīḥ Īsā are either weak or fabricated. In response, there was consensus of Muslim scholars on the Mutawātir (multiple-attested) status of aḥadith of the Prophet (PBUH) on the descent of Īsā (a.s.). Great Mufāssir, such as Imam al-Ṭabarī, Imam Alūsī and Ibn kathīr have stated in their tafsirs, when clarifying the verses indicating towards Īsā's descent, that the aḥadīth on this subject have reached tawātur and the Ummah has unanimously agreed upon this.</p>
+                            
+                            <p>Ibn Kathir confirmed that the aḥadith on Īsā's descent are Mutawatir aḥadith from the Prophet (PBUH) according to the transmission of Abu Hurayrah, Ibn Masūd, 'Uthman b. abi al-'As, Abu Umama (al-Bahili), al-Nawwas b. Sim'an (al-Ansari), 'Abdullah b. 'Amr b. al-'As, Majma' b. Jariya, Abu Shurayha and Hudhayfa b. Usaid, may Allah be pleased with them.</p>
+                        </section>
+                        
+                        <!-- Mushkilah Hadith -->
+                        <section class="mb-8">
+                            <h2>Mushkilah Ḥadīth</h2>
+                            <p>The scholars of hadith are yet to agree on a particular set of criteria for identifying Problematic (Mushkilah) ḥadith. However, they are in agreement on the following features for ḥadith to be considered Problematic (Mushkilah):</p>
+                            
+                            <ul class="list-decimal pl-6 mb-4 space-y-2">
+                                <li>The ḥadith in question must have genuine Isnad (chain of transmitters)</li>
+                                <li>The ḥadith must be authentic</li>
+                                <li>The matn (text of ḥadith) contains information contrary to a text of the Qūr'ān</li>
+                                <li>The matn (text of ḥadith) is contrary to another authentic ḥadith of similar status</li>
+                                <li>The ḥadith is not consistent with human reasoning or social reality</li>
+                            </ul>
+                            
+                            <p>Simply put, Problematic (Mushkilah) ḥadith is authentic hadith of the Prophet (PBUH) which contradicts Qūr'ānic statement, other authentic ḥadith of similar status or social reality. Weak ahadith are not considered problematic.</p>
+                        </section>
+                        
+                        <!-- The Supernatural Power of al-Dajjal -->
+                        <section class="mb-8">
+                            <h2>The Supernatural Power of al-Dajjāl</h2>
+                            <p>The antagonists claim that it is not in the tradition of Allah to establish an impostor on earth and then equips him with supernatural power, the kind of which he has not given to his Prophets and then punish the believers who believe in him. A number of hadith of the Prophet (PBUH) stated that al-Dajjāl will perform some strange actions thus:</p>
+                            
+                            <div class="hadith-quote">
+                                <h3 class="font-semibold mb-2">It was narrated that Hudhaifah said:</h3>
+                                <p>The Messenger of Allah said: 'I know what the Dajjal will have with him. He will have two flowing rivers, one that appears to the eye to be clear water, and one that appears to the eye to be flaming fire. If anyone sees that, let him go to the river which he thinks is fire and close his eyes, then lower his head and drink from it, for it is cool water. The Dajjal has one blind eye, with a layer of thick skin over it, and between his eyes is written "disbeliever," which every believer will read, whether he is literate or illiterate' (ṣaḥīḥ al-muslim#7367).</p>
+                            </div>
+                        </section>
+                        
+                        <!-- The Issues Raised: An Analysis -->
+                        <section class="mb-8">
+                            <h2>The Issues Raised: An Analysis</h2>
+                            <p>The first significant allegation of the opponents is that there are no indications in the Qūr'ān to support the appearance of al-Dajjāl (Anti-Christ) and the descent of Masīḥ Īsā.</p>
+                            
+                            <p>This issue could have been a genuine and strong one if the Qūr'ān is the only source of guidance and authority in Islam. The fact that the Sunnah of the Prophet (PBUH) also forms a part of guidance and authority in Islam has rendered this argument a very weak one. "And whatever the Messenger has given you – take; and whatever he has forbidden you – refrain from" (59:7)</p>
+                            
+                            <p>The answer provided by the proponents that the authentic hadith of the Prophet (PBUH) is equally "wahy" (revelation from Allah) as contained in the noble verse: "Nor does he speak from (his own) inclination. It is not but a revelation revealed" is therefore a very strong one.</p>
+                            
+                            <p>The analysis of the various opinions of both parties revealed that the opinions of the proponents are very strong and tenable.</p>
+                        </section>
+                        
+                        <!-- Conclusion -->
+                        <section class="mb-8">
+                            <h2>Conclusion</h2>
+                            <p>In conclusion, the fact that the belief in the appearance of Masih al-Dajjāl and the descent of Masīḥ Īsā at the Last Hour is closely connected to one of the six articles of faith in Islam, belief in the Last Day, has made this a point of special concern for the Muslim scholars. An ample of evidence exists in the Prophetic traditions. These traditions have been graded Mutawatir (multiple-attested) ahadith. Furthermore, indications to this in the Qūr'ān have also been provided by great Mufassirs (commentators). However, authentic ahadith of the Prophet (PBUH) is enough as evidence, since it is regarded as wahy (revelation).</p>
+                            
+                            <p>However, the Muslim scholars are of different opinions concerning the authenticity of the text of these ahadith. Thereby, the scholars are grouped into two classes of proponents and antagonists, based on their stand on this issue.</p>
+                            
+                            <p>The analysis of the various opinions of both parties revealed that the opinions of the proponents are very strong and tenable.</p>
+                            
+                            <p>In the light of the above, it is mandatory for Muslims to believe in the appearance of Masih ad–Dajjāl and the descent of Masih Īsā as part of major signs of the Last Hour. And also to believe in whatever the Prophet (PBUH) predicted to happen in the future, as this equally form a part of ilm al-ghayb (knowledge of unseen) without which the Īmān of Muslim is deficient.</p>
+                        </section>
+                        
+                        <!-- References -->
+                        <section class="mb-8">
+                            <h2>References</h2>
+                            <div class="text-sm text-gray-700 space-y-2">
+                                <p>Abdullah Yusuf Ali. (2001). The Meaning of the Holy Qūr'ān. ISBN: 9780915957767, 0915957760.</p>
+                                
+                                <p>al-Baydawi, Abd Allah b. Umar. (1329H). Anwar al-Tanzil wa-Asrar al-Ta'wil. Beirut: Dar ai-Jil.</p>
+                                
+                                <p>al-Bukhārī, Muhammad ibn Ismāīl. (1997). Ṣaḥīḥ al-Bukhārī. Riyadh: Dārussalam.</p>
+                                
+                                <p>at-Tabari, Abu Jafar Muhammad b. Jarir. (1324H). Jami' al-Bayan fi Tafsir al-Qūr'ān, 30 parts bound in 12 volume Bulaq.</p>
+                                
+                                <p>Ibn Hajar. (1968). Tadhib al-Tadhib. Beirut: Dar Sadir.</p>
+                                
+                                <p>Ibn Kathir, Abu al-Fida Ismail. (1385H). Tafsir al-Qūr'ān al-Azim, volume 7, Beirut: Dar al-Andalus.</p>
+                                
+                                <p>Karnedi, Rozian, Suryadi Suryadi, and Muahammad Alfatih Suryadilaga. (2019). The Polemic of Ahad Hadith Use in Interpreting the Death of Prophet Īsā According to Mahmud Syaltut and Siradjuddin Abbas. Madania: Jurnal Kajian Keislaman 23, no. 1: 105-116.</p>
+                                
+                                <p>Muhammad Asad. (2003). The Message of The Quran, The Book Foundation.</p>
+                                
+                                <p>Muslim ibn al-Ḥajjaj, Abūal-Ḥusayn al-Naysābūrī. (2007). Ṣaḥīḥ Muslim. Riyadh, Dārussalam.</p>
+                                
+                                <p>Neal, R. (1991). Christ in Islam and Christianity: The Representation of Jesus in the Qūr'ān and the Classical Muslim Commentaries London: Macmillan Press LTD.</p>
+                                
+                                <p>Seth, Maulana Rashid Ahmed Ali. (2003). The Prophet Īsā (Jesus). Zakariya Islamic academy.</p>
+                            </div>
+                        </section>
+                        
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <!-- Enhanced PDF Modal -->
+    <div id="pdfModal" class="pdf-modal">
+        <div class="pdf-modal-content">
+            <div class="pdf-header">
+                <div class="pdf-title">The Appearance of al-Dajjāl and the Descent of Masīḥ Īsā</div>
+                <div class="pdf-controls">
+                    <button class="pdf-button" onclick="refreshPDF()" title="Refresh PDF">
+                        <i class="fas fa-sync-alt"></i>
+                        <span class="hidden sm:inline">Refresh</span>
+                    </button>
+                    <button class="pdf-button" onclick="openInNewTab()" title="Open in New Tab">
+                        <i class="fas fa-external-link-alt"></i>
+                        <span class="hidden sm:inline">New Tab</span>
+                    </button>
+                    <a href="https://dqdhiu.netlify.app/file/18-Article%20Text-60-1-10-20230221.pdf" download class="pdf-button" title="Download PDF">
+                        <i class="fas fa-download"></i>
+                        <span class="hidden sm:inline">Download</span>
+                    </a>
+                    <button class="pdf-close" onclick="closePDF()" title="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="pdf-viewer-container">
+                <iframe id="pdfFrame" class="pdf-iframe" src=""></iframe>
+                <div id="pdfFallback" class="pdf-fallback">
+                    <div class="fallback-content">
+                        <div class="fallback-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="fallback-title">PDF Viewer Not Supported</div>
+                        <div class="fallback-description">
+                            Your browser doesn't support embedded PDF viewing. Please download the file to view it on your device.
+                        </div>
+                        <a href="https://dqdhiu.netlify.app/file/18-Article%20Text-60-1-10-20230221.pdf" download class="download-button">
+                            <i class="fas fa-download"></i>
+                            Download PDF
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="logo-container mb-4">
+                        <img src="logo.png" alt="Islamic Insight Logo" class="logo-image">
+                        <div class="logo-text-container">
+                            <h1 class="logo-text text-white">ISLAMIC INSIGHT</h1>
+                            <p class="logo-subtitle text-gray-300">Journal of Islamic Studies</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-4">
+                        <strong>MAILING ADDRESS:</strong><br><br>
+                        Editor, Islamic Insight Journal of Islamic Studies, Darul Huda Islamic<br>
+                        University, Chemmad, P.B.NO. 3, Tirurangadi (PO), Malappuram (Dt.),<br>
+                        676306 (PIN), Kerala, India.<br><br>
+                        Email: islamicinsight@dhiu.in<br><br>
+                        Website: www.islamicinsight.in
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-300 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="index.html#about" class="text-gray-300 hover:text-white transition-colors">About Journal</a></li>
+                        <li><a href="editors.html" class="text-gray-300 hover:text-white transition-colors">Editorial Board</a></li>
+                        <li><a href="index.html#contact" class="text-gray-300 hover:text-white transition-colors">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fas fa-envelope text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
+                <p>&copy; 2024 Islamic Insight Journal. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const pdfUrl = 'https://dqdhiu.netlify.app/file/18-Article%20Text-60-1-10-20230221.pdf';
+        
+        function openPDF() {
+            const modal = document.getElementById('pdfModal');
+            const iframe = document.getElementById('pdfFrame');
+            const fallback = document.getElementById('pdfFallback');
+            
+            // Show modal
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            // Try to load PDF in iframe
+            loadPDFInIframe();
+        }
+        
+        function loadPDFInIframe() {
+            const iframe = document.getElementById('pdfFrame');
+            const fallback = document.getElementById('pdfFallback');
+            
+            // Show loading state
+            iframe.style.display = 'block';
+            fallback.classList.remove('active');
+            
+            // For better mobile support, use Google Docs viewer as primary method
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // Use Google Docs viewer for mobile devices
+                iframe.src = `https://docs.google.com/gview?url=${encodeURIComponent(pdfUrl)}&embedded=true`;
+            } else {
+                // For desktop, try direct embed first, fallback to Google Docs viewer
+                iframe.src = pdfUrl;
+            }
+            
+            // Handle iframe load errors
+            iframe.onload = function() {
+                // PDF loaded successfully
+                console.log('PDF loaded successfully');
+            };
+            
+            iframe.onerror = function() {
+                // If direct embed fails, try Google Docs viewer
+                console.log('Direct embed failed, trying Google Docs viewer');
+                iframe.src = `https://docs.google.com/gview?url=${encodeURIComponent(pdfUrl)}&embedded=true`;
+                
+                // If Google Docs viewer also fails, show fallback
+                setTimeout(() => {
+                    if (!iframe.contentDocument && !iframe.contentWindow.document) {
+                        showFallback();
+                    }
+                }, 5000);
+            };
+            
+            // Fallback for browsers that don't support PDF viewing
+            setTimeout(() => {
+                try {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    if (!iframeDoc || iframeDoc.body.innerHTML === '') {
+                        console.log('PDF viewer not supported, showing fallback');
+                        showFallback();
+                    }
+                } catch (e) {
+                    // Cross-origin error means the PDF is loading (which is good)
+                    console.log('Cross-origin restriction (PDF loading)');
+                }
+            }, 3000);
+        }
+        
+        function showFallback() {
+            const iframe = document.getElementById('pdfFrame');
+            const fallback = document.getElementById('pdfFallback');
+            
+            iframe.style.display = 'none';
+            fallback.classList.add('active');
+        }
+        
+        function refreshPDF() {
+            loadPDFInIframe();
+        }
+        
+        function openInNewTab() {
+            window.open(pdfUrl, '_blank');
+        }
+        
+        function closePDF() {
+            const modal = document.getElementById('pdfModal');
+            const iframe = document.getElementById('pdfFrame');
+            const fallback = document.getElementById('pdfFallback');
+            
+            modal.style.display = 'none';
+            iframe.src = '';
+            fallback.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('pdfModal');
+            if (event.target == modal) {
+                closePDF();
+            }
+        }
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closePDF();
+            }
+        });
+        
+        // Smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Detect if device supports PDF viewing
+        function detectPDFSupport() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+            const isIOS = /ipad|iphone|ipod/.test(userAgent);
+            
+            // iOS devices typically don't support embedded PDFs well
+            if (isIOS) {
+                return false;
+            }
+            
+            // Check for PDF plugin support
+            if (navigator.plugins && navigator.plugins.length) {
+                for (let i = 0; i < navigator.plugins.length; i++) {
+                    if (navigator.plugins[i].name.toLowerCase().indexOf('pdf') > -1) {
+                        return true;
+                    }
+                }
+            }
+            
+            // Modern browsers usually support PDF viewing
+            return !isMobile;
+        }
+        
+        // Initialize PDF support detection
+        const supportsPDF = detectPDFSupport();
+        console.log('PDF Support:', supportsPDF);
+    </script>
+</body>
+</html>
