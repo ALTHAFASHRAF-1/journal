@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WESTERN SĪRAH LITERATURE FROM INCEPTION TO CONTEMPORARY DEVELOPMENTS: A HISTORICAL ANALYSIS - Islamic Insight Journal</title>
+    <meta name="description" content="An analytical study of Mushkilah Aḥadīth examining the controversial topics of the appearance of al-Dajjāl and the descent of Masīḥ Īsā as signs of the Last Day in Islamic eschatology.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #1a202c;
+        }
+        
+        .academic-title {
+            font-family: 'Crimson Text', serif;
+        }
+        
+        .article-content h1, 
+        .article-content h2, 
+        .article-content h3 {
+            font-family: 'Crimson Text', serif;
+            font-weight: 600;
+        }
+        
+        .article-content p {
+            margin-bottom: 1rem;
+            text-align: justify;
+            line-height: 1.7;
+        }
+        
+        .article-content h2 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: #2d3748;
+        }
+        
+        .article-content h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+            color: #4a5568;
+        }
+        
+        .citation-box {
+            background: #f7fafc;
+            border-left: 4px solid #4299e1;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-style: italic;
+        }
+        
+        .hadith-quote {
+            background: #f8fafc;
+            border-left: 4px solid #22c55e;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .quranic-verse {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .logo-image {
+            height: 40px;
+            width: auto;
+        }
+        
+        .logo-text-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .logo-text {
+            line-height: 1;
+            margin: 0;
+        }
+        
+        .logo-subtitle {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin: 0;
+            line-height: 1;
+            font-weight: 400;
+        }
+        
+        .pdf-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.95);
+            backdrop-filter: blur(5px);
+        }
+        
+        .pdf-modal-content {
+            position: relative;
+            margin: auto;
+            padding: 0;
+            width: 95%;
+            height: 95%;
+            max-width: 1200px;
+            margin-top: 1%;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .pdf-header {
+            background: #1f2937;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .pdf-title {
+            font-size: 1rem;
+            font-weight: 600;
+            flex-grow: 1;
+            margin-right: 1rem;
+        }
+        
+        .pdf-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .pdf-button {
+            background: #374151;
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .pdf-button:hover {
+            background: #4b5563;
+        }
+        
+        .pdf-close {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 1rem;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .pdf-close:hover {
+            background: #dc2626;
+        }
+        
+        .pdf-viewer-container {
+            position: relative;
+            height: calc(100% - 70px);
+            background: #f3f4f6;
+        }
+        
+        .pdf-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
+        
+        .pdf-fallback {
+            display: none;
+            padding: 2rem;
+            text-align: center;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #f9fafb;
+        }
+        
+        .pdf-fallback.active {
+            display: flex;
+        }
+        
+        .fallback-content {
+            max-width: 400px;
+        }
+        
+        .fallback-icon {
+            font-size: 4rem;
+            color: #9ca3af;
+            margin-bottom: 1rem;
+        }
+        
+        .fallback-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        
+        .fallback-description {
+            color: #6b7280;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .download-button {
+            background: #3b82f6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        
+        .download-button:hover {
+            background: #2563eb;
+        }
+        
+        .author-info {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .article-metadata {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .keyword-tag {
+            background: #ebf8ff;
+            color: #2b6cb0;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .arabic-text {
+            font-family: 'Traditional Arabic', 'Al Bayan', 'Geeza Pro', serif;
+            font-size: 1.1em;
+            direction: rtl;
+            text-align: right;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .logo-image {
+                height: 32px;
+            }
+            .logo-text {
+                font-size: 1rem;
+            }
+            .logo-subtitle {
+                font-size: 0.65rem;
+            }
+            .pdf-modal-content {
+                width: 98%;
+                height: 98%;
+                margin-top: 1%;
+            }
+            .pdf-title {
+                font-size: 0.875rem;
+            }
+            .pdf-button {
+                padding: 0.375rem;
+                font-size: 0.75rem;
+            }
+            .pdf-controls {
+                gap: 0.25rem;
+            }
+            .pdf-header {
+                padding: 0.75rem;
+            }
+            .fallback-icon {
+                font-size: 3rem;
+            }
+            .fallback-title {
+                font-size: 1.25rem;
+            }
+        }
+        
+        /* iOS Safari specific fixes */
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
+            .pdf-iframe {
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="logo-container">
+                            <img src="logo.png" alt="Islamic Insight Logo" class="logo-image">
+                            <div class="logo-text-container">
+                                <h1 class="logo-text text-xl font-bold text-black-900 academic-title">ISLAMIC INSIGHT</h1>
+                                <p class="logo-subtitle">Journal of Islamic Studies</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Home</a>
+                    <a href="index.html#featured" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Current Issue</a>
+                    <a href="index.html#publications" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Archives</a>
+                    <a href="all-issues.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">All Issues</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="min-h-screen bg-gray-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            
+            <!-- Article Header -->
+            <article class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <div class="p-8">
+                    
+                    <!-- Article Title -->
+                    <h1 class="text-3xl md:text-4xl font-bold academic-title text-gray-900 mb-6 leading-tight">
+                        WESTERN SĪRAH LITERATURE FROM INCEPTION TO CONTEMPORARY DEVELOPMENTS: A HISTORICAL ANALYSIS
+                    </h1>
+                    
+                    <!-- Author Information -->
+                    <div class="author-info">
+                        <h3 class="text-lg font-semibold mb-2">Author</h3>
+                        <div class="space-y-2">
+                            <div>
+                                <p class="text-gray-700 font-medium">Irshad EV</p>
+                                <p class="text-sm text-gray-600">Research Scholar, Mohammed VI Institute for the Training of Imams, Morchidines and Morchidates, Rabat, Morocco</p>
+                                <p class="text-sm text-gray-500">Email: irshadev@gmail.com</p>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                    <!-- Article Metadata -->
+                    <div class="article-metadata">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <span class="font-semibold text-gray-700">Published:</span>
+                                <span class="text-gray-600">November 15, 2024</span>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-gray-700">Pages:</span>
+                                <span class="text-gray-600">11-33</span>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-gray-700">Volume:</span>
+                                <span class="text-gray-600">Vol. 7 No. 2 (2024)</span>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-gray-700">ISSN:</span>
+                                <span class="text-gray-600">2581-3269</span>
+                            </div>
+                            <div class="md:col-span-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-semibold text-gray-700 mr-2">PDF:</span>
+                                    <button onclick="openPDF()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors">
+                                        <i class="fas fa-file-pdf mr-1"></i>
+                                        VIEW FULL PDF
+                                    </button>
+                                    <a href="https://dqdhiu.netlify.app/file/55-Article%20Text-141-1-10-20250108.pdf">
+                                 
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Keywords -->
+                    <div class="keywords">
+                        <span class="keyword-tag">Western Sīrah</span>
+                        <span class="keyword-tag">Classical and modern Sīrah Literature</span>
+                        <span class="keyword-tag">Orientalism</span>
+                        <span class="keyword-tag">Western Perspectives towards Prophet</span>
+                    </div>
+                    
+                    <!-- Article Content -->
+                    <div class="article-content mt-8">
+                        
+                        <!-- Abstract -->
+                        <section class="mb-8">
+                            <h2>Abstract</h2>
+                            <p>This study investigates the varied approaches of Western scholars and writers toward the life and character of Prophet Muhammad (PBUH) under the title, " Western Sīrah Literature from its Inception to Contemporary Developments: A Historical Analysis". It addresses the deep-rooted stereotypes and polemical narratives in Western discourse, which often depicted the Prophet negatively, framing him as a figure of opposition and "the Other." These portrayals persisted from medieval times through the European Renaissance, as seen in works by figures like Dante, Chaucer, and Milton. The research highlights the shift in these perspectives over time. Early Western polemics against Islam and the Prophet influenced Islamic discourse significantly, but by the 18th and 19th centuries, voices like George Sale challenged these entrenched biases. Sale's translation of the Qurʾān marked a significant break from medieval depictions of the Prophet as the “anti-Christ”. In modern times, many Western academics have adopted more nuanced approaches, critiqued Orientalism and contributed to a better understanding of Islamic culture and history. This article emphasizes the work of contemporary non-Muslim scholars such as Karen Armstrong, John Esposito, and Martin Lings, whose independently researched portrayals aim to present a balanced view of the Prophet Muhammad.</p>
+                        </section>
+                        
+                        <!-- Introduction -->
+                        <section class="mb-8">
+                            <h2>Introduction</h2>
+                            <p>The world's most comprehensive biography is arguably that of the Prophet Muhammad (PBUH). Every aspect of his life, in its minuscule details, has been passed on through generations.</p>
+                            
+                            <p>Muhammad’s (PBUH) life is known to the world from different sources. Qur'ān contains peripheral details on Prophet Muhammad’s (PBUH) life and events. Furthermore, his sayings, and actions were carefully preserved and collected to form another early source, the poems of Hassān ibn Thābit, who joined the Prophet in Medina and sang of the important events in the life of the Muslim community, praising Muhammad (PBUH) and derogating his enemies. Also very early are the various descriptions of the Prophet’s wars and raids (Maghāzī) and the spread of Islam in the Arabian Peninsula. All this constituted raw material for his Sīrah, his biography. The Sīrah composed by Ibn Ishāq (d. Ca. 768) and then edited by Ibn Hishām (d. Ca. 830) became the basis of all later biographies.</p>
+
+                            <p>Muhammad’s biographical dates have always been considered the best-known among those of all great religious founders, but even in earliest Islam a “sacred biography,” which nonetheless certainly kept in mind the major external events of his life, including the dates, developed among the Muslims and has remained intact to our day (Schimmel, 2008, p. 5). It was elaborated in the various Islamic languages and retold in prose and verse, sometimes (as in Ottoman Turkey) even adorned with illustrations. As late as a few years ago a Turkish poet composed a series of sixtythree “pictures” from the Prophet’s life in simple verse. “The quest for the historical Muhammad” is, as the innumerable studies of his life show, a seemingly impossible undertaking, but without attempting to divest Muhammad’s biography of the luminous haze of legends, we can sketch his historical life approximately in the following way. Later, Ḥadīth compilation was made and it became the major source of Prophetic history.</p>
+                        </section>
+                        
+                        
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <!-- Enhanced PDF Modal -->
+    <div id="pdfModal" class="pdf-modal">
+        <div class="pdf-modal-content">
+            <div class="pdf-header">
+                <div class="pdf-title">WESTERN SĪRAH LITERATURE FROM INCEPTION TO CONTEMPORARY DEVELOPMENTS: A HISTORICAL ANALYSIS</div>
+                <div class="pdf-controls">
+                    <button class="pdf-button" onclick="refreshPDF()" title="Refresh PDF">
+                        <i class="fas fa-sync-alt"></i>
+                        <span class="hidden sm:inline">Refresh</span>
+                    </button>
+                    <button class="pdf-button" onclick="openInNewTab()" title="Open in New Tab">
+                        <i class="fas fa-external-link-alt"></i>
+                        <span class="hidden sm:inline">New Tab</span>
+                    </button>
+                    <a href="https://dqdhiu.netlify.app/file/55-Article%20Text-141-1-10-20250108.pdf" download class="pdf-button" title="Download PDF">
+                        <i class="fas fa-download"></i>
+                        <span class="hidden sm:inline">Download</span>
+                    </a>
+                    <button class="pdf-close" onclick="closePDF()" title="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="pdf-viewer-container">
+                <iframe id="pdfFrame" class="pdf-iframe" src=""></iframe>
+                <div id="pdfFallback" class="pdf-fallback">
+                    <div class="fallback-content">
+                        <div class="fallback-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="fallback-title">PDF Viewer Not Supported</div>
+                        <div class="fallback-description">
+                            Your browser doesn't support embedded PDF viewing. Please download the file to view it on your device.
+                        </div>
+                        <a href="https://dqdhiu.netlify.app/file/55-Article%20Text-141-1-10-20250108.pdf" download class="download-button">
+                            <i class="fas fa-download"></i>
+                            Download PDF
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="logo-container mb-4">
+                        <img src="logo.png" alt="Islamic Insight Logo" class="logo-image">
+                        <div class="logo-text-container">
+                            <h1 class="logo-text text-white">ISLAMIC INSIGHT</h1>
+                            <p class="logo-subtitle text-gray-300">Journal of Islamic Studies</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-4">
+                        <strong>MAILING ADDRESS:</strong><br><br>
+                        Editor, Islamic Insight Journal of Islamic Studies, Darul Huda Islamic<br>
+                        University, Chemmad, P.B.NO. 3, Tirurangadi (PO), Malappuram (Dt.),<br>
+                        676306 (PIN), Kerala, India.<br><br>
+                        Email: islamicinsight@dhiu.in<br><br>
+                        Website: www.islamicinsight.in
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-300 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="index.html#about" class="text-gray-300 hover:text-white transition-colors">About Journal</a></li>
+                        <li><a href="editors.html" class="text-gray-300 hover:text-white transition-colors">Editorial Board</a></li>
+                        <li><a href="index.html#contact" class="text-gray-300 hover:text-white transition-colors">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fas fa-envelope text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
+                <p>&copy; 2024 Islamic Insight Journal. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const pdfUrl = 'https://dqdhiu.netlify.app/file/55-Article%20Text-141-1-10-20250108.pdf';
+        
+        function openPDF() {
+            const modal = document.getElementById('pdfModal');
+            const iframe = document.getElementById('pdfFrame');
+            const fallback = document.getElementById('pdfFallback');
+            
+            // Show modal
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            // Try to load PDF in iframe
+            loadPDFInIframe();
+        }
+        
+        function loadPDFInIframe() {
+            const iframe = document.getElementById('pdfFrame');
+            const fallback = document.getElementById('pdfFallback');
+            
+            // Show loading state
+            iframe.style.display = 'block';
+            fallback.classList.remove('active');
+            
+            // For better mobile support, use Google Docs viewer as primary method
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // Use Google Docs viewer for mobile devices
+                iframe.src = `https://docs.google.com/gview?url=${encodeURIComponent(pdfUrl)}&embedded=true`;
+            } else {
+                // For desktop, try direct embed first, fallback to Google Docs viewer
+                iframe.src = pdfUrl;
+            }
+            
+            // Handle iframe load errors
+            iframe.onload = function() {
+                // PDF loaded successfully
+                console.log('PDF loaded successfully');
+            };
+            
+            iframe.onerror = function() {
+                // If direct embed fails, try Google Docs viewer
+                console.log('Direct embed failed, trying Google Docs viewer');
+                iframe.src = `https://docs.google.com/gview?url=${encodeURIComponent(pdfUrl)}&embedded=true`;
+                
+                // If Google Docs viewer also fails, show fallback
+                setTimeout(() => {
+                    if (!iframe.contentDocument && !iframe.contentWindow.document) {
+                        showFallback();
+                    }
+                }, 5000);
+            };
+            
+            // Fallback for browsers that don't support PDF viewing
+            setTimeout(() => {
+                try {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    if (!iframeDoc || iframeDoc.body.innerHTML === '') {
+                        console.log('PDF viewer not supported, showing fallback');
+                        showFallback();
+                    }
+                } catch (e) {
+                    // Cross-origin error means the PDF is loading (which is good)
+                    console.log('Cross-origin restriction (PDF loading)');
+                }
+            }, 3000);
+        }
+        
+        function showFallback() {
+            const iframe = document.getElementById('pdfFrame');
+            const fallback = document.getElementById('pdfFallback');
+            
+            iframe.style.display = 'none';
+            fallback.classList.add('active');
+        }
+        
+        function refreshPDF() {
+            loadPDFInIframe();
+        }
+        
+        function openInNewTab() {
+            window.open(pdfUrl, '_blank');
+        }
+        
+        function closePDF() {
+            const modal = document.getElementById('pdfModal');
+            const iframe = document.getElementById('pdfFrame');
+            const fallback = document.getElementById('pdfFallback');
+            
+            modal.style.display = 'none';
+            iframe.src = '';
+            fallback.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('pdfModal');
+            if (event.target == modal) {
+                closePDF();
+            }
+        }
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closePDF();
+            }
+        });
+        
+        // Smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Detect if device supports PDF viewing
+        function detectPDFSupport() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+            const isIOS = /ipad|iphone|ipod/.test(userAgent);
+            
+            // iOS devices typically don't support embedded PDFs well
+            if (isIOS) {
+                return false;
+            }
+            
+            // Check for PDF plugin support
+            if (navigator.plugins && navigator.plugins.length) {
+                for (let i = 0; i < navigator.plugins.length; i++) {
+                    if (navigator.plugins[i].name.toLowerCase().indexOf('pdf') > -1) {
+                        return true;
+                    }
+                }
+            }
+            
+            // Modern browsers usually support PDF viewing
+            return !isMobile;
+        }
+        
+        // Initialize PDF support detection
+        const supportsPDF = detectPDFSupport();
+        console.log('PDF Support:', supportsPDF);
+    </script>
+</body>
+</html>
+
+
