@@ -127,6 +127,678 @@ const articlesData = {
             "Zakat System"
         ],
         abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    6: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    7: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    8: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    9: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    10: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    11: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    12: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    13: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    14: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    15: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    16: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    17: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    18: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    19: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    20: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    21: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    22: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    23: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    24: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    25: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    26: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    27: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    28: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
+    },
+    29: {
+        title: "ECONOMIC PRINCIPLES IN ISLAM: THEORY AND PRACTICE",
+        authors: [
+            {
+                name: "Prof. Muhammad Al-Kindi",
+                position: "Director, Islamic Economics Institute, King Abdulaziz University, Jeddah, Saudi Arabia",
+                email: "m.alkindi@kau.edu.sa"
+            },
+            {
+                name: "Dr. Nadia Farouk",
+                position: "Research Fellow, Islamic Finance Research Center, Dubai, UAE",
+                email: "n.farouk@ifrc.ae"
+            }
+        ],
+        publishedDate: "November 15, 2024",
+        pages: "103-125",
+        volume: "Vol. 7 No. 2 (2024)",
+        issn: "2581-3269",
+        pdfUrl: "https://example.com/pdf/article5.pdf",
+        keywords: [
+            "Islamic Economics",
+            "Sharia Finance",
+            "Economic Justice",
+            "Riba",
+            "Zakat System"
+        ],
+        abstract: "This study presents a comprehensive examination of economic principles as outlined in Islamic teachings and their practical applications in contemporary financial systems. The research explores fundamental concepts such as the prohibition of interest (Riba), the obligation of wealth redistribution through Zakat, and the principles of risk-sharing in Islamic finance. The paper analyzes the implementation of these principles in modern Islamic banking and financial institutions, discussing both successes and challenges in creating ethical economic systems based on Islamic values."
     }
 
     // Add more articles as needed...
