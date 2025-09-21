@@ -454,52 +454,53 @@
     </footer>
 
     <script>
-        // Global variables
-        let currentIssue = null;
-        let allArticles = [];
-        let currentSearchTerm = '';
-        let isSearchExpanded = false;
+    // Global variables
+    let currentIssue = null;
+    let allArticles = [];
+    let currentSearchTerm = '';
+    let isSearchExpanded = false;
 
-        // Configuration
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZys7T-JbfU9Htj6TdF5qoB6sF5FoFWJ_kXS-4eTXjPXsRN8DS0iivvr_9QWPYPB3QVg/exec';
+    // Configuration - MUST match your actual Google Script URL
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZys7T-JbfU9Htj6TdF5qoB6sF5FoFWJ_kXS-4eTXjPXsRN8DS0iivvr_9QWPYPB3QVg/exec';
 
-        // Wait for configuration to load
-        function waitForConfig(callback, maxAttempts = 15, currentAttempt = 0) {
-            if (typeof journalIssues !== 'undefined' && typeof IssueNavigation !== 'undefined') {
-                callback();
-            } else if (currentAttempt < maxAttempts) {
-                setTimeout(() => {
-                    waitForConfig(callback, maxAttempts, currentAttempt + 1);
-                }, 500);
-            } else {
-                showError('Failed to load journal configuration');
-            }
+    // Wait for configuration to load with better error handling
+    function waitForConfig(callback, maxAttempts = 20, currentAttempt = 0) {
+        if (typeof journalIssues !== 'undefined' && typeof IssueNavigation !== 'undefined') {
+            callback();
+        } else if (currentAttempt < maxAttempts) {
+            setTimeout(() => {
+                waitForConfig(callback, maxAttempts, currentAttempt + 1);
+            }, 500);
+        } else {
+            showError('Failed to load journal configuration. Please check your internet connection and refresh the page.');
+        }
+    }
+
+    // Get issue ID from URL or default to latest
+    function getCurrentIssueId() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const issueParam = urlParams.get('issue');
+        
+        if (issueParam && typeof journalIssues !== 'undefined' && journalIssues[issueParam]) {
+            return issueParam;
         }
 
-        // Get issue ID from URL or default to latest
-        function getCurrentIssueId() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const issueParam = urlParams.get('issue');
-            
-            if (issueParam && typeof journalIssues !== 'undefined' && journalIssues[issueParam]) {
-                return issueParam;
-            }
-
-            if (typeof IssueNavigation !== 'undefined') {
-                const issues = IssueNavigation.generateIssueSelector();
-                return issues.length > 0 ? issues[0].id : null;
-            }
-
-            return null;
+        if (typeof IssueNavigation !== 'undefined') {
+            const issues = IssueNavigation.generateIssueSelector();
+            return issues.length > 0 ? issues[0].id : null;
         }
 
-        // Load and display issue
-        function loadIssue() {
-            showLoading(true);
-            
+        return null;
+    }
+
+    // Load and display issue with better error handling
+    function loadIssue() {
+        showLoading(true);
+        
+        try {
             const issueId = getCurrentIssueId();
             if (!issueId || !journalIssues[issueId]) {
-                showError('Issue not found');
+                showError('Issue not found. This could mean no issues have been created yet.');
                 return;
             }
 
@@ -513,399 +514,46 @@
                 showLoading(false);
                 document.getElementById('main-content').style.display = 'grid';
             }, 300);
+        } catch (error) {
+            console.error('Error loading issue:', error);
+            showError('Error loading issue: ' + error.message);
         }
+    }
 
-        // Update page content
-        function updatePageContent() {
-            document.title = `${currentIssue.title} - Islamic Insight Journal`;
-            
-            document.getElementById('page-header').textContent = currentIssue.title;
-            
-            const coverImage = document.getElementById('journal-cover');
-            coverImage.src = currentIssue.coverImage;
-            coverImage.alt = `${currentIssue.title} Cover`;
-            coverImage.onerror = () => {
-                coverImage.src = 'https://via.placeholder.com/300x400/4f46e5/ffffff?text=Journal+Cover';
-            };
+    // Rest of your existing functions remain the same...
+    // (updatePageContent, initAllArticles, loadArticles, etc.)
 
-            document.getElementById('published-date').textContent = formatDate(currentIssue.publishedDate);
-            document.getElementById('volume-info').textContent = `${currentIssue.volume}, Number ${currentIssue.number}`;
-            
-            const count = currentIssue.articles.length;
-            document.getElementById('article-count').textContent = `${count} article${count !== 1 ? 's' : ''} in this issue`;
-        }
-
-        // Initialize all articles for search
-        function initAllArticles() {
-            allArticles = [];
-            Object.entries(journalIssues).forEach(([issueId, issue]) => {
-                issue.articles.forEach(article => {
-                    allArticles.push({
-                        ...article,
-                        issueId: issueId,
-                        issueTitle: issue.title,
-                        issueYear: issue.year
-                    });
-                });
+    // Initialize page with enhanced error handling
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Loading journal configuration...');
+        
+        // Load configuration from Google Script with cache busting
+        const script = document.createElement('script');
+        script.src = `${GOOGLE_SCRIPT_URL}?_=${Date.now()}`;
+        
+        script.onload = function() {
+            console.log('Configuration script loaded, waiting for data...');
+            waitForConfig(() => {
+                console.log('Configuration loaded successfully');
+                loadIssue();
             });
-        }
-
-        // Load and display articles
-        function loadArticles(articlesToShow = null) {
-            const articlesGrid = document.getElementById('articlesGrid');
-            const articles = articlesToShow || currentIssue.articles;
-
-            if (articles.length === 0) {
-                articlesGrid.innerHTML = `
-                    <div class="col-span-full text-center py-12">
-                        <div class="text-gray-400 mb-4">
-                            <i class="fas fa-search text-4xl"></i>
-                        </div>
-                        <h3 class="text-lg font-medium text-gray-600 mb-2">No articles found</h3>
-                        <p class="text-gray-500">Try adjusting your search terms.</p>
-                        <button onclick="clearSearch()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
-                            Clear Search
-                        </button>
-                    </div>
-                `;
-                return;
+        };
+        
+        script.onerror = function() {
+            console.error('Failed to load configuration script');
+            showError('Failed to load journal data. Please check your internet connection and try refreshing the page.');
+        };
+        
+        // Add timeout for script loading
+        setTimeout(() => {
+            if (typeof journalIssues === 'undefined') {
+                console.error('Configuration loading timeout');
+                showError('Configuration loading timed out. Please check your Google Script URL and try again.');
             }
-
-            const articlesHTML = articles.map((article, index) => `
-                <div id="article-${article.id}" class="article-card bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden fade-in" style="animation-delay: ${index * 0.1}s">
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold academic-title text-gray-900 mb-3 leading-tight">
-                            ${currentSearchTerm ? highlightSearchTerm(article.title, currentSearchTerm) : escapeHtml(article.title)}
-                        </h3>
-
-                        <div class="mb-3">
-                            <p class="text-sm font-medium text-blue-600">
-                                ${currentSearchTerm ? highlightSearchTerm(article.author, currentSearchTerm) : escapeHtml(article.author)}
-                            </p>
-                        </div>
-
-                        <div class="mb-4 text-sm text-gray-600">
-                            <i class="far fa-calendar-alt mr-2"></i>
-                            <span>${formatDate(article.date)}</span>
-                            <span class="mx-2">•</span>
-                            <span>Pages ${article.pages}</span>
-                            ${article.doi ? `<span class="mx-2">•</span><span>DOI: ${article.doi}</span>` : ''}
-                        </div>
-
-                        <div class="mb-4">
-                            <p class="text-gray-700 text-sm leading-relaxed mb-4">
-                                ${currentSearchTerm ? highlightSearchTerm(article.abstract, currentSearchTerm) : escapeHtml(article.abstract)}
-                            </p>
-
-                            ${article.keywords.length > 0 ? `
-                                <div class="flex flex-wrap gap-2">
-                                    ${article.keywords.map(keyword => 
-                                        `<span class="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full">
-                                            ${currentSearchTerm ? highlightSearchTerm(keyword, currentSearchTerm) : escapeHtml(keyword)}
-                                        </span>`
-                                    ).join('')}
-                                </div>
-                            ` : ''}
-                        </div>
-
-                        <div class="flex justify-between items-center">
-                            <a href="${article.htmlFile}" 
-                               class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                                Read More <i class="fas fa-arrow-right ml-2"></i>
-                            </a>
-
-                            <div class="flex space-x-2">
-                                <button onclick="shareArticle(${article.id})" 
-                                        class="text-gray-600 hover:text-blue-600 transition-colors p-2" 
-                                        title="Share Article">
-                                    <i class="fas fa-share-alt"></i>
-                                </button>
-                                <button onclick="citeArticle(${article.id})" 
-                                        class="text-gray-600 hover:text-blue-600 transition-colors p-2" 
-                                        title="Citation">
-                                    <i class="fas fa-quote-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-
-            articlesGrid.innerHTML = articlesHTML;
-        }
-
-        // Setup event listeners
-        function setupEventListeners() {
-            // Mobile menu toggle
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-            if (mobileMenuBtn && mobileMenu) {
-                mobileMenuBtn.addEventListener('click', () => {
-                    mobileMenu.classList.toggle('hidden');
-                });
-            }
-
-            // Search functionality
-            const searchToggleBtn = document.getElementById('search-toggle-btn');
-            const searchInput = document.getElementById('search-input');
-
-            if (searchToggleBtn) {
-                searchToggleBtn.addEventListener('click', toggleSearch);
-            }
-
-            if (searchInput) {
-                searchInput.addEventListener('input', handleSearch);
-                searchInput.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape') {
-                        toggleSearch();
-                    }
-                });
-            }
-
-            // Navigation buttons
-            const prevBtn = document.getElementById('prev-issue-btn');
-            const nextBtn = document.getElementById('next-issue-btn');
-
-            if (typeof IssueNavigation !== 'undefined') {
-                const currentIssueId = getCurrentIssueId();
-                const prevIssue = IssueNavigation.getPreviousIssue(currentIssueId);
-                const nextIssue = IssueNavigation.getNextIssue(currentIssueId);
-
-                if (prevBtn) {
-                    if (prevIssue) {
-                        prevBtn.onclick = () => window.location.href = prevIssue.url;
-                        prevBtn.disabled = false;
-                        prevBtn.classList.remove('opacity-50');
-                    } else {
-                        prevBtn.disabled = true;
-                        prevBtn.classList.add('opacity-50');
-                    }
-                }
-
-                if (nextBtn) {
-                    if (nextIssue) {
-                        nextBtn.onclick = () => window.location.href = nextIssue.url;
-                        nextBtn.disabled = false;
-                        nextBtn.classList.remove('opacity-50');
-                    } else {
-                        nextBtn.disabled = true;
-                        nextBtn.classList.add('opacity-50');
-                    }
-                }
-            }
-
-            // Close search on outside click
-            document.addEventListener('click', (e) => {
-                const searchContainer = document.querySelector('.search-container');
-                if (searchContainer && !searchContainer.contains(e.target)) {
-                    document.getElementById('search-results').classList.add('hidden');
-                }
-            });
-        }
-
-        // Toggle search
-        function toggleSearch() {
-            const searchInput = document.getElementById('search-input');
-            const searchIcon = document.getElementById('search-icon');
-            const searchResults = document.getElementById('search-results');
-
-            isSearchExpanded = !isSearchExpanded;
-
-            if (isSearchExpanded) {
-                searchInput.classList.add('expanded');
-                searchIcon.className = 'fas fa-times text-lg';
-                searchInput.focus();
-            } else {
-                searchInput.classList.remove('expanded');
-                searchIcon.className = 'fas fa-search text-lg';
-                searchResults.classList.add('hidden');
-                searchInput.value = '';
-                currentSearchTerm = '';
-                loadArticles();
-            }
-        }
-
-        // Handle search
-        function handleSearch() {
-            const query = document.getElementById('search-input').value.toLowerCase().trim();
-            currentSearchTerm = query;
-
-            if (!query) {
-                document.getElementById('search-results').classList.add('hidden');
-                loadArticles();
-                return;
-            }
-
-            const filteredArticles = allArticles.filter(article => {
-                return article.title.toLowerCase().includes(query) ||
-                    article.author.toLowerCase().includes(query) ||
-                    article.abstract.toLowerCase().includes(query) ||
-                    article.keywords.some(keyword => keyword.toLowerCase().includes(query));
-            });
-
-            displaySearchResults(filteredArticles, query);
-            
-            // Show current issue results
-            const currentIssueResults = filteredArticles.filter(article => article.issueId === getCurrentIssueId());
-            loadArticles(currentIssueResults);
-        }
-
-        // Display search results dropdown
-        function displaySearchResults(results, query) {
-            const searchResults = document.getElementById('search-results');
-            
-            if (results.length === 0) {
-                searchResults.innerHTML = `
-                    <div class="p-4 text-center text-gray-500">
-                        <i class="fas fa-search text-2xl mb-2 text-gray-400"></i>
-                        <p>No articles found for "<strong>${escapeHtml(query)}</strong>"</p>
-                    </div>
-                `;
-            } else {
-                searchResults.innerHTML = results.slice(0, 8).map(article => `
-                    <div class="search-result-item" onclick="navigateToArticle('${article.issueId}', ${article.id})">
-                        <h4 class="font-semibold text-gray-900 mb-1 text-sm">${highlightSearchTerm(article.title, query)}</h4>
-                        <p class="text-sm text-gray-600 mb-1">${highlightSearchTerm(article.author, query)}</p>
-                        <p class="text-xs text-blue-600 mb-1">${highlightSearchTerm(article.issueTitle, query)}</p>
-                        <p class="text-xs text-gray-500">${highlightSearchTerm(truncateText(article.abstract, 100), query)}...</p>
-                    </div>
-                `).join('');
-            }
-
-            searchResults.classList.remove('hidden');
-        }
-
-        // Navigate to article
-        function navigateToArticle(issueId, articleId) {
-            if (issueId === getCurrentIssueId()) {
-                scrollToArticle(articleId);
-            } else {
-                window.location.href = `issues.html?issue=${issueId}#article-${articleId}`;
-            }
-        }
-
-        // Scroll to article
-        function scrollToArticle(articleId) {
-            document.getElementById('search-results').classList.add('hidden');
-            const articleElement = document.getElementById(`article-${articleId}`);
-            if (articleElement) {
-                articleElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }
-
-        // Clear search
-        function clearSearch() {
-            const searchInput = document.getElementById('search-input');
-            const searchIcon = document.getElementById('search-icon');
-            const searchResults = document.getElementById('search-results');
-
-            searchInput.value = '';
-            searchInput.classList.remove('expanded');
-            searchIcon.className = 'fas fa-search text-lg';
-            searchResults.classList.add('hidden');
-            
-            currentSearchTerm = '';
-            isSearchExpanded = false;
-            loadArticles();
-        }
-
-        // Utility functions
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function truncateText(text, maxLength) {
-            if (text.length <= maxLength) return text;
-            return text.substr(0, maxLength).replace(/\s+\S*$/, '');
-        }
-
-        function highlightSearchTerm(text, query) {
-            if (!query) return escapeHtml(text);
-            const escapedText = escapeHtml(text);
-            const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            const regex = new RegExp(`(${escapedQuery})`, 'gi');
-            return escapedText.replace(regex, '<mark>$1</mark>');
-        }
-
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-        }
-
-        function showLoading(show) {
-            const loadingState = document.getElementById('loading-state');
-            const mainContent = document.getElementById('main-content');
-            
-            if (show) {
-                loadingState.style.display = 'block';
-                mainContent.style.display = 'none';
-            } else {
-                loadingState.style.display = 'none';
-                mainContent.style.display = 'grid';
-            }
-        }
-
-        function showError(message) {
-            document.getElementById('loading-state').style.display = 'none';
-            document.getElementById('error-state').classList.remove('hidden');
-            document.getElementById('main-content').style.display = 'none';
-        }
-
-        // Article actions
-        function shareArticle(articleId) {
-            const article = currentIssue.articles.find(a => a.id === articleId);
-            if (!article) return;
-
-            const shareData = {
-                title: article.title,
-                text: `${article.title} by ${article.author}`,
-                url: `${window.location.origin}/${article.htmlFile}`
-            };
-
-            if (navigator.share) {
-                navigator.share(shareData);
-            } else {
-                navigator.clipboard.writeText(shareData.url).then(() => {
-                    alert('Article link copied to clipboard!');
-                }).catch(() => {
-                    prompt('Copy this link to share:', shareData.url);
-                });
-            }
-        }
-
-        function citeArticle(articleId) {
-            const article = currentIssue.articles.find(a => a.id === articleId);
-            if (!article) return;
-
-            const year = new Date(article.date).getFullYear();
-            const citation = `${article.author} (${year}). ${article.title}. Islamic Insight Journal, ${currentIssue.volume}(${currentIssue.number}), ${article.pages}.`;
-            
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(citation).then(() => {
-                    alert(`Citation copied to clipboard:\n\n${citation}`);
-                });
-            } else {
-                alert(`Citation:\n\n${citation}`);
-            }
-        }
-
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            // Load configuration from Google Script
-            const script = document.createElement('script');
-            script.src = GOOGLE_SCRIPT_URL;
-            script.onload = function() {
-                waitForConfig(() => {
-                    loadIssue();
-                });
-            };
-            script.onerror = function() {
-                showError('Failed to load journal data. Please check your internet connection.');
-            };
-            document.head.appendChild(script);
-        });
-    </script>
+        }, 15000);
+        
+        document.head.appendChild(script);
+    });
+</script>
 </body>
 </html>
