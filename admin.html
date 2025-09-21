@@ -1,4 +1,333 @@
-// Updated admin.html script section - replace the existing script
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .tab-button {
+            transition: all 0.2s ease;
+        }
+        
+        .tab-button.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+        
+        .tab-button:not(.active) {
+            color: #6b7280;
+        }
+        
+        .tab-button:not(.active):hover {
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+        
+        .form-input {
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+        
+        .data-card {
+            transition: all 0.2s ease;
+        }
+        
+        .data-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">Journal Admin Panel</h1>
+            <p class="text-gray-600">Manage journal issues and articles</p>
+        </div>
+        
+        <!-- Navigation Tabs -->
+        <div class="flex justify-center mb-8">
+            <div class="bg-white rounded-xl shadow-md p-1 flex flex-wrap gap-1">
+                <button id="addIssueTab" class="tab-button active px-6 py-3 rounded-lg font-medium text-sm">
+                    <i class="fas fa-plus mr-2"></i>Add Issue
+                </button>
+                <button id="addArticleTab" class="tab-button px-6 py-3 rounded-lg font-medium text-sm">
+                    <i class="fas fa-file-plus mr-2"></i>Add Article
+                </button>
+                <button id="addFullArticleTab" class="tab-button px-6 py-3 rounded-lg font-medium text-sm">
+                    <i class="fas fa-file-alt mr-2"></i>Add Full Article
+                </button>
+                <button id="viewDataTab" class="tab-button px-6 py-3 rounded-lg font-medium text-sm">
+                    <i class="fas fa-database mr-2"></i>View Data
+                </button>
+            </div>
+        </div>
+
+        <!-- Add Issue Form -->
+        <div id="addIssuePanel" class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-8">
+            <div class="flex items-center mb-6">
+                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-plus text-blue-600"></i>
+                </div>
+                <h2 class="text-2xl font-semibold text-gray-800">Add New Issue</h2>
+            </div>
+            
+            <form id="addIssueForm" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Issue ID *</label>
+                        <input type="text" id="issueId" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., issue4" required>
+                        <p class="text-xs text-gray-500 mt-1">Unique identifier for the issue</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Volume *</label>
+                        <input type="number" id="volume" class="form-input w-full p-3 border border-gray-300 rounded-lg" min="1" required>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Number *</label>
+                        <input type="number" id="number" class="form-input w-full p-3 border border-gray-300 rounded-lg" min="1" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Year *</label>
+                        <input type="number" id="year" class="form-input w-full p-3 border border-gray-300 rounded-lg" min="2020" max="2030" required>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Issue Title *</label>
+                    <input type="text" id="issueTitle" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., Vol. 7 No. 3 (2024)" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Published Date *</label>
+                    <input type="date" id="publishedDate" class="form-input w-full p-3 border border-gray-300 rounded-lg" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Cover Image URL *</label>
+                    <input type="url" id="coverImage" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="https://example.com/cover.jpg" required>
+                    <p class="text-xs text-gray-500 mt-1">Direct link to the cover image</p>
+                </div>
+                
+                <button type="submit" class="btn-primary w-full text-white font-medium py-4 px-6 rounded-lg">
+                    <i class="fas fa-plus mr-2"></i>Create Issue
+                </button>
+            </form>
+        </div>
+
+        <!-- Add Article (Simple) Form -->
+        <div id="addArticlePanel" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 hidden">
+            <div class="flex items-center mb-6">
+                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-file-plus text-green-600"></i>
+                </div>
+                <h2 class="text-2xl font-semibold text-gray-800">Add Article to Existing Issue</h2>
+            </div>
+            
+            <form id="addArticleForm" class="space-y-6">
+                <!-- Issue Selection -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Select Issue *</label>
+                    <select id="articleIssueId" class="form-input w-full p-3 border border-gray-300 rounded-lg" required>
+                        <option value="">Loading issues...</option>
+                    </select>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Article Title *</label>
+                        <input type="text" id="articleTitle" class="form-input w-full p-3 border border-gray-300 rounded-lg" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Author *</label>
+                        <input type="text" id="articleAuthor" class="form-input w-full p-3 border border-gray-300 rounded-lg" required>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Abstract *</label>
+                    <textarea id="articleAbstract" rows="4" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="Enter the article abstract..." required></textarea>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Article Date *</label>
+                        <input type="date" id="articleDate" class="form-input w-full p-3 border border-gray-300 rounded-lg" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pages *</label>
+                        <input type="text" id="articlePages" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., 1-24" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">DOI</label>
+                        <input type="text" id="articleDoi" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="10.1234/ii.2024.7.2.001">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Keywords</label>
+                    <input type="text" id="articleKeywords" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="keyword1, keyword2, keyword3">
+                    <p class="text-xs text-gray-500 mt-1">Separate keywords with commas</p>
+                </div>
+                
+                <button type="submit" class="btn-primary w-full text-white font-medium py-4 px-6 rounded-lg">
+                    <i class="fas fa-plus mr-2"></i>Add Article
+                </button>
+            </form>
+        </div>
+
+        <!-- Add Full Article Form -->
+        <div id="addFullArticlePanel" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 hidden">
+            <div class="flex items-center mb-6">
+                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-file-alt text-purple-600"></i>
+                </div>
+                <h2 class="text-2xl font-semibold text-gray-800">Add Complete Article</h2>
+            </div>
+            
+            <form id="addFullArticleForm" class="space-y-6">
+                <!-- Issue Selection -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Select Issue *</label>
+                    <select id="fullArticleIssueId" class="form-input w-full p-3 border border-gray-300 rounded-lg" required>
+                        <option value="">Loading issues...</option>
+                    </select>
+                </div>
+                
+                <!-- Article Information -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Article Title *</label>
+                    <input type="text" id="fullArticleTitle" class="form-input w-full p-3 border border-gray-300 rounded-lg" required>
+                </div>
+                
+                <!-- Author Information -->
+                <div class="bg-gray-50 p-6 rounded-xl">
+                    <h3 class="text-lg font-medium mb-4 text-gray-800">
+                        <i class="fas fa-user mr-2"></i>Author Information
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Author Name *</label>
+                            <input type="text" id="fullAuthorName" class="form-input w-full p-3 border border-gray-300 rounded-lg" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Author Email *</label>
+                            <input type="email" id="fullAuthorEmail" class="form-input w-full p-3 border border-gray-300 rounded-lg" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Author Position/Affiliation *</label>
+                        <textarea id="fullAuthorPosition" rows="3" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., Professor of Islamic Studies, University Name" required></textarea>
+                    </div>
+                </div>
+                
+                <!-- Article Details -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Published Date *</label>
+                        <input type="date" id="fullPublishedDate" class="form-input w-full p-3 border border-gray-300 rounded-lg" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pages *</label>
+                        <input type="text" id="fullPages" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., 1-24" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">ISSN *</label>
+                        <input type="text" id="fullIssn" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., 2581-3269" required>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">PDF URL *</label>
+                    <input type="url" id="fullPdfUrl" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="https://example.com/article.pdf" required>
+                    <p class="text-xs text-gray-500 mt-1">Direct link to the PDF file</p>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Keywords *</label>
+                    <input type="text" id="fullKeywords" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="keyword1, keyword2, keyword3" required>
+                    <p class="text-xs text-gray-500 mt-1">Separate keywords with commas</p>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Abstract *</label>
+                    <textarea id="fullAbstract" rows="6" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="Enter the complete abstract..." required></textarea>
+                </div>
+                
+                <button type="submit" class="btn-primary w-full text-white font-medium py-4 px-6 rounded-lg">
+                    <i class="fas fa-plus mr-2"></i>Add Complete Article
+                </button>
+            </form>
+        </div>
+
+        <!-- View Data Panel -->
+        <div id="viewDataPanel" class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg p-8 hidden">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center mr-4">
+                        <i class="fas fa-database text-indigo-600"></i>
+                    </div>
+                    <h2 class="text-2xl font-semibold text-gray-800">Current Data</h2>
+                </div>
+                <div class="flex gap-2">
+                    <button id="refreshData" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-sync-alt mr-2"></i>Issues
+                    </button>
+                    <button id="viewArticlesData" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-file-alt mr-2"></i>Articles
+                    </button>
+                </div>
+            </div>
+            <div id="dataDisplay" class="overflow-x-auto">
+                <div class="flex items-center justify-center py-8">
+                    <div class="loading-spinner mr-3"></div>
+                    <p class="text-gray-500">Loading data...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success/Error Messages -->
+        <div id="messageContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
+    </div>
+
+    // Updated admin.html script section - replace the existing script
 <script>
     // Configuration - Replace with your Google Script URL
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZys7T-JbfU9Htj6TdF5qoB6sF5FoFWJ_kXS-4eTXjPXsRN8DS0iivvr_9QWPYPB3QVg/exec';
@@ -265,3 +594,6 @@
         }
     });
 </script>
+
+</body>
+</html>
