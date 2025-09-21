@@ -179,15 +179,47 @@ function closePDF() {
 }
 
 // Event Listeners
-document.addEventListener('DOMContentLoaded', function() {
+function initializeArticlePage() {
     const articleId = getArticleIdFromUrl();
     
-    if (articleId && articlesData[articleId]) {
+    if (articleId && typeof articlesData !== 'undefined' && articlesData[articleId]) {
         loadArticle(articleId);
     } else {
         showError();
     }
-});
+}
+
+// Wait for both DOM and articles data to be ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if articlesData is already loaded
+        if (typeof articlesData !== 'undefined') {
+            initializeArticlePage();
+        } else {
+            // Wait a bit more for the dynamic script to load
+            setTimeout(() => {
+                if (typeof articlesData !== 'undefined') {
+                    initializeArticlePage();
+                } else {
+                    showError();
+                }
+            }, 2000);
+        }
+    });
+} else {
+    // DOM is already loaded
+    if (typeof articlesData !== 'undefined') {
+        initializeArticlePage();
+    } else {
+        setTimeout(() => {
+            if (typeof articlesData !== 'undefined') {
+                initializeArticlePage();
+            } else {
+                showError();
+            }
+        }, 2000);
+    }
+}
 
 // Close modal when clicking outside of it
 window.onclick = function(event) {
