@@ -690,6 +690,31 @@
     </footer>
 
     <script>
+        // Check if configuration is loaded
+function waitForConfig(callback, maxAttempts = 10, currentAttempt = 0) {
+    if (typeof journalIssues !== 'undefined' && typeof IssueNavigation !== 'undefined') {
+        callback();
+    } else if (currentAttempt < maxAttempts) {
+        setTimeout(() => {
+            waitForConfig(callback, maxAttempts, currentAttempt + 1);
+        }, 500);
+    } else {
+        // Configuration failed to load
+        console.error('Failed to load journal configuration');
+        document.getElementById('loading-state').innerHTML = `
+            <div class="text-center py-12">
+                <div class="text-red-500 mb-4">
+                    <i class="fas fa-exclamation-triangle text-4xl"></i>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">Configuration Error</h3>
+                <p class="text-gray-600">Failed to load journal data. Please try refreshing the page.</p>
+                <button onclick="window.location.reload()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                    Refresh Page
+                </button>
+            </div>
+        `;
+    }
+}
         // Enhanced Journal Issue Loader with Multi-Issue Search
         class JournalIssueLoader {
             constructor() {
@@ -1434,11 +1459,13 @@
         }
 
         // Initialize the journal loader
-        let journalLoader;
-        document.addEventListener('DOMContentLoaded', function() {
-            journalLoader = new JournalIssueLoader();
-            journalLoader.loadIssue();
-        });
+let journalLoader;
+document.addEventListener('DOMContentLoaded', function() {
+    waitForConfig(() => {
+        journalLoader = new JournalIssueLoader();
+        journalLoader.loadIssue();
+    });
+});
 
         // Handle page visibility change to reload if needed
         document.addEventListener('visibilitychange', function() {
