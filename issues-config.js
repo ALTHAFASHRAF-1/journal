@@ -12,12 +12,12 @@ const journalIssues = {
                 id: 1,
                 title: "WESTERN SĪRAH LITERATURE FROM INCEPTION TO CONTEMPORARY DEVELOPMENTS: A HISTORICAL ANALYSIS",
                 author: "Irshad EV",
-                abstract: "This study investigates the varied approaches of Western scholars and writers toward the life and character of Prophet Muhammad (PBUH). Through a comprehensive historical analysis, this research examines how Western Sīrah literature has evolved from its inception during the medieval period to contemporary developments in the 21st century. The study analyzes key works, methodologies, and perspectives employed by Western authors, identifying patterns of orientalist influence, scholarly objectivity, and contemporary revisionist approaches. The research highlights the transformation from purely polemical works to more nuanced academic studies, while also addressing persistent biases and misconceptions that continue to influence Western representations of the Prophet's life.",
+                abstract: "This study investigates the varied approaches of Western scholars and writers toward the life and character of Prophet Muhammad (PBUH).",
                 date: "2024-11-15",
                 keywords: ["Western Sīrah", "Classical and modern Sīrah Literature", "Orientalism", "Western Perspectives towards Prophet"],
                 pages: "1-24",
                 htmlFile: "article1.html",
-                doi: "10.1234/ii.2024.7.2.001"
+               
             },
             {
                 id: 2,
