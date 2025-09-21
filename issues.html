@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islamic Insight Journal</title>
+    <meta name="description" content="Islamic Insight Journal - A comprehensive journal of Islamic studies and research">
+    <meta name="keywords" content="Islamic studies, journal, research, academia">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* Custom CSS */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .article-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .article-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-left-color: #3b82f6;
+        }
+
+        .academic-title {
+            line-height: 1.4;
+            font-family: 'Georgia', serif;
+        }
+
+        .journal-cover {
+            max-width: 300px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        /* Search Styles */
+        .search-container {
+            position: relative;
+        }
+
+        #navbar-search-input {
+            width: 0;
+            opacity: 0;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        #navbar-search-input.expanded {
+            width: 300px;
+            opacity: 1;
+        }
+
+        #mobile-search-input {
+            width: 0;
+            opacity: 0;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        #mobile-search-input.expanded {
+            width: 200px;
+            opacity: 1;
+        }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .search-result-item {
+            padding: 12px;
+            border-bottom: 1px solid #f3f4f6;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .search-result-item:hover {
+            background-color: #f9fafb;
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .hidden-for-search {
+            display: none !important;
+        }
+
+        /* Issue Selector */
+        .issue-selector {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .journal-cover {
+                max-width: 250px;
+            }
+            
+            #navbar-search-input.expanded {
+                width: 200px;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        /* Loading animation */
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Highlight styles */
+        mark {
+            background-color: #fef3c7;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        /* Navigation improvements */
+        .nav-link {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            transform: translateY(-1px);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 50%;
+            background-color: #3b82f6;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+    </style>
+
+    <!-- Include the configuration -->
+    <script src="issues-config.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50 no-print">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo and Title -->
+                <div class="flex items-center space-x-4">
+                    <div class="text-2xl font-bold text-blue-600">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800">Islamic Insight</h1>
+                        <p class="text-sm text-gray-600">Journal of Islamic Studies</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <div id="nav-items" class="flex items-center space-x-6">
+                        <a href="#articles" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Articles</a>
+                        <a href="#about" class="nav-link text-gray-700 hover:text-blue-600 font-medium">About</a>
+                        <a href="#contact" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Contact</a>
+                        
+                        <!-- Issue Selector -->
+                        <select id="issue-selector" class="issue-selector bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Select Issue</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Desktop Search -->
+                    <div class="search-container">
+                        <input type="text" 
+                               id="navbar-search-input" 
+                               placeholder="Search articles..." 
+                               class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <button id="search-toggle-btn" class="ml-2 p-2 text-gray-600 hover:text-blue-600 transition-colors">
+                            <i id="search-icon" class="fas fa-search text-lg"></i>
+                        </button>
+                        <div id="navbar-search-results" class="search-results hidden"></div>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center space-x-2">
+                    <!-- Mobile Search -->
+                    <div class="search-container">
+                        <input type="text" 
+                               id="mobile-search-input" 
+                               placeholder="Search..." 
+                               class="border border-gray-300 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <button id="mobile-search-toggle-btn" class="p-2 text-gray-600 hover:text-blue-600 transition-colors">
+                            <i id="mobile-search-icon" class="fas fa-search"></i>
+                        </button>
+                        <div id="mobile-search-results" class="search-results hidden"></div>
+                    </div>
+                    
+                    <button id="mobile-menu-btn" class="p-2 text-gray-600 hover:text-blue-600 transition-colors">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="md:hidden hidden py-4 border-t border-gray-200">
+                <div class="flex flex-col space-y-4">
+                    <a href="#articles" class="text-gray-700 hover:text-blue-600 font-medium px-2">Articles</a>
+                    <a href="#about" class="text-gray-700 hover:text-blue-600 font-medium px-2">About</a>
+                    <a href="#contact" class="text-gray-700 hover:text-blue-600 font-medium px-2">Contact</a>
+                    
+                    <!-- Mobile Issue Selector -->
+                    <select id="mobile-issue-selector" class="issue-selector bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 mx-2">
+                        <option value="">Select Issue</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Header Section -->
+        <section class="text-center mb-12">
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+                Loading...
+            </h2>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                Explore our comprehensive collection of peer-reviewed articles on Islamic studies, 
+                theology, history, and contemporary Muslim thought.
+            </p>
+        </section>
+
+        <!-- Journal Information and Cover -->
+        <section class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-8 mb-12">
+            <div class="flex flex-col lg:flex-row items-center lg:items-start gap-8">
+                <!-- Journal Cover -->
+                <div class="flex-shrink-0">
+                    <img src="" alt="Journal Cover" class="journal-cover">
+                </div>
+
+                <!-- Journal Details -->
+                <div class="flex-1 text-center lg:text-left">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Current Issue</h3>
+                    
+                    <div class="space-y-3 text-sm text-gray-600">
+                        <div class="flex items-center justify-center lg:justify-start">
+                            <i class="fas fa-calendar-alt mr-3 text-blue-600"></i>
+                            <span><strong>Published:</strong> <span data-field="published">Loading...</span></span>
+                        </div>
+
+                        <div class="flex items-center justify-center lg:justify-start">
+                            <i class="fas fa-bookmark mr-3 text-blue-600"></i>
+                            <span><strong>Volume:</strong> <span data-field="volume">Loading...</span></span>
+                        </div>
+
+                        <div class="flex items-center justify-center lg:justify-start">
+                            <i class="fas fa-language mr-3 text-blue-600"></i>
+                            <span><strong>Languages:</strong> English, Arabic</span>
+                        </div>
+
+                        <div class="flex items-center justify-center lg:justify-start">
+                            <i class="fas fa-eye mr-3 text-blue-600"></i>
+                            <span><strong>Open Access</strong></span>
+                        </div>
+
+                        <div class="flex items-center justify-center lg:justify-start">
+                            <i class="fas fa-certificate mr-3 text-blue-600"></i>
+                            <span><strong>Peer Reviewed</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- Issue Navigation -->
+                    <div class="mt-6 flex flex-wrap justify-center lg:justify-start gap-2">
+                        <button id="prev-issue-btn" class="bg-white hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium transition-colors">
+                            <i class="fas fa-chevron-left mr-2"></i>Previous Issue
+                        </button>
+                        <button id="next-issue-btn" class="bg-white hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium transition-colors">
+                            Next Issue<i class="fas fa-chevron-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Articles Section -->
+        <section id="articles" class="mb-12">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="text-2xl font-bold text-gray-900">Articles in This Issue</h3>
+                <div class="text-sm text-gray-600">
+                    <span id="article-count">Loading articles...</span>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loading-state" class="text-center py-12">
+                <div class="loading-spinner inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full"></div>
+                <p class="mt-4 text-gray-600">Loading articles...</p>
+            </div>
+
+            <!-- Articles Grid -->
+            <div id="articlesGrid" class="grid gap-8 md:grid-cols-1 lg:grid-cols-1">
+                <!-- Articles will be loaded here dynamically -->
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="bg-gray-50 rounded-xl p-8 mb-12">
+            <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">About Islamic Insight Journal</h3>
+            <div class="max-w-4xl mx-auto">
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Islamic Insight Journal is a premier academic publication dedicated to advancing scholarly 
+                    research and understanding in the field of Islamic studies. Our peer-reviewed journal 
+                    publishes original research articles, reviews, and scholarly analyses covering various 
+                    aspects of Islamic theology, history, law, philosophy, and contemporary Muslim thought.
+                </p>
+                <p class="text-gray-700 leading-relaxed">
+                    We welcome contributions from scholars worldwide who seek to contribute to the academic 
+                    discourse on Islam and its rich intellectual tradition. All articles undergo rigorous 
+                    peer review to ensure the highest standards of academic excellence.
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="text-center">
+            <h3 class="text-2xl font-bold text-gray-900 mb-6">Contact Us</h3>
+            <div class="max-w-2xl mx-auto">
+                <p class="text-gray-700 mb-6">
+                    For submissions, inquiries, or collaboration opportunities, please reach out to our editorial team.
+                </p>
+                <div class="flex flex-wrap justify-center gap-6">
+                    <div class="flex items-center">
+                        <i class="fas fa-envelope text-blue-600 mr-2"></i>
+                        <span class="text-gray-700">editor@islamicinsight.journal</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-phone text-blue-600 mr-2"></i>
+                        <span class="text-gray-700">+1 (555) 123-4567</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 mt-16 no-print">
+        <div class="container mx-auto px-4 text-center">
+            <div class="mb-4">
+                <h4 class="text-lg font-semibold mb-2">Islamic Insight Journal</h4>
+                <p class="text-gray-400 text-sm">Advancing Islamic scholarship through rigorous academic research</p>
+            </div>
+            <div class="border-t border-gray-700 pt-4">
+                <p class="text-gray-400 text-sm">
+                    &copy; 2024 Islamic Insight Journal. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Include the dynamic functionality -->
+    <script src="journal-dynamic.js"></script>
+</body>
+</html>
