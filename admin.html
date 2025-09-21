@@ -1,893 +1,267 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Journal Admin Panel</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #3498db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
+// Updated admin.html script section - replace the existing script
+<script>
+    // Configuration - Replace with your Google Script URL
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZys7T-JbfU9Htj6TdF5qoB6sF5FoFWJ_kXS-4eTXjPXsRN8DS0iivvr_9QWPYPB3QVg/exec';
+    
+    let currentDataView = 'issues';
+    let isLoading = false;
+    
+    // Tab Management
+    function initTabs() {
+        const tabs = {
+            'addIssueTab': 'addIssuePanel',
+            'addArticleTab': 'addArticlePanel',
+            'addFullArticleTab': 'addFullArticlePanel',
+            'viewDataTab': 'viewDataPanel'
+        };
         
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .tab-button {
-            transition: all 0.2s ease;
-        }
-        
-        .tab-button.active {
-            background-color: #3b82f6;
-            color: white;
-        }
-        
-        .tab-button:not(.active) {
-            color: #6b7280;
-        }
-        
-        .tab-button:not(.active):hover {
-            background-color: #f3f4f6;
-            color: #374151;
-        }
-        
-        .form-input {
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            transition: all 0.2s ease;
-        }
-        
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
-        }
-        
-        .data-card {
-            transition: all 0.2s ease;
-        }
-        
-        .data-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-    </style>
-</head>
-<body class="bg-gray-100 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
-        <!-- Header -->
-        <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-gray-800 mb-2">Journal Admin Panel</h1>
-            <p class="text-gray-600">Manage journal issues and articles</p>
-        </div>
-        
-        <!-- Navigation Tabs -->
-        <div class="flex justify-center mb-8">
-            <div class="bg-white rounded-xl shadow-md p-1 flex flex-wrap gap-1">
-                <button id="addIssueTab" class="tab-button active px-6 py-3 rounded-lg font-medium text-sm">
-                    <i class="fas fa-plus mr-2"></i>Add Issue
-                </button>
-                <button id="addArticleTab" class="tab-button px-6 py-3 rounded-lg font-medium text-sm">
-                    <i class="fas fa-file-plus mr-2"></i>Add Article
-                </button>
-                <button id="addFullArticleTab" class="tab-button px-6 py-3 rounded-lg font-medium text-sm">
-                    <i class="fas fa-file-alt mr-2"></i>Add Full Article
-                </button>
-                <button id="viewDataTab" class="tab-button px-6 py-3 rounded-lg font-medium text-sm">
-                    <i class="fas fa-database mr-2"></i>View Data
-                </button>
-            </div>
-        </div>
-
-        <!-- Add Issue Form -->
-        <div id="addIssuePanel" class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-8">
-            <div class="flex items-center mb-6">
-                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                    <i class="fas fa-plus text-blue-600"></i>
-                </div>
-                <h2 class="text-2xl font-semibold text-gray-800">Add New Issue</h2>
-            </div>
-            
-            <form id="addIssueForm" class="space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Issue ID *</label>
-                        <input type="text" id="issueId" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., issue4" required>
-                        <p class="text-xs text-gray-500 mt-1">Unique identifier for the issue</p>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Volume *</label>
-                        <input type="number" id="volume" class="form-input w-full p-3 border border-gray-300 rounded-lg" min="1" required>
-                    </div>
-                </div>
+        Object.keys(tabs).forEach(tabId => {
+            document.getElementById(tabId).addEventListener('click', () => {
+                if (isLoading) return;
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Number *</label>
-                        <input type="number" id="number" class="form-input w-full p-3 border border-gray-300 rounded-lg" min="1" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Year *</label>
-                        <input type="number" id="year" class="form-input w-full p-3 border border-gray-300 rounded-lg" min="2020" max="2030" required>
-                    </div>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Issue Title *</label>
-                    <input type="text" id="issueTitle" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., Vol. 7 No. 3 (2024)" required>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Published Date *</label>
-                    <input type="date" id="publishedDate" class="form-input w-full p-3 border border-gray-300 rounded-lg" required>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Cover Image URL *</label>
-                    <input type="url" id="coverImage" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="https://example.com/cover.jpg" required>
-                    <p class="text-xs text-gray-500 mt-1">Direct link to the cover image</p>
-                </div>
-                
-                <button type="submit" class="btn-primary w-full text-white font-medium py-4 px-6 rounded-lg">
-                    <i class="fas fa-plus mr-2"></i>Create Issue
-                </button>
-            </form>
-        </div>
-
-        <!-- Add Article (Simple) Form -->
-        <div id="addArticlePanel" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 hidden">
-            <div class="flex items-center mb-6">
-                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-4">
-                    <i class="fas fa-file-plus text-green-600"></i>
-                </div>
-                <h2 class="text-2xl font-semibold text-gray-800">Add Article to Existing Issue</h2>
-            </div>
-            
-            <form id="addArticleForm" class="space-y-6">
-                <!-- Issue Selection -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Select Issue *</label>
-                    <select id="articleIssueId" class="form-input w-full p-3 border border-gray-300 rounded-lg" required>
-                        <option value="">Loading issues...</option>
-                    </select>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Article Title *</label>
-                        <input type="text" id="articleTitle" class="form-input w-full p-3 border border-gray-300 rounded-lg" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Author *</label>
-                        <input type="text" id="articleAuthor" class="form-input w-full p-3 border border-gray-300 rounded-lg" required>
-                    </div>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Abstract *</label>
-                    <textarea id="articleAbstract" rows="4" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="Enter the article abstract..." required></textarea>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Article Date *</label>
-                        <input type="date" id="articleDate" class="form-input w-full p-3 border border-gray-300 rounded-lg" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Pages *</label>
-                        <input type="text" id="articlePages" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., 1-24" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">DOI</label>
-                        <input type="text" id="articleDoi" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="10.1234/ii.2024.7.2.001">
-                    </div>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Keywords</label>
-                    <input type="text" id="articleKeywords" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="keyword1, keyword2, keyword3">
-                    <p class="text-xs text-gray-500 mt-1">Separate keywords with commas</p>
-                </div>
-                
-                <button type="submit" class="btn-primary w-full text-white font-medium py-4 px-6 rounded-lg">
-                    <i class="fas fa-plus mr-2"></i>Add Article
-                </button>
-            </form>
-        </div>
-
-        <!-- Add Full Article Form -->
-        <div id="addFullArticlePanel" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 hidden">
-            <div class="flex items-center mb-6">
-                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
-                    <i class="fas fa-file-alt text-purple-600"></i>
-                </div>
-                <h2 class="text-2xl font-semibold text-gray-800">Add Complete Article</h2>
-            </div>
-            
-            <form id="addFullArticleForm" class="space-y-6">
-                <!-- Issue Selection -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Select Issue *</label>
-                    <select id="fullArticleIssueId" class="form-input w-full p-3 border border-gray-300 rounded-lg" required>
-                        <option value="">Loading issues...</option>
-                    </select>
-                </div>
-                
-                <!-- Article Information -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Article Title *</label>
-                    <input type="text" id="fullArticleTitle" class="form-input w-full p-3 border border-gray-300 rounded-lg" required>
-                </div>
-                
-                <!-- Author Information -->
-                <div class="bg-gray-50 p-6 rounded-xl">
-                    <h3 class="text-lg font-medium mb-4 text-gray-800">
-                        <i class="fas fa-user mr-2"></i>Author Information
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Author Name *</label>
-                            <input type="text" id="fullAuthorName" class="form-input w-full p-3 border border-gray-300 rounded-lg" required>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Author Email *</label>
-                            <input type="email" id="fullAuthorEmail" class="form-input w-full p-3 border border-gray-300 rounded-lg" required>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Author Position/Affiliation *</label>
-                        <textarea id="fullAuthorPosition" rows="3" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., Professor of Islamic Studies, University Name" required></textarea>
-                    </div>
-                </div>
-                
-                <!-- Article Details -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Published Date *</label>
-                        <input type="date" id="fullPublishedDate" class="form-input w-full p-3 border border-gray-300 rounded-lg" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Pages *</label>
-                        <input type="text" id="fullPages" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., 1-24" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">ISSN *</label>
-                        <input type="text" id="fullIssn" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., 2581-3269" required>
-                    </div>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">PDF URL *</label>
-                    <input type="url" id="fullPdfUrl" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="https://example.com/article.pdf" required>
-                    <p class="text-xs text-gray-500 mt-1">Direct link to the PDF file</p>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Keywords *</label>
-                    <input type="text" id="fullKeywords" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="keyword1, keyword2, keyword3" required>
-                    <p class="text-xs text-gray-500 mt-1">Separate keywords with commas</p>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Abstract *</label>
-                    <textarea id="fullAbstract" rows="6" class="form-input w-full p-3 border border-gray-300 rounded-lg" placeholder="Enter the complete abstract..." required></textarea>
-                </div>
-                
-                <button type="submit" class="btn-primary w-full text-white font-medium py-4 px-6 rounded-lg">
-                    <i class="fas fa-plus mr-2"></i>Add Complete Article
-                </button>
-            </form>
-        </div>
-
-        <!-- View Data Panel -->
-        <div id="viewDataPanel" class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg p-8 hidden">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                <div class="flex items-center">
-                    <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center mr-4">
-                        <i class="fas fa-database text-indigo-600"></i>
-                    </div>
-                    <h2 class="text-2xl font-semibold text-gray-800">Current Data</h2>
-                </div>
-                <div class="flex gap-2">
-                    <button id="refreshData" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
-                        <i class="fas fa-sync-alt mr-2"></i>Issues
-                    </button>
-                    <button id="viewArticlesData" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
-                        <i class="fas fa-file-alt mr-2"></i>Articles
-                    </button>
-                </div>
-            </div>
-            <div id="dataDisplay" class="overflow-x-auto">
-                <div class="flex items-center justify-center py-8">
-                    <div class="loading-spinner mr-3"></div>
-                    <p class="text-gray-500">Loading data...</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Success/Error Messages -->
-        <div id="messageContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
-    </div>
-
-    <script>
-        // Configuration - Replace with your Google Script URL
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZys7T-JbfU9Htj6TdF5qoB6sF5FoFWJ_kXS-4eTXjPXsRN8DS0iivvr_9QWPYPB3QVg/exec';
-        
-        let currentDataView = 'issues';
-        let isLoading = false;
-        
-        // Tab Management
-        function initTabs() {
-            const tabs = {
-                'addIssueTab': 'addIssuePanel',
-                'addArticleTab': 'addArticlePanel',
-                'addFullArticleTab': 'addFullArticlePanel',
-                'viewDataTab': 'viewDataPanel'
-            };
-            
-            Object.keys(tabs).forEach(tabId => {
-                document.getElementById(tabId).addEventListener('click', () => {
-                    if (isLoading) return; // Prevent tab switching during operations
-                    
-                    // Reset all tabs
-                    Object.keys(tabs).forEach(id => {
-                        const tab = document.getElementById(id);
-                        const panel = document.getElementById(tabs[id]);
-                        tab.classList.remove('active');
-                        panel.classList.add('hidden');
-                    });
-                    
-                    // Activate clicked tab
-                    document.getElementById(tabId).classList.add('active');
-                    document.getElementById(tabs[tabId]).classList.remove('hidden');
-                    
-                    if (tabId === 'addArticleTab' || tabId === 'addFullArticleTab') {
-                        loadIssueOptions();
-                    } else if (tabId === 'viewDataTab') {
-                        currentDataView = 'issues';
-                        loadCurrentData();
-                    }
+                // Reset all tabs
+                Object.keys(tabs).forEach(id => {
+                    const tab = document.getElementById(id);
+                    const panel = document.getElementById(tabs[id]);
+                    tab.classList.remove('active');
+                    panel.classList.add('hidden');
                 });
+                
+                // Activate clicked tab
+                document.getElementById(tabId).classList.add('active');
+                document.getElementById(tabs[tabId]).classList.remove('hidden');
+                
+                if (tabId === 'addArticleTab' || tabId === 'addFullArticleTab') {
+                    loadIssueOptions();
+                } else if (tabId === 'viewDataTab') {
+                    currentDataView = 'issues';
+                    loadCurrentData();
+                }
             });
-        }
+        });
+    }
 
-        // Load issue options for article forms
-        async function loadIssueOptions() {
-            const selects = ['articleIssueId', 'fullArticleIssueId'];
-            
-            // Show loading state
-            selects.forEach(selectId => {
-                const select = document.getElementById(selectId);
-                if (select) {
-                    select.innerHTML = '<option value="">Loading issues...</option>';
-                }
+    // Load issue options with better error handling
+    async function loadIssueOptions() {
+        const selects = ['articleIssueId', 'fullArticleIssueId'];
+        
+        selects.forEach(selectId => {
+            const select = document.getElementById(selectId);
+            if (select) {
+                select.innerHTML = '<option value="">Loading issues...</option>';
+            }
+        });
+        
+        try {
+            const url = `${GOOGLE_SCRIPT_URL}?action=getIssues&_=${Date.now()}`;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                },
+                cache: 'no-cache'
             });
             
-            try {
-                const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getIssues`);
-                const data = await response.json();
-                
-                if (data.success) {
-                    selects.forEach(selectId => {
-                        const select = document.getElementById(selectId);
-                        if (select) {
-                            select.innerHTML = '<option value="">Select an issue...</option>';
-                            
-                            const issueEntries = Object.entries(data.data);
-                            if (issueEntries.length === 0) {
-                                select.innerHTML = '<option value="">No issues available - Create an issue first</option>';
-                                return;
-                            }
-                            
-                            issueEntries.forEach(([issueId, issue]) => {
-                                const option = document.createElement('option');
-                                option.value = issueId;
-                                option.textContent = `${issue.title} (Vol. ${issue.volume}, No. ${issue.number})`;
-                                option.dataset.volume = issue.volume;
-                                option.dataset.number = issue.number;
-                                option.dataset.year = issue.year;
-                                option.dataset.issueTitle = issue.title;
-                                option.dataset.publishedDate = issue.publishedDate;
-                                option.dataset.coverImage = issue.coverImage;
-                                select.appendChild(option);
-                            });
-                        }
-                    });
-                } else {
-                    showMessage('Error loading issues: ' + data.data, 'error');
-                }
-            } catch (error) {
-                console.error('Error loading issues:', error);
-                showMessage('Error loading issues: ' + error.message, 'error');
-                
-                // Show error state in selects
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.success) {
                 selects.forEach(selectId => {
                     const select = document.getElementById(selectId);
                     if (select) {
-                        select.innerHTML = '<option value="">Error loading issues - Please refresh</option>';
+                        select.innerHTML = '<option value="">Select an issue...</option>';
+                        
+                        const issueEntries = Object.entries(data.data || {});
+                        if (issueEntries.length === 0) {
+                            select.innerHTML = '<option value="">No issues available - Create an issue first</option>';
+                            return;
+                        }
+                        
+                        issueEntries.forEach(([issueId, issue]) => {
+                            const option = document.createElement('option');
+                            option.value = issueId;
+                            option.textContent = `${issue.title} (Vol. ${issue.volume}, No. ${issue.number})`;
+                            option.dataset.volume = issue.volume;
+                            option.dataset.number = issue.number;
+                            option.dataset.year = issue.year;
+                            option.dataset.issueTitle = issue.title;
+                            option.dataset.publishedDate = issue.publishedDate;
+                            option.dataset.coverImage = issue.coverImage;
+                            select.appendChild(option);
+                        });
                     }
                 });
-            }
-        }
-
-        // Form Submissions
-        document.getElementById('addIssueForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            if (isLoading) return;
-            isLoading = true;
-            
-            const submitBtn = e.target.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<div class="loading-spinner mr-2"></div>Creating Issue...';
-            submitBtn.disabled = true;
-            
-            const formData = {
-                action: 'addIssue',
-                issueId: document.getElementById('issueId').value.trim(),
-                volume: parseInt(document.getElementById('volume').value),
-                number: parseInt(document.getElementById('number').value),
-                year: parseInt(document.getElementById('year').value),
-                title: document.getElementById('issueTitle').value.trim(),
-                publishedDate: document.getElementById('publishedDate').value,
-                coverImage: document.getElementById('coverImage').value.trim()
-            };
-            
-            // Basic validation
-            if (!formData.issueId || !formData.title || !formData.publishedDate || !formData.coverImage) {
-                showMessage('Please fill in all required fields', 'error');
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-                isLoading = false;
-                return;
-            }
-            
-            try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                });
                 
-                const result = await response.json();
-                
-                if (result.success) {
-                    showMessage('Issue created successfully!', 'success');
-                    document.getElementById('addIssueForm').reset();
-                } else {
-                    showMessage('Error: ' + result.data, 'error');
-                }
-            } catch (error) {
-                console.error('Error creating issue:', error);
-                showMessage('Error: ' + error.message, 'error');
-            } finally {
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-                isLoading = false;
-            }
-        });
-
-        // Add Simple Article Form Handler
-        document.getElementById('addArticleForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            if (isLoading) return;
-            isLoading = true;
-            
-            const submitBtn = e.target.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<div class="loading-spinner mr-2"></div>Adding Article...';
-            submitBtn.disabled = true;
-            
-            const selectedOption = document.getElementById('articleIssueId').selectedOptions[0];
-            
-            if (!selectedOption || !selectedOption.value) {
-                showMessage('Please select an issue', 'error');
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-                isLoading = false;
-                return;
-            }
-            
-            const formData = {
-                action: 'addArticle',
-                issueId: selectedOption.value,
-                title: document.getElementById('articleTitle').value.trim(),
-                author: document.getElementById('articleAuthor').value.trim(),
-                abstract: document.getElementById('articleAbstract').value.trim(),
-                date: document.getElementById('articleDate').value,
-                pages: document.getElementById('articlePages').value.trim(),
-                doi: document.getElementById('articleDoi').value.trim(),
-                keywords: document.getElementById('articleKeywords').value.split(',').map(k => k.trim()).filter(k => k)
-            };
-            
-            try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    showMessage(`Simple article added successfully! Article ID: ${result.data.articleId}`, 'success');
-                    document.getElementById('addArticleForm').reset();
-                } else {
-                    showMessage('Error: ' + result.data, 'error');
-                }
-            } catch (error) {
-                console.error('Error adding article:', error);
-                showMessage('Error: ' + error.message, 'error');
-            } finally {
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-                isLoading = false;
-            }
-        });
-
-        // Add Full Article Form Handler
-        document.getElementById('addFullArticleForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            if (isLoading) return;
-            isLoading = true;
-            
-            const submitBtn = e.target.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<div class="loading-spinner mr-2"></div>Adding Complete Article...';
-            submitBtn.disabled = true;
-            
-            const selectedOption = document.getElementById('fullArticleIssueId').selectedOptions[0];
-            
-            if (!selectedOption || !selectedOption.value) {
-                showMessage('Please select an issue', 'error');
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-                isLoading = false;
-                return;
-            }
-            
-            const formData = {
-                action: 'addFullArticle',
-                issueId: selectedOption.value,
-                title: document.getElementById('fullArticleTitle').value.trim(),
-                authorName: document.getElementById('fullAuthorName').value.trim(),
-                authorPosition: document.getElementById('fullAuthorPosition').value.trim(),
-                authorEmail: document.getElementById('fullAuthorEmail').value.trim(),
-                publishedDate: document.getElementById('fullPublishedDate').value,
-                pages: document.getElementById('fullPages').value.trim(),
-                volume: `Vol. ${selectedOption.dataset.volume} No. ${selectedOption.dataset.number} (${selectedOption.dataset.year})`,
-                issn: document.getElementById('fullIssn').value.trim(),
-                pdfUrl: document.getElementById('fullPdfUrl').value.trim(),
-                keywords: document.getElementById('fullKeywords').value.split(',').map(k => k.trim()).filter(k => k),
-                abstract: document.getElementById('fullAbstract').value.trim()
-            };
-            
-            try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    showMessage(`Article added successfully! Article ID: ${result.data.articleId}`, 'success');
-                    document.getElementById('addFullArticleForm').reset();
-                } else {
-                    showMessage('Error: ' + result.data, 'error');
-                }
-            } catch (error) {
-                console.error('Error adding article:', error);
-                showMessage('Error: ' + error.message, 'error');
-            } finally {
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-                isLoading = false;
-            }
-        });
-
-        // Load and display current data
-        async function loadCurrentData() {
-            const dataDisplay = document.getElementById('dataDisplay');
-            dataDisplay.innerHTML = `
-                <div class="flex items-center justify-center py-8">
-                    <div class="loading-spinner mr-3"></div>
-                    <p class="text-gray-500">Loading ${currentDataView}...</p>
-                </div>
-            `;
-            
-            try {
-                const action = currentDataView === 'issues' ? 'getIssues' : 'getArticles';
-                const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=${action}`);
-                const data = await response.json();
-                
-                if (data.success) {
-                    displayData(data.data);
-                } else {
-                    dataDisplay.innerHTML = `
-                        <div class="text-center py-8">
-                            <i class="fas fa-exclamation-triangle text-red-500 text-4xl mb-4"></i>
-                            <p class="text-red-500 font-medium">Error loading data</p>
-                            <p class="text-gray-600">${data.data || 'Unknown error occurred'}</p>
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                console.error('Error loading data:', error);
-                dataDisplay.innerHTML = `
-                    <div class="text-center py-8">
-                        <i class="fas fa-exclamation-triangle text-red-500 text-4xl mb-4"></i>
-                        <p class="text-red-500 font-medium">Error: ${error.message}</p>
-                        <button onclick="loadCurrentData()" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
-                            <i class="fas fa-sync-alt mr-2"></i>Retry
-                        </button>
-                    </div>
-                `;
-            }
-        }
-
-        function displayData(data) {
-            const dataDisplay = document.getElementById('dataDisplay');
-            
-            if (!data || Object.keys(data).length === 0) {
-                dataDisplay.innerHTML = `
-                    <div class="text-center py-8">
-                        <i class="fas fa-inbox text-gray-400 text-4xl mb-4"></i>
-                        <p class="text-gray-500 font-medium">No ${currentDataView} available</p>
-                        <p class="text-gray-400">Create some ${currentDataView} to see them here</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            if (currentDataView === 'issues') {
-                displayIssuesData(data);
+                showMessage('Issues loaded successfully!', 'success');
             } else {
-                displayArticlesData(data);
+                throw new Error(data.data || 'Unknown error');
             }
-        }
-
-        function displayIssuesData(issues) {
-            const dataDisplay = document.getElementById('dataDisplay');
-            let html = `
-                <div class="mb-6">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-4">
-                        <i class="fas fa-journal-whills mr-2"></i>Issues Data (${Object.keys(issues).length})
-                    </h3>
-                </div>
-                <div class="space-y-6">
-            `;
+        } catch (error) {
+            console.error('Error loading issues:', error);
+            showMessage('Error loading issues: ' + error.message, 'error');
             
-            Object.entries(issues).forEach(([issueId, issue]) => {
-                html += `
-                    <div class="data-card border border-gray-200 rounded-xl p-6 bg-white">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h4 class="text-lg font-semibold text-gray-800 mb-2">${issue.title}</h4>
-                                <div class="flex flex-wrap gap-4 text-sm text-gray-600">
-                                    <span><i class="fas fa-book mr-1"></i>Volume ${issue.volume}, Number ${issue.number}</span>
-                                    <span><i class="fas fa-calendar mr-1"></i>${issue.year}</span>
-                                    <span><i class="fas fa-clock mr-1"></i>Published: ${new Date(issue.publishedDate).toLocaleDateString()}</span>
-                                </div>
-                            </div>
-                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">${issueId}</span>
-                        </div>
-                        
-                        <div class="mb-4">
-                            <h5 class="font-medium text-gray-700 mb-2">
-                                <i class="fas fa-file-alt mr-2"></i>Articles (${issue.articles.length})
-                            </h5>
-                            ${issue.articles.length > 0 ? `
-                                <div class="grid gap-3 max-h-64 overflow-y-auto">
-                                    ${issue.articles.map(article => `
-                                        <div class="p-4 bg-gray-50 rounded-lg border-l-4 border-blue-500">
-                                            <h6 class="font-medium text-gray-800 mb-1">${article.title}</h6>
-                                            <p class="text-sm text-gray-600 mb-2">by ${article.author}</p>
-                                            <div class="flex flex-wrap gap-4 text-xs text-gray-500">
-                                                <span><i class="fas fa-calendar mr-1"></i>${new Date(article.date).toLocaleDateString()}</span>
-                                                <span><i class="fas fa-file-pdf mr-1"></i>Pages: ${article.pages}</span>
-                                                ${article.doi ? `<span><i class="fas fa-link mr-1"></i>DOI: ${article.doi}</span>` : ''}
-                                            </div>
-                                            ${article.keywords.length > 0 ? `
-                                                <div class="mt-2 flex flex-wrap gap-1">
-                                                    ${article.keywords.map(keyword => `
-                                                        <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">${keyword}</span>
-                                                    `).join('')}
-                                                </div>
-                                            ` : ''}
-                                        </div>
-                                    `).join('')}
-                                </div>
-                            ` : '<p class="text-gray-500 italic bg-gray-50 p-4 rounded-lg">No articles yet - Add some articles to this issue</p>'}
-                        </div>
-                        
-                        ${issue.coverImage ? `
-                            <div class="mt-4">
-                                <p class="text-sm text-gray-600 mb-2"><i class="fas fa-image mr-1"></i>Cover Image:</p>
-                                <div class="flex items-center gap-3">
-                                    <img src="${issue.coverImage}" alt="Cover" class="w-16 h-20 object-cover rounded shadow-sm" onerror="this.style.display='none'">
-                                    <a href="${issue.coverImage}" target="_blank" class="text-blue-600 hover:underline text-sm break-all">${issue.coverImage}</a>
-                                </div>
-                            </div>
-                        ` : ''}
-                    </div>
-                `;
+            selects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                if (select) {
+                    select.innerHTML = '<option value="">Error loading issues - Please refresh</option>';
+                }
+            });
+        }
+    }
+
+    // Enhanced form submission for issues
+    document.getElementById('addIssueForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        if (isLoading) return;
+        isLoading = true;
+        
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<div class="loading-spinner mr-2"></div>Creating Issue...';
+        submitBtn.disabled = true;
+        
+        const formData = {
+            action: 'addIssue',
+            issueId: document.getElementById('issueId').value.trim(),
+            volume: parseInt(document.getElementById('volume').value),
+            number: parseInt(document.getElementById('number').value),
+            year: parseInt(document.getElementById('year').value),
+            title: document.getElementById('issueTitle').value.trim(),
+            publishedDate: document.getElementById('publishedDate').value,
+            coverImage: document.getElementById('coverImage').value.trim()
+        };
+        
+        // Enhanced validation
+        if (!formData.issueId || !formData.title || !formData.publishedDate || !formData.coverImage) {
+            showMessage('Please fill in all required fields', 'error');
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            isLoading = false;
+            return;
+        }
+        
+        if (isNaN(formData.volume) || isNaN(formData.number) || isNaN(formData.year)) {
+            showMessage('Volume, Number, and Year must be valid numbers', 'error');
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            isLoading = false;
+            return;
+        }
+        
+        try {
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+                cache: 'no-cache'
             });
             
-            html += '</div>';
-            dataDisplay.innerHTML = html;
-        }
-
-        function displayArticlesData(articles) {
-            const dataDisplay = document.getElementById('dataDisplay');
-            let html = `
-                <div class="mb-6">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-4">
-                        <i class="fas fa-file-alt mr-2"></i>Articles Data (${Object.keys(articles).length})
-                    </h3>
-                </div>
-                <div class="space-y-6">
-            `;
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
             
-            Object.entries(articles).forEach(([articleId, article]) => {
-                html += `
-                    <div class="data-card border border-gray-200 rounded-xl p-6 bg-white">
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="flex-1">
-                                <h4 class="text-lg font-semibold text-gray-800 mb-2">${article.title}</h4>
-                                <div class="flex flex-wrap gap-4 text-sm text-gray-600 mb-3">
-                                    <span><i class="fas fa-user mr-1"></i>${article.authors[0].name}</span>
-                                    <span><i class="fas fa-calendar mr-1"></i>${new Date(article.publishedDate).toLocaleDateString()}</span>
-                                    <span><i class="fas fa-file-pdf mr-1"></i>Pages: ${article.pages}</span>
-                                </div>
-                            </div>
-                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">${articleId}</span>
-                        </div>
-                        
-                        <div class="grid md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <h5 class="font-medium text-gray-700 mb-2"><i class="fas fa-user-tie mr-1"></i>Author Details</h5>
-                                <div class="bg-gray-50 p-3 rounded-lg text-sm">
-                                    <p class="font-medium">${article.authors[0].name}</p>
-                                    <p class="text-gray-600 mb-1">${article.authors[0].position}</p>
-                                    <p class="text-blue-600">${article.authors[0].email}</p>
-                                </div>
-                            </div>
-                            <div>
-                                <h5 class="font-medium text-gray-700 mb-2"><i class="fas fa-info-circle mr-1"></i>Publication Details</h5>
-                                <div class="bg-gray-50 p-3 rounded-lg text-sm space-y-1">
-                                    <p><span class="font-medium">Volume:</span> ${article.volume}</p>
-                                    <p><span class="font-medium">ISSN:</span> ${article.issn}</p>
-                                    ${article.pdfUrl ? `<p><span class="font-medium">PDF:</span> <a href="${article.pdfUrl}" target="_blank" class="text-blue-600 hover:underline">View PDF</a></p>` : ''}
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="mb-4">
-                            <h5 class="font-medium text-gray-700 mb-2"><i class="fas fa-align-left mr-1"></i>Abstract</h5>
-                            <p class="text-sm text-gray-700 bg-gray-50 p-3 rounded-lg leading-relaxed">${article.abstract}</p>
-                        </div>
-                        
-                        ${article.keywords.length > 0 ? `
-                            <div>
-                                <h5 class="font-medium text-gray-700 mb-2"><i class="fas fa-tags mr-1"></i>Keywords</h5>
-                                <div class="flex flex-wrap gap-2">
-                                    ${article.keywords.map(keyword => `
-                                        <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">${keyword}</span>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        ` : ''}
-                    </div>
-                `;
+            const result = await response.json();
+            
+            if (result.success) {
+                showMessage('Issue created successfully!', 'success');
+                document.getElementById('addIssueForm').reset();
+                setDefaultDates(); // Reset dates
+            } else {
+                showMessage('Error: ' + result.data, 'error');
+            }
+        } catch (error) {
+            console.error('Error creating issue:', error);
+            showMessage('Error creating issue: ' + error.message, 'error');
+        } finally {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            isLoading = false;
+        }
+    });
+
+    // Load and display current data with better error handling
+    async function loadCurrentData() {
+        const dataDisplay = document.getElementById('dataDisplay');
+        dataDisplay.innerHTML = `
+            <div class="flex items-center justify-center py-8">
+                <div class="loading-spinner mr-3"></div>
+                <p class="text-gray-500">Loading ${currentDataView}...</p>
+            </div>
+        `;
+        
+        try {
+            const action = currentDataView === 'issues' ? 'getIssues' : 'getArticles';
+            const url = `${GOOGLE_SCRIPT_URL}?action=${action}&_=${Date.now()}`;
+            
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                },
+                cache: 'no-cache'
             });
             
-            html += '</div>';
-            dataDisplay.innerHTML = html;
-        }
-
-        // Utility Functions
-        function showMessage(message, type = 'info') {
-            const messageContainer = document.getElementById('messageContainer');
-            const messageEl = document.createElement('div');
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
             
-            const colors = {
-                success: 'bg-green-500 border-green-600',
-                error: 'bg-red-500 border-red-600',
-                info: 'bg-blue-500 border-blue-600',
-                warning: 'bg-yellow-500 border-yellow-600'
-            };
+            const data = await response.json();
             
-            const icons = {
-                success: 'fas fa-check-circle',
-                error: 'fas fa-exclamation-circle',
-                info: 'fas fa-info-circle',
-                warning: 'fas fa-exclamation-triangle'
-            };
-            
-            messageEl.className = `${colors[type]} text-white px-4 py-3 rounded-lg shadow-lg border-l-4 transform transition-all duration-300 max-w-md`;
-            messageEl.innerHTML = `
-                <div class="flex items-start">
-                    <i class="${icons[type]} mr-3 mt-0.5"></i>
-                    <div class="flex-1">
-                        <p class="font-medium">${message}</p>
-                    </div>
-                    <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-white hover:text-gray-200">
-                        <i class="fas fa-times"></i>
+            if (data.success) {
+                displayData(data.data || {});
+            } else {
+                throw new Error(data.data || 'Unknown error');
+            }
+        } catch (error) {
+            console.error('Error loading data:', error);
+            dataDisplay.innerHTML = `
+                <div class="text-center py-8">
+                    <i class="fas fa-exclamation-triangle text-red-500 text-4xl mb-4"></i>
+                    <p class="text-red-500 font-medium">Error loading ${currentDataView}</p>
+                    <p class="text-gray-600 mb-4">${error.message}</p>
+                    <button onclick="loadCurrentData()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-sync-alt mr-2"></i>Retry
                     </button>
                 </div>
             `;
-            
-            messageContainer.appendChild(messageEl);
-            
-            // Auto remove after 5 seconds
-            setTimeout(() => {
-                if (messageEl.parentNode) {
-                    messageEl.style.transform = 'translateX(100%)';
-                    messageEl.style.opacity = '0';
-                    setTimeout(() => messageEl.remove(), 300);
-                }
-            }, 5000);
         }
+    }
 
-        // Event Listeners
-        document.getElementById('refreshData').addEventListener('click', () => {
-            currentDataView = 'issues';
-            loadCurrentData();
-        });
+    // Rest of your existing functions remain the same...
+    // (displayData, displayIssuesData, displayArticlesData, showMessage, etc.)
 
-        document.getElementById('viewArticlesData').addEventListener('click', () => {
-            currentDataView = 'articles';
-            loadCurrentData();
-        });
-
-        // Set default dates to today
-        function setDefaultDates() {
-            const today = new Date().toISOString().split('T')[0];
-            const dateInputs = ['publishedDate', 'articleDate', 'fullPublishedDate'];
-            dateInputs.forEach(inputId => {
-                const input = document.getElementById(inputId);
-                if (input && !input.value) {
-                    input.value = today;
-                }
-            });
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
+    // Initialize with better error handling
+    document.addEventListener('DOMContentLoaded', () => {
+        try {
             initTabs();
             setDefaultDates();
-        });
-
-        // Handle connection errors gracefully
-        window.addEventListener('online', () => {
-            showMessage('Connection restored', 'success');
-        });
-
-        window.addEventListener('offline', () => {
-            showMessage('Connection lost - Please check your internet', 'warning');
-        });
-    </script>
-</body>
-</html>
+            
+            // Test connection on load
+            fetch(`${GOOGLE_SCRIPT_URL}?action=getIssues&_=${Date.now()}`, {
+                method: 'GET',
+                cache: 'no-cache'
+            })
+            .then(response => {
+                if (response.ok) {
+                    showMessage('Connected to Google Sheets successfully!', 'success');
+                } else {
+                    showMessage('Warning: Connection to Google Sheets may have issues', 'warning');
+                }
+            })
+            .catch(error => {
+                showMessage('Warning: Could not connect to Google Sheets. Check the URL.', 'warning');
+                console.error('Connection test failed:', error);
+            });
+            
+        } catch (error) {
+            console.error('Initialization error:', error);
+            showMessage('Error initializing admin panel', 'error');
+        }
+    });
+</script>
