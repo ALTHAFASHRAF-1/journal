@@ -589,12 +589,26 @@
         </div>
     </footer>
 
-    <!-- Include the articles data -->
-   <!--  <script src="articles-data.js"></script>-->
-    <!-- Include the main article script -->
-   <!-- Replace articles-data.js with dynamic loading -->
-<script src="https://script.google.com/macros/s/AKfycbyZys7T-JbfU9Htj6TdF5qoB6sF5FoFWJ_kXS-4eTXjPXsRN8DS0iivvr_9QWPYPB3QVg/exec"></script>
-<script src="article-script.js"></script>
+    <!-- Load articles configuration dynamically -->
+<script>
+// Load articles data dynamically
+(function() {
+    const script = document.createElement('script');
+    script.src = 'https://script.google.com/macros/s/AKfycbyZys7T-JbfU9Htj6TdF5qoB6sF5FoFWJ_kXS-4eTXjPXsRN8DS0iivvr_9QWPYPB3QVg/exec?action=getArticlesConfig';
+    script.onload = function() {
+        // Load the main article script after articles data is loaded
+        const articleScript = document.createElement('script');
+        articleScript.src = 'article-script.js';
+        document.head.appendChild(articleScript);
+    };
+    script.onerror = function() {
+        console.error('Failed to load articles configuration');
+        document.getElementById('error-state').style.display = 'block';
+        document.getElementById('loading-state').style.display = 'none';
+    };
+    document.head.appendChild(script);
+})();
+</script>
 
 </body>
 </html>
