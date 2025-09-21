@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8">Journal Admin Panel</h1>
+        
+        <!-- Navigation Tabs -->
+        <div class="flex justify-center mb-8">
+            <div class="bg-white rounded-lg shadow p-1 flex flex-wrap gap-1">
+                <button id="addIssueTab" class="px-4 py-2 rounded-md bg-blue-500 text-white font-medium text-sm">Add Issue</button>
+                <button id="addArticleTab" class="px-4 py-2 rounded-md text-gray-600 font-medium text-sm">Add Article</button>
+                <button id="addFullArticleTab" class="px-4 py-2 rounded-md text-gray-600 font-medium text-sm">Add Full Article</button>
+                <button id="viewDataTab" class="px-4 py-2 rounded-md text-gray-600 font-medium text-sm">View Data</button>
+            </div>
+        </div>
+
+        <!-- Add Issue Form -->
+        <div id="addIssuePanel" class="max-w-2xl mx-auto bg-white rounded-lg shadow p-6">
+            <h2 class="text-2xl font-semibold mb-6">Add New Issue</h2>
+            <form id="addIssueForm">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Issue ID</label>
+                        <input type="text" id="issueId" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., issue4" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Volume</label>
+                        <input type="number" id="volume" class="w-full p-3 border border-gray-300 rounded-lg" required>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Number</label>
+                        <input type="number" id="number" class="w-full p-3 border border-gray-300 rounded-lg" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Year</label>
+                        <input type="number" id="year" class="w-full p-3 border border-gray-300 rounded-lg" required>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Issue Title</label>
+                    <input type="text" id="issueTitle" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., Vol. 7 No. 3 (2024)" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Published Date</label>
+                    <input type="date" id="publishedDate" class="w-full p-3 border border-gray-300 rounded-lg" required>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Cover Image URL</label>
+                    <input type="url" id="coverImage" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="https://example.com/cover.jpg" required>
+                </div>
+                
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-lg transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Create Issue
+                </button>
+            </form>
+        </div>
+
+        <!-- Add Article (Simple) Form -->
+        <div id="addArticlePanel" class="max-w-4xl mx-auto bg-white rounded-lg shadow p-6 hidden">
+            <h2 class="text-2xl font-semibold mb-6">Add Article to Existing Issue</h2>
+            <form id="addArticleForm">
+                <!-- Issue Selection -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Select Issue</label>
+                    <select id="articleIssueId" class="w-full p-3 border border-gray-300 rounded-lg" required>
+                        <option value="">Select an issue...</option>
+                    </select>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Article Title</label>
+                        <input type="text" id="articleTitle" class="w-full p-3 border border-gray-300 rounded-lg" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Author</label>
+                        <input type="text" id="articleAuthor" class="w-full p-3 border border-gray-300 rounded-lg" required>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Abstract</label>
+                    <textarea id="articleAbstract" rows="4" class="w-full p-3 border border-gray-300 rounded-lg" required></textarea>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Article Date</label>
+                        <input type="date" id="articleDate" class="w-full p-3 border border-gray-300 rounded-lg" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pages</label>
+                        <input type="text" id="articlePages" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., 1-24" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">DOI (optional)</label>
+                        <input type="text" id="articleDoi" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="10.1234/ii.2024.7.2.001">
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Keywords (comma-separated)</label>
+                    <input type="text" id="articleKeywords" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="keyword1, keyword2, keyword3">
+                </div>
+                
+                <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-4 rounded-lg transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Add Article
+                </button>
+            </form>
+        </div>
+
+        <!-- Add Full Article Form -->
+        <div id="addFullArticlePanel" class="max-w-4xl mx-auto bg-white rounded-lg shadow p-6 hidden">
+            <h2 class="text-2xl font-semibold mb-6">Add Complete Article</h2>
+            <form id="addFullArticleForm">
+                <!-- Issue Selection -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Select Issue</label>
+                    <select id="fullArticleIssueId" class="w-full p-3 border border-gray-300 rounded-lg" required>
+                        <option value="">Select an issue...</option>
+                    </select>
+                </div>
+                
+                <!-- Article Information -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Article Title</label>
+                    <input type="text" id="fullArticleTitle" class="w-full p-3 border border-gray-300 rounded-lg" required>
+                </div>
+                
+                <!-- Author Information -->
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h3 class="text-lg font-medium mb-3">Author Information</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Author Name</label>
+                            <input type="text" id="fullAuthorName" class="w-full p-3 border border-gray-300 rounded-lg" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Author Email</label>
+                            <input type="email" id="fullAuthorEmail" class="w-full p-3 border border-gray-300 rounded-lg" required>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Author Position/Affiliation</label>
+                        <textarea id="fullAuthorPosition" rows="2" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., Professor of Islamic Studies, University Name" required></textarea>
+                    </div>
+                </div>
+                
+                <!-- Article Details -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Published Date</label>
+                        <input type="date" id="fullPublishedDate" class="w-full p-3 border border-gray-300 rounded-lg" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pages</label>
+                        <input type="text" id="fullPages" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., 1-24" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">ISSN</label>
+                        <input type="text" id="fullIssn" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., 2581-3269" required>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">PDF URL</label>
+                    <input type="url" id="fullPdfUrl" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="https://example.com/article.pdf" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Keywords (comma-separated)</label>
+                    <input type="text" id="fullKeywords" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="keyword1, keyword2, keyword3" required>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Abstract</label>
+                    <textarea id="fullAbstract" rows="6" class="w-full p-3 border border-gray-300 rounded-lg" required></textarea>
+                </div>
+                
+                <button type="submit" class="w-full bg-purple-500 hover:bg-purple-600 text-white font-medium py-3 px-4 rounded-lg transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Add Complete Article
+                </button>
+            </form>
+        </div>
+
+        <!-- View Data Panel -->
+        <div id="viewDataPanel" class="max-w-6xl mx-auto bg-white rounded-lg shadow p-6 hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-semibold">Current Data</h2>
+                <div class="flex gap-2">
+                    <button id="refreshData" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
+                        <i class="fas fa-refresh mr-2"></i>Refresh
+                    </button>
+                    <button id="viewArticlesData" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
+                        <i class="fas fa-file-alt mr-2"></i>View Articles
+                    </button>
+                </div>
+            </div>
+            <div id="dataDisplay" class="overflow-x-auto">
+                <p class="text-gray-500">Loading data...</p>
+            </div>
+        </div>
+
+        <!-- Success/Error Messages -->
+        <div id="messageContainer" class="fixed top-4 right-4 z-50"></div>
+    </div>
+
+    <script>
+        // Configuration - Replace with your Google Script URL
+        const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
+        
+        let currentDataView = 'issues';
+        
+        // Tab Management
+        function initTabs() {
+            const tabs = {
+                'addIssueTab': 'addIssuePanel',
+                'addArticleTab': 'addArticlePanel',
+                'addFullArticleTab': 'addFullArticlePanel',
+                'viewDataTab': 'viewDataPanel'
+            };
+            
+            Object.keys(tabs).forEach(tabId => {
+                document.getElementById(tabId).addEventListener('click', () => {
+                    // Reset all tabs
+                    Object.keys(tabs).forEach(id => {
+                        document.getElementById(id).className = 'px-4 py-2 rounded-md text-gray-600 font-medium text-sm';
+                        document.getElementById(tabs[id]).classList.add('hidden');
+                    });
+                    
+                    // Activate clicked tab
+                    document.getElementById(tabId).className = 'px-4 py-2 rounded-md bg-blue-500 text-white font-medium text-sm';
+                    document.getElementById(tabs[tabId]).classList.remove('hidden');
+                    
+                    if (tabId === 'addArticleTab' || tabId === 'addFullArticleTab') {
+                        loadIssueOptions();
+                    } else if (tabId === 'viewDataTab') {
+                        currentDataView = 'issues';
+                        loadCurrentData();
+                    }
+                });
+            });
+        }
+
+        // Load issue options for article forms
+        async function loadIssueOptions() {
+            try {
+                const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getIssues`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const selects = ['articleIssueId', 'fullArticleIssueId'];
+                    
+                    selects.forEach(selectId => {
+                        const select = document.getElementById(selectId);
+                        if (select) {
+                            select.innerHTML = '<option value="">Select an issue...</option>';
+                            
+                            Object.entries(data.data).forEach(([issueId, issue]) => {
+                                const option = document.createElement('option');
+                                option.value = issueId;
+                                option.textContent = `${issue.title} (Vol. ${issue.volume}, No. ${issue.number})`;
+                                option.dataset.volume = issue.volume;
+                                option.dataset.number = issue.number;
+                                option.dataset.year = issue.year;
+                                option.dataset.issueTitle = issue.title;
+                                option.dataset.publishedDate = issue.publishedDate;
+                                option.dataset.coverImage = issue.coverImage;
+                                select.appendChild(option);
+                            });
+                        }
+                    });
+                }
+            } catch (error) {
+                showMessage('Error loading issues: ' + error.message, 'error');
+            }
+        }
+
+        // Form Submissions
+        document.getElementById('addIssueForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                action: 'addIssue',
+                issueId: document.getElementById('issueId').value,
+                volume: parseInt(document.getElementById('volume').value),
+                number: parseInt(document.getElementById('number').value),
+                year: parseInt(document.getElementById('year').value),
+                title: document.getElementById('issueTitle').value,
+                publishedDate: document.getElementById('publishedDate').value,
+                coverImage: document.getElementById('coverImage').value
+            };
+            
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage('Issue created successfully!', 'success');
+                    document.getElementById('addIssueForm').reset();
+                } else {
+                    showMessage('Error: ' + result.data, 'error');
+                }
+            } catch (error) {
+                showMessage('Error: ' + error.message, 'error');
+            }
+        });
+
+        document.getElementById('addFullArticleForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const selectedOption = document.getElementById('fullArticleIssueId').selectedOptions[0];
+            
+            if (!selectedOption || !selectedOption.value) {
+                showMessage('Please select an issue', 'error');
+                return;
+            }
+            
+            const formData = {
+                action: 'addFullArticle',
+                issueId: selectedOption.value,
+                title: document.getElementById('fullArticleTitle').value,
+                authorName: document.getElementById('fullAuthorName').value,
+                authorPosition: document.getElementById('fullAuthorPosition').value,
+                authorEmail: document.getElementById('fullAuthorEmail').value,
+                publishedDate: document.getElementById('fullPublishedDate').value,
+                pages: document.getElementById('fullPages').value,
+                volume: `Vol. ${selectedOption.dataset.volume} No. ${selectedOption.dataset.number} (${selectedOption.dataset.year})`,
+                issn: document.getElementById('fullIssn').value,
+                pdfUrl: document.getElementById('fullPdfUrl').value,
+                keywords: document.getElementById('fullKeywords').value.split(',').map(k => k.trim()).filter(k => k),
+                abstract: document.getElementById('fullAbstract').value
+            };
+            
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage(`Article added successfully! Article ID: ${result.data.articleId}`, 'success');
+                    document.getElementById('addFullArticleForm').reset();
+                } else {
+                    showMessage('Error: ' + result.data, 'error');
+                }
+            } catch (error) {
+                showMessage('Error: ' + error.message, 'error');
+            }
+        });
+
+        // Load and display current data
+        async function loadCurrentData() {
+            const dataDisplay = document.getElementById('dataDisplay');
+            dataDisplay.innerHTML = '<p class="text-gray-500">Loading data...</p>';
+            
+            try {
+                const action = currentDataView === 'issues' ? 'getIssues' : 'getArticles';
+                const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=${action}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayData(data.data);
+                } else {
+                    dataDisplay.innerHTML = '<p class="text-red-500">Error loading data</p>';
+                }
+            } catch (error) {
+                dataDisplay.innerHTML = `<p class="text-red-500">Error: ${error.message}</p>`;
+            }
+        }
+
+        function displayData(data) {
+            const dataDisplay = document.getElementById('dataDisplay');
+            
+            if (Object.keys(data).length === 0) {
+                dataDisplay.innerHTML = '<p class="text-gray-500">No data available</p>';
+                return;
+            }
+            
+            if (currentDataView === 'issues') {
+                displayIssuesData(data);
+            } else {
+                displayArticlesData(data);
+            }
+        }
+
+        function displayIssuesData(issues) {
+            const dataDisplay = document.getElementById('dataDisplay');
+            let html = '<h3 class="text-xl font-semibold mb-4">Issues Data</h3>';
+            
+            Object.entries(issues).forEach(([issueId, issue]) => {
+                html += `
+                    <div class="mb-6 p-4 border border-gray-200 rounded-lg">
+                        <h3 class="text-lg font-semibold mb-2">${issue.title}</h3>
+                        <p class="text-gray-600 mb-2">Volume ${issue.volume}, Number ${issue.number} (${issue.year})</p>
+                        <p class="text-gray-600 mb-3">Published: ${issue.publishedDate}</p>
+                        <h4 class="font-medium mb-2">Articles (${issue.articles.length}):</h4>
+                        ${issue.articles.length > 0 ? `
+                            <div class="grid gap-2">
+                                ${issue.articles.map(article => `
+                                    <div class="p-3 bg-gray-50 rounded">
+                                        <strong>${article.title}</strong><br>
+                                        <span class="text-gray-600">by ${article.author}</span><br>
+                                        <span class="text-sm text-gray-500">Pages: ${article.pages} | Date: ${article.date}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : '<p class="text-gray-500 italic">No articles yet</p>'}
+                    </div>
+                `;
+            });
+            
+            dataDisplay.innerHTML = html;
+        }
+
+        function displayArticlesData(articles) {
+            const dataDisplay = document.getElementById('dataDisplay');
+            let html = '<h3 class="text-xl font-semibold mb-4">Articles Data</h3>';
+            
+            Object.entries(articles).forEach(([articleId, article]) => {
+                html += `
+                    <div class="mb-6 p-4 border border-gray-200 rounded-lg">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-lg font-semibold">${article.title}</h3>
+                            <span class="text-sm text-gray-500">ID: ${articleId}</span>
+                        </div>
+                        <p class="text-gray-600 mb-2">by ${article.authors[0].name}</p>
+                        <p class="text-gray-600 mb-2">${article.volume} | Pages: ${article.pages}</p>
+                        <p class="text-gray-600 mb-2">Published: ${article.publishedDate}</p>
+                        <p class="text-sm text-gray-500 mb-2">Email: ${article.authors[0].email}</p>
+                        <p class="text-sm text-gray-700 mb-2">${article.abstract.substring(0, 200)}...</p>
+                        <div class="flex flex-wrap gap-1">
+                            ${article.keywords.map(keyword => `
+                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">${keyword}</span>
+                            `).join('')}
+                        </div>
+                        ${article.pdfUrl ? `
+                            <div class="mt-2">
+                                <a href="${article.pdfUrl}" target="_blank" class="text-blue-600 hover:underline text-sm">
+                                    <i class="fas fa-file-pdf mr-1"></i>View PDF
+                                </a>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+            
+            dataDisplay.innerHTML = html;
+        }
+
+        // Utility Functions
+        function showMessage(message, type = 'info') {
+            const messageContainer = document.getElementById('messageContainer');
+            const messageEl = document.createElement('div');
+            
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                info: 'bg-blue-500'
+            };
+            
+            messageEl.className = `${colors[type]} text-white px-4 py-2 rounded-lg mb-2 shadow-lg`;
+            messageEl.textContent = message;
+            
+            messageContainer.appendChild(messageEl);
+            
+            setTimeout(() => {
+                messageEl.remove();
+            }, 5000);
+        }
+
+        // Event Listeners
+        document.getElementById('refreshData').addEventListener('click', () => {
+            currentDataView = 'issues';
+            loadCurrentData();
+        });
+
+        document.getElementById('viewArticlesData').addEventListener('click', () => {
+            currentDataView = 'articles';
+            loadCurrentData();
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initTabs();
+        });
+    </script>
+</body>
+</html>
