@@ -32,9 +32,12 @@ class JournalIssueLoader {
 
     // Load issue data and update page content
     loadIssue() {
+        console.log('Loading issue...');
         this.showLoading(true);
         
         this.currentIssueId = this.getCurrentIssueId();
+        console.log('Current Issue ID:', this.currentIssueId);
+        
         this.currentIssue = journalIssues[this.currentIssueId];
 
         if (!this.currentIssue) {
@@ -43,7 +46,9 @@ class JournalIssueLoader {
             return;
         }
 
-        this.articlesData = this.currentIssue.articles;
+        console.log('Current Issue:', this.currentIssue);
+        this.articlesData = this.currentIssue.articles || [];
+        
         this.updatePageContent();
         this.setupEventListeners();
         this.setupIssueSelector();
@@ -62,10 +67,10 @@ class JournalIssueLoader {
         const articlesGrid = document.getElementById('articlesGrid');
         
         if (loadingState) {
-            loadingState.style.display = show ? 'block' : 'none';
+            loadingState.style.display = show ? 'flex' : 'none';
         }
-        if (articlesGrid && !show) {
-            articlesGrid.style.display = 'grid';
+        if (articlesGrid) {
+            articlesGrid.style.display = show ? 'none' : 'grid';
         }
     }
 
@@ -152,14 +157,13 @@ class JournalIssueLoader {
             metaKeywords.name = 'keywords';
             document.head.appendChild(metaKeywords);
         }
-        const allKeywords = this.articlesData.flatMap(article => article.keywords);
+        const allKeywords = this.articlesData.flatMap(article => article.keywords || []);
         metaKeywords.content = [...new Set(allKeywords)].join(', ');
     }
 
     // Setup issue selector dropdown
     setupIssueSelector() {
         const issueSelector = document.getElementById('issue-selector');
-        const mobileIssueSelector = document.getElementById('mobile-issue-selector');
         const issues = IssueNavigation.generateIssueSelector();
         
         const options = issues.map(issue => 
@@ -171,15 +175,6 @@ class JournalIssueLoader {
         if (issueSelector) {
             issueSelector.innerHTML = '<option value="">Select Issue</option>' + options;
             issueSelector.addEventListener('change', (e) => {
-                if (e.target.value) {
-                    window.location.href = IssueNavigation.getIssueUrl(e.target.value);
-                }
-            });
-        }
-
-        if (mobileIssueSelector) {
-            mobileIssueSelector.innerHTML = '<option value="">Select Issue</option>' + options;
-            mobileIssueSelector.addEventListener('change', (e) => {
                 if (e.target.value) {
                     window.location.href = IssueNavigation.getIssueUrl(e.target.value);
                 }
@@ -378,7 +373,7 @@ class JournalIssueLoader {
             return article.title.toLowerCase().includes(query) ||
                 article.author.toLowerCase().includes(query) ||
                 article.abstract.toLowerCase().includes(query) ||
-                article.keywords.some(keyword => keyword.toLowerCase().includes(query));
+                (article.keywords && article.keywords.some(keyword => keyword.toLowerCase().includes(query)));
         });
 
         this.displayNavbarSearchResults(filteredArticles, query);
@@ -401,7 +396,7 @@ class JournalIssueLoader {
             return article.title.toLowerCase().includes(query) ||
                 article.author.toLowerCase().includes(query) ||
                 article.abstract.toLowerCase().includes(query) ||
-                article.keywords.some(keyword => keyword.toLowerCase().includes(query));
+                (article.keywords && article.keywords.some(keyword => keyword.toLowerCase().includes(query)));
         });
 
         this.displayMobileSearchResults(filteredArticles, query);
@@ -572,7 +567,7 @@ class JournalIssueLoader {
 
                         <div class="mb-4">
                             <div class="flex flex-wrap gap-2">
-                                ${article.keywords.filter(k => k.trim()).map(keyword => 
+                                ${(article.keywords || []).filter(k => k.trim()).map(keyword => 
                                     `<span class="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full">
                                         ${this.currentSearchTerm ? this.highlightSearchTerm(keyword, this.currentSearchTerm) : this.escapeHtml(keyword)}
                                     </span>`
@@ -648,9 +643,7 @@ class JournalIssueLoader {
     downloadPDF(articleId) {
         const article = this.articlesData.find(a => a.id === articleId);
         if (article) {
-            // In a real implementation, this would trigger actual PDF download
             console.log(`Downloading PDF for article: ${article.title}`);
-            // You can implement actual PDF download logic here
             alert(`PDF download for "${article.title}" would start here.\n\nIn a real implementation, this would link to the actual PDF file.`);
         }
     }
@@ -719,6 +712,9 @@ class JournalIssueLoader {
 // Initialize the journal loader
 let journalLoader;
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM Content Loaded');
+    console.log('Journal Issues Available:', Object.keys(journalIssues));
+    
     journalLoader = new JournalIssueLoader();
     journalLoader.loadIssue();
 });
