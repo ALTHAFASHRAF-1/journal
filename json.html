@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Journal Issue JSON Generator</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f9f9f9;
+    margin: 0;
+    padding: 20px;
+  }
+  h1, h2, h3 { color: #333; }
+  input, textarea, select {
+    width: 100%;
+    padding: 8px 10px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+  textarea { resize: vertical; }
+  .section { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+  .article { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 8px; background: #fafafa; }
+  button {
+    padding: 10px 15px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 6px;
+    background: #4f46e5;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  button:hover { background: #4338ca; }
+  pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+    max-height: 400px;
+  }
+  .flex-row { display: flex; gap: 15px; flex-wrap: wrap; }
+  .flex-col { flex: 1; min-width: 150px; }
+</style>
+</head>
+<body>
+
+<h1>Journal Issue JSON Generator</h1>
+
+<div class="section">
+  <h2>Issue Details</h2>
+  <div class="flex-row">
+    <div class="flex-col"><input type="text" id="issueId" placeholder="Issue ID (e.g., issue5)"></div>
+    <div class="flex-col"><input type="number" id="volume" placeholder="Volume"></div>
+    <div class="flex-col"><input type="number" id="number" placeholder="Number"></div>
+    <div class="flex-col"><input type="number" id="year" placeholder="Year"></div>
+  </div>
+  <div class="flex-row">
+    <div class="flex-col"><input type="date" id="publishedDate" placeholder="Published Date"></div>
+    <div class="flex-col"><input type="text" id="coverImage" placeholder="Cover Image URL"></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Articles</h2>
+  <div id="articlesContainer"></div>
+  <button onclick="addArticle()">Add Article</button>
+</div>
+
+<div class="section">
+  <h2>Generated JSON</h2>
+  <button onclick="generateJSON()">Generate JSON</button>
+  <button onclick="copyJSON()">Copy JSON</button>
+  <pre id="output"></pre>
+</div>
+
+<script>
+  let articleCount = 0;
+
+  function addArticle() {
+    articleCount++;
+    const container = document.getElementById("articlesContainer");
+    const div = document.createElement("div");
+    div.className = "article";
+    div.id = "article-" + articleCount;
+    div.innerHTML = `
+      <h3>Article ${articleCount}</h3>
+      <div class="flex-row">
+        <div class="flex-col"><input type="number" placeholder="Article ID" class="articleId"></div>
+        <div class="flex-col"><input type="text" placeholder="Title" class="title"></div>
+        <div class="flex-col"><input type="text" placeholder="Author Name" class="author"></div>
+      </div>
+      <div class="flex-row">
+        <div class="flex-col"><input type="text" placeholder="Author Position" class="authorPosition"></div>
+        <div class="flex-col"><input type="email" placeholder="Author Email" class="authorEmail"></div>
+      </div>
+      <textarea placeholder="Abstract" class="abstract"></textarea>
+      <div class="flex-row">
+        <div class="flex-col"><input type="date" placeholder="Date" class="date"></div>
+        <div class="flex-col"><input type="date" placeholder="Published Date" class="publishedDate"></div>
+      </div>
+      <div class="flex-row">
+        <div class="flex-col"><input type="text" placeholder="Keywords (comma-separated)" class="keywords"></div>
+        <div class="flex-col"><input type="text" placeholder="Pages (e.g., 1-24)" class="pages"></div>
+      </div>
+      <div class="flex-row">
+        <div class="flex-col"><input type="text" placeholder="HTML File URL" class="htmlFile"></div>
+        <div class="flex-col"><input type="text" placeholder="PDF URL" class="pdfUrl"></div>
+      </div>
+      <input type="text" placeholder="DOI (optional)" class="doi">
+    `;
+    container.appendChild(div);
+  }
+
+  function generateJSON() {
+    const issueId = document.getElementById("issueId").value.trim();
+    const volume = parseInt(document.getElementById("volume").value);
+    const number = parseInt(document.getElementById("number").value);
+    const year = parseInt(document.getElementById("year").value);
+    const publishedDate = document.getElementById("publishedDate").value;
+    const coverImage = document.getElementById("coverImage").value;
+
+    const articlesDivs = document.querySelectorAll(".article");
+    const articles = [];
+
+    articlesDivs.forEach(div => {
+      const article = {
+        id: parseInt(div.querySelector(".articleId").value),
+        title: div.querySelector(".title").value,
+        author: div.querySelector(".author").value,
+        authors: [{
+          name: div.querySelector(".author").value,
+          position: div.querySelector(".authorPosition").value,
+          email: div.querySelector(".authorEmail").value
+        }],
+        abstract: div.querySelector(".abstract").value,
+        date: div.querySelector(".date").value,
+        publishedDate: div.querySelector(".publishedDate").value,
+        keywords: div.querySelector(".keywords").value.split(",").map(k => k.trim()),
+        pages: div.querySelector(".pages").value,
+        htmlFile: div.querySelector(".htmlFile").value,
+        pdfUrl: div.querySelector(".pdfUrl").value,
+        doi: div.querySelector(".doi").value || null
+      };
+      articles.push(article);
+    });
+ 
+    const outputJSON = {
+      [issueId]: {
+        volume,
+        number,
+        year,
+        title: `Vol. ${volume} No. ${number} (${year})`,
+        publishedDate,
+        coverImage,
+        articles
+      }
+    };
+
+    document.getElementById("output").textContent = JSON.stringify(outputJSON, null, 2);
+  }
+
+  function copyJSON() {
+    const output = document.getElementById("output");
+    navigator.clipboard.writeText(output.textContent)
+      .then(() => alert("JSON copied to clipboard!"))
+      .catch(err => alert("Failed to copy: " + err));
+  }
+</script>
+
+</body>
+</html>
