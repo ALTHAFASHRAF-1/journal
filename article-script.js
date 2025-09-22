@@ -95,7 +95,8 @@ function loadArticle(articleId) {
 }
 
 // Enhanced initialization with better error handling
-function initializeArticlePage() {
+// Replace the initializeArticlePage function:
+async function initializeArticlePage() {
     const articleId = getArticleIdFromUrl();
     
     if (!articleId) {
@@ -103,28 +104,17 @@ function initializeArticlePage() {
         return;
     }
 
-    // Wait for data to be available
-    let attempts = 0;
-    const maxAttempts = 10;
-    
-    function tryLoadArticle() {
-        attempts++;
-        
-        // Check if data is available
-        const dataAvailable = (typeof JournalDataManager !== 'undefined') || 
-                             (typeof articlesData !== 'undefined' && Object.keys(articlesData).length > 0);
-        
-        if (dataAvailable) {
-            loadArticle(articleId);
-        } else if (attempts < maxAttempts) {
-            setTimeout(tryLoadArticle, 200);
-        } else {
-            console.error('Data not available after maximum attempts');
-            showError();
-        }
-    }
-    
-    tryLoadArticle();
+    // Wait for sheets data to load
+    await initializeJournalData();
+
+    loadArticle(articleId);
+}
+
+// Update the initialization calls:
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeArticlePage);
+} else {
+    initializeArticlePage();
 }
 
 // Rest of the functions remain the same...
