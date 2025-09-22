@@ -349,6 +349,11 @@
             overflow: hidden;
         }
 
+        /* Loading State */
+        #loading-state {
+            display: none;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 1200px) {
             .navbar-search-input.expanded {
@@ -511,6 +516,14 @@
 
     <!-- Main Content -->
     <main class="min-h-screen bg-gray-50">
+        <!-- Loading State -->
+        <div id="loading-state" class="min-h-screen flex items-center justify-center">
+            <div class="text-center">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                <p class="text-gray-600">Loading journal content...</p>
+            </div>
+        </div>
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <!-- Page Header -->
             <div class="text-center mb-8">
@@ -523,6 +536,25 @@
                 </p>
             </div>
 
+            <!-- Issue Navigation -->
+            <div class="flex justify-center mb-8">
+                <div class="flex items-center space-x-4 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                    <button id="prev-issue-btn" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+                        <i class="fas fa-chevron-left mr-2"></i>
+                        Previous Issue
+                    </button>
+                    
+                    <select id="issue-selector" class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                    
+                    <button id="next-issue-btn" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+                        Next Issue
+                        <i class="fas fa-chevron-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
             <!-- 75/25 Layout -->
             <div class="main-layout">
                 <!-- Articles Section (75%) -->
@@ -530,7 +562,7 @@
                     <div class="flex justify-between items-center mb-8">
                         <h3 class="text-2xl font-bold text-gray-900">Articles in This Issue</h3>
                         <div class="text-sm text-gray-600">
-                            <span id="article-count">5 articles in this issue</span>
+                            <span id="article-count">Loading articles...</span>
                         </div>
                     </div>
 
@@ -555,12 +587,12 @@
                             <div class="space-y-3 text-sm text-gray-600">
                                 <div class="flex items-center">
                                     <i class="fas fa-calendar-alt mr-3 text-blue-600"></i>
-                                    <span><strong>Published:</strong> December 1, 2024</span>
+                                    <span><strong>Published:</strong> <span data-field="published">December 1, 2024</span></span>
                                 </div>
 
                                 <div class="flex items-center">
                                     <i class="fas fa-bookmark mr-3 text-blue-600"></i>
-                                    <span><strong>Volume:</strong> 7, Number 2</span>
+                                    <span><strong>Volume:</strong> <span data-field="volume">7, Number 2</span></span>
                                 </div>
 
                                 <div class="flex items-center">
@@ -644,546 +676,8 @@
         </div>
     </footer>
 
-    <script>
-        // Sample articles data for Vol. 7 No. 2 (2024)
-        const articlesData = [
-            {
-                id: 1,
-                title: "WESTERN SĪRAH LITERATURE FROM INCEPTION TO CONTEMPORARY DEVELOPMENTS: A HISTORICAL ANALYSIS",
-                author: "Irshad EV",
-                abstract: "This study investigates the varied approaches of Western scholars and writers toward the life and character of Prophet Muhammad (PBUH). Through a comprehensive historical analysis, this research examines how Western Sīrah literature has evolved from its inception during the medieval period to contemporary developments in the 21st century. The study analyzes key works, methodologies, and perspectives employed by Western authors, identifying patterns of orientalist influence, scholarly objectivity, and contemporary revisionist approaches.",
-                date: "2024-11-15",
-                keywords: ["Western Sīrah", "Classical and modern Sīrah Literature", "Orientalism", "Western Perspectives towards Prophet"],
-                pages: "1-24",
-                htmlFile: "article1.html",
-                doi: "10.1234/ii.2024.7.2.001"
-            },
-            {
-                id: 2,
-                title: "ḤADĪTH OF SELF-KNOWING BETWEEN SUFIS AND ḤADĪTH SCHOLARS",
-                author: "Muhammad Gufran-ul-Haque",
-                abstract: "This paper examines the Ḥadīth of Self-knowing, often quoted as \"Whoever knows himself, knows his Lord,\" investigating its authenticity and interpretation among Sufi mystics and traditional Ḥadīth scholars. The study employs classical Ḥadīth methodology (takhrīj) to trace the chain of transmission while analyzing how different Islamic intellectual traditions have understood and utilized this saying.",
-                date: "2024-11-10",
-                keywords: ["Self-knowing", "Ḥadīth authenticity", "Sufi mysticism", "kashf", "ilhām", "Takhrīj", "form of Ḥadīth"],
-                pages: "25-48",
-                htmlFile: "article2.html",
-                doi: "10.1234/ii.2024.7.2.002"
-            },
-            {
-                id: 3,
-                title: "FACTORS OF CIVILISATIONAL ADVANCEMENT IN THE QURʾĀN: INSIGHTS FROM AL-BŪṬĪ",
-                author: "Muhammed Rashid AT",
-                abstract: "This study investigates the factors underlying civilizational advancement as outlined in the Qurʾān, focusing on the interpretations and insights of the renowned scholar Saʿīd Ramaḍān al-Būṭī. The research examines key Qurʾānic principles that contribute to societal progress, including ethical conduct, spiritual awareness, knowledge acquisition, social justice, and sustainable development.",
-                date: "2024-11-05",
-                keywords: ["Civilizational advancement", "Qurʾān and Civilisation", "Saʿīd Ramaḍān al-Būṭī", "Ethical Conduct", "Spiritual Awareness", "Sustainable Growth"],
-                pages: "49-68",
-                htmlFile: "article3.html",
-                doi: "10.1234/ii.2024.7.2.003"
-            },
-            {
-                id: 4,
-                title: "PRICE ANALYSIS OF ḤAJJ: COSTS, SUBSIDIES, INFLATION, AND SOCIAL INFLUENCES IN INDIA",
-                author: "Dr. Shujaat Ahmad Qureshi",
-                abstract: "The cost of the Ḥajj pilgrimage from India has seen a substantial rise from 2002 to 2024, primarily driven by economic factors like inflation, exchange rate fluctuations, and gold price variations. This comprehensive study analyzes the multifaceted factors contributing to Ḥajj cost escalation, examining the role of government subsidies, airline pricing, accommodation costs in Saudi Arabia, and the socio-economic impact on Indian Muslim communities.",
-                date: "2024-10-28",
-                keywords: ["Ḥajj Price", "Inflation in India", "Exchange Rate", "Gold Rate and Ḥajj Subsidy"],
-                pages: "69-92",
-                htmlFile: "article4.html",
-                doi: "10.1234/ii.2024.7.2.004"
-            },
-            {
-                id: 5,
-                title: "Behind The Story: Ethical Readings of Qur'ānic Narratives",
-                author: "Mohammed Niyas P",
-                abstract: "Book Review: This comprehensive review examines the scholarly work 'Behind The Story: Ethical Readings of Qur'ānic Narratives,' which offers a fresh perspective on understanding the moral and ethical dimensions embedded within Qurʾānic stories. The review analyzes the author's methodology in extracting ethical teachings from prophetic narratives, examining how classical and contemporary exegetical approaches can be synthesized to derive practical moral guidance.",
-                date: "2024-10-20",
-                keywords: ["Book Review", "Qurʾānic Narratives", "Islamic Ethics", "Moral Philosophy", "Exegesis"],
-                pages: "93-116",
-                htmlFile: "article5.html",
-                doi: "10.1234/ii.2024.7.2.005"
-            }
-        ];
-
-        // DOM Elements
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        // Enhanced search elements
-        const searchToggleBtn = document.getElementById('search-toggle-btn');
-        const navbarSearchInput = document.getElementById('navbar-search-input');
-        const navbarSearchResults = document.getElementById('navbar-search-results');
-        const searchIcon = document.getElementById('search-icon');
-        const navItems = document.getElementById('nav-items');
-
-        // Mobile search elements
-        const mobileSearchToggleBtn = document.getElementById('mobile-search-toggle-btn');
-        const mobileSearchInput = document.getElementById('mobile-search-input');
-        const mobileSearchResults = document.getElementById('mobile-search-results');
-        const mobileSearchIcon = document.getElementById('mobile-search-icon');
-
-        // Search state tracking
-        let isDesktopSearchExpanded = false;
-        let isMobileSearchExpanded = false;
-        let currentSearchTerm = '';
-
-        // Initialize the application
-        document.addEventListener('DOMContentLoaded', function() {
-            setupEventListeners();
-            loadArticles();
-        });
-
-        // Setup event listeners
-        function setupEventListeners() {
-            // Mobile menu toggle
-            if (mobileMenuBtn && mobileMenu) {
-                mobileMenuBtn.addEventListener('click', function() {
-                    mobileMenu.classList.toggle('hidden');
-                });
-            }
-
-            // Desktop navbar search functionality
-            if (searchToggleBtn) {
-                searchToggleBtn.addEventListener('click', toggleNavbarSearch);
-            }
-            
-            if (navbarSearchInput) {
-                navbarSearchInput.addEventListener('input', handleNavbarSearch);
-                navbarSearchInput.addEventListener('focus', function() {
-                    if (navbarSearchInput.value.trim()) {
-                        navbarSearchResults.classList.remove('hidden');
-                    }
-                });
-                navbarSearchInput.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape') {
-                        toggleNavbarSearch();
-                    }
-                    if (e.key === 'Enter') {
-                        handleSearchEnter();
-                    }
-                });
-            }
-
-            // Mobile search functionality
-            if (mobileSearchToggleBtn) {
-                mobileSearchToggleBtn.addEventListener('click', toggleMobileSearch);
-            }
-            
-            if (mobileSearchInput) {
-                mobileSearchInput.addEventListener('input', handleMobileSearch);
-                mobileSearchInput.addEventListener('focus', function() {
-                    if (mobileSearchInput.value.trim()) {
-                        mobileSearchResults.classList.remove('hidden');
-                    }
-                });
-                mobileSearchInput.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape') {
-                        toggleMobileSearch();
-                    }
-                    if (e.key === 'Enter') {
-                        handleSearchEnter();
-                    }
-                });
-            }
-
-            // Close search results when clicking outside
-            document.addEventListener('click', function(e) {
-                // Desktop search
-                if (navbarSearchInput && navbarSearchResults && searchToggleBtn) {
-                    if (!navbarSearchInput.contains(e.target) && 
-                        !navbarSearchResults.contains(e.target) && 
-                        !searchToggleBtn.contains(e.target)) {
-                        navbarSearchResults.classList.add('hidden');
-                    }
-                }
-
-                // Mobile search
-                if (mobileSearchInput && mobileSearchResults && mobileSearchToggleBtn) {
-                    if (!mobileSearchInput.contains(e.target) && 
-                        !mobileSearchResults.contains(e.target) && 
-                        !mobileSearchToggleBtn.contains(e.target)) {
-                        mobileSearchResults.classList.add('hidden');
-                    }
-                }
-            });
-
-            // Smooth scrolling for navigation links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                        // Close mobile menu if open
-                        if (mobileMenu) {
-                            mobileMenu.classList.add('hidden');
-                        }
-                    }
-                });
-            });
-        }
-
-        // Handle search enter key
-        function handleSearchEnter() {
-            const firstResult = navbarSearchResults?.querySelector('.search-result-item') || 
-                               mobileSearchResults?.querySelector('.search-result-item');
-            
-            if (firstResult) {
-                firstResult.click();
-            }
-        }
-
-        // Toggle navbar search
-        function toggleNavbarSearch() {
-            isDesktopSearchExpanded = !isDesktopSearchExpanded;
-
-            if (isDesktopSearchExpanded) {
-                navbarSearchInput.classList.add('expanded');
-                navItems.classList.add('hidden-for-search');
-                searchIcon.className = 'fas fa-times text-lg';
-                navbarSearchInput.focus();
-            } else {
-                navbarSearchInput.classList.remove('expanded');
-                navItems.classList.remove('hidden-for-search');
-                searchIcon.className = 'fas fa-search text-lg';
-                navbarSearchResults.classList.add('hidden');
-                navbarSearchInput.value = '';
-                currentSearchTerm = '';
-                loadArticles();
-            }
-        }
-
-        // Toggle mobile search
-        function toggleMobileSearch() {
-            isMobileSearchExpanded = !isMobileSearchExpanded;
-
-            if (isMobileSearchExpanded) {
-                mobileSearchInput.classList.add('expanded');
-                mobileSearchIcon.className = 'fas fa-times text-lg';
-                mobileSearchInput.focus();
-            } else {
-                mobileSearchInput.classList.remove('expanded');
-                mobileSearchIcon.className = 'fas fa-search text-lg';
-                mobileSearchResults.classList.add('hidden');
-                mobileSearchInput.value = '';
-                currentSearchTerm = '';
-                loadArticles();
-            }
-        }
-
-        // Handle navbar search
-        function handleNavbarSearch() {
-            const query = navbarSearchInput.value.toLowerCase().trim();
-            currentSearchTerm = query;
-
-            if (!query) {
-                navbarSearchResults.classList.add('hidden');
-                loadArticles();
-                return;
-            }
-
-            const filteredArticles = articlesData.filter(article => {
-                return article.title.toLowerCase().includes(query) ||
-                    article.author.toLowerCase().includes(query) ||
-                    article.abstract.toLowerCase().includes(query) ||
-                    article.keywords.some(keyword => keyword.toLowerCase().includes(query));
-            });
-
-            displayNavbarSearchResults(filteredArticles, query);
-            loadArticles(filteredArticles);
-        }
-
-        // Handle mobile search
-        function handleMobileSearch() {
-            const query = mobileSearchInput.value.toLowerCase().trim();
-            currentSearchTerm = query;
-
-            if (!query) {
-                mobileSearchResults.classList.add('hidden');
-                loadArticles();
-                return;
-            }
-
-            const filteredArticles = articlesData.filter(article => {
-                return article.title.toLowerCase().includes(query) ||
-                    article.author.toLowerCase().includes(query) ||
-                    article.abstract.toLowerCase().includes(query) ||
-                    article.keywords.some(keyword => keyword.toLowerCase().includes(query));
-            });
-
-            displayMobileSearchResults(filteredArticles, query);
-            loadArticles(filteredArticles);
-        }
-
-        // Display navbar search results
-        function displayNavbarSearchResults(results, query) {
-            if (results.length === 0) {
-                navbarSearchResults.innerHTML = `
-                    <div class="p-4 text-center text-gray-500">
-                        <i class="fas fa-search text-2xl mb-2 text-gray-400"></i>
-                        <p>No articles found for "<strong>${escapeHtml(query)}</strong>"</p>
-                    </div>
-                `;
-            } else {
-                navbarSearchResults.innerHTML = results.slice(0, 5).map(article => `
-                    <div class="search-result-item" onclick="scrollToArticle(${article.id});">
-                        <h4 class="font-semibold text-gray-900 mb-1 text-sm">${highlightSearchTerm(article.title, query)}</h4>
-                        <p class="text-sm text-gray-600 mb-2">${highlightSearchTerm(article.author, query)}</p>
-                        <p class="text-xs text-gray-500">${highlightSearchTerm(truncateText(article.abstract, 120), query)}...</p>
-                    </div>
-                `).join('');
-            }
-
-            navbarSearchResults.classList.remove('hidden');
-        }
-
-        // Display mobile search results
-        function displayMobileSearchResults(results, query) {
-            if (results.length === 0) {
-                mobileSearchResults.innerHTML = `
-                    <div class="p-3 text-center text-gray-500 text-sm">
-                        <i class="fas fa-search text-lg mb-1 text-gray-400"></i>
-                        <p>No articles found for "<strong>${escapeHtml(query)}</strong>"</p>
-                    </div>
-                `;
-            } else {
-                mobileSearchResults.innerHTML = results.slice(0, 5).map(article => `
-                    <div class="search-result-item text-sm" onclick="scrollToArticle(${article.id});">
-                        <h4 class="font-semibold text-gray-900 mb-1">${highlightSearchTerm(article.title, query)}</h4>
-                        <p class="text-xs text-gray-600 mb-1">${highlightSearchTerm(article.author, query)}</p>
-                        <p class="text-xs text-gray-500">${highlightSearchTerm(truncateText(article.abstract, 100), query)}...</p>
-                    </div>
-                `).join('');
-            }
-
-            mobileSearchResults.classList.remove('hidden');
-        }
-
-        // Utility functions
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function truncateText(text, maxLength) {
-            if (text.length <= maxLength) return text;
-            return text.substr(0, maxLength).replace(/\s+\S*$/, '');
-        }
-
-        // Highlight search terms
-        function highlightSearchTerm(text, query) {
-            if (!query) return escapeHtml(text);
-            const escapedText = escapeHtml(text);
-            const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            const regex = new RegExp(`(${escapedQuery})`, 'gi');
-            return escapedText.replace(regex, '<mark class="bg-yellow-200 px-1 rounded">$1</mark>');
-        }
-
-        // Scroll to specific article
-        function scrollToArticle(articleId) {
-            if (navbarSearchResults) navbarSearchResults.classList.add('hidden');
-            if (mobileSearchResults) mobileSearchResults.classList.add('hidden');
-            
-            const articleElement = document.getElementById(`article-${articleId}`);
-            if (articleElement) {
-                articleElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                articleElement.classList.add('ring-2', 'ring-blue-500');
-                setTimeout(() => {
-                    articleElement.classList.remove('ring-2', 'ring-blue-500');
-                }, 2000);
-            }
-        }
-
-        // Load and display articles
-        function loadArticles(articlesToShow = null) {
-            const articlesGrid = document.getElementById('articlesGrid');
-            const articles = articlesToShow || articlesData;
-
-            if (articles.length === 0) {
-                articlesGrid.innerHTML = `
-                    <div class="col-span-full text-center py-12">
-                        <div class="text-gray-400 mb-4">
-                            <i class="fas fa-search text-4xl"></i>
-                        </div>
-                        <h3 class="text-lg font-medium text-gray-600 mb-2">No articles found</h3>
-                        <p class="text-gray-500">Try adjusting your search terms or browse all articles.</p>
-                        <button onclick="clearSearch()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
-                            Clear Search
-                        </button>
-                    </div>
-                `;
-                return;
-            }
-
-            const articlesHTML = articles.map((article, index) => `
-                <div id="article-${article.id}" class="article-card bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden fade-in" style="animation-delay: ${index * 0.1}s">
-                    <div class="p-6 article-content">
-                        <h3 class="text-xl font-semibold academic-title text-gray-900 mb-3 leading-tight">
-                            ${currentSearchTerm ? highlightSearchTerm(article.title, currentSearchTerm) : escapeHtml(article.title)}
-                        </h3>
-
-                        <div class="mb-3">
-                            <p class="text-sm font-medium text-blue-600">
-                                ${currentSearchTerm ? highlightSearchTerm(article.author, currentSearchTerm) : escapeHtml(article.author)}
-                            </p>
-                        </div>
-
-                        <div class="mb-4 text-sm text-gray-600">
-                            <i class="far fa-calendar-alt mr-2"></i>
-                            <span>${formatDate(article.date)}</span>
-                            <span class="mx-2">•</span>
-                            <span>Pages ${article.pages}</span>
-                            ${article.doi ? `<span class="mx-2">•</span><span>DOI: ${article.doi}</span>` : ''}
-                        </div>
-
-                        <div class="article-description">
-                            <p class="text-gray-700 text-sm leading-relaxed mb-4">
-                                ${currentSearchTerm ? highlightSearchTerm(article.abstract, currentSearchTerm) : escapeHtml(article.abstract)}
-                            </p>
-
-                            <div class="mb-4">
-                                <div class="flex flex-wrap gap-2">
-                                    ${article.keywords.filter(k => k.trim()).map(keyword => 
-                                        `<span class="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full">
-                                            ${currentSearchTerm ? highlightSearchTerm(keyword, currentSearchTerm) : escapeHtml(keyword)}
-                                        </span>`
-                                    ).join('')}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="article-footer">
-                            <div class="flex justify-between items-center">
-                                <a href="${article.htmlFile}" 
-                                   class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors text-center">
-                                    Read Full Article <i class="fas fa-arrow-right ml-2"></i>
-                                </a>
-
-                                <div class="flex space-x-2">
-                                    <button onclick="downloadPDF(${article.id})" 
-                                            class="text-gray-600 hover:text-blue-600 transition-colors p-2" 
-                                            title="Download PDF">
-                                        <i class="fas fa-download"></i>
-                                    </button>
-                                    <button onclick="shareArticle(${article.id})" 
-                                            class="text-gray-600 hover:text-blue-600 transition-colors p-2" 
-                                            title="Share Article">
-                                        <i class="fas fa-share-alt"></i>
-                                    </button>
-                                    <button onclick="citeArticle(${article.id})" 
-                                            class="text-gray-600 hover:text-blue-600 transition-colors p-2" 
-                                            title="Citation">
-                                        <i class="fas fa-quote-right"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-
-            articlesGrid.innerHTML = articlesHTML;
-        }
-
-        // Clear search
-        function clearSearch() {
-            if (navbarSearchInput) {
-                navbarSearchInput.value = '';
-                navbarSearchInput.classList.remove('expanded');
-            }
-            if (mobileSearchInput) {
-                mobileSearchInput.value = '';
-                mobileSearchInput.classList.remove('expanded');
-            }
-            if (navItems) navItems.classList.remove('hidden-for-search');
-            if (searchIcon) searchIcon.className = 'fas fa-search text-lg';
-            if (mobileSearchIcon) mobileSearchIcon.className = 'fas fa-search text-lg';
-            if (navbarSearchResults) navbarSearchResults.classList.add('hidden');
-            if (mobileSearchResults) mobileSearchResults.classList.add('hidden');
-            
-            currentSearchTerm = '';
-            isDesktopSearchExpanded = false;
-            isMobileSearchExpanded = false;
-            loadArticles();
-        }
-
-        // Utility functions
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            return date.toLocaleDateString('en-US', options);
-        }
-
-        // Download PDF placeholder
-        function downloadPDF(articleId) {
-            const article = articlesData.find(a => a.id === articleId);
-            if (article) {
-                console.log(`Downloading PDF for article: ${article.title}`);
-                alert(`PDF download for "${article.title}" would start here.\n\nIn a real implementation, this would link to the actual PDF file.`);
-            }
-        }
-
-        // Share article
-        function shareArticle(articleId) {
-            const article = articlesData.find(a => a.id === articleId);
-            if (!article) return;
-
-            const shareData = {
-                title: article.title,
-                text: `${article.title} by ${article.author}`,
-                url: `${window.location.origin}${window.location.pathname}#article-${articleId}`
-            };
-
-            if (navigator.share && navigator.canShare(shareData)) {
-                navigator.share(shareData);
-            } else {
-                // Fallback to clipboard
-                const shareText = `${shareData.title}\nBy ${article.author}\n${shareData.url}`;
-                navigator.clipboard.writeText(shareText).then(() => {
-                    alert('Article link copied to clipboard!');
-                }).catch(() => {
-                    // Final fallback
-                    prompt('Copy this link to share:', shareData.url);
-                });
-            }
-        }
-
-        // Generate citation for article
-        function citeArticle(articleId) {
-            const article = articlesData.find(a => a.id === articleId);
-            if (!article) return;
-
-            const citation = generateCitation(article);
-            
-            // Show citation in a modal-like alert
-            const citationText = `APA Style Citation:\n\n${citation.apa}\n\n` +
-                                `MLA Style Citation:\n\n${citation.mla}\n\n` +
-                                `Chicago Style Citation:\n\n${citation.chicago}`;
-            
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(citation.apa).then(() => {
-                    alert(`${citationText}\n\nAPA citation copied to clipboard!`);
-                });
-            } else {
-                alert(citationText);
-            }
-        }
-
-        // Generate different citation formats
-        function generateCitation(article) {
-            const year = new Date(article.date).getFullYear();
-            
-            return {
-                apa: `${article.author} (${year}). ${article.title}. Islamic Insight Journal, 7(2), ${article.pages}. ${article.doi ? `https://doi.org/${article.doi}` : ''}`,
-                
-                mla: `${article.author}. "${article.title}." Islamic Insight Journal, vol. 7, no. 2, ${year}, pp. ${article.pages}.`,
-                
-                chicago: `${article.author}. "${article.title}." Islamic Insight Journal 7, no. 2 (${year}): ${article.pages}. ${article.doi ? `https://doi.org/${article.doi}.` : ''}`
-            };
-        }
-    </script>
+    <!-- Load JavaScript files in correct order -->
+    <script src="js/issues-config.js"></script>
+    <script src="js/journal-dynamic.js"></script>
 </body>
 </html>
