@@ -1,4 +1,4 @@
-// article-script.js - Enhanced version with new data structure support
+// article-script.js - Fixed version with better error handling
 
 // Global variables
 let currentArticleId = null;
@@ -8,30 +8,65 @@ let currentPdfUrl = null;
 function getArticleIdFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get('id');
-    return id ? parseInt(id) : null;
-}
-
-// Load article data using new data manager
-function loadArticle(articleId) {
-    // Try new data structure first, then fallback to legacy
-    let article = null;
+    console.log('URL parameters:', Object.fromEntries(urlParams.entries()));
+    console.log('Extracted article ID:', id);
     
-    if (typeof JournalDataManager !== 'undefined') {
-        article = JournalDataManager.getArticle(articleId);
-    } else if (typeof articlesData !== 'undefined') {
-        article = articlesData[articleId];
+    if (!id) {
+        console.error('No article ID found in URL');
+        return null;
     }
     
+    // Parse ID - handle both string and number
+    const parsedId = parseInt(id);
+    return isNaN(parsedId) ? id : parsedId;
+}
+
+// Enhanced article loading with better debugging
+async function loadArticle(articleId) {
+    console.log('Loading article with ID:', articleId);
+    console.log('Type of articleId:', typeof articleId);
+    
+    let article = null;
+    
+    // Try multiple data sources with fallbacks
+    if (typeof sheetsDataManager !== 'undefined') {
+        console.log('Using sheetsDataManager...');
+        article = await sheetsDataManager.getArticle(articleId);
+    } else if (typeof JournalDataManager !== 'undefined') {
+        console.log('Using JournalDataManager...');
+        article = await JournalDataManager.getArticle(articleId);
+    } else if (typeof articlesData !== 'undefined' && articlesData[articleId]) {
+        console.log('Using articlesData...');
+        article = articlesData[articleId];
+    } else if (window.journalData) {
+        console.log('Searching in journalData...');
+        // Search through all issues
+        for (const issueId in window.journalData.issues) {
+            const issue = window.journalData.issues[issueId];
+            const foundArticle = issue.articles.find(a => a.id == articleId);
+            if (foundArticle) {
+                article = foundArticle;
+                break;
+            }
+        }
+    }
+    
+    console.log('Found article:', article);
+    
     if (!article) {
-        showError();
+        showError('Article not found. Please check the article ID.');
         return;
     }
 
     currentArticleId = articleId;
     currentPdfUrl = article.pdfUrl;
     
+    updateArticleDisplay(article);
+}
+
+function updateArticleDisplay(article) {
     // Update page title
-    document.getElementById('page-title').textContent = `${article.title} - Islamic Insight Journal`;
+    document.title = `${article.title} - Islamic Insight Journal`;
     
     // Update article title
     document.getElementById('article-title').textContent = article.title;
@@ -52,6 +87,7 @@ function loadArticle(articleId) {
     
     authors.forEach(author => {
         const authorDiv = document.createElement('div');
+        authorDiv.className = 'mb-3';
         authorDiv.innerHTML = `
             <p class="text-gray-700 font-medium">${author.name}</p>
             <p class="text-sm text-gray-600">${author.position || 'Author'}</p>
@@ -61,9 +97,9 @@ function loadArticle(articleId) {
     });
     
     // Update metadata
-    document.getElementById('published-date').textContent = article.publishedDate || article.date;
-    document.getElementById('page-range').textContent = article.pages;
-    document.getElementById('volume-info').textContent = article.volume || 'N/A';
+    document.getElementById('published-date').textContent = article.publishedDate || article.date || 'Not specified';
+    document.getElementById('page-range').textContent = article.pages || 'Not specified';
+    document.getElementById('volume-info').textContent = article.volume ? `Vol. ${article.volume}, No. ${article.number}` : 'Not specified';
     document.getElementById('issn-number').textContent = article.issn || '2581-3269';
     
     // Update PDF links
@@ -71,61 +107,118 @@ function loadArticle(articleId) {
         document.getElementById('direct-pdf-link').href = currentPdfUrl;
         document.getElementById('modal-download-link').href = currentPdfUrl;
         document.getElementById('fallback-download-link').href = currentPdfUrl;
+        
+        // Enable PDF button
+        const pdfButton = document.querySelector('button[onclick="openPDF()"]');
+        if (pdfButton) {
+            pdfButton.disabled = false;
+            pdfButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+    } else {
+        // Disable PDF button if no PDF available
+        const pdfButton = document.querySelector('button[onclick="openPDF()"]');
+        if (pdfButton) {
+            pdfButton.disabled = true;
+            pdfButton.classList.add('opacity-50', 'cursor-not-allowed');
+            pdfButton.textContent = 'PDF NOT AVAILABLE';
+        }
     }
     
     // Update keywords
     const keywordsContainer = document.getElementById('keywords-container');
     keywordsContainer.innerHTML = '';
     
-    if (article.keywords && Array.isArray(article.keywords)) {
+    if (article.keywords && Array.isArray(article.keywords) && article.keywords.length > 0) {
         article.keywords.forEach(keyword => {
-            const keywordSpan = document.createElement('span');
-            keywordSpan.className = 'keyword-tag';
-            keywordSpan.textContent = keyword;
-            keywordsContainer.appendChild(keywordSpan);
+            if (keyword && keyword.trim()) {
+                const keywordSpan = document.createElement('span');
+                keywordSpan.className = 'keyword-tag';
+                keywordSpan.textContent = keyword.trim();
+                keywordsContainer.appendChild(keywordSpan);
+            }
         });
+    } else {
+        keywordsContainer.innerHTML = '<span class="text-gray-500">No keywords available</span>';
     }
     
     // Update abstract
-    document.getElementById('abstract-content').textContent = article.abstract;
+    const abstractContent = document.getElementById('abstract-content');
+    if (article.abstract && article.abstract.trim()) {
+        abstractContent.textContent = article.abstract;
+    } else {
+        abstractContent.textContent = 'No abstract available for this article.';
+        abstractContent.classList.add('text-gray-500', 'italic');
+    }
     
     // Show article and hide loading
     document.getElementById('loading-state').style.display = 'none';
     document.getElementById('article-container').style.display = 'block';
+    
+    console.log('Article display updated successfully');
 }
 
-// Enhanced initialization with better error handling
-// Replace the initializeArticlePage function:
+// Enhanced initialization
 async function initializeArticlePage() {
+    console.log('Initializing article page...');
+    
     const articleId = getArticleIdFromUrl();
     
     if (!articleId) {
-        showError();
+        showError('No article ID specified in the URL.');
         return;
     }
 
-    // Wait for sheets data to load
-    await initializeJournalData();
-
-    loadArticle(articleId);
+    try {
+        // Wait for sheets data to load with timeout
+        const dataLoaded = await Promise.race([
+            initializeJournalData(),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('Data loading timeout')), 10000))
+        ]);
+        
+        if (!dataLoaded) {
+            throw new Error('Failed to load journal data');
+        }
+        
+        // Small delay to ensure data is fully processed
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        await loadArticle(articleId);
+    } catch (error) {
+        console.error('Error initializing article page:', error);
+        showError('Failed to load article data. Please try again later.');
+    }
 }
 
-// Update the initialization calls:
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeArticlePage);
-} else {
-    initializeArticlePage();
+function showError(message) {
+    console.error('Showing error:', message);
+    
+    const loadingState = document.getElementById('loading-state');
+    const errorState = document.getElementById('error-state');
+    
+    if (loadingState) loadingState.style.display = 'none';
+    if (errorState) {
+        errorState.style.display = 'block';
+        errorState.innerHTML = `
+            <h2 class="text-xl font-bold mb-2">Article Loading Error</h2>
+            <p class="mb-4">${message}</p>
+            <div class="space-x-4">
+                <a href="index.html" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors">
+                    Return to Homepage
+                </a>
+                <button onclick="location.reload()" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded transition-colors">
+                    Retry Loading
+                </button>
+            </div>
+        `;
+    }
 }
 
-// Rest of the functions remain the same...
-function showError() {
-    document.getElementById('loading-state').style.display = 'none';
-    document.getElementById('error-state').style.display = 'block';
-}
-
-// PDF Modal Functions (unchanged)
+// PDF Modal Functions
 function openPDF() {
-    if (!currentPdfUrl) return;
+    if (!currentPdfUrl) {
+        alert('PDF is not available for this article.');
+        return;
+    }
     
     const modal = document.getElementById('pdfModal');
     modal.style.display = 'block';
@@ -157,23 +250,16 @@ function loadPDFInIframe() {
         iframe.src = `https://docs.google.com/gview?url=${encodeURIComponent(currentPdfUrl)}&embedded=true`;
         
         setTimeout(() => {
-            if (!iframe.contentDocument && !iframe.contentWindow.document) {
+            try {
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                if (!iframeDoc || iframeDoc.body.innerHTML === '') {
+                    showFallback();
+                }
+            } catch (e) {
                 showFallback();
             }
         }, 5000);
     };
-    
-    setTimeout(() => {
-        try {
-            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-            if (!iframeDoc || iframeDoc.body.innerHTML === '') {
-                console.log('PDF viewer not supported, showing fallback');
-                showFallback();
-            }
-        } catch (e) {
-            console.log('Cross-origin restriction (PDF loading)');
-        }
-    }, 3000);
 }
 
 function showFallback() {
@@ -212,7 +298,7 @@ if (document.readyState === 'loading') {
     initializeArticlePage();
 }
 
-// Event listeners (unchanged)
+// Event listeners
 window.onclick = function(event) {
     const modal = document.getElementById('pdfModal');
     if (event.target == modal) {
@@ -225,39 +311,3 @@ document.addEventListener('keydown', function(event) {
         closePDF();
     }
 });
-
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    });
-});
-
-const supportsPDF = detectPDFSupport();
-console.log('PDF Support:', supportsPDF);
-
-function detectPDFSupport() {
-    const userAgent = navigator.userAgent.toLowerCase();
-    const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
-    const isIOS = /ipad|iphone|ipod/.test(userAgent);
-    
-    if (isIOS) {
-        return false;
-    }
-    
-    if (navigator.plugins && navigator.plugins.length) {
-        for (let i = 0; i < navigator.plugins.length; i++) {
-            if (navigator.plugins[i].name.toLowerCase().indexOf('pdf') > -1) {
-                return true;
-            }
-        }
-    }
-    
-    return !isMobile;
-}
