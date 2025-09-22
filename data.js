@@ -159,7 +159,7 @@ const journalData = {
           "Khuffayn"
         ],
         "pages": "1-24",
-        "htmlFile": "",
+        "htmlFile": "https://dqdhiu.netlify.app/articles.html?id=6",
         "pdfUrl": "",
         "doi": null
       }
