@@ -59,7 +59,7 @@ const journalData = {
                     keywords: ["Self-knowing", "Ḥadīth authenticity", "Sufi mysticism", "kashf", "ilhām", "Takhrīj", "form of Ḥadīth"],
                     pages: "25-48",
                     htmlFile: "https://dqdhiu.netlify.app/articles.html?id=2",
-                    pdfUrl: "https://example.com/pdf/article2.pdf",
+                    pdfUrl: "https://dqdhiu.netlify.app/file/56-Article Text-147-1-10-20250108.pdf",
                     doi: null
                 },
                 {
@@ -79,7 +79,7 @@ const journalData = {
                     keywords: ["Civilizational advancement", "Qurʾān and Civilisation", "Saʿīd Ramaḍān al-Būṭī", "Ethical Conduct", "Spiritual Awareness", "Sustainable Growth"],
                     pages: "49-68",
                     htmlFile: "https://dqdhiu.netlify.app/articles.html?id=3",
-                    pdfUrl: "https://example.com/pdf/article3.pdf",
+                    pdfUrl: "https://dqdhiu.netlify.app/file/57-Article Text-152-1-10-20250108.pdf",
                     doi: null
                 },
                 {
@@ -99,7 +99,7 @@ const journalData = {
                     keywords: ["Ḥajj Price", "Inflation in India", "Exchange Rate", "Gold Rate and Ḥajj Subsidy"],
                     pages: "69-92",
                     htmlFile: "https://dqdhiu.netlify.app/articles.html?id=4",
-                    pdfUrl: "https://example.com/pdf/article4.pdf",
+                    pdfUrl: "https://dqdhiu.netlify.app/file/58-Article Text-157-1-10-20250108.pdf",
                     doi: null
                 },
                 {
@@ -119,7 +119,7 @@ const journalData = {
                     keywords: ["Book Review", "Qurʾānic Narratives", "Islamic Ethics", "Moral Philosophy", "Exegesis"],
                     pages: "93-116",
                     htmlFile: "https://dqdhiu.netlify.app/articles.html?id=5",
-                    pdfUrl: "https://example.com/pdf/article5.pdf",
+                    pdfUrl: "https://dqdhiu.netlify.app/file/61-Other-170-2-10-20250108.pdf",
                     doi: null
                 }
             ]
