@@ -1,6 +1,6 @@
-// sheets-loader.js - Google Sheets integration for Islamic Insight Journal
+// sheets-loader.js - Fixed Google Sheets integration
 
-const SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSkzubKLpyPWDjAWl5XS83-4huOcBJDZeeLRKVbntV2sDo-uG5Tzw5aFA6PQw3rNNv4-L-_44asHfTr/pub?gid=0&single=true&output=csv'; // Replace with your published CSV URL
+const SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSkzubKLpyPWDjAWl5XS83-4huOcBJDZeeLRKVbntV2sDo-uG5Tzw5aFA6PQw3rNNv4-L-_44asHfTr/pub?gid=0&single=true&output=csv';
 
 class SheetsDataManager {
     constructor() {
@@ -18,10 +18,13 @@ class SheetsDataManager {
             try {
                 console.log('Loading data from Google Sheets...');
                 const response = await fetch(SHEETS_CSV_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 const csvText = await response.text();
                 this.journalData = this.parseCSVToJournalData(csvText);
                 this.isLoaded = true;
-                console.log('Data loaded successfully from Google Sheets');
+                console.log('Data loaded successfully from Google Sheets:', this.journalData);
                 resolve(this.journalData);
             } catch (error) {
                 console.error('Error loading data from Google Sheets:', error);
@@ -34,7 +37,11 @@ class SheetsDataManager {
 
     parseCSVToJournalData(csvText) {
         const lines = csvText.split('\n').filter(line => line.trim());
-        const headers = lines[0].split(',').map(h => h.trim());
+        if (lines.length < 2) {
+            throw new Error('CSV file is empty or has only headers');
+        }
+        
+        const headers = this.parseCSVLine(lines[0]).map(h => h.trim().toLowerCase());
         
         const journalData = {
             config: {
@@ -67,12 +74,16 @@ class SheetsDataManager {
         const result = [];
         let current = '';
         let inQuotes = false;
+        let quoteChar = '';
         
         for (let i = 0; i < line.length; i++) {
             const char = line[i];
             
-            if (char === '"') {
-                inQuotes = !inQuotes;
+            if ((char === '"' || char === "'") && !inQuotes) {
+                inQuotes = true;
+                quoteChar = char;
+            } else if (char === quoteChar && inQuotes) {
+                inQuotes = false;
             } else if (char === ',' && !inQuotes) {
                 result.push(current);
                 current = '';
@@ -82,12 +93,15 @@ class SheetsDataManager {
         }
         
         result.push(current);
-        return result;
+        return result.map(field => field.trim());
     }
 
     processCSVRow(row, journalData) {
         const issueId = row.issue_id;
-        if (!issueId) return;
+        if (!issueId) {
+            console.warn('Skipping row without issue_id');
+            return;
+        }
 
         // Create issue if it doesn't exist
         if (!journalData.issues[issueId]) {
@@ -102,9 +116,16 @@ class SheetsDataManager {
             };
         }
 
+        // Parse article ID properly - handle both string and number
+        const articleId = this.parseArticleId(row.article_id);
+        if (!articleId) {
+            console.warn('Skipping row without valid article_id:', row.article_id);
+            return;
+        }
+
         // Add article to issue
         const article = {
-            id: parseInt(row.article_id) || Date.now(),
+            id: articleId,
             title: row.article_title || 'Untitled Article',
             author: row.author || 'Unknown Author',
             authors: this.parseAuthors(row.authors) || [{
@@ -115,37 +136,69 @@ class SheetsDataManager {
             abstract: row.abstract || 'No abstract available.',
             date: row.date || new Date().toISOString().split('T')[0],
             publishedDate: row.published_date || row.date || new Date().toISOString().split('T')[0],
-            keywords: row.keywords ? row.keywords.split(',').map(k => k.trim()).filter(k => k) : [],
+            keywords: this.parseKeywords(row.keywords),
             pages: row.pages || '1-1',
-            htmlFile: row.html_file || `${journalData.config.baseUrl}articles.html?id=${row.article_id}`,
+            htmlFile: row.html_file || `articles.html?id=${articleId}`,
             pdfUrl: row.pdf_url || '',
-            doi: row.doi || null
+            doi: row.doi || null,
+            volume: parseInt(row.volume) || 1,
+            number: parseInt(row.number) || 1
         };
 
         journalData.issues[issueId].articles.push(article);
+    }
+
+    parseArticleId(articleId) {
+        if (!articleId) return null;
+        
+        // Try to parse as number first
+        const numId = parseInt(articleId);
+        if (!isNaN(numId)) return numId;
+        
+        // If not a number, use string hash
+        let hash = 0;
+        for (let i = 0; i < articleId.length; i++) {
+            const char = articleId.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash; // Convert to 32bit integer
+        }
+        return Math.abs(hash);
+    }
+
+    parseKeywords(keywordsString) {
+        if (!keywordsString) return [];
+        
+        try {
+            // Handle comma-separated keywords
+            return keywordsString.split(',').map(k => k.trim()).filter(k => k);
+        } catch (error) {
+            console.warn('Error parsing keywords:', error);
+            return [];
+        }
     }
 
     parseAuthors(authorsString) {
         if (!authorsString) return null;
         
         try {
-            // Handle both JSON format and simple string format
-            if (authorsString.startsWith('[')) {
+            // Handle JSON format
+            if (authorsString.startsWith('[') || authorsString.startsWith('{')) {
                 return JSON.parse(authorsString.replace(/'/g, '"'));
-            } else {
-                return authorsString.split(';').map(author => ({
-                    name: author.trim(),
-                    position: "Author",
-                    email: "author@example.com"
-                }));
             }
+            
+            // Handle simple string format
+            return authorsString.split(';').map(author => ({
+                name: author.trim(),
+                position: "Author",
+                email: `${author.trim().toLowerCase().replace(/\s+/g, '.')}@example.com`
+            }));
         } catch (error) {
             console.warn('Error parsing authors:', error);
             return null;
         }
     }
 
-    // Same methods as original JournalDataManager but with async support
+    // Data retrieval methods
     async getAllIssues() {
         await this.ensureLoaded();
         return Object.entries(this.journalData.issues).map(([key, issue]) => ({
@@ -174,9 +227,7 @@ class SheetsDataManager {
                     issueTitle: issue.title,
                     issueYear: issue.year,
                     issueVolume: issue.volume,
-                    issueNumber: issue.number,
-                    volume: issue.title,
-                    issn: this.journalData.config.issn
+                    issueNumber: issue.number
                 });
             });
         });
@@ -186,7 +237,18 @@ class SheetsDataManager {
     async getArticle(articleId) {
         await this.ensureLoaded();
         const allArticles = await this.getAllArticles();
-        return allArticles.find(article => article.id === parseInt(articleId)) || null;
+        
+        // Try to find article by ID (handle both string and number)
+        const article = allArticles.find(article => 
+            article.id == articleId || // Loose comparison to handle string/number
+            article.id === parseInt(articleId)
+        );
+        
+        console.log('Searching for article ID:', articleId);
+        console.log('Available articles:', allArticles.map(a => ({ id: a.id, title: a.title })));
+        console.log('Found article:', article);
+        
+        return article || null;
     }
 
     async getArticlesByIssue(issueId) {
@@ -197,9 +259,7 @@ class SheetsDataManager {
         return issue.articles.map(article => ({
             ...article,
             issueId: issueId,
-            issueTitle: issue.title,
-            volume: issue.title,
-            issn: this.journalData.config.issn
+            issueTitle: issue.title
         }));
     }
 
@@ -215,7 +275,7 @@ class SheetsDataManager {
                    article.author.toLowerCase().includes(searchTerm) ||
                    article.abstract.toLowerCase().includes(searchTerm) ||
                    article.keywords.some(keyword => keyword.toLowerCase().includes(searchTerm)) ||
-                   article.issueTitle.toLowerCase().includes(searchTerm);
+                   (article.issueTitle && article.issueTitle.toLowerCase().includes(searchTerm));
         });
     }
 
@@ -232,7 +292,12 @@ const sheetsDataManager = new SheetsDataManager();
 // Backward compatibility functions
 async function initializeJournalData() {
     try {
+        console.log('Initializing journal data...');
         await sheetsDataManager.loadFromSheets();
+        
+        if (!sheetsDataManager.journalData) {
+            throw new Error('Failed to load journal data');
+        }
         
         // Set global variables for backward compatibility
         window.journalData = sheetsDataManager.journalData;
@@ -245,55 +310,32 @@ async function initializeJournalData() {
             window.articlesData[article.id] = article;
         });
 
-        // Set up legacy navigation
-        window.IssueNavigation = {
-            getAllIssues: () => Object.keys(window.journalIssues),
-            getIssueUrl: (issueId) => `?issue=${issueId}`,
-            generateIssueSelector: () => {
-                const issues = Object.entries(window.journalIssues).map(([key, issue]) => ({
-                    id: key,
-                    title: issue.title,
-                    url: `?issue=${key}`,
-                    year: issue.year,
-                    volume: issue.volume,
-                    number: issue.number
-                })).sort((a, b) => {
-                    if (b.year !== a.year) return b.year - a.year;
-                    if (b.volume !== a.volume) return b.volume - a.volume;
-                    return b.number - a.number;
-                });
-                return issues;
-            },
-            getPreviousIssue: (currentIssueId) => {
-                const issues = window.IssueNavigation.generateIssueSelector();
-                const currentIndex = issues.findIndex(issue => issue.id === currentIssueId);
-                if (currentIndex < issues.length - 1) {
-                    return issues[currentIndex + 1];
-                }
-                return null;
-            },
-            getNextIssue: (currentIssueId) => {
-                const issues = window.IssueNavigation.generateIssueSelector();
-                const currentIndex = issues.findIndex(issue => issue.id === currentIssueId);
-                if (currentIndex > 0) {
-                    return issues[currentIndex - 1];
-                }
-                return null;
-            }
-        };
-
-        window.JournalDataManager = sheetsDataManager;
+        console.log('Journal data initialized successfully');
+        console.log('Available issues:', Object.keys(window.journalIssues));
+        console.log('Available articles:', Object.keys(window.articlesData));
         
-        console.log('Journal data initialized from Google Sheets');
         return true;
     } catch (error) {
         console.error('Failed to initialize journal data:', error);
+        
+        // Create fallback data structure
+        window.journalData = {
+            config: {
+                journalName: "Islamic Insight Journal",
+                issn: "2581-3269"
+            },
+            issues: {}
+        };
+        window.journalIssues = {};
+        window.articlesData = {};
+        
         return false;
     }
 }
 
 // Auto-initialize when loaded
 document.addEventListener('DOMContentLoaded', async function() {
+    console.log('DOM loaded, initializing journal data...');
     await initializeJournalData();
     
     // Trigger custom event when data is ready
