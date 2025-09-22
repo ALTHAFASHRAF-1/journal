@@ -126,55 +126,45 @@ const journalData = {
         },
 
         "issue4": {
-            volume: 7,
-            number: 1,
-            year: 2024,
-            title: "Vol. 7 No. 1 (2024)",
-            publishedDate: "2024-06-01",
-            coverImage: "https://dqdhiu.netlify.app/vol7no1.jpg",
-            articles: [
-                {
-                    id: 6,
-                    title: "THE KHUFF IN MUSLIM RITUAL THOUGHT: THE CURIOUS CASE OF A BOOT'S RELIGIOUS IDENTITY",
-                    author: "Doctoral student at Emory University's Islamic Civilizations Studies (ICIVS) program, Georgia, United States",
-                    authors: [
-                        {
-                            name: "Anonymous Doctoral Student",
-                            position: "Doctoral student at Emory University's Islamic Civilizations Studies (ICIVS) program, Georgia, United States",
-                            email: "student@emory.edu"
-                        }
-                    ],
-                    abstract: "Typically, Islamic footwear is not casual conversation that one might have in the elevator, even amongst Islamic Studies academics. This study explores the religious and ritual significance of the khuff (leather socks/boots) in Islamic jurisprudence and practice.",
-                    date: "2024-05-15",
-                    publishedDate: "May 15, 2024",
-                    keywords: ["Khuffayn", "Ritual Studies", "Islamic Law", "Fiqh", "Shia Studies", "Ibadi Studies", "Islamic Theology", "Islamic Footwear"],
-                    pages: "1-22",
-                    htmlFile: "https://dqdhiu.netlify.app/articles.html?id=6",
-                    pdfUrl: "https://example.com/pdf/article6.pdf",
-                    doi: null
-                },
-                {
-                    id: 7,
-                    title: "WOMEN'S EDUCATION IN EARLY ISLAMIC HISTORY",
-                    author: "Dr. Fatima Al-Zahra",
-                    authors: [
-                        {
-                            name: "Dr. Fatima Al-Zahra",
-                            position: "Professor of Islamic History and Gender Studies",
-                            email: "alzahra@example.com"
-                        }
-                    ],
-                    abstract: "An exploration of women's educational roles and contributions in the early Islamic period, this study challenges conventional narratives about gender and education in Islamic history. Through examination of historical sources, biographical literature, and educational treatises from the first three centuries of Islam, the research demonstrates the active participation of women in various fields of knowledge including theology, law, medicine, and literature.",
-                    date: "2024-05-10",
-                    publishedDate: "May 10, 2024",
-                    keywords: ["Women's Education", "Islamic History", "Gender Studies", "Early Islam", "Female Scholars"],
-                    pages: "23-45",
-                    htmlFile: "https://dqdhiu.netlify.app/articles.html?id=7",
-                    pdfUrl: "https://example.com/pdf/article7.pdf",
-                    doi: null
-                }
-            ]
-        },
+    "volume": 7,
+    "number": 1,
+    "year": 2024,
+    "title": "Vol. 7 No. 1 (2024)",
+    "publishedDate": "2024-06-30",
+    "coverImage": "https://dqdhiu.netlify.app/vol7no1.jpg",
+    "articles": [
+      {
+        "id": 6,
+        "title": "THE KHUFF IN MUSLIM RITUAL THOUGHT: THE CURIOUS CASE OF A BOOT’S RELIGIOUS IDENTITY",
+        "author": "Hamza A. Dudgeon",
+        "authors": [
+          {
+            "name": "Hamza A. Dudgeon",
+            "position": "",
+            "email": "hamza@gmail.com"
+          }
+        ],
+        "abstract": "Typically, Islamic footwear is not casual conversation that one might\nhave in the elevator, even amongst Islamic Studies academics.\nSlippers, leather socks, boots, moccasins, or whatever one may want\nto call them, the “khuffayn” are generally regarded as no more than a\nfootnote by academics. Often, it is merely gleamed over as a mundane\nsnippet of Ṭahāra (purity), and not deeply investigated. The reality is\nthat the issue of footwear in medieval and contemporary Islam is\nsurrounded by nuanced discussion and debate. Investigating the\nQurʾān, medieval Ḥadīth literature, various books of Islamic law, and\ntheological treatises, the researcher discovered that not only do the\nkhuffayn have legal ramifications, but also creedal. Some of the\nbooks examined are the Ṣaḥīḥayn, Shamāʾil Tirmidhi, Kitāb al-Āthār\nof Abū Ḥanīfa, The Muwaṭṭāʾ, The Musnad of Imam Shāfiʿī, Al-\nʿAqīda aṭ-Ṭaḥāwīya, Abū Ḥanīfa’s al-Fiqh al-Akbar, and so on. The\nmass mention of the khuffayn indicates that it was an important topic\nto the authors writing it down. The researcher wanted to know what\nexactly the physical khuff was? And how Sunni Muslims\nconceptualized footwear’s legal and theological implications from the\nmedieval period until now? This adds to the ongoing debate between\nthe supremacy of ritual vs. theology. Through analyzing the medieval\npassages that the researcher used, it became apparent that in the early\nperiod, the khuffayn were never physically described. They were so\ncommon that the reader was assumed to be quite familiar with the\nfootwear. In the stipulations of the jurists as to what components the\nkhuffayn may consist of, or what basic elements constitute a khuff,\nwe are able to paint a partial picture as to what they might’ve been.\nFurthermore, in the later medieval period (11th - 17th centuries), we\nstart to see more of a physical description of the khuffayn. The descriptions indicate that the khuffayn were probably a type of leather moccasin-boots, which had some universality in the Near East and\neven East Africa. It is not until the 19th century that footwear besides\nthe khuffayn and Jarmūq (galosh) is mentioned. Shoes appear in the\nḤanafī encyclopedic text Ḥāshiya Ibn ʿĀbidīn. Contemporary Sunnis\nthink about footwear and purity in a very different way. The\nresearcher demonstrates textually how late Sunni traditionalists and\ndifferent revisionist groups conceive of modern footwear, both legally\nand theologically, which often diverges significantly from medieval\nconceptualizations. However, in the medieval period up until our\ncontemporary time, wiping over the khuff has been a ritual that marks\nsectarian identity so much so that it is considered a part of the Islamic\ncreed to affirm or reject the practice. So, is wiping over the khuff a\nritual or theologizing? Perhaps, both. ",
+        "date": "2024-01-01",
+        "publishedDate": "2024-01-06",
+        "keywords": [
+          "Khuffayn",
+          "Ritual Studies",
+          "Islamic Law",
+          "Fiqh",
+          "Shia Studies",
+          "Ibadi Studies",
+          "Islamic Theology",
+          "Islamic Footwear",
+          "Khuffayn"
+        ],
+        "pages": "1-24",
+        "htmlFile": "",
+        "pdfUrl": "",
+        "doi": null
+      }
+    ]
+  },
 
         "issue3": {
             volume: 6,
