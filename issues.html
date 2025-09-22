@@ -1435,9 +1435,12 @@ chicago: `${article.author}. "${article.title}." Islamic Insight Journal ${issue
 
 // Initialize the journal loader
 let journalLoader;
-document.addEventListener('DOMContentLoaded', function() {
-journalLoader = new JournalIssueLoader();
-journalLoader.loadIssue();
+document.addEventListener('DOMContentLoaded', async function() {
+    // Wait for sheets data to load
+    await initializeJournalData();
+    
+    journalLoader = new JournalIssueLoader();
+    journalLoader.loadIssue();
 });
 
 // Handle page visibility change to reload if needed
