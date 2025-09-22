@@ -100,17 +100,6 @@
             margin: 2rem;
         }
 
-        /* Debug info */
-        .debug-info {
-            background: #f3f4f6;
-            border: 1px solid #d1d5db;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            margin: 1rem 0;
-            font-family: monospace;
-            font-size: 0.875rem;
-        }
-
         .pdf-modal {
             display: none;
             position: fixed;
@@ -277,12 +266,6 @@
     <main class="min-h-screen bg-gray-50">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             
-            <!-- Debug Information (Remove in production) -->
-            <div id="debug-info" class="debug-info hidden">
-                <h3 class="font-bold mb-2">Debug Information:</h3>
-                <div id="debug-content"></div>
-            </div>
-            
             <!-- Loading State -->
             <div id="loading-state" class="loading-overlay">
                 <div class="loading-spinner"></div>
@@ -292,7 +275,7 @@
             <!-- Error State -->
             <div id="error-state" class="error-message" style="display: none;">
                 <h2 class="text-xl font-bold mb-2">Article Not Found</h2>
-                <p id="error-message">The requested article could not be found. Please check the URL or <a href="index.html" class="text-blue-600 hover:underline">return to the homepage</a>.</p>
+                <p>The requested article could not be found. Please check the URL or <a href="index.html" class="text-blue-600 hover:underline">return to the homepage</a>.</p>
             </div>
             
             <!-- Article Container -->
@@ -467,67 +450,33 @@
         let currentPdfUrl = null;
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6rOB2NKSsKC64QFh6vKqu7As5wszni2i7D__Q9dZGwSu6dE-Pm3l0y6--Qv_3iD9D6A/exec';
 
-        // Debug function
-        function debugLog(message, data = null) {
-            console.log(`[DEBUG] ${message}`, data || '');
-            const debugElement = document.getElementById('debug-content');
-            if (debugElement) {
-                const timestamp = new Date().toLocaleTimeString();
-                debugElement.innerHTML += `<div>[${timestamp}] ${message}${data ? ': ' + JSON.stringify(data, null, 2) : ''}</div>`;
-            }
-        }
-
-        // Show debug info in development
-        function showDebugInfo() {
-            const debugElement = document.getElementById('debug-info');
-            if (debugElement && window.location.hostname === 'localhost') {
-                debugElement.classList.remove('hidden');
-            }
-        }
-
         // Get article ID from URL parameter
         function getArticleIdFromUrl() {
             const urlParams = new URLSearchParams(window.location.search);
-            const id = urlParams.get('id');
-            debugLog('Article ID from URL', id);
-            return id ? parseInt(id) : null;
+            return urlParams.get('id'); // Keep as string to match your data
         }
 
         // Wait for articles data to load
-        function waitForArticlesData(callback, maxAttempts = 30, currentAttempt = 0) {
-            debugLog(`Waiting for articles data, attempt ${currentAttempt + 1}/${maxAttempts}`);
-            
+        function waitForArticlesData(callback, maxAttempts = 15, currentAttempt = 0) {
             if (typeof articlesData !== 'undefined') {
-                debugLog('Articles data loaded successfully', { 
-                    articlesCount: Object.keys(articlesData).length,
-                    articleIds: Object.keys(articlesData)
-                });
                 callback();
             } else if (currentAttempt < maxAttempts) {
                 setTimeout(() => {
                     waitForArticlesData(callback, maxAttempts, currentAttempt + 1);
                 }, 500);
             } else {
-                debugLog('Articles data loading failed after maximum attempts');
-                showError('Failed to load articles data. Please check your internet connection and refresh the page.');
+                showError();
             }
         }
 
         // Load article data
         function loadArticle(articleId) {
-            debugLog('Loading article', articleId);
             const article = articlesData[articleId];
             
             if (!article) {
-                debugLog('Article not found', { 
-                    articleId, 
-                    availableArticles: Object.keys(articlesData) 
-                });
-                showError(`Article with ID ${articleId} not found. Available articles: ${Object.keys(articlesData).join(', ')}`);
+                showError();
                 return;
             }
-
-            debugLog('Article loaded successfully', article);
 
             currentArticleId = articleId;
             currentPdfUrl = article.pdfUrl;
@@ -570,7 +519,7 @@
             
             // Update keywords
             const keywordsContainer = document.getElementById('keywords-container');
-            if (article.keywords && article.keywords.length > 0) {
+            if (article.keywords.length > 0) {
                 keywordsContainer.innerHTML = `
                     <h3 class="text-lg font-semibold text-gray-900 mb-3">Keywords</h3>
                     <div class="flex flex-wrap gap-2">
@@ -589,36 +538,21 @@
             // Show article and hide loading
             document.getElementById('loading-state').style.display = 'none';
             document.getElementById('article-container').style.display = 'block';
-            
-            debugLog('Article display updated successfully');
         }
 
         // Show error state
-        function showError(message) {
-            debugLog('Showing error', message);
-            const loadingState = document.getElementById('loading-state');
-            const errorState = document.getElementById('error-state');
-            const errorMessage = document.getElementById('error-message');
-            
-            loadingState.style.display = 'none';
-            errorState.style.display = 'block';
-            if (errorMessage) {
-                errorMessage.innerHTML = message;
-            }
+        function showError() {
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('error-state').style.display = 'block';
         }
 
         // Format date
         function formatDate(dateString) {
-            try {
-                const date = new Date(dateString);
-                return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-            } catch (error) {
-                debugLog('Date formatting error', { dateString, error: error.message });
-                return dateString;
-            }
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
         }
 
-        // Utility function
+        // Escape HTML to prevent XSS
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
@@ -632,7 +566,6 @@
                 return;
             }
             
-            debugLog('Opening PDF modal', currentPdfUrl);
             const modal = document.getElementById('pdfModal');
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
@@ -650,11 +583,9 @@
             
             // Load PDF
             iframe.src = currentPdfUrl;
-            debugLog('Loading PDF in iframe', currentPdfUrl);
             
             // Handle load errors
             iframe.onerror = function() {
-                debugLog('PDF iframe load error');
                 showFallback();
             };
             
@@ -662,11 +593,9 @@
             setTimeout(() => {
                 try {
                     if (!iframe.contentDocument && !iframe.contentWindow.document) {
-                        debugLog('PDF viewer not supported, showing fallback');
                         showFallback();
                     }
                 } catch (e) {
-                    debugLog('Cross-origin error (expected for external PDFs)');
                     // Cross-origin error means PDF is loading
                 }
             }, 3000);
@@ -678,17 +607,14 @@
             
             iframe.style.display = 'none';
             fallback.classList.add('active');
-            debugLog('Showing PDF fallback');
         }
 
         function refreshPDF() {
-            debugLog('Refreshing PDF');
             loadPDFInIframe();
         }
 
         function openInNewTab() {
             if (currentPdfUrl) {
-                debugLog('Opening PDF in new tab', currentPdfUrl);
                 window.open(currentPdfUrl, '_blank');
             }
         }
@@ -702,23 +628,16 @@
             iframe.src = '';
             fallback.classList.remove('active');
             document.body.style.overflow = 'auto';
-            debugLog('PDF modal closed');
         }
 
         // Initialize article page
         function initializeArticlePage() {
-            debugLog('Initializing article page');
             const articleId = getArticleIdFromUrl();
             
             if (articleId && typeof articlesData !== 'undefined' && articlesData[articleId]) {
                 loadArticle(articleId);
             } else {
-                debugLog('Article initialization failed', { 
-                    articleId, 
-                    articlesDataExists: typeof articlesData !== 'undefined',
-                    availableArticles: typeof articlesData !== 'undefined' ? Object.keys(articlesData) : 'N/A'
-                });
-                showError(`Article with ID ${articleId} not found. Please check the URL or return to the homepage.`);
+                showError();
             }
         }
 
@@ -738,34 +657,17 @@
 
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
-            debugLog('DOM loaded, initializing article page');
-            showDebugInfo();
-            
             // Load articles configuration from Google Script
             const script = document.createElement('script');
             script.src = `${GOOGLE_SCRIPT_URL}?action=getArticlesConfig&_=${Date.now()}`;
-            
             script.onload = function() {
-                debugLog('Articles configuration script loaded');
                 waitForArticlesData(() => {
-                    debugLog('Starting article initialization');
                     initializeArticlePage();
                 });
             };
-            
             script.onerror = function() {
-                debugLog('Failed to load articles configuration script');
-                showError('Failed to load articles data. Please check your internet connection and try refreshing the page.');
+                showError();
             };
-            
-            // Add timeout for script loading
-            setTimeout(() => {
-                if (typeof articlesData === 'undefined') {
-                    debugLog('Articles configuration loading timeout');
-                    showError('Articles configuration loading timed out. Please check your Google Script URL and try again.');
-                }
-            }, 15000);
-            
             document.head.appendChild(script);
         });
     </script>
