@@ -1,6 +1,6 @@
 // sheets-loader.js - Google Sheets integration for Islamic Insight Journal
 
-const SHEETS_CSV_URL = 'YOUR_GOOGLE_SHEETS_CSV_URL_HERE'; // Replace with your published CSV URL
+const SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSzMD29jfzF44OLt8iT0sR3hmL7Zharsg-jJ374yM5yQREypAolg2nQ_gazCdXFLXfNmZPDfK2eNkpK/pub?gid=0&single=true&output=csv'; // Replace with your published CSV URL
 
 class SheetsDataManager {
     constructor() {
