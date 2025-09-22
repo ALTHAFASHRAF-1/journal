@@ -92,7 +92,6 @@
             font-weight: 400;
         }
 
-        /* Loading spinner */
         .loading-spinner {
             animation: spin 1s linear infinite;
         }
@@ -102,7 +101,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Search styles */
         .search-icon {
             color: #2563eb;
             cursor: pointer;
@@ -175,18 +173,6 @@
             border-radius: 3px;
         }
 
-        /* Debug info */
-        .debug-info {
-            background: #f3f4f6;
-            border: 1px solid #d1d5db;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            margin: 1rem 0;
-            font-family: monospace;
-            font-size: 0.875rem;
-        }
-
-        /* Responsive Layout */
         .main-layout {
             display: grid;
             grid-template-columns: 1fr 300px;
@@ -319,12 +305,6 @@
                 </p>
             </div>
 
-            <!-- Debug Information (Remove in production) -->
-            <div id="debug-info" class="debug-info hidden">
-                <h3 class="font-bold mb-2">Debug Information:</h3>
-                <div id="debug-content"></div>
-            </div>
-
             <!-- Loading State -->
             <div id="loading-state" class="text-center py-12">
                 <div class="loading-spinner inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full"></div>
@@ -337,7 +317,7 @@
                     <i class="fas fa-exclamation-triangle text-4xl"></i>
                 </div>
                 <h3 class="text-lg font-medium text-gray-900 mb-2">Error Loading Content</h3>
-                <p id="error-message" class="text-gray-600 mb-4">Unable to load journal data. Please try again.</p>
+                <p class="text-gray-600 mb-4">Unable to load journal data. Please try again.</p>
                 <button onclick="window.location.reload()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
                     Refresh Page
                 </button>
@@ -471,443 +451,346 @@
     </footer>
 
     <script>
-    // Global variables
-    let currentIssue = null;
-    let allArticles = [];
-    let currentSearchTerm = '';
-    let isSearchExpanded = false;
+        // Global variables
+        let currentIssue = null;
+        let allArticles = [];
+        let currentSearchTerm = '';
+        let isSearchExpanded = false;
 
-    // Configuration - MUST match your actual Google Script URL
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6rOB2NKSsKC64QFh6vKqu7As5wszni2i7D__Q9dZGwSu6dE-Pm3l0y6--Qv_3iD9D6A/exec';
+        // Configuration - MUST match your actual Google Script URL
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6rOB2NKSsKC64QFh6vKqu7As5wszni2i7D__Q9dZGwSu6dE-Pm3l0y6--Qv_3iD9D6A/exec';
 
-    // Debug function
-    function debugLog(message, data = null) {
-        console.log(`[DEBUG] ${message}`, data || '');
-        const debugElement = document.getElementById('debug-content');
-        if (debugElement) {
-            const timestamp = new Date().toLocaleTimeString();
-            debugElement.innerHTML += `<div>[${timestamp}] ${message}${data ? ': ' + JSON.stringify(data, null, 2) : ''}</div>`;
-        }
-    }
-
-    // Show debug info in development
-    function showDebugInfo() {
-        const debugElement = document.getElementById('debug-info');
-        if (debugElement && window.location.hostname === 'localhost') {
-            debugElement.classList.remove('hidden');
-        }
-    }
-
-    // Wait for configuration to load with better error handling
-    function waitForConfig(callback, maxAttempts = 30, currentAttempt = 0) {
-        debugLog(`Waiting for config, attempt ${currentAttempt + 1}/${maxAttempts}`);
-        
-        if (typeof journalIssues !== 'undefined' && typeof IssueNavigation !== 'undefined') {
-            debugLog('Configuration loaded successfully', { 
-                issuesCount: Object.keys(journalIssues).length,
-                issues: Object.keys(journalIssues)
-            });
-            callback();
-        } else if (currentAttempt < maxAttempts) {
-            setTimeout(() => {
-                waitForConfig(callback, maxAttempts, currentAttempt + 1);
-            }, 500);
-        } else {
-            debugLog('Configuration loading failed after maximum attempts');
-            showError('Failed to load journal configuration. Please check your internet connection and refresh the page.');
-        }
-    }
-
-    // Get issue ID from URL or default to latest
-    function getCurrentIssueId() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const issueParam = urlParams.get('issue');
-        
-        debugLog('URL issue parameter', issueParam);
-        
-        if (issueParam && typeof journalIssues !== 'undefined' && journalIssues[issueParam]) {
-            debugLog('Found issue in URL', issueParam);
-            return issueParam;
+        // Wait for configuration to load with better error handling
+        function waitForConfig(callback, maxAttempts = 20, currentAttempt = 0) {
+            if (typeof journalIssues !== 'undefined' && typeof IssueNavigation !== 'undefined') {
+                callback();
+            } else if (currentAttempt < maxAttempts) {
+                setTimeout(() => {
+                    waitForConfig(callback, maxAttempts, currentAttempt + 1);
+                }, 500);
+            } else {
+                showError('Failed to load journal configuration. Please check your internet connection and refresh the page.');
+            }
         }
 
-        if (typeof IssueNavigation !== 'undefined') {
-            const issues = IssueNavigation.generateIssueSelector();
-            debugLog('Available issues', issues.map(i => i.id));
-            return issues.length > 0 ? issues[0].id : null;
-        }
-
-        return null;
-    }
-
-    // Show loading state
-    function showLoading(show) {
-        const loadingState = document.getElementById('loading-state');
-        const mainContent = document.getElementById('main-content');
-        const errorState = document.getElementById('error-state');
-        
-        if (show) {
-            loadingState.style.display = 'block';
-            mainContent.style.display = 'none';
-            errorState.classList.add('hidden');
-        } else {
-            loadingState.style.display = 'none';
-        }
-    }
-
-    // Show error state
-    function showError(message) {
-        debugLog('Showing error', message);
-        const loadingState = document.getElementById('loading-state');
-        const errorState = document.getElementById('error-state');
-        const errorMessage = document.getElementById('error-message');
-        
-        loadingState.style.display = 'none';
-        errorState.classList.remove('hidden');
-        if (errorMessage) {
-            errorMessage.textContent = message;
-        }
-    }
-
-    // Load and display issue with better error handling
-    function loadIssue() {
-        showLoading(true);
-        showDebugInfo();
-        
-        try {
-            const issueId = getCurrentIssueId();
-            debugLog('Current issue ID', issueId);
+        // Get issue ID from URL or default to latest
+        function getCurrentIssueId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const issueParam = urlParams.get('issue');
             
-            if (!issueId || !journalIssues[issueId]) {
-                debugLog('Issue not found', { 
-                    issueId, 
-                    availableIssues: typeof journalIssues !== 'undefined' ? Object.keys(journalIssues) : 'journalIssues not loaded'
-                });
-                showError('Issue not found. This could mean no issues have been created yet.');
-                return;
+            if (issueParam && typeof journalIssues !== 'undefined' && journalIssues[issueParam]) {
+                return issueParam;
             }
 
-            currentIssue = journalIssues[issueId];
-            debugLog('Loaded issue', currentIssue);
+            if (typeof IssueNavigation !== 'undefined') {
+                const issues = IssueNavigation.generateIssueSelector();
+                return issues.length > 0 ? issues[0].id : null;
+            }
+
+            return null;
+        }
+
+        // Load and display issue with better error handling
+        function loadIssue() {
+            showLoading(true);
             
-            updatePageContent();
-            initAllArticles();
-            loadArticles();
-            setupEventListeners();
-            
-            setTimeout(() => {
-                showLoading(false);
-                document.getElementById('main-content').style.display = 'grid';
-                debugLog('Issue loaded successfully');
-            }, 300);
-        } catch (error) {
-            console.error('Error loading issue:', error);
-            debugLog('Error loading issue', error.message);
-            showError('Error loading issue: ' + error.message);
-        }
-    }
-
-    // Update page content
-    function updatePageContent() {
-        if (!currentIssue) return;
-        
-        debugLog('Updating page content', currentIssue.title);
-        
-        // Update page title
-        document.title = `${currentIssue.title} - Islamic Insight Journal`;
-        document.getElementById('page-title').textContent = `${currentIssue.title} - Islamic Insight Journal`;
-
-        // Update main header
-        const mainHeader = document.getElementById('page-header');
-        if (mainHeader) {
-            mainHeader.textContent = currentIssue.title;
-        }
-
-        // Update journal cover image
-        const coverImage = document.getElementById('journal-cover');
-        if (coverImage) {
-            coverImage.src = currentIssue.coverImage;
-            coverImage.alt = `${currentIssue.title} Cover`;
-            coverImage.onerror = () => {
-                coverImage.src = 'https://via.placeholder.com/300x400/4f46e5/ffffff?text=Journal+Cover';
-            };
-        }
-
-        // Update published date
-        const publishedSpan = document.getElementById('published-date');
-        if (publishedSpan) {
-            publishedSpan.textContent = formatDate(currentIssue.publishedDate);
-        }
-
-        // Update volume information
-        const volumeSpan = document.getElementById('volume-info');
-        if (volumeSpan) {
-            volumeSpan.textContent = `Volume ${currentIssue.volume}, Number ${currentIssue.number}`;
-        }
-
-        // Update article count
-        const articleCountSpan = document.getElementById('article-count');
-        if (articleCountSpan) {
-            const count = currentIssue.articles ? currentIssue.articles.length : 0;
-            articleCountSpan.textContent = `${count} article${count !== 1 ? 's' : ''} in this issue`;
-        }
-    }
-
-    // Initialize all articles
-    function initAllArticles() {
-        allArticles = currentIssue.articles || [];
-        debugLog('Initialized articles', { count: allArticles.length, articles: allArticles });
-    }
-
-    // Load and display articles
-    function loadArticles(articlesToShow = null) {
-        const articlesGrid = document.getElementById('articlesGrid');
-        const articles = articlesToShow || allArticles;
-
-        debugLog('Loading articles', { count: articles.length });
-
-        if (articles.length === 0) {
-            articlesGrid.innerHTML = `
-                <div class="col-span-full text-center py-12">
-                    <div class="text-gray-400 mb-4">
-                        <i class="fas fa-search text-4xl"></i>
-                    </div>
-                    <h3 class="text-lg font-medium text-gray-600 mb-2">No articles found</h3>
-                    <p class="text-gray-500">This issue doesn't contain any articles yet.</p>
-                </div>
-            `;
-            return;
-        }
-
-        const articlesHTML = articles.map((article, index) => `
-            <div id="article-${article.id}" class="article-card bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden fade-in" style="animation-delay: ${index * 0.1}s">
-                <div class="p-6 article-content">
-                    <h3 class="text-xl font-semibold academic-title text-gray-900 mb-3 leading-tight">
-                        ${escapeHtml(article.title)}
-                    </h3>
-
-                    <div class="mb-3">
-                        <p class="text-sm font-medium text-blue-600">
-                            ${escapeHtml(article.author)}
-                        </p>
-                    </div>
-
-                    <div class="mb-4 text-sm text-gray-600">
-                        <i class="far fa-calendar-alt mr-2"></i>
-                        <span>${formatDate(article.date)}</span>
-                        <span class="mx-2">•</span>
-                        <span>Pages ${escapeHtml(article.pages)}</span>
-                        ${article.doi ? `<span class="mx-2">•</span><span>DOI: ${escapeHtml(article.doi)}</span>` : ''}
-                    </div>
-
-                    <div class="article-description">
-                        <p class="text-gray-700 text-sm leading-relaxed mb-4">
-                            ${escapeHtml(article.abstract)}
-                        </p>
-
-                        <div class="mb-4">
-                            <div class="flex flex-wrap gap-2">
-                                ${article.keywords.filter(k => k.trim()).map(keyword => 
-                                    `<span class="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full">
-                                        ${escapeHtml(keyword)}
-                                    </span>`
-                                ).join('')}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="article-footer">
-                        <div class="flex justify-between items-center">
-                            <a href="${article.htmlFile}" 
-                               class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors text-center">
-                                Read Full Article <i class="fas fa-arrow-right ml-2"></i>
-                            </a>
-
-                            <div class="flex space-x-2">
-                                <button onclick="downloadPDF(${article.id})" 
-                                        class="text-gray-600 hover:text-blue-600 transition-colors p-2" 
-                                        title="Download PDF">
-                                    <i class="fas fa-download"></i>
-                                </button>
-                                <button onclick="shareArticle(${article.id})" 
-                                        class="text-gray-600 hover:text-blue-600 transition-colors p-2" 
-                                        title="Share Article">
-                                    <i class="fas fa-share-alt"></i>
-                                </button>
-                                <button onclick="citeArticle(${article.id})" 
-                                        class="text-gray-600 hover:text-blue-600 transition-colors p-2" 
-                                        title="Citation">
-                                    <i class="fas fa-quote-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `).join('');
-
-        articlesGrid.innerHTML = articlesHTML;
-        debugLog('Articles rendered successfully');
-    }
-
-    // Setup event listeners
-    function setupEventListeners() {
-        debugLog('Setting up event listeners');
-        
-        // Mobile menu toggle
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        if (mobileMenuBtn && mobileMenu) {
-            mobileMenuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-        }
-
-        // Search functionality
-        const searchToggleBtn = document.getElementById('search-toggle-btn');
-        const searchInput = document.getElementById('search-input');
-        const searchResults = document.getElementById('search-results');
-
-        if (searchToggleBtn) {
-            searchToggleBtn.addEventListener('click', () => {
-                isSearchExpanded = !isSearchExpanded;
-                const searchIcon = document.getElementById('search-icon');
-                
-                if (isSearchExpanded) {
-                    searchInput.classList.add('expanded');
-                    searchIcon.className = 'fas fa-times text-lg';
-                    searchInput.focus();
-                } else {
-                    searchInput.classList.remove('expanded');
-                    searchIcon.className = 'fas fa-search text-lg';
-                    searchResults.classList.add('hidden');
-                    searchInput.value = '';
-                    currentSearchTerm = '';
-                    loadArticles();
-                }
-            });
-        }
-
-        if (searchInput) {
-            searchInput.addEventListener('input', () => {
-                const query = searchInput.value.toLowerCase().trim();
-                currentSearchTerm = query;
-
-                if (!query) {
-                    searchResults.classList.add('hidden');
-                    loadArticles();
+            try {
+                const issueId = getCurrentIssueId();
+                if (!issueId || !journalIssues[issueId]) {
+                    showError('Issue not found. This could mean no issues have been created yet.');
                     return;
                 }
 
-                const filteredArticles = allArticles.filter(article => {
-                    return article.title.toLowerCase().includes(query) ||
-                        article.author.toLowerCase().includes(query) ||
-                        article.abstract.toLowerCase().includes(query) ||
-                        article.keywords.some(keyword => keyword.toLowerCase().includes(query));
-                });
+                currentIssue = journalIssues[issueId];
+                updatePageContent();
+                initAllArticles();
+                loadArticles();
+                setupEventListeners();
+                
+                setTimeout(() => {
+                    showLoading(false);
+                    document.getElementById('main-content').style.display = 'grid';
+                }, 300);
+            } catch (error) {
+                console.error('Error loading issue:', error);
+                showError('Error loading issue: ' + error.message);
+            }
+        }
 
-                loadArticles(filteredArticles);
-            });
+        // Show/hide loading state
+        function showLoading(show) {
+            const loadingState = document.getElementById('loading-state');
+            const errorState = document.getElementById('error-state');
+            
+            if (loadingState) {
+                loadingState.style.display = show ? 'block' : 'none';
+            }
+            if (errorState) {
+                errorState.style.display = 'none';
+            }
+        }
 
-            searchInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    searchToggleBtn.click();
+        // Show error message
+        function showError(message) {
+            const loadingState = document.getElementById('loading-state');
+            const errorState = document.getElementById('error-state');
+            const mainContent = document.getElementById('main-content');
+            
+            if (loadingState) loadingState.style.display = 'none';
+            if (mainContent) mainContent.style.display = 'none';
+            if (errorState) {
+                errorState.style.display = 'block';
+                const errorMessage = errorState.querySelector('p');
+                if (errorMessage) {
+                    errorMessage.textContent = message;
                 }
-            });
+            }
         }
-    }
 
-    // Utility functions
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
+        // Update dynamic content on the page
+        function updatePageContent() {
+            // Update page title
+            document.title = `${currentIssue.title} - Islamic Insight Journal`;
 
-    function formatDate(dateString) {
-        try {
+            // Update main header
+            const pageHeader = document.getElementById('page-header');
+            if (pageHeader) {
+                pageHeader.textContent = currentIssue.title;
+            }
+
+            // Update journal cover image
+            const coverImage = document.getElementById('journal-cover');
+            if (coverImage) {
+                coverImage.src = currentIssue.coverImage;
+                coverImage.alt = `${currentIssue.title} Cover`;
+                coverImage.onerror = () => {
+                    coverImage.src = 'https://via.placeholder.com/300x400/4f46e5/ffffff?text=Journal+Cover';
+                };
+            }
+
+            // Update published date
+            const publishedDate = document.getElementById('published-date');
+            if (publishedDate) {
+                publishedDate.textContent = formatDate(currentIssue.publishedDate);
+            }
+
+            // Update volume information
+            const volumeInfo = document.getElementById('volume-info');
+            if (volumeInfo) {
+                volumeInfo.textContent = `${currentIssue.volume}, Number ${currentIssue.number}`;
+            }
+
+            // Update article count
+            const articleCount = document.getElementById('article-count');
+            if (articleCount) {
+                const count = currentIssue.articles.length;
+                articleCount.textContent = `${count} article${count !== 1 ? 's' : ''} in this issue`;
+            }
+        }
+
+        // Initialize all articles for search
+        function initAllArticles() {
+            allArticles = currentIssue.articles || [];
+        }
+
+        // Format date for display
+        function formatDate(dateString) {
             const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-        } catch (error) {
-            return dateString;
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
         }
-    }
 
-    // Placeholder functions for article interactions
-    function downloadPDF(articleId) {
-        const article = allArticles.find(a => a.id === articleId);
-        if (article) {
-            alert(`PDF download for "${article.title}" would start here.\n\nIn a real implementation, this would link to the actual PDF file.`);
+        // Load and display articles
+        function loadArticles() {
+            const articlesGrid = document.getElementById('articlesGrid');
+            const articles = allArticles;
+
+            if (articles.length === 0) {
+                articlesGrid.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <div class="text-gray-400 mb-4">
+                            <i class="fas fa-book-open text-4xl"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-600 mb-2">No articles in this issue</h3>
+                        <p class="text-gray-500">Articles will appear here once they are published.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const articlesHTML = articles.map((article, index) => `
+                <div id="article-${article.id}" class="article-card bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden fade-in" style="animation-delay: ${index * 0.1}s">
+                    <div class="p-6 article-content">
+                        <h3 class="text-xl font-semibold academic-title text-gray-900 mb-3 leading-tight">
+                            ${escapeHtml(article.title)}
+                        </h3>
+
+                        <div class="mb-3">
+                            <p class="text-sm font-medium text-blue-600">
+                                ${escapeHtml(article.author)}
+                            </p>
+                        </div>
+
+                        <div class="mb-4 text-sm text-gray-600">
+                            <i class="far fa-calendar-alt mr-2"></i>
+                            <span>${formatDate(article.date)}</span>
+                            <span class="mx-2">•</span>
+                            <span>Pages ${escapeHtml(article.pages)}</span>
+                            ${article.doi ? `<span class="mx-2">•</span><span>DOI: ${escapeHtml(article.doi)}</span>` : ''}
+                        </div>
+
+                        <div class="article-description">
+                            <p class="text-gray-700 text-sm leading-relaxed mb-4">
+                                ${escapeHtml(article.abstract)}
+                            </p>
+
+                            <div class="mb-4">
+                                <div class="flex flex-wrap gap-2">
+                                    ${article.keywords.filter(k => k.trim()).map(keyword => 
+                                        `<span class="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full">
+                                            ${escapeHtml(keyword)}
+                                        </span>`
+                                    ).join('')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="article-footer">
+                            <div class="flex justify-between items-center">
+                                <a href="${article.htmlFile}" 
+                                   class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors text-center">
+                                    Read Full Article <i class="fas fa-arrow-right ml-2"></i>
+                                </a>
+
+                                <div class="flex space-x-2">
+                                    <button onclick="shareArticle('${article.id}')" 
+                                            class="text-gray-600 hover:text-blue-600 transition-colors p-2" 
+                                            title="Share Article">
+                                        <i class="fas fa-share-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            articlesGrid.innerHTML = articlesHTML;
         }
-    }
 
-    function shareArticle(articleId) {
-        const article = allArticles.find(a => a.id === articleId);
-        if (!article) return;
+        // Setup event listeners
+        function setupEventListeners() {
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
 
-        const shareUrl = `${window.location.origin}${window.location.pathname}?issue=${getCurrentIssueId()}#article-${articleId}`;
-        
-        if (navigator.share) {
-            navigator.share({
+            // Issue navigation buttons
+            const prevButton = document.getElementById('prev-issue-btn');
+            const nextButton = document.getElementById('next-issue-btn');
+            
+            if (typeof IssueNavigation !== 'undefined') {
+                const currentIssueId = getCurrentIssueId();
+                const prevIssue = IssueNavigation.getPreviousIssue(currentIssueId);
+                const nextIssue = IssueNavigation.getNextIssue(currentIssueId);
+
+                if (prevButton) {
+                    if (prevIssue) {
+                        prevButton.disabled = false;
+                        prevButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                        prevButton.onclick = () => window.location.href = prevIssue.url;
+                        prevButton.title = `Go to ${prevIssue.title}`;
+                    } else {
+                        prevButton.disabled = true;
+                        prevButton.classList.add('opacity-50', 'cursor-not-allowed');
+                        prevButton.onclick = null;
+                        prevButton.title = 'No previous issue';
+                    }
+                }
+
+                if (nextButton) {
+                    if (nextIssue) {
+                        nextButton.disabled = false;
+                        nextButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                        nextButton.onclick = () => window.location.href = nextIssue.url;
+                        nextButton.title = `Go to ${nextIssue.title}`;
+                    } else {
+                        nextButton.disabled = true;
+                        nextButton.classList.add('opacity-50', 'cursor-not-allowed');
+                        nextButton.onclick = null;
+                        nextButton.title = 'No next issue';
+                    }
+                }
+            }
+        }
+
+        // Utility functions
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Share article function
+        function shareArticle(articleId) {
+            const article = allArticles.find(a => a.id === articleId);
+            if (!article) return;
+
+            const shareData = {
                 title: article.title,
                 text: `${article.title} by ${article.author}`,
-                url: shareUrl
-            });
-        } else {
-            navigator.clipboard.writeText(shareUrl).then(() => {
-                alert('Article link copied to clipboard!');
-            }).catch(() => {
-                prompt('Copy this link to share:', shareUrl);
-            });
-        }
-    }
+                url: `${window.location.origin}/${article.htmlFile}`
+            };
 
-    function citeArticle(articleId) {
-        const article = allArticles.find(a => a.id === articleId);
-        if (!article) return;
-
-        const year = new Date(article.date).getFullYear();
-        const citation = `${article.author} (${year}). ${article.title}. Islamic Insight Journal, ${currentIssue.volume}(${currentIssue.number}), ${article.pages}.`;
-        
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(citation).then(() => {
-                alert(`Citation copied to clipboard:\n\n${citation}`);
-            });
-        } else {
-            alert(`APA Citation:\n\n${citation}`);
-        }
-    }
-
-    // Initialize page with enhanced error handling
-    document.addEventListener('DOMContentLoaded', function() {
-        debugLog('DOM loaded, initializing page');
-        
-        // Load configuration from Google Script with cache busting
-        const script = document.createElement('script');
-        script.src = `${GOOGLE_SCRIPT_URL}?_=${Date.now()}`;
-        
-        script.onload = function() {
-            debugLog('Configuration script loaded');
-            waitForConfig(() => {
-                debugLog('Starting issue load');
-                loadIssue();
-            });
-        };
-        
-        script.onerror = function() {
-            debugLog('Failed to load configuration script');
-            showError('Failed to load journal data. Please check your internet connection and try refreshing the page.');
-        };
-        
-        // Add timeout for script loading
-        setTimeout(() => {
-            if (typeof journalIssues === 'undefined') {
-                debugLog('Configuration loading timeout');
-                showError('Configuration loading timed out. Please check your Google Script URL and try again.');
+            if (navigator.share && navigator.canShare(shareData)) {
+                navigator.share(shareData);
+            } else {
+                // Fallback to clipboard
+                const shareText = `${shareData.title}\nBy ${article.author}\n${shareData.url}`;
+                navigator.clipboard.writeText(shareText).then(() => {
+                    alert('Article link copied to clipboard!');
+                }).catch(() => {
+                    // Final fallback
+                    prompt('Copy this link to share:', shareData.url);
+                });
             }
-        }, 15000);
-        
-        document.head.appendChild(script);
-    });
-</script>
+        }
+
+        // Initialize page with enhanced error handling
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Loading journal configuration...');
+            
+            // Load configuration from Google Script with cache busting
+            const script = document.createElement('script');
+            script.src = `${GOOGLE_SCRIPT_URL}?_=${Date.now()}`;
+            
+            script.onload = function() {
+                console.log('Configuration script loaded, waiting for data...');
+                waitForConfig(() => {
+                    console.log('Configuration loaded successfully');
+                    loadIssue();
+                });
+            };
+            
+            script.onerror = function() {
+                console.error('Failed to load configuration script');
+                showError('Failed to load journal data. Please check your internet connection and try refreshing the page.');
+            };
+            
+            // Add timeout for script loading
+            setTimeout(() => {
+                if (typeof journalIssues === 'undefined') {
+                    console.error('Configuration loading timeout');
+                    showError('Configuration loading timed out. Please check your Google Script URL and try again.');
+                }
+            }, 15000);
+            
+            document.head.appendChild(script);
+        });
+    </script>
 </body>
 </html>
