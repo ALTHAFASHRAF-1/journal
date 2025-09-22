@@ -37,6 +37,45 @@
             line-height: 1.7;
         }
         
+        .article-content h2 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: #2d3748;
+        }
+        
+        .article-content h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+            color: #4a5568;
+        }
+        
+        .citation-box {
+            background: #f7fafc;
+            border-left: 4px solid #4299e1;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-style: italic;
+        }
+        
+        .hadith-quote {
+            background: #f8fafc;
+            border-left: 4px solid #22c55e;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .quranic-verse {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+        
         .logo-container {
             display: flex;
             align-items: center;
@@ -67,39 +106,6 @@
             font-weight: 400;
         }
         
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #3498db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .loading-overlay {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 50vh;
-            flex-direction: column;
-            gap: 1rem;
-        }
-        
-        .error-message {
-            color: #ef4444;
-            text-align: center;
-            padding: 2rem;
-            background: #fef2f2;
-            border-radius: 8px;
-            margin: 2rem;
-        }
-
         .pdf-modal {
             display: none;
             position: fixed;
@@ -131,7 +137,7 @@
             color: white;
             padding: 1rem;
             display: flex;
-            justify-content: space-between;
+            justify-content: between;
             align-items: center;
             border-radius: 8px 8px 0 0;
         }
@@ -215,6 +221,118 @@
             display: flex;
         }
         
+        .fallback-content {
+            max-width: 400px;
+        }
+        
+        .fallback-icon {
+            font-size: 4rem;
+            color: #9ca3af;
+            margin-bottom: 1rem;
+        }
+        
+        .fallback-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        
+        .fallback-description {
+            color: #6b7280;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .download-button {
+            background: #3b82f6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        
+        .download-button:hover {
+            background: #2563eb;
+        }
+        
+        .author-info {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .article-metadata {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .keyword-tag {
+            background: #ebf8ff;
+            color: #2b6cb0;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .arabic-text {
+            font-family: 'Traditional Arabic', 'Al Bayan', 'Geeza Pro', serif;
+            font-size: 1.1em;
+            direction: rtl;
+            text-align: right;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-overlay {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50vh;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .error-message {
+            color: #ef4444;
+            text-align: center;
+            padding: 2rem;
+            background: #fef2f2;
+            border-radius: 8px;
+            margin: 2rem;
+        }
+        
+        /* Mobile Responsive */
         @media (max-width: 768px) {
             .logo-image {
                 height: 32px;
@@ -229,6 +347,32 @@
                 width: 98%;
                 height: 98%;
                 margin-top: 1%;
+            }
+            .pdf-title {
+                font-size: 0.875rem;
+            }
+            .pdf-button {
+                padding: 0.375rem;
+                font-size: 0.75rem;
+            }
+            .pdf-controls {
+                gap: 0.25rem;
+            }
+            .pdf-header {
+                padding: 0.75rem;
+            }
+            .fallback-icon {
+                font-size: 3rem;
+            }
+            .fallback-title {
+                font-size: 1.25rem;
+            }
+        }
+        
+        /* iOS Safari specific fixes */
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
+            .pdf-iframe {
+                -webkit-overflow-scrolling: touch;
             }
         }
     </style>
@@ -256,7 +400,7 @@
                     <a href="index.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Home</a>
                     <a href="index.html#featured" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Current Issue</a>
                     <a href="index.html#publications" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Archives</a>
-                    <a href="issues.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">All Issues</a>
+                    <a href="all-issues.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">All Issues</a>
                 </div>
             </div>
         </div>
@@ -288,65 +432,66 @@
                     </h1>
                     
                     <!-- Author Information -->
-                    <div class="bg-gray-50 rounded-lg p-6 mb-6">
-                        <h3 class="text-lg font-semibold mb-4">Author Information</h3>
-                        <div id="author-container" class="space-y-4">
+                    <div class="author-info">
+                        <h3 class="text-lg font-semibold mb-2">Author</h3>
+                        <div id="author-container" class="space-y-2">
                             <!-- Authors will be populated by JavaScript -->
                         </div>
                     </div>
                     
                     <!-- Article Metadata -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+                    <div class="article-metadata">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                             <div>
                                 <span class="font-semibold text-gray-700">Published:</span>
-                                <span id="published-date" class="text-gray-600 ml-2">Loading...</span>
+                                <span id="published-date" class="text-gray-600">Loading...</span>
                             </div>
                             <div>
                                 <span class="font-semibold text-gray-700">Pages:</span>
-                                <span id="page-range" class="text-gray-600 ml-2">Loading...</span>
+                                <span id="page-range" class="text-gray-600">Loading...</span>
                             </div>
                             <div>
                                 <span class="font-semibold text-gray-700">Volume:</span>
-                                <span id="volume-info" class="text-gray-600 ml-2">Loading...</span>
+                                <span id="volume-info" class="text-gray-600">Loading...</span>
                             </div>
                             <div>
                                 <span class="font-semibold text-gray-700">ISSN:</span>
-                                <span id="issn-number" class="text-gray-600 ml-2">Loading...</span>
+                                <span id="issn-number" class="text-gray-600">Loading...</span>
                             </div>
                             <div class="md:col-span-2">
                                 <div class="flex items-center gap-2">
-                                    <span class="font-semibold text-gray-700">PDF:</span>
+                                    <span class="font-semibold text-gray-700 mr-2">PDF:</span>
                                     <button onclick="openPDF()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors">
                                         <i class="fas fa-file-pdf mr-1"></i>
                                         VIEW FULL PDF
                                     </button>
+                                    <a id="direct-pdf-link" href="#" style="display: none;"></a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Keywords -->
-                    <div id="keywords-container" class="mb-6">
+                    <div id="keywords-container" class="keywords">
                         <!-- Keywords will be populated by JavaScript -->
                     </div>
                     
                     <!-- Article Content -->
-                    <div class="article-content">
+                    <div class="article-content mt-8">
+                        
                         <!-- Abstract -->
                         <section class="mb-8">
-                            <h2 class="text-2xl font-semibold academic-title text-gray-900 mb-4">Abstract</h2>
-                            <div class="bg-gray-50 rounded-lg p-6">
-                                <p id="abstract-content" class="text-gray-700 leading-relaxed">Loading abstract...</p>
-                            </div>
+                            <h2>Abstract</h2>
+                            <p id="abstract-content">Loading abstract...</p>
                         </section>
+                        
                     </div>
                 </div>
             </article>
         </div>
     </main>
 
-    <!-- PDF Modal -->
+    <!-- Enhanced PDF Modal -->
     <div id="pdfModal" class="pdf-modal">
         <div class="pdf-modal-content">
             <div class="pdf-header">
@@ -354,15 +499,15 @@
                 <div class="pdf-controls">
                     <button class="pdf-button" onclick="refreshPDF()" title="Refresh PDF">
                         <i class="fas fa-sync-alt"></i>
-                        <span class="hidden sm:inline ml-1">Refresh</span>
+                        <span class="hidden sm:inline">Refresh</span>
                     </button>
                     <button class="pdf-button" onclick="openInNewTab()" title="Open in New Tab">
                         <i class="fas fa-external-link-alt"></i>
-                        <span class="hidden sm:inline ml-1">New Tab</span>
+                        <span class="hidden sm:inline">New Tab</span>
                     </button>
                     <a id="modal-download-link" href="#" download class="pdf-button" title="Download PDF">
                         <i class="fas fa-download"></i>
-                        <span class="hidden sm:inline ml-1">Download</span>
+                        <span class="hidden sm:inline">Download</span>
                     </a>
                     <button class="pdf-close" onclick="closePDF()" title="Close">
                         <i class="fas fa-times"></i>
@@ -372,15 +517,15 @@
             <div class="pdf-viewer-container">
                 <iframe id="pdfFrame" class="pdf-iframe" src=""></iframe>
                 <div id="pdfFallback" class="pdf-fallback">
-                    <div class="text-center">
-                        <div class="text-4xl text-gray-400 mb-4">
+                    <div class="fallback-content">
+                        <div class="fallback-icon">
                             <i class="fas fa-file-pdf"></i>
                         </div>
-                        <div class="text-xl font-semibold text-gray-700 mb-2">PDF Viewer Not Supported</div>
-                        <div class="text-gray-600 mb-6 max-w-md">
+                        <div class="fallback-title">PDF Viewer Not Supported</div>
+                        <div class="fallback-description">
                             Your browser doesn't support embedded PDF viewing. Please download the file to view it on your device.
                         </div>
-                        <a id="fallback-download-link" href="#" download class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg inline-flex items-center gap-2 transition-colors">
+                        <a id="fallback-download-link" href="#" download class="download-button">
                             <i class="fas fa-download"></i>
                             Download PDF
                         </a>
@@ -444,232 +589,9 @@
         </div>
     </footer>
 
-    <script>
-        // Global variables
-        let currentArticleId = null;
-        let currentPdfUrl = null;
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6rOB2NKSsKC64QFh6vKqu7As5wszni2i7D__Q9dZGwSu6dE-Pm3l0y6--Qv_3iD9D6A/exec';
-
-        // Get article ID from URL parameter
-        function getArticleIdFromUrl() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('id'); // Keep as string to match your data
-        }
-
-        // Wait for articles data to load
-        function waitForArticlesData(callback, maxAttempts = 15, currentAttempt = 0) {
-            if (typeof articlesData !== 'undefined') {
-                callback();
-            } else if (currentAttempt < maxAttempts) {
-                setTimeout(() => {
-                    waitForArticlesData(callback, maxAttempts, currentAttempt + 1);
-                }, 500);
-            } else {
-                showError();
-            }
-        }
-
-        // Load article data
-        function loadArticle(articleId) {
-            const article = articlesData[articleId];
-            
-            if (!article) {
-                showError();
-                return;
-            }
-
-            currentArticleId = articleId;
-            currentPdfUrl = article.pdfUrl;
-            
-            // Update page title
-            document.getElementById('page-title').textContent = `${article.title} - Islamic Insight Journal`;
-            
-            // Update article title
-            document.getElementById('article-title').textContent = article.title;
-            
-            // Update modal title
-            document.getElementById('modal-pdf-title').textContent = article.title;
-            
-            // Update authors
-            const authorContainer = document.getElementById('author-container');
-            authorContainer.innerHTML = '';
-            
-            article.authors.forEach(author => {
-                const authorDiv = document.createElement('div');
-                authorDiv.className = 'bg-white rounded-lg p-4 border border-gray-200';
-                authorDiv.innerHTML = `
-                    <p class="text-gray-900 font-semibold text-lg">${escapeHtml(author.name)}</p>
-                    <p class="text-gray-600 mb-2">${escapeHtml(author.position)}</p>
-                    <p class="text-blue-600 text-sm">
-                        <i class="fas fa-envelope mr-1"></i>${escapeHtml(author.email)}
-                    </p>
-                `;
-                authorContainer.appendChild(authorDiv);
-            });
-            
-            // Update metadata
-            document.getElementById('published-date').textContent = formatDate(article.publishedDate);
-            document.getElementById('page-range').textContent = article.pages;
-            document.getElementById('volume-info').textContent = article.volume;
-            document.getElementById('issn-number').textContent = article.issn;
-            
-            // Update PDF links
-            document.getElementById('modal-download-link').href = article.pdfUrl;
-            document.getElementById('fallback-download-link').href = article.pdfUrl;
-            
-            // Update keywords
-            const keywordsContainer = document.getElementById('keywords-container');
-            if (article.keywords.length > 0) {
-                keywordsContainer.innerHTML = `
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Keywords</h3>
-                    <div class="flex flex-wrap gap-2">
-                        ${article.keywords.map(keyword => 
-                            `<span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full font-medium">${escapeHtml(keyword)}</span>`
-                        ).join('')}
-                    </div>
-                `;
-            } else {
-                keywordsContainer.innerHTML = '';
-            }
-            
-            // Update abstract
-            document.getElementById('abstract-content').textContent = article.abstract;
-            
-            // Show article and hide loading
-            document.getElementById('loading-state').style.display = 'none';
-            document.getElementById('article-container').style.display = 'block';
-        }
-
-        // Show error state
-        function showError() {
-            document.getElementById('loading-state').style.display = 'none';
-            document.getElementById('error-state').style.display = 'block';
-        }
-
-        // Format date
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-        }
-
-        // Escape HTML to prevent XSS
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // PDF Modal Functions
-        function openPDF() {
-            if (!currentPdfUrl) {
-                alert('PDF not available for this article.');
-                return;
-            }
-            
-            const modal = document.getElementById('pdfModal');
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            
-            loadPDFInIframe();
-        }
-
-        function loadPDFInIframe() {
-            const iframe = document.getElementById('pdfFrame');
-            const fallback = document.getElementById('pdfFallback');
-            
-            // Show iframe, hide fallback
-            iframe.style.display = 'block';
-            fallback.classList.remove('active');
-            
-            // Load PDF
-            iframe.src = currentPdfUrl;
-            
-            // Handle load errors
-            iframe.onerror = function() {
-                showFallback();
-            };
-            
-            // Fallback for unsupported browsers
-            setTimeout(() => {
-                try {
-                    if (!iframe.contentDocument && !iframe.contentWindow.document) {
-                        showFallback();
-                    }
-                } catch (e) {
-                    // Cross-origin error means PDF is loading
-                }
-            }, 3000);
-        }
-
-        function showFallback() {
-            const iframe = document.getElementById('pdfFrame');
-            const fallback = document.getElementById('pdfFallback');
-            
-            iframe.style.display = 'none';
-            fallback.classList.add('active');
-        }
-
-        function refreshPDF() {
-            loadPDFInIframe();
-        }
-
-        function openInNewTab() {
-            if (currentPdfUrl) {
-                window.open(currentPdfUrl, '_blank');
-            }
-        }
-
-        function closePDF() {
-            const modal = document.getElementById('pdfModal');
-            const iframe = document.getElementById('pdfFrame');
-            const fallback = document.getElementById('pdfFallback');
-            
-            modal.style.display = 'none';
-            iframe.src = '';
-            fallback.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        // Initialize article page
-        function initializeArticlePage() {
-            const articleId = getArticleIdFromUrl();
-            
-            if (articleId && typeof articlesData !== 'undefined' && articlesData[articleId]) {
-                loadArticle(articleId);
-            } else {
-                showError();
-            }
-        }
-
-        // Close modal events
-        window.onclick = function(event) {
-            const modal = document.getElementById('pdfModal');
-            if (event.target == modal) {
-                closePDF();
-            }
-        }
-
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closePDF();
-            }
-        });
-
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            // Load articles configuration from Google Script
-            const script = document.createElement('script');
-            script.src = `${GOOGLE_SCRIPT_URL}?action=getArticlesConfig&_=${Date.now()}`;
-            script.onload = function() {
-                waitForArticlesData(() => {
-                    initializeArticlePage();
-                });
-            };
-            script.onerror = function() {
-                showError();
-            };
-            document.head.appendChild(script);
-        });
-    </script>
+    <!-- Include the articles data -->
+    <script src="articles-data.js"></script>
+    <!-- Include the main article script -->
+    <script src="article-script.js"></script>
 </body>
 </html>
