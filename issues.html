@@ -54,12 +54,26 @@ to { opacity: 1; transform: translateY(0); }
 .article-card {
 transition: all 0.3s ease;
 border-left: 4px solid transparent;
+display: flex;
+gap: 1.5rem;
+align-items: flex-start;
 }
 
 .article-card:hover {
 transform: translateY(-2px);
 box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 border-left-color: #3b82f6;
+}
+
+.article-card-image {
+flex-shrink: 0;
+width: 220px;
+height: 140px;
+}
+
+.article-card-content {
+flex: 1;
+min-width: 0;
 }
 
 .logo-container {
@@ -253,7 +267,7 @@ border-radius: 0.5rem 0.5rem 0 0;
 /* Responsive Layout */
 .main-layout {
 display: grid;
-grid-template-columns: 1fr 300px;
+grid-template-columns: 1fr 250px;
 gap: 2rem;
 align-items: start;
 }
@@ -266,6 +280,21 @@ gap: 1.5rem;
 
 .journal-sidebar {
 order: -1;
+}
+
+/* Reset article cards to vertical on mobile */
+.article-card {
+display: block;
+}
+
+.article-card-image {
+width: 100%;
+height: 200px;
+margin-bottom: 1rem;
+}
+
+.article-card-content {
+min-width: auto;
 }
 }
 
@@ -286,7 +315,7 @@ overflow: hidden;
 
 .journal-cover {
 width: 100%;
-height: 300px;
+height: 250px;
 object-fit: cover;
 }
 
@@ -385,6 +414,10 @@ margin-bottom: 2rem;
 .journal-info-card .p-6 {
 padding: 1rem;
 }
+
+.journal-cover {
+height: 200px;
+}
 }
 
 @media (max-width: 640px) {
@@ -402,11 +435,6 @@ gap: 1rem;
 
 .journal-sidebar {
 margin-bottom: 1.5rem;
-}
-
-#articlesGrid {
-grid-template-columns: 1fr !important;
-gap: 1rem;
 }
 }
 
@@ -427,6 +455,10 @@ padding: 1rem;
 font-size: 1.125rem;
 line-height: 1.4;
 }
+
+.journal-cover {
+height: 180px;
+}
 }
 
 /* Print styles */
@@ -434,6 +466,21 @@ line-height: 1.4;
 .no-print {
 display: none !important;
 }
+}
+
+/* Utility classes for text truncation */
+.line-clamp-2 {
+display: -webkit-box;
+-webkit-line-clamp: 2;
+-webkit-box-orient: vertical;
+overflow: hidden;
+}
+
+.line-clamp-3 {
+display: -webkit-box;
+-webkit-line-clamp: 3;
+-webkit-box-orient: vertical;
+overflow: hidden;
 }
 </style>
 
@@ -562,9 +609,9 @@ Retry
 </button>
 </div>
 
-<!-- 75/25 Layout -->
+<!-- 80/20 Layout -->
 <div class="main-layout" id="main-content" style="display: none;">
-<!-- Articles Section (75%) -->
+<!-- Articles Section (80%) -->
 <section class="articles-section">
 <div class="flex justify-between items-center mb-8">
 <h3 class="text-2xl font-bold text-gray-900">Articles in This Issue</h3>
@@ -573,61 +620,79 @@ Retry
 </div>
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6" id="articlesGrid">
+<!-- Single column layout for landscape style articles -->
+<div class="space-y-6" id="articlesGrid">
 <!-- Articles will be populated by JavaScript -->
+<!-- Example article card structure for reference:
+<article class="article-card bg-white rounded-lg shadow-sm hover:shadow-md p-6">
+<img src="article-image.jpg" alt="Article Title" class="article-card-image rounded-lg object-cover">
+<div class="article-card-content">
+<h3 class="text-xl font-semibold academic-title text-gray-900 mb-3 line-clamp-2">Article Title</h3>
+<p class="text-gray-600 text-sm mb-3 line-clamp-3">Article abstract or description...</p>
+<div class="flex items-center text-sm text-gray-500 mb-4">
+<i class="fas fa-user mr-2"></i>
+<span>Author Names</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs text-gray-400">Pages 1-20</span>
+<a href="article-url" class="text-blue-600 hover:text-blue-800 font-medium text-sm">Read Article</a>
+</div>
+</div>
+</article>
+-->
 </div>
 </section>
 
-<!-- Journal Information Sidebar (25%) -->
+<!-- Journal Information Sidebar (20%) -->
 <aside class="journal-sidebar">
 <div class="journal-info-card">
 <img src="" alt="Journal Cover" class="journal-cover">
 
-<div class="p-6">
-<h3 class="text-xl font-semibold academic-title text-gray-900 mb-4">
+<div class="p-5">
+<h3 class="text-lg font-semibold academic-title text-gray-900 mb-4">
 Journal Information
 </h3>
 
 <div class="space-y-3 text-sm text-gray-600">
 <div class="flex items-center">
-<i class="fas fa-calendar-alt mr-3 text-blue-600"></i>
+<i class="fas fa-calendar-alt mr-2 text-blue-600 text-xs"></i>
 <span><strong>Published:</strong> <span data-field="published">Loading...</span></span>
 </div>
 
 <div class="flex items-center">
-<i class="fas fa-bookmark mr-3 text-blue-600"></i>
+<i class="fas fa-bookmark mr-2 text-blue-600 text-xs"></i>
 <span><strong>Volume:</strong> <span data-field="volume">Loading...</span></span>
 </div>
 
 <div class="flex items-center">
-<i class="fas fa-language mr-3 text-blue-600"></i>
+<i class="fas fa-language mr-2 text-blue-600 text-xs"></i>
 <span><strong>Languages:</strong> English, Arabic</span>
 </div>
 
 <div class="flex items-center">
-<i class="fas fa-eye mr-3 text-blue-600"></i>
+<i class="fas fa-eye mr-2 text-blue-600 text-xs"></i>
 <span><strong>Open Access</strong></span>
 </div>
 
 <div class="flex items-center">
-<i class="fas fa-certificate mr-3 text-blue-600"></i>
+<i class="fas fa-certificate mr-2 text-blue-600 text-xs"></i>
 <span><strong>Peer Reviewed</strong></span>
 </div>
 </div>
 
-<div class="mt-6 pt-4 border-t border-gray-200">
-<p class="text-sm text-gray-700 leading-relaxed">
+<div class="mt-5 pt-4 border-t border-gray-200">
+<p class="text-xs text-gray-700 leading-relaxed">
 Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual platform for disseminating exceptional academic research on Islam and the Muslim world.
 </p>
 </div>
 
 <!-- Issue Navigation -->
-<div class="mt-6 flex flex-wrap gap-2">
-<button id="prev-issue-btn" class="bg-white hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium transition-colors flex-1">
-<i class="fas fa-chevron-left mr-2"></i>Previous Issue
+<div class="mt-5 flex flex-col gap-2">
+<button id="prev-issue-btn" class="bg-white hover:bg-gray-50 text-gray-700 px-3 py-2 rounded-lg border border-gray-300 text-xs font-medium transition-colors">
+<i class="fas fa-chevron-left mr-1"></i>Previous Issue
 </button>
-<button id="next-issue-btn" class="bg-white hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium transition-colors flex-1">
-Next Issue<i class="fas fa-chevron-right ml-2"></i>
+<button id="next-issue-btn" class="bg-white hover:bg-gray-50 text-gray-700 px-3 py-2 rounded-lg border border-gray-300 text-xs font-medium transition-colors">
+Next Issue<i class="fas fa-chevron-right ml-1"></i>
 </button>
 </div>
 </div>
