@@ -919,7 +919,6 @@ View Articles <i class="fas fa-arrow-right ml-2"></i>
 </div>
 
 <script>
-
 // Additional publications for the Publications section (without images)
 const publications = [
 {
@@ -932,15 +931,9 @@ volume: "Vol. 8, No 1",
 pages: "",
 doi: "",
 categories: ["Announcement"],
-abstract: "We are pleased to invite original research articles for the upcoming issue of Islamic Insight, a biannual peer-reviewed journal published by the Kulliyyah of Qur'an and Sunnah, Darul Huda Islamic University, Kerala, India. Islamic Insight welcomes high-quality, interdisciplinary research in areas related to Islamic revealed knowledge and the Muslim world. This includes-but is not limited to- studies in the Noble Qur'an, Hadith, Islamic Theology, Islamic Social Sciences, and Muslim History and Culture. Unique and relevant contributions beyond the prescribed disciplines are also encouraged. All submissions will undergo a double-blind peer review process. Send your manuscripts by mid-June 2025 for consideration in Vol. 8, No. 1 (2025).",
+abstract: "We are pleased to invite original research articles for the upcoming issue of Islamic Insight, a biannual peer-reviewed journal published by the Kulliyyah of Qur'an and Sunnah, Darul Huda Islamic University, Kerala, India.",
 keywords: ["For submission: islamicinsight@dhiu.in"],
-fullContent: `
-                   <h2>Call For Papers</h2>
-                   <p>We are pleased to invite original research articles for the upcoming issue of Islamic Insight, a biannual peer-reviewed journal published by the Kulliyyah of Qur'an and Sunnah, Darul Huda Islamic University, Kerala, India. Islamic Insight welcomes high-quality, interdisciplinary research in areas related to Islamic revealed knowledge and the Muslim world. This includes-but is not limited to- studies in the Noble Qur'an, Hadith, Islamic Theology, Islamic Social Sciences, and Muslim History and Culture. Unique and relevant contributions beyond the prescribed disciplines are also encouraged. All submissions will undergo a double-blind peer review process. Send your manuscripts by mid-June 2025 for consideration in Vol. 8, No. 1 (2025).</p>
-                   <p>For submission:</p>
-                   <a style="color:blue" href="islamicinsight@dhiu.in">islamicinsight@dhiu.in</a>
-                   
-               `
+redirectToCallForPapers: true // Flag to indicate this should redirect to call-for-papers.html
 },
 ];
 
@@ -1213,7 +1206,7 @@ function displayMobileSearchResults(results, query) {
     mobileSearchResults.classList.remove('hidden');
 }
 
-// New function to handle article clicks with redirect logic
+// Updated function to handle article clicks with redirect logic
 function handleArticleClick(articleId) {
     const article = allArticles.find(a => a.id === articleId);
     if (!article) return;
@@ -1221,10 +1214,72 @@ function handleArticleClick(articleId) {
     // Check if this article should redirect to index1.html (current issue)
     if (article.redirectToIndex1) {
         location.href = 'https://dqdhiu.netlify.app/issues?issue=issue5';
-    } else {
-        // Open in modal for other articles (like Call for Papers)
+    } 
+    // Check if this article should redirect to call-for-papers.html
+    else if (article.redirectToCallForPapers) {
+        location.href = 'call-for-papers.html';
+    } 
+    else {
+        // Open in modal for other articles
         openArticle(articleId);
     }
+}
+
+// Updated openArticle function to handle redirects
+function openArticle(articleId) {
+    const article = allArticles.find(a => a.id === articleId);
+    if (!article) return;
+
+    // Handle redirects
+    if (article.redirectToIndex1) {
+        location.href = 'https://dqdhiu.netlify.app/issues?issue=issue5';
+        return;
+    }
+    
+    if (article.redirectToCallForPapers) {
+        location.href = 'call-for-papers.html';
+        return;
+    }
+
+    // Rest of the existing modal code for other articles...
+    let imageHtml = '';
+    if (article.imageUrl) {
+    imageHtml = `
+        <div class="mb-6">
+            <img src="${article.imageUrl}" alt="${article.title}" class="w-full rounded-lg shadow-sm">
+        </div>
+    `;
+    }
+
+    modalContent.innerHTML = `
+        ${imageHtml}
+        <div class="mb-6">
+            <div class="mb-4">
+                ${article.categories.map(category => `<span class="badge badge-blue">${category}</span>`).join('')}
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-bold academic-title text-gray-900 mb-4">
+                ${article.title}
+            </h1>
+            <div class="text-gray-600 mb-4">
+                <p class="font-medium">${article.authors}</p>
+                <p class="text-sm">${article.journal}, ${article.volume}, ${article.pages} <i class="far fa-calendar-alt"></i> ${article.date}</p>
+            </div>
+            <div class="flex flex-wrap gap-2 mb-6">
+                ${article.keywords.map(keyword => `<span class="text-xs bg-gray-100 text-gray-600 rounded-full px-2 py-1">${keyword}</span>`).join('')}
+            </div>
+        </div>
+        <div class="article-content prose max-w-none">
+            ${article.fullContent}
+        </div>
+    `;
+
+    articleModal.classList.remove('hidden');
+    navbarSearchResults.classList.add('hidden');
+    mobileSearchResults.classList.add('hidden');
+
+    // Reset search states
+    if (isDesktopSearchExpanded) toggleNavbarSearch();
+    if (isMobileSearchExpanded) toggleMobileSearch();
 }
 
 // Highlight search terms in results
@@ -1232,51 +1287,6 @@ function highlightSearchTerm(text, query) {
     if (!query) return text;
     const regex = new RegExp(`(${query})`, 'gi');
     return text.replace(regex, '<mark class="bg-yellow-200 px-1 rounded">$1</mark>');
-}
-
-// Open article in modal with enhanced functionality (for non-redirecting articles)
-function openArticle(articleId) {
-const article = allArticles.find(a => a.id === articleId);
-if (!article) return;
-
-let imageHtml = '';
-if (article.imageUrl) {
-imageHtml = `
-    <div class="mb-6">
-        <img src="${article.imageUrl}" alt="${article.title}" class="w-full rounded-lg shadow-sm">
-    </div>
-`;
-}
-
-modalContent.innerHTML = `
-    ${imageHtml}
-    <div class="mb-6">
-        <div class="mb-4">
-            ${article.categories.map(category => `<span class="badge badge-blue">${category}</span>`).join('')}
-        </div>
-        <h1 class="text-2xl sm:text-3xl font-bold academic-title text-gray-900 mb-4">
-            ${article.title}
-        </h1>
-        <div class="text-gray-600 mb-4">
-            <p class="font-medium">${article.authors}</p>
-            <p class="text-sm">${article.journal}, ${article.volume}, ${article.pages} <i class="far fa-calendar-alt"></i> ${article.date}</p>
-        </div>
-        <div class="flex flex-wrap gap-2 mb-6">
-            ${article.keywords.map(keyword => `<span class="text-xs bg-gray-100 text-gray-600 rounded-full px-2 py-1">${keyword}</span>`).join('')}
-        </div>
-    </div>
-    <div class="article-content prose max-w-none">
-        ${article.fullContent}
-    </div>
-`;
-
-articleModal.classList.remove('hidden');
-navbarSearchResults.classList.add('hidden');
-mobileSearchResults.classList.add('hidden');
-
-// Reset search states
-if (isDesktopSearchExpanded) toggleNavbarSearch();
-if (isMobileSearchExpanded) toggleMobileSearch();
 }
 
 // Close article modal
