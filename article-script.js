@@ -81,7 +81,7 @@ function updateArticleDisplay(article) {
     // Handle both old and new author format
     const authors = article.authors || (article.author ? [{
         name: article.author,
-        position: "Author",
+        position: "Research Scholar",
         email: "author@example.com"
     }] : []);
     
