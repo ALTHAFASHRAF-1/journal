@@ -64,26 +64,6 @@ async function loadArticle(articleId) {
     updateArticleDisplay(article);
 }
 
-// Add this function to parse simple format
-function parseAuthors(authorString) {
-    if (!authorString) return [];
-    
-    // Try to parse as JSON first
-    try {
-        return JSON.parse(authorString);
-    } catch (e) {
-        // Fallback to delimiter format
-        return authorString.split(';').map(authorStr => {
-            const parts = authorStr.split('|');
-            return {
-                name: parts[0]?.trim() || 'Unknown Author',
-                position: parts[1]?.trim() || 'Author',
-                email: parts[2]?.trim() || 'N/A'
-            };
-        });
-    }
-}
-
 function updateArticleDisplay(article) {
     // Update page title
     document.title = `${article.title} - Islamic Insight Journal`;
@@ -94,26 +74,27 @@ function updateArticleDisplay(article) {
     // Update modal title
     document.getElementById('modal-pdf-title').textContent = article.title;
     
-    // Update authors with parsing
+    // Update authors
     const authorContainer = document.getElementById('author-container');
     authorContainer.innerHTML = '';
     
-    const authors = parseAuthors(article.authors || article.author);
+    // Handle both old and new author format
+    const authors = article.authors || (article.author ? [{
+        name: article.author,
+        position: "Author",
+        email: "author@example.com"
+    }] : []);
     
-    if (authors.length === 0) {
-        authorContainer.innerHTML = '<p class="text-gray-500">Author information not available</p>';
-    } else {
-        authors.forEach(author => {
-            const authorDiv = document.createElement('div');
-            authorDiv.className = 'mb-3';
-            authorDiv.innerHTML = `
-                <p class="text-gray-700 font-medium">${author.name}</p>
-                <p class="text-sm text-gray-600">${author.position || 'Author'}</p>
-                <p class="text-sm text-gray-500">Email: ${author.email || 'N/A'}</p>
-            `;
-            authorContainer.appendChild(authorDiv);
-        });
-    }
+    authors.forEach(author => {
+        const authorDiv = document.createElement('div');
+        authorDiv.className = 'mb-3';
+        authorDiv.innerHTML = `
+            <p class="text-gray-700 font-medium">${author.name}</p>
+            <p class="text-sm text-gray-600">${author.position || 'Author'}</p>
+            <p class="text-sm text-gray-500">Email: ${author.email || 'N/A'}</p>
+        `;
+        authorContainer.appendChild(authorDiv);
+    });
     
     // Update metadata
     document.getElementById('published-date').textContent = article.publishedDate || article.date || 'Not specified';
