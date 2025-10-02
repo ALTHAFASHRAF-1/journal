@@ -248,7 +248,7 @@ background: #f8fafc;
 }
 }
 
-/* Current Issue Image Styles - Exactly matching index.html */
+/* Current Issue Image Styles */
 .current-issue-image-container {
     width: 100%;
     height: 280px;
@@ -267,7 +267,7 @@ background: #f8fafc;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Mobile Responsive - Exactly matching index.html */
+/* Mobile Responsive */
 @media (max-width: 1024px) {
     .current-issue-image-container {
         height: 200px;
@@ -472,7 +472,7 @@ background: #f8fafc;
     flex-direction: column;
 }
 
-/* Updated Hero Section with Banner Background - Same Dimensions as Original */
+/* Updated Hero Section with Banner Background */
 .hero-section {
     color: white;
     padding: 2rem 0;
@@ -507,7 +507,6 @@ background: #f8fafc;
     left: 0;
     width: 100%;
     height: 100%;
-  /*  background: rgba(30, 58, 138, 0.6);  */
     z-index: -1;
 }
 
@@ -849,7 +848,7 @@ async function fetchIssues() {
     }
 }
 
-// Process the raw data from Google Sheets
+// Process the raw data from Google Sheets - Only use issue-related columns
 function processIssuesData(rawData) {
     // Filter to get only unique issues (group by issue_id)
     const uniqueIssues = {};
@@ -860,7 +859,7 @@ function processIssuesData(rawData) {
         }
     });
     
-    // Convert to array and process each issue
+    // Convert to array and process each issue using only issue-related columns
     return Object.values(uniqueIssues).map(item => {
         // Generate categories based on issue date
         const issueDate = new Date(item.issue_published_date);
@@ -880,23 +879,18 @@ function processIssuesData(rawData) {
             categories.push("First Issue");
         }
         
-        // Generate redirect URL based on issue_id
-        const redirectUrl = `https://dqdhiu.netlify.app/issues?issue=issue${item.issue_id}`;
-        
+        // Use only the issue-related columns
         return {
             id: item.issue_id,
             title: item.issue_title,
-            authors: "",
-            journal: "Islamic Insight",
-            date: item.issue_published_date,
             volume: item.volume,
-            pages: "",
-            doi: "",
+            number: item.number,
+            year: item.year,
+            date: item.issue_published_date,
             categories: categories,
             abstract: item.issue_abstract || "Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world.",
-            keywords: [],
             imageUrl: item.issue_cover_image,
-            redirectUrl: redirectUrl
+            redirectUrl: item.redirectUrl
         };
     }).sort((a, b) => b.id - a.id); // Sort by ID descending (newest first)
 }
@@ -924,7 +918,7 @@ function hideError() {
     errorMessage.classList.add('hidden');
 }
 
-// Render all issues in horizontal layout (like current issue)
+// Render all issues in horizontal layout
 function renderAllIssues() {
     issuesGrid.innerHTML = '';
     
@@ -945,7 +939,7 @@ function renderAllIssues() {
     });
 }
 
-// Create issue card with horizontal layout (same as current issue design)
+// Create issue card with horizontal layout
 function createIssueCard(issue) {
     const div = document.createElement('div');
     div.className = 'bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden current-issue-card';
@@ -1145,7 +1139,6 @@ function handleNavbarSearch() {
     const filteredIssues = allIssues.filter(issue => {
         return issue.title.toLowerCase().includes(query) ||
             issue.abstract.toLowerCase().includes(query) ||
-            issue.keywords.some(keyword => keyword.toLowerCase().includes(query)) ||
             issue.categories.some(category => category.toLowerCase().includes(query)) ||
             issue.volume.toLowerCase().includes(query);
     });
@@ -1190,7 +1183,6 @@ function handleMobileSearch() {
     const filteredIssues = allIssues.filter(issue => {
         return issue.title.toLowerCase().includes(query) ||
             issue.abstract.toLowerCase().includes(query) ||
-            issue.keywords.some(keyword => keyword.toLowerCase().includes(query)) ||
             issue.categories.some(category => category.toLowerCase().includes(query)) ||
             issue.volume.toLowerCase().includes(query);
     });
