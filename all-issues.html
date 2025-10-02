@@ -601,6 +601,30 @@ background: #f8fafc;
 .retry-btn:hover {
     background: #2563eb;
 }
+
+/* Debug info styles */
+.debug-info {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 1rem 0;
+    font-family: monospace;
+    font-size: 0.875rem;
+    color: #495057;
+}
+
+.debug-info.error {
+    background: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+.debug-info.success {
+    background: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
         
 /* Enhanced Responsive Typography */
 @media (max-width: 768px) {
@@ -738,6 +762,12 @@ Explore our complete collection of published journal issues
 </p>
 </div>
 
+<!-- Debug Information (will be hidden in production) -->
+<div id="debug-info" class="debug-info hidden">
+    <h4>Debug Information:</h4>
+    <div id="debug-content"></div>
+</div>
+
 <!-- Issues Grid -->
 <div class="space-y-6" id="issues-grid">
     <!-- Loading spinner will be shown here initially -->
@@ -808,16 +838,23 @@ Explore our complete collection of published journal issues
 // **IMPORTANT: Replace this with your actual Google Apps Script Web App URL**
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzrTbBUlx41l-zEbOXz1-KSBAGNjFRDvFNIvIgp-H_HiwklyPg6faRXg-MpO2kdDdw1/exec';
 
+// Debug mode (set to false for production)
+const DEBUG_MODE = true;
+
 // ================================
 // GLOBAL VARIABLES
 // ================================
 let allIssues = [];
 let isDataLoaded = false;
+let fetchAttempts = 0;
+const MAX_FETCH_ATTEMPTS = 3;
 
 // DOM Elements
 const issuesGrid = document.getElementById('issues-grid');
 const mobileMenuBtn = document.getElementById('mobile-menu-btn');
 const mobileMenu = document.getElementById('mobile-menu');
+const debugInfo = document.getElementById('debug-info');
+const debugContent = document.getElementById('debug-content');
 
 // Enhanced search elements
 const searchToggleBtn = document.getElementById('search-toggle-btn');
@@ -840,50 +877,136 @@ let isMobileSearchExpanded = false;
 // INITIALIZATION
 // ================================
 document.addEventListener('DOMContentLoaded', function() {
+    logDebug('DOM loaded, initializing application...');
     setupEventListeners();
     fetchIssuesFromGoogleSheets();
+    
+    if (DEBUG_MODE) {
+        debugInfo.classList.remove('hidden');
+    }
 });
+
+// ================================
+// DEBUG FUNCTIONS
+// ================================
+function logDebug(message, data = null) {
+    if (DEBUG_MODE) {
+        console.log(`[DEBUG] ${message}`, data || '');
+        updateDebugInfo(message, data);
+    }
+}
+
+function logError(message, error = null) {
+    console.error(`[ERROR] ${message}`, error || '');
+    if (DEBUG_MODE) {
+        updateDebugInfo(`ERROR: ${message}`, error, 'error');
+    }
+}
+
+function updateDebugInfo(message, data = null, type = 'info') {
+    if (!DEBUG_MODE || !debugContent) return;
+    
+    const timestamp = new Date().toLocaleTimeString();
+    const debugEntry = document.createElement('div');
+    debugEntry.className = `debug-entry ${type}`;
+    debugEntry.innerHTML = `
+        <strong>[${timestamp}]</strong> ${message}
+        ${data ? `<pre>${typeof data === 'object' ? JSON.stringify(data, null, 2) : data}</pre>` : ''}
+    `;
+    
+    debugContent.appendChild(debugEntry);
+    debugContent.scrollTop = debugContent.scrollHeight;
+    
+    // Update debug container class
+    debugInfo.className = `debug-info ${type}`;
+}
 
 // ================================
 // DATA FETCHING AND PROCESSING
 // ================================
 
 /**
- * Fetch issues data from Google Sheets via Apps Script
+ * Fetch issues data from Google Sheets via Apps Script with enhanced error handling
  */
 async function fetchIssuesFromGoogleSheets() {
+    fetchAttempts++;
+    logDebug(`Attempting to fetch data (attempt ${fetchAttempts}/${MAX_FETCH_ATTEMPTS})`);
+    
     try {
         showLoadingState();
+        
+        logDebug('Making request to Google Apps Script...', GOOGLE_SCRIPT_URL);
+        
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
         
         const response = await fetch(GOOGLE_SCRIPT_URL, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-            }
+                'Accept': 'application/json',
+            },
+            signal: controller.signal,
+            mode: 'cors',
+            cache: 'no-cache'
+        });
+
+        clearTimeout(timeoutId);
+        
+        logDebug('Response received', {
+            status: response.status,
+            statusText: response.statusText,
+            headers: Array.from(response.headers.entries())
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
-        const result = await response.json();
+        let result;
+        const contentType = response.headers.get('content-type');
+        
+        if (contentType && contentType.includes('application/json')) {
+            result = await response.json();
+        } else {
+            const text = await response.text();
+            logDebug('Received non-JSON response', text.substring(0, 500));
+            throw new Error('Invalid response format: Expected JSON but received text');
+        }
+        
+        logDebug('Parsed response', result);
         
         if (result.status === 'error') {
-            throw new Error(result.message || 'Failed to fetch data from Google Sheets');
+            throw new Error(result.message || 'Unknown error from Google Apps Script');
+        }
+
+        if (!result.data || !Array.isArray(result.data)) {
+            throw new Error('Invalid data format: Expected array of issues');
         }
 
         // Transform the data
-        allIssues = transformGoogleSheetsData(result.data || []);
+        allIssues = transformGoogleSheetsData(result.data);
         isDataLoaded = true;
+        
+        logDebug(`Successfully processed ${allIssues.length} issues`);
         
         // Render the issues
         renderAllIssues();
         
-        console.log('Successfully loaded', allIssues.length, 'issues from Google Sheets');
+        // Reset fetch attempts on success
+        fetchAttempts = 0;
         
     } catch (error) {
-        console.error('Error fetching data from Google Sheets:', error);
-        showErrorState(error.message);
+        logError('Failed to fetch data from Google Sheets', error);
+        
+        if (fetchAttempts < MAX_FETCH_ATTEMPTS) {
+            logDebug(`Retrying in 2 seconds... (${fetchAttempts}/${MAX_FETCH_ATTEMPTS})`);
+            setTimeout(() => {
+                fetchIssuesFromGoogleSheets();
+            }, 2000);
+        } else {
+            showErrorState(error.message);
+        }
     }
 }
 
@@ -891,11 +1014,34 @@ async function fetchIssuesFromGoogleSheets() {
  * Transform Google Sheets data to the format expected by the frontend
  */
 function transformGoogleSheetsData(sheetsData) {
-    const transformed = sheetsData.map(issue => {
+    logDebug('Transforming sheets data', sheetsData);
+    
+    if (!Array.isArray(sheetsData)) {
+        logError('Invalid sheets data: Expected array', sheetsData);
+        return [];
+    }
+    
+    const transformed = sheetsData.map((issue, index) => {
+        logDebug(`Processing issue ${index + 1}`, issue);
+        
+        // Ensure required fields have defaults
+        const safeIssue = {
+            issue_id: issue.issue_id || `temp_${index}`,
+            volume: issue.volume || '1',
+            number: issue.number || '1',
+            year: issue.year || new Date().getFullYear().toString(),
+            issue_title: issue.issue_title || `Volume ${issue.volume} No. ${issue.number}`,
+            issue_abstract: issue.issue_abstract || 'No abstract available for this issue.',
+            issue_published_date: issue.issue_published_date || new Date().toISOString().split('T')[0],
+            issue_cover_image: issue.issue_cover_image || 'https://dqdhiu.netlify.app/default-cover.jpg',
+            redirectUrl: issue.redirectUrl || '#',
+            articles: issue.articles || []
+        };
+        
         // Determine categories based on issue data
         const categories = [];
         const currentYear = new Date().getFullYear();
-        const issueYear = parseInt(issue.year) || 0;
+        const issueYear = parseInt(safeIssue.year) || currentYear;
         
         if (issueYear === currentYear) {
             categories.push('Latest');
@@ -903,48 +1049,51 @@ function transformGoogleSheetsData(sheetsData) {
         if (issueYear < currentYear) {
             categories.push('Previous');
         }
-        if (issue.number === '1') {
+        if (safeIssue.number === '1') {
             categories.push('First Issue');
         }
         if (categories.length === 0) {
-            categories.push('Issued');
+            categories.push('Published');
         }
 
         // Extract keywords from the first article if available
         let keywords = [];
-        if (issue.articles && issue.articles.length > 0 && issue.articles[0].keywords) {
-            keywords = issue.articles[0].keywords.split(',').map(k => k.trim()).slice(0, 3);
+        if (safeIssue.articles && safeIssue.articles.length > 0 && safeIssue.articles[0].keywords) {
+            keywords = safeIssue.articles[0].keywords.split(',').map(k => k.trim()).slice(0, 3);
         }
         if (keywords.length === 0) {
             keywords = ['Islamic Studies', 'Academic Research', 'Peer Review'];
         }
 
         return {
-            id: parseInt(issue.issue_id) || 0,
-            title: issue.issue_title || 'Untitled Issue',
+            id: parseInt(safeIssue.issue_id) || index,
+            title: safeIssue.issue_title,
             authors: '', // Issues typically don't have authors, articles do
             journal: 'Islamic Insight',
-            date: issue.issue_published_date || new Date().toISOString().split('T')[0],
-            volume: issue.volume || '',
+            date: safeIssue.issue_published_date,
+            volume: safeIssue.volume,
             pages: '', // Pages are typically at article level
             doi: '', // DOI is typically at article level
             categories: categories,
-            abstract: issue.issue_abstract || 'No abstract available for this issue.',
+            abstract: safeIssue.issue_abstract,
             keywords: keywords,
-            imageUrl: issue.issue_cover_image || 'https://dqdhiu.netlify.app/default-cover.jpg',
-            redirectUrl: issue.redirectUrl || '#',
-            articles: issue.articles || [],
-            year: issue.year,
-            number: issue.number
+            imageUrl: safeIssue.issue_cover_image,
+            redirectUrl: safeIssue.redirectUrl,
+            articles: safeIssue.articles,
+            year: safeIssue.year,
+            number: safeIssue.number
         };
     });
 
     // Sort by year and number (most recent first)
-    return transformed.sort((a, b) => {
+    const sorted = transformed.sort((a, b) => {
         const yearDiff = parseInt(b.year) - parseInt(a.year);
         if (yearDiff !== 0) return yearDiff;
         return parseInt(b.number) - parseInt(a.number);
     });
+    
+    logDebug('Transformation complete', sorted);
+    return sorted;
 }
 
 // ================================
@@ -959,6 +1108,7 @@ function showLoadingState() {
         <div class="loading-spinner">
             <div class="spinner"></div>
             <p class="loading-text">Loading journal issues from database...</p>
+            ${DEBUG_MODE ? `<p class="text-xs text-gray-500 mt-2">Attempt ${fetchAttempts}/${MAX_FETCH_ATTEMPTS}</p>` : ''}
         </div>
     `;
 }
@@ -967,15 +1117,25 @@ function showLoadingState() {
  * Show error state with retry option
  */
 function showErrorState(errorMessage = 'Failed to load journal issues') {
+    logError('Showing error state', errorMessage);
+    
     issuesGrid.innerHTML = `
         <div class="error-state">
             <i class="fas fa-exclamation-triangle error-icon"></i>
             <h3 class="text-xl font-semibold text-gray-900 mb-2">Unable to Load Issues</h3>
             <p class="text-gray-600 mb-4">${errorMessage}</p>
             <p class="text-sm text-gray-500 mb-4">Please check your internet connection and try again.</p>
+            ${DEBUG_MODE ? `
+                <div class="debug-info error mb-4">
+                    <p><strong>Debug Info:</strong></p>
+                    <p>Attempts: ${fetchAttempts}/${MAX_FETCH_ATTEMPTS}</p>
+                    <p>Google Script URL: ${GOOGLE_SCRIPT_URL}</p>
+                    <p>Error: ${errorMessage}</p>
+                </div>
+            ` : ''}
             <button onclick="retryDataFetch()" class="retry-btn">
                 <i class="fas fa-redo mr-2"></i>
-                Retry
+                Retry Loading
             </button>
         </div>
     `;
@@ -985,6 +1145,8 @@ function showErrorState(errorMessage = 'Failed to load journal issues') {
  * Retry data fetching
  */
 function retryDataFetch() {
+    logDebug('Manual retry triggered');
+    fetchAttempts = 0;
     fetchIssuesFromGoogleSheets();
 }
 
@@ -992,12 +1154,20 @@ function retryDataFetch() {
  * Render all issues in the grid
  */
 function renderAllIssues() {
+    logDebug('Rendering all issues', `${allIssues.length} issues`);
+    
     if (!isDataLoaded || allIssues.length === 0) {
         issuesGrid.innerHTML = `
             <div class="text-center py-12">
                 <i class="fas fa-book-open text-4xl text-gray-400 mb-4"></i>
                 <h3 class="text-lg font-semibold text-gray-900 mb-2">No Issues Available</h3>
                 <p class="text-gray-600">Journal issues will appear here once they are published.</p>
+                ${DEBUG_MODE ? `
+                    <div class="debug-info mt-4">
+                        <p>Data loaded: ${isDataLoaded}</p>
+                        <p>Issues count: ${allIssues.length}</p>
+                    </div>
+                ` : ''}
             </div>
         `;
         return;
@@ -1005,10 +1175,13 @@ function renderAllIssues() {
     
     issuesGrid.innerHTML = '';
     
-    allIssues.forEach(issue => {
+    allIssues.forEach((issue, index) => {
+        logDebug(`Rendering issue ${index + 1}`, issue.title);
         const issueCard = createIssueCard(issue);
         issuesGrid.appendChild(issueCard);
     });
+    
+    logDebug('All issues rendered successfully');
 }
 
 /**
@@ -1039,7 +1212,7 @@ function createIssueCard(issue) {
                     <img src="${issue.imageUrl}" 
                          alt="${issue.title}" 
                          class="current-issue-image"
-                         onerror="this.src='https://dqdhiu.netlify.app/default-cover.jpg'">
+                         onerror="this.src='https://dqdhiu.netlify.app/default-cover.jpg'; console.log('Image failed to load:', '${issue.imageUrl}');">
                 </div>
             </div>
 
@@ -1060,6 +1233,9 @@ function createIssueCard(issue) {
                 <div class="mb-6 space-y-2">
                     <p class="text-sm text-gray-600">
                         <i class="far fa-calendar-alt mr-2"></i><strong>Published:</strong> ${displayDate}
+                    </p>
+                    <p class="text-sm text-gray-600">
+                        <i class="fas fa-book mr-2"></i><strong>Volume:</strong> ${issue.volume} No. ${issue.number} (${issue.year})
                     </p>
                     ${issue.articles && issue.articles.length > 0 ? `
                     <p class="text-sm text-gray-600">
@@ -1084,6 +1260,14 @@ function createIssueCard(issue) {
                     </button>
                     ` : ''}
                 </div>
+                
+                ${DEBUG_MODE ? `
+                    <div class="debug-info mt-4 text-xs">
+                        <p><strong>Issue ID:</strong> ${issue.id}</p>
+                        <p><strong>Redirect URL:</strong> ${issue.redirectUrl}</p>
+                        <p><strong>Articles:</strong> ${issue.articles.length}</p>
+                    </div>
+                ` : ''}
             </div>
         </div>
     `;
@@ -1100,14 +1284,19 @@ function createIssueCard(issue) {
  */
 function formatDate(dateString) {
     try {
+        if (!dateString) return 'Date not available';
         const date = new Date(dateString);
+        if (isNaN(date.getTime())) {
+            return dateString; // Return original if parsing fails
+        }
         return date.toLocaleDateString('en-US', { 
             year: 'numeric', 
             month: 'long', 
             day: 'numeric' 
         });
     } catch (error) {
-        return dateString; // Return original if parsing fails
+        logError('Date formatting error', error);
+        return dateString || 'Invalid date';
     }
 }
 
@@ -1115,10 +1304,13 @@ function formatDate(dateString) {
  * Redirect to specific issue page
  */
 function redirectToIssue(url) {
-    if (url && url !== '#') {
+    logDebug('Redirecting to issue', url);
+    
+    if (url && url !== '#' && url !== '') {
         window.location.href = url;
     } else {
-        console.warn('No redirect URL provided for this issue');
+        logError('No valid redirect URL provided', url);
+        alert('This issue is not yet available online. Please check back later.');
     }
 }
 
@@ -1128,8 +1320,16 @@ function redirectToIssue(url) {
 function showIssueDetails(issueId) {
     const issue = allIssues.find(i => i.id === issueId);
     if (issue) {
-        alert(`Issue Details:\n\nTitle: ${issue.title}\nVolume: ${issue.volume}\nPublished: ${formatDate(issue.date)}\nArticles: ${issue.articles.length}`);
+        logDebug('Showing issue details', issue);
+        
+        const articlesInfo = issue.articles.length > 0 
+            ? `\nArticles:\n${issue.articles.map(a => `- ${a.article_title} by ${a.author}`).join('\n')}`
+            : '\nNo articles available';
+            
+        alert(`Issue Details:\n\nTitle: ${issue.title}\nVolume: ${issue.volume} No. ${issue.number}\nYear: ${issue.year}\nPublished: ${formatDate(issue.date)}\nArticles: ${issue.articles.length}${articlesInfo}`);
         // TODO: Implement proper modal or detailed view
+    } else {
+        logError('Issue not found', issueId);
     }
 }
 
@@ -1141,6 +1341,8 @@ function showIssueDetails(issueId) {
  * Setup all event listeners
  */
 function setupEventListeners() {
+    logDebug('Setting up event listeners');
+    
     // Mobile menu toggle
     if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', function() {
@@ -1220,6 +1422,8 @@ function setupEventListeners() {
             }
         });
     });
+    
+    logDebug('Event listeners setup complete');
 }
 
 // ================================
@@ -1312,9 +1516,10 @@ function searchIssues(query) {
             issue.keywords.some(keyword => keyword.toLowerCase().includes(query)) ||
             issue.categories.some(category => category.toLowerCase().includes(query)) ||
             issue.volume.toLowerCase().includes(query) ||
+            issue.year.toString().includes(query) ||
             (issue.articles && issue.articles.some(article => 
-                article.article_title.toLowerCase().includes(query) ||
-                article.author.toLowerCase().includes(query) ||
+                (article.article_title && article.article_title.toLowerCase().includes(query)) ||
+                (article.author && article.author.toLowerCase().includes(query)) ||
                 (article.abstract && article.abstract.toLowerCase().includes(query))
             ));
     });
@@ -1342,7 +1547,7 @@ function displayNavbarSearchResults(results, query) {
         navbarSearchResults.innerHTML = results.map(issue => `
             <div class="search-result-item" onclick="redirectToIssue('${issue.redirectUrl}'); toggleNavbarSearch();">
                 <h4 class="font-semibold text-gray-900 mb-1 text-sm">${highlightSearchTerm(issue.title, query)}</h4>
-                <p class="text-xs text-gray-500 mb-2">${issue.volume} • ${formatDate(issue.date)}</p>
+                <p class="text-xs text-gray-500 mb-2">Volume ${issue.volume} No. ${issue.number} • ${formatDate(issue.date)}</p>
                 <p class="text-xs text-gray-500">${highlightSearchTerm(issue.abstract.substring(0, 120), query)}...</p>
                 <div class="flex flex-wrap gap-1 mt-2">
                     ${issue.categories.slice(0, 2).map(cat => `<span class="badge badge-blue text-xs">${cat}</span>`).join('')}
@@ -1376,7 +1581,7 @@ function displayMobileSearchResults(results, query) {
         mobileSearchResults.innerHTML = results.map(issue => `
             <div class="search-result-item text-sm" onclick="redirectToIssue('${issue.redirectUrl}'); toggleMobileSearch();">
                 <h4 class="font-semibold text-gray-900 mb-1">${highlightSearchTerm(issue.title, query)}</h4>
-                <p class="text-xs text-gray-600 mb-1">${issue.volume} • ${formatDate(issue.date)}</p>
+                <p class="text-xs text-gray-600 mb-1">Volume ${issue.volume} No. ${issue.number} • ${formatDate(issue.date)}</p>
                 <p class="text-xs text-gray-500">${highlightSearchTerm(issue.abstract.substring(0, 100), query)}...</p>
                 <div class="flex flex-wrap gap-1 mt-1">
                     ${issue.categories.slice(0, 2).map(cat => `<span class="badge badge-blue text-xs">${cat}</span>`).join('')}
@@ -1392,10 +1597,27 @@ function displayMobileSearchResults(results, query) {
  * Highlight search terms in results
  */
 function highlightSearchTerm(text, query) {
-    if (!query) return text;
-    const regex = new RegExp(`(${query})`, 'gi');
+    if (!query || !text) return text;
+    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
     return text.replace(regex, '<mark class="bg-yellow-200 px-1 rounded">$1</mark>');
 }
+
+// ================================
+// GLOBAL ERROR HANDLER
+// ================================
+window.addEventListener('error', function(e) {
+    logError('Global error caught', {
+        message: e.message,
+        filename: e.filename,
+        lineno: e.lineno,
+        colno: e.colno,
+        error: e.error
+    });
+});
+
+window.addEventListener('unhandledrejection', function(e) {
+    logError('Unhandled promise rejection', e.reason);
+});
 </script>
 
 </body>
