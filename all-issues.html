@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Academic Research Journal - Peer-reviewed scholarly publications across multiple disciplines">
+    <meta name="keywords" content="academic journal, research papers, scholarly articles, peer review, scientific publications">
+    <meta name="author" content="Academic Research Journal">
+    <title>Islamic Insight - All Issues</title>
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <!-- CSS Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+font-family: 'Inter', sans-serif;
+line-height: 1.6;
+color: #1a202c;
+}
+
+.academic-title {
+font-family: 'Crimson Text', serif;
+}
+
+.article-content h1, .article-content h2, .article-content h3 {
+font-family: 'Crimson Text', serif;
+font-weight: 600;
+}
+
+.article-content p {
+margin-bottom: 1rem;
+text-align: justify;
+line-height: 1.7;
+}
+
+.article-content h2 {
+margin-top: 2rem;
+margin-bottom: 1rem;
+font-size: 1.5rem;
+color: #2d3748;
+}
+
+.article-content h3 {
+margin-top: 1.5rem;
+margin-bottom: 0.75rem;
+font-size: 1.25rem;
+color: #4a5568;
+}
+
+.citation-box {
+background: #f7fafc;
+border-left: 4px solid #4299e1;
+padding: 1rem;
+margin: 1rem 0;
+font-style: italic;
+}
+
+@media (max-width: 768px) {
+.article-content {
+font-size: 0.95rem;
+}
+
+.article-content h2 {
+font-size: 1.3rem;
+}
+
+.article-content h3 {
+font-size: 1.1rem;
+}
+}
+
+.mobile-menu {
+transition: all 0.3s ease;
+}
+
+.article-card {
+transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.article-card:hover {
+transform: translateY(-2px);
+box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.modal {
+backdrop-filter: blur(4px);
+}
+
+.search-container {
+position: relative;
+}
+
+.search-results {
+position: absolute;
+top: 100%;
+left: 0;
+right: 0;
+background: white;
+border: 1px solid #e2e8f0;
+border-radius: 0.5rem;
+box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+max-height: 400px;
+overflow-y: auto;
+z-index: 50;
+}
+
+.badge {
+display: inline-block;
+padding: 0.25rem 0.75rem;
+border-radius: 9999px;
+font-size: 0.75rem;
+font-weight: 600;
+margin-right: 0.5rem;
+margin-bottom: 0.25rem;
+}
+
+.badge-blue { background: #ebf8ff; color: #2b6cb0; }
+.badge-green { background: #f0fff4; color: #2f855a; }
+.badge-red { background: #fff5f5; color: #c53030; }
+.badge-purple { background: #faf5ff; color: #6b46c1; }
+.badge-yellow { background: #fffaf0; color: #b7791f; }
+
+.pdf-content {
+display: none;
+}
+
+.article-image {
+height: 200px;
+background-size: cover;
+background-position: center;
+border-radius: 8px 8px 0 0;
+}
+
+.featured-article-image {
+width: 100%;
+height: 200px;
+object-fit: cover;
+border-radius: 8px 8px 0 0;
+}
+
+.logo-container {
+display: flex;
+align-items: center;
+gap: 0.75rem;
+}
+
+.logo-image {
+height: 40px;
+width: auto;
+}
+
+.logo-text-container {
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+}
+
+.logo-text {
+line-height: 1;
+margin: 0;
+}
+
+.logo-subtitle {
+font-size: 0.75rem;
+color: #6b7280;
+margin: 0;
+line-height: 1;
+font-weight: 400;
+}
+
+@media (max-width: 768px) {
+.logo-image {
+height: 32px;
+}
+
+.logo-text {
+font-size: 1rem;
+}
+
+.logo-subtitle {
+font-size: 0.65rem;
+}
+}
+
+.dropdown {
+position: relative;
+}
+
+.dropdown-content {
+display: none;
+position: absolute;
+top: 100%;
+right: 0;
+background-color: white;
+min-width: 160px;
+box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+border-radius: 0.5rem;
+z-index: 1000;
+border: 1px solid #e2e8f0;
+}
+
+.dropdown:hover .dropdown-content {
+display: block;
+}
+
+.dropdown-content a {
+color: #374151;
+padding: 12px 16px;
+text-decoration: none;
+display: block;
+transition: background-color 0.2s;
+}
+
+.dropdown-content a:hover {
+background-color: #f3f4f6;
+}
+
+.dropdown-content a:first-child {
+border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.dropdown-content a:last-child {
+border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.current-issue-card {
+transition: all 0.3s ease;
+}
+
+.current-issue-card:hover {
+transform: translateY(-2px);
+box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.journal-cover-container {
+background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+@media (max-width: 1024px) {
+.journal-cover-container {
+background: #f8fafc;
+}
+}
+
+/* Current Issue Image Styles - Exactly matching index.html */
+.current-issue-image-container {
+    width: 100%;
+    height: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.current-issue-image {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile Responsive - Exactly matching index.html */
+@media (max-width: 1024px) {
+    .current-issue-image-container {
+        height: 200px;
+    }
+}
+
+.nav-right {
+    margin-left: auto;
+}
+
+/* Enhanced Search Styles */
+.search-icon {
+    color: #2563eb;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+}
+
+.search-icon:hover {
+    color: #1d4ed8;
+    background-color: #f3f4f6;
+}
+
+.navbar-search-container {
+    position: relative;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-search-input {
+    width: 0;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.875rem;
+}
+
+.navbar-search-input.expanded {
+    width: 280px;
+    opacity: 1;
+    padding: 0.75rem 1rem;
+    border: 2px solid #3b82f6;
+    border-radius: 0.5rem;
+    background: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.navbar-search-results {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    max-height: 350px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+/* Mobile Search Enhancements */
+.mobile-nav-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.mobile-search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.mobile-search-input {
+    width: 0;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.875rem;
+}
+
+.mobile-search-input.expanded {
+    width: 200px;
+    opacity: 1;
+    padding: 0.625rem 0.875rem;
+    border: 2px solid #3b82f6;
+    border-radius: 0.5rem;
+    background: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    position: relative;
+    right: 0;
+    top: 0;
+    transform: none;
+}
+
+.mobile-search-results {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    left: -120px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+/* Responsive Search Adjustments */
+@media (max-width: 1200px) {
+    .navbar-search-input.expanded {
+        width: 240px;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-search-input.expanded {
+        width: 180px;
+    }
+
+    .mobile-search-results {
+        left: -100px;
+    }
+}
+
+@media (max-width: 640px) {
+    .mobile-search-input.expanded {
+        width: 160px;
+    }
+
+    .mobile-search-results {
+        left: -80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .mobile-search-input.expanded {
+        width: 140px;
+    }
+
+    .mobile-search-results {
+        left: -60px;
+    }
+}
+
+/* Hide navigation items when search is expanded */
+.nav-items.hidden-for-search {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+/* Search Results Styling */
+.search-result-item {
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid #f3f4f6;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.search-result-item:hover {
+    background-color: #f8fafc;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+    border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.search-result-item:first-child {
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+/* Mobile Menu Button Enhancement */
+.mobile-menu-btn {
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+}
+
+.mobile-menu-btn:hover {
+    background-color: #f3f4f6;
+}
+
+/* Updated Hero and About/Call for Papers Layout */
+.hero-about-container {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Updated Hero Section with Banner Background - Same Dimensions as Original */
+.hero-section {
+    color: white;
+    padding: 2rem 0;
+    min-height: 25vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Desktop Banner Background */
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://dqdhiu.netlify.app/desktop-banner.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -2;
+}
+
+/* Optional overlay for better text readability */
+.hero-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  /*  background: rgba(30, 58, 138, 0.6);  */
+    z-index: -1;
+}
+
+/* Enhanced text positioning for banner */
+.hero-content {
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 1024px) {
+    .hero-section {
+        padding: 1rem 0;
+        min-height: 12vh;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 1.5rem 0;
+        min-height: 18vh;
+    }
+
+    .hero-section::before {
+        background-image: url('https://dqdhiu.netlify.app/mobile-banner.jpg');
+    }
+
+    .hero-section h2 {
+        font-size: 2rem !important;
+    }
+
+    .hero-section p {
+        font-size: 1rem !important;
+    }
+}
+
+/* Enhanced Responsive Typography */
+@media (max-width: 768px) {
+    .logo-text {
+        font-size: 0.9rem;
+    }
+
+    .logo-subtitle {
+        font-size: 0.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-text {
+        font-size: 0.85rem;
+    }
+
+    .logo-subtitle {
+        font-size: 0.55rem;
+    }
+}
+</style>
+</head>
+
+<body class="bg-gray-50">
+<!-- Navigation -->
+<nav class="bg-white shadow-sm sticky top-0 z-40">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-16">
+<div class="flex items-center">
+<div class="flex-shrink-0">
+<div class="logo-container">
+<img src="logo.png" alt="Islamic Insight Logo" class="logo-image">
+<div class="logo-text-container">
+<h1 class="logo-text text-xl font-bold text-black-900 academic-title">
+ISLAMIC INSIGHT
+</h1>
+<p class="logo-subtitle">Journal of Islamic Studies</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Desktop Navigation - Moved to right -->
+<div class="hidden md:block nav-right">
+<div class="flex items-center space-x-6">
+<!-- Navigation Items -->
+<div id="nav-items" class="nav-items flex items-baseline space-x-6">
+<a href="index.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Home</a>
+<a href="index.html#publications" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Call For Paper</a>
+<a href="index.html#featured" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Current Issue</a>
+<a href="#featured" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">All Issues</a>
+<div class="dropdown">
+<a href="index.html#about" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">About</a>
+<div class="dropdown-content">
+<a href="editors.html">Editorial Team</a>
+<a href="#contact">Contact</a>
+</div>
+</div>
+</div>
+
+<!-- Search Container -->
+<div class="navbar-search-container">
+<input
+type="text"
+id="navbar-search-input"
+placeholder="Search articles, authors..."
+class="navbar-search-input"
+>
+<button id="search-toggle-btn" class="search-icon">
+<i id="search-icon" class="fas fa-search text-lg"></i>
+</button>
+<div id="navbar-search-results" class="navbar-search-results hidden"></div>
+</div>
+</div>
+</div>
+
+<!-- Mobile menu button and search - Moved to right -->
+<div class="md:hidden nav-right">
+    <div class="mobile-nav-container">
+        <!-- Mobile Search Container -->
+        <div class="mobile-search-container">
+            <input
+                type="text"
+                id="mobile-search-input"
+                placeholder="Search..."
+                class="mobile-search-input"
+            >
+            <button id="mobile-search-toggle-btn" class="search-icon">
+                <i id="mobile-search-icon" class="fas fa-search text-lg"></i>
+            </button>
+            <div id="mobile-search-results" class="mobile-search-results hidden"></div>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="mobile-menu-btn text-gray-700 hover:text-blue-900 focus:outline-none">
+            <i class="fas fa-bars text-lg"></i>
+        </button>
+    </div>
+</div>
+</div>
+</div>
+
+<!-- Mobile Navigation -->
+<div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+<div class="px-2 pt-2 pb-3 space-y-1">
+<a href="index.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Home</a>
+<a href="index.html#publications" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Call For Paper</a>
+<a href="index.html#featured" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Current Issue</a>
+<a href="#featured" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">All Issues</a>
+<a href="index.html#about" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">About</a>
+<a href="editors.html" class="block px-3 py-2 pl-6 text-sm font-medium text-gray-600 hover:text-blue-900 transition-colors">Editorial Team</a>
+<a href="#contact" class="block px-3 py-2 pl-6 text-sm font-medium text-gray-600 hover:text-blue-900 transition-colors">Contact</a>
+</div>
+</div>
+</nav>
+
+<!-- Updated Home Section with Banner Background -->
+<section id="home" class="hero-about-container">
+    <!-- Hero Section - Now with Banner Background -->
+    <div class="hero-section">
+
+    </div>
+</section>
+
+<!-- All Issues Section -->
+<section id="featured" class="pt-4 pb-12 sm:pt-6 sm:pb-16 lg:pt-8 lg:pb-20 bg-gray-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-8">
+<h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold academic-title text-gray-900 mb-4">
+All Issues
+</h2>
+<p class="text-gray-600 max-w-3xl mx-auto">
+Explore our complete collection of published journal issues
+</p>
+</div>
+
+<!-- Issues Grid -->
+<div class="space-y-6" id="issues-grid">
+    <!-- Issues will be populated by JavaScript -->
+</div>
+</div>
+</section>
+
+<!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="logo-container mb-4">
+                        <img src="logo.png" alt="Islamic Insight Logo" class="logo-image">
+                        <div class="logo-text-container">
+                            <h1 class="logo-text text-white">ISLAMIC INSIGHT</h1>
+                            <p class="logo-subtitle text-gray-300">Journal of Islamic Studies</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-4">
+                     <strong> MAILING ADDRESS:</strong><br>Editor, Islamic Insight Journal of Islamic Studies, Darul Huda Islamic <br> University, Chemmad, P.B.NO. 3, Tirurangadi (PO), Malappuram (Dt.),<br>676306 (PIN), Kerala, India.<br><br>Email: islamicinsight@dhiu.in <br><br>Website: www.islamicinsight.in
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#about" class="text-gray-300 hover:text-white transition-colors">About Journal</a></li>
+                        <li><a href="#editorial" class="text-gray-300 hover:text-white transition-colors">Editorial Board</a></li>
+                        <li><a href="#guidelines" class="text-gray-300 hover:text-white transition-colors">Submission Guidelines</a></li>
+                        <li><a href="#contact" class="text-gray-300 hover:text-white transition-colors">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fas fa-envelope text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
+                <p>&copy; 2024 Islamic Insight Journal. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+<script>
+// Issues data with corrected redirect URLs (removed duplicates)
+const allIssues = [
+    {
+        id: 1,
+        title: "Vol. 7 No. 2 (2024): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
+        authors: "",
+        journal: "Islamic Insight",
+        date: "2024-12-01",
+        volume: "Vol. 7 No. 2 (2024)",
+        pages: "",
+        doi: "",
+        categories: ["Latest", "Current Issue"],
+        abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world. It welcomes original scholarship across various disciplines, encompassing textual analysis of the Quran and Hadith, Islamic legal and theological discourse, philosophy, comparative religion, social sciences, and the historical and cultural experiences of Muslims. Notably, IIJIS employs a rigorous double-blind peer review process to ensure the quality of published works.",
+        keywords: ["Islamic Studies", "Peer Review", "Academic Research"],
+        imageUrl: "https://dqdhiu.netlify.app/vol7no2.jpg",
+        redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue1"
+    },
+    {
+        id: 2,
+        title: "Vol. 7 No. 1 (2024): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
+        authors: "",
+        journal: "Islamic Insight",
+        date: "2024-06-30",
+        volume: "Vol. 7 No. 1 (2024)",
+        pages: "",
+        doi: "",
+        categories: ["Previous", "Issued"],
+        abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world. It welcomes original scholarship across various disciplines, encompassing textual analysis of the Quran and Hadith, Islamic legal and theological discourse, philosophy, comparative religion, social sciences, and the historical and cultural experiences of Muslims.",
+        keywords: ["Islamic Studies", "Bilingual", "Research"],
+        imageUrl: "https://dqdhiu.netlify.app/vol7no1.jpg",
+        redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue2"
+    },
+    {
+        id: 3,
+        title: "Vol. 5 No. 01 (2022): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
+        authors: "",
+        journal: "Islamic Insight",
+        date: "2022-05-01",
+        volume: "Vol. 5 No. 01 (2022)",
+        pages: "",
+        doi: "",
+        categories: ["Previous", "Issued"],
+        abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) is a bilingual (English and Arabic) academic journal published twice a year by the Kulliyyah of Qur'an and Sunnah, Darul Huda Islamic University. It is a multi-disciplinary journal devoted for publishing original scholarship of exceptional quality on all aspects of Islam and the Muslim world.",
+        keywords: ["Multi-disciplinary", "Qur'an", "Sunnah"],
+        imageUrl: "https://dqdhiu.netlify.app/vol5no1.jpg",
+        redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue3"
+    },
+    {
+        id: 4,
+        title: "Vol. 1 No. 2 (2018): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
+        authors: "",
+        journal: "Islamic Insight",
+        date: "2018-12-01",
+        volume: "Vol. 1 No. 2 (2018)",
+        pages: "",
+        doi: "",
+        categories: ["Previous", "Issued"],
+        abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world. This issue represents our continued commitment to scholarly excellence and rigorous peer review standards.",
+        keywords: ["Scholarly Excellence", "Islamic Research", "Academic"],
+        imageUrl: "https://dqdhiu.netlify.app/vol1no2.jpg",
+        redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue4"
+    },
+    {
+        id: 5,
+        title: "Vol. 1 No. 1 (2018): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
+        authors: "",
+        journal: "Islamic Insight",
+        date: "2018-06-01",
+        volume: "Vol. 1 No. 1 (2018)",
+        pages: "",
+        doi: "",
+        categories: ["Previous", "Issued", "First Issue"],
+        abstract: "The inaugural issue of Islamic Insight Journal of Islamic Studies (IIJIS), marking the beginning of our academic journey. This bilingual platform was established to disseminate exceptional academic research on Islam and the Muslim world, setting the foundation for future scholarly contributions.",
+        keywords: ["Inaugural Issue", "Foundation", "Academic Journey"],
+        imageUrl: "https://dqdhiu.netlify.app/vol1no1.jpg",
+        redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue5"
+    }
+];
+
+// DOM Elements
+const issuesGrid = document.getElementById('issues-grid');
+const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+const mobileMenu = document.getElementById('mobile-menu');
+
+// Enhanced search elements
+const searchToggleBtn = document.getElementById('search-toggle-btn');
+const navbarSearchInput = document.getElementById('navbar-search-input');
+const navbarSearchResults = document.getElementById('navbar-search-results');
+const searchIcon = document.getElementById('search-icon');
+const navItems = document.getElementById('nav-items');
+
+// Mobile search elements
+const mobileSearchToggleBtn = document.getElementById('mobile-search-toggle-btn');
+const mobileSearchInput = document.getElementById('mobile-search-input');
+const mobileSearchResults = document.getElementById('mobile-search-results');
+const mobileSearchIcon = document.getElementById('mobile-search-icon');
+
+// Search state tracking
+let isDesktopSearchExpanded = false;
+let isMobileSearchExpanded = false;
+
+// Initialize the application
+document.addEventListener('DOMContentLoaded', function() {
+    renderAllIssues();
+    setupEventListeners();
+});
+
+// Render all issues in horizontal layout (like current issue)
+function renderAllIssues() {
+    issuesGrid.innerHTML = '';
+
+    allIssues.forEach(issue => {
+        const issueCard = createIssueCard(issue);
+        issuesGrid.appendChild(issueCard);
+    });
+}
+
+// Create issue card with horizontal layout (same as current issue design)
+function createIssueCard(issue) {
+    const div = document.createElement('div');
+    div.className = 'bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden current-issue-card';
+
+    const badgeColors = ['badge-blue', 'badge-green', 'badge-red', 'badge-purple', 'badge-yellow'];
+    const categoryBadges = issue.categories.map((category, index) => 
+        `<span class="badge ${badgeColors[index % badgeColors.length]}">${category}</span>`
+    ).join('');
+
+    div.innerHTML = `
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
+            <!-- Journal cover - Left side -->
+            <div class="lg:col-span-1 p-2 flex justify-center items-center bg-gray-50">
+                <div class="current-issue-image-container">
+                    <img src="${issue.imageUrl}" alt="${issue.title}" class="current-issue-image">
+                </div>
+            </div>
+            <!-- Content - Right side -->
+            <div class="lg:col-span-2 p-6">
+                <div class="mb-4">
+                    ${categoryBadges}
+                </div>
+                
+                <h3 class="text-xl sm:text-2xl font-semibold academic-title text-gray-900 mb-4">
+                    ${issue.title}
+                </h3>
+                <p class="text-gray-700 mb-6 leading-relaxed text-justify">
+                    ${issue.abstract}
+                </p>
+                <div class="mb-6">
+                    <p class="text-sm text-gray-600">
+                        <i class="far fa-calendar-alt mr-2"></i><strong>Published:</strong> ${issue.date}
+                    </p>
+                </div>
+                <div class="flex justify-between items-center">
+                    <button 
+                        onclick="redirectToIssue('${issue.redirectUrl}')" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                        View Articles <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    return div;
+}
+
+// Function to redirect to specific issue page
+function redirectToIssue(url) {
+    window.location.href = url;
+}
+
+// Setup event listeners
+function setupEventListeners() {
+    // Mobile menu toggle
+    mobileMenuBtn.addEventListener('click', function() {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    // Desktop navbar search functionality
+    searchToggleBtn.addEventListener('click', toggleNavbarSearch);
+    navbarSearchInput.addEventListener('input', handleNavbarSearch);
+    navbarSearchInput.addEventListener('focus', function() {
+        if (navbarSearchInput.value.trim()) {
+            navbarSearchResults.classList.remove('hidden');
+        }
+    });
+
+    // Mobile search functionality
+    if (mobileSearchToggleBtn) {
+        mobileSearchToggleBtn.addEventListener('click', toggleMobileSearch);
+        mobileSearchInput.addEventListener('input', handleMobileSearch);
+        mobileSearchInput.addEventListener('focus', function() {
+            if (mobileSearchInput.value.trim()) {
+                mobileSearchResults.classList.remove('hidden');
+            }
+        });
+    }
+
+    // Enhanced keyboard support for search
+    navbarSearchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            toggleNavbarSearch();
+        }
+    });
+
+    mobileSearchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            toggleMobileSearch();
+        }
+    });
+
+    // Close search results when clicking outside
+    document.addEventListener('click', function(e) {
+        // Desktop search
+        if (!navbarSearchInput.contains(e.target) && 
+            !navbarSearchResults.contains(e.target) && 
+            !searchToggleBtn.contains(e.target)) {
+            navbarSearchResults.classList.add('hidden');
+        }
+
+        // Mobile search
+        if (!mobileSearchInput.contains(e.target) && 
+            !mobileSearchResults.contains(e.target) && 
+            !mobileSearchToggleBtn.contains(e.target)) {
+            mobileSearchResults.classList.add('hidden');
+        }
+    });
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                // Close mobile menu if open
+                mobileMenu.classList.add('hidden');
+            }
+        });
+    });
+}
+
+// Enhanced toggle navbar search with better state management
+function toggleNavbarSearch() {
+    isDesktopSearchExpanded = !isDesktopSearchExpanded;
+
+    if (isDesktopSearchExpanded) {
+        // Expand search
+        navbarSearchInput.classList.add('expanded');
+        navItems.classList.add('hidden-for-search');
+        searchIcon.className = 'fas fa-times text-lg';
+        navbarSearchInput.focus();
+    } else {
+        // Collapse search
+        navbarSearchInput.classList.remove('expanded');
+        navItems.classList.remove('hidden-for-search');
+        searchIcon.className = 'fas fa-search text-lg';
+        navbarSearchResults.classList.add('hidden');
+        navbarSearchInput.value = '';
+    }
+}
+
+// Enhanced toggle mobile search with proper cross functionality
+function toggleMobileSearch() {
+    isMobileSearchExpanded = !isMobileSearchExpanded;
+
+    if (isMobileSearchExpanded) {
+        // Expand search
+        mobileSearchInput.classList.add('expanded');
+        mobileSearchIcon.className = 'fas fa-times text-lg';
+        mobileSearchInput.focus();
+    } else {
+        // Collapse search
+        mobileSearchInput.classList.remove('expanded');
+        mobileSearchIcon.className = 'fas fa-search text-lg';
+        mobileSearchResults.classList.add('hidden');
+        mobileSearchInput.value = '';
+    }
+}
+
+// Handle navbar search with improved filtering
+function handleNavbarSearch() {
+    const query = navbarSearchInput.value.toLowerCase().trim();
+
+    if (!query) {
+        navbarSearchResults.classList.add('hidden');
+        return;
+    }
+
+    const filteredIssues = allIssues.filter(issue => {
+        return issue.title.toLowerCase().includes(query) ||
+            issue.abstract.toLowerCase().includes(query) ||
+            issue.keywords.some(keyword => keyword.toLowerCase().includes(query)) ||
+            issue.categories.some(category => category.toLowerCase().includes(query)) ||
+            issue.volume.toLowerCase().includes(query);
+    });
+
+    displayNavbarSearchResults(filteredIssues, query);
+}
+
+// Enhanced display navbar search results with redirect functionality
+function displayNavbarSearchResults(results, query) {
+    if (results.length === 0) {
+        navbarSearchResults.innerHTML = `
+            <div class="p-4 text-center text-gray-500">
+                <i class="fas fa-search text-2xl mb-2 text-gray-400"></i>
+                <p>No issues found for "<strong>${query}</strong>"</p>
+            </div>
+        `;
+    } else {
+        navbarSearchResults.innerHTML = results.map(issue => `
+            <div class="search-result-item" onclick="redirectToIssue('${issue.redirectUrl}'); toggleNavbarSearch();">
+                <h4 class="font-semibold text-gray-900 mb-1 text-sm">${highlightSearchTerm(issue.title, query)}</h4>
+                <p class="text-xs text-gray-500 mb-2">${issue.volume} • ${issue.date}</p>
+                <p class="text-xs text-gray-500">${highlightSearchTerm(issue.abstract.substring(0, 120), query)}...</p>
+                <div class="flex flex-wrap gap-1 mt-2">
+                    ${issue.categories.slice(0, 2).map(cat => `<span class="badge badge-blue text-xs">${cat}</span>`).join('')}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    navbarSearchResults.classList.remove('hidden');
+}
+
+// Handle mobile search with improved filtering
+function handleMobileSearch() {
+    const query = mobileSearchInput.value.toLowerCase().trim();
+
+    if (!query) {
+        mobileSearchResults.classList.add('hidden');
+        return;
+    }
+
+    const filteredIssues = allIssues.filter(issue => {
+        return issue.title.toLowerCase().includes(query) ||
+            issue.abstract.toLowerCase().includes(query) ||
+            issue.keywords.some(keyword => keyword.toLowerCase().includes(query)) ||
+            issue.categories.some(category => category.toLowerCase().includes(query)) ||
+            issue.volume.toLowerCase().includes(query);
+    });
+
+    displayMobileSearchResults(filteredIssues, query);
+}
+
+// Enhanced display mobile search results with redirect functionality
+function displayMobileSearchResults(results, query) {
+    if (results.length === 0) {
+        mobileSearchResults.innerHTML = `
+            <div class="p-3 text-center text-gray-500 text-sm">
+                <i class="fas fa-search text-lg mb-1 text-gray-400"></i>
+                <p>No issues found for "<strong>${query}</strong>"</p>
+            </div>
+        `;
+    } else {
+        mobileSearchResults.innerHTML = results.map(issue => `
+            <div class="search-result-item text-sm" onclick="redirectToIssue('${issue.redirectUrl}'); toggleMobileSearch();">
+                <h4 class="font-semibold text-gray-900 mb-1">${highlightSearchTerm(issue.title, query)}</h4>
+                <p class="text-xs text-gray-600 mb-1">${issue.volume} • ${issue.date}</p>
+                <p class="text-xs text-gray-500">${highlightSearchTerm(issue.abstract.substring(0, 100), query)}...</p>
+                <div class="flex flex-wrap gap-1 mt-1">
+                    ${issue.categories.slice(0, 2).map(cat => `<span class="badge badge-blue text-xs">${cat}</span>`).join('')}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    mobileSearchResults.classList.remove('hidden');
+}
+
+// Highlight search terms in results
+function highlightSearchTerm(text, query) {
+    if (!query) return text;
+    const regex = new RegExp(`(${query})`, 'gi');
+    return text.replace(regex, '<mark class="bg-yellow-200 px-1 rounded">$1</mark>');
+}
+</script>
+
+</body>
+</html>
