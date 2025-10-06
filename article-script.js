@@ -156,6 +156,13 @@ function updateArticleDisplay(article) {
     
     console.log('Article display updated successfully');
 }
+// After updating the content, apply Arabic styling
+setTimeout(() => {
+    if (window.arabicStyler) {
+        window.arabicStyler.styleAllContent();
+    }
+}, 100);
+
 
 // Enhanced initialization
 async function initializeArticlePage() {
@@ -330,3 +337,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+
