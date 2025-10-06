@@ -17,6 +17,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Include the configuration and data loaders -->
+    <script src="sheets-loader.js"></script>
+    <script src="issue-navigation.js"></script>
+
 <style>
 body {
 font-family: 'Inter', sans-serif;
@@ -564,6 +568,27 @@ background: #f8fafc;
         font-size: 0.55rem;
     }
 }
+
+/* Loading animation */
+.loading-spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Fade in animation */
+.fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 </style>
 </head>
 
@@ -594,7 +619,7 @@ ISLAMIC INSIGHT
 <a href="index.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Home</a>
 <a href="index.html#publications" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Call For Paper</a>
 <a href="index.html#featured" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Current Issue</a>
-<a href="#featured" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">All Issues</a>
+<a href="#featured" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors bg-blue-50 rounded">All Issues</a>
 <div class="dropdown">
 <a href="index.html#about" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">About</a>
 <div class="dropdown-content">
@@ -609,7 +634,7 @@ ISLAMIC INSIGHT
 <input
 type="text"
 id="navbar-search-input"
-placeholder="Search articles, authors..."
+placeholder="Search issues, articles..."
 class="navbar-search-input"
 >
 <button id="search-toggle-btn" class="search-icon">
@@ -652,7 +677,7 @@ class="navbar-search-input"
 <a href="index.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Home</a>
 <a href="index.html#publications" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Call For Paper</a>
 <a href="index.html#featured" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Current Issue</a>
-<a href="#featured" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">All Issues</a>
+<a href="#featured" class="block px-3 py-2 text-sm font-medium text-blue-700 bg-blue-50 rounded">All Issues</a>
 <a href="index.html#about" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">About</a>
 <a href="editors.html" class="block px-3 py-2 pl-6 text-sm font-medium text-gray-600 hover:text-blue-900 transition-colors">Editorial Team</a>
 <a href="#contact" class="block px-3 py-2 pl-6 text-sm font-medium text-gray-600 hover:text-blue-900 transition-colors">Contact</a>
@@ -668,8 +693,31 @@ class="navbar-search-input"
     </div>
 </section>
 
+<!-- Loading State -->
+<div id="loading-state" class="text-center py-12">
+    <div class="loading-spinner inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full"></div>
+    <p class="mt-4 text-gray-600">Loading journal issues...</p>
+</div>
+
+<!-- Error State -->
+<div id="error-state" class="text-center py-12" style="display: none;">
+    <div class="text-red-500 mb-4">
+        <i class="fas fa-exclamation-triangle text-4xl"></i>
+    </div>
+    <h3 class="text-lg font-medium text-gray-900 mb-2">Error Loading Content</h3>
+    <p class="text-gray-600 mb-4">Failed to load journal data. Please try again later.</p>
+    <div class="space-x-4">
+        <a href="index.html" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+            Return to Homepage
+        </a>
+        <button onclick="location.reload()" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors">
+            Retry
+        </button>
+    </div>
+</div>
+
 <!-- All Issues Section -->
-<section id="featured" class="pt-4 pb-12 sm:pt-6 sm:pb-16 lg:pt-8 lg:pb-20 bg-gray-50">
+<section id="featured" class="pt-4 pb-12 sm:pt-6 sm:pb-16 lg:pt-8 lg:pb-20 bg-gray-50" style="display: none;">
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 <div class="text-center mb-8">
 <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold academic-title text-gray-900 mb-4">
@@ -678,11 +726,46 @@ All Issues
 <p class="text-gray-600 max-w-3xl mx-auto">
 Explore our complete collection of published journal issues
 </p>
+<div class="mt-4">
+    <p class="text-sm text-gray-500" id="issues-count">Loading issues...</p>
+</div>
+</div>
+
+<!-- Filter and Sort Options -->
+<div class="flex flex-col sm:flex-row justify-between items-center mb-8 space-y-4 sm:space-y-0">
+    <div class="flex flex-wrap gap-4">
+        <select id="year-filter" class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">All Years</option>
+        </select>
+        <select id="volume-filter" class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">All Volumes</option>
+        </select>
+    </div>
+    <div class="flex gap-2">
+        <button id="sort-newest" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors">
+            Newest First
+        </button>
+        <button id="sort-oldest" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-50 transition-colors">
+            Oldest First
+        </button>
+    </div>
 </div>
 
 <!-- Issues Grid -->
 <div class="space-y-6" id="issues-grid">
     <!-- Issues will be populated by JavaScript -->
+</div>
+
+<!-- No Results Message -->
+<div id="no-results" class="text-center py-12" style="display: none;">
+    <div class="text-gray-400 mb-4">
+        <i class="fas fa-search text-4xl"></i>
+    </div>
+    <h3 class="text-lg font-medium text-gray-600 mb-2">No Issues Found</h3>
+    <p class="text-gray-500">Try adjusting your search or filter criteria.</p>
+    <button onclick="allIssuesLoader.clearFilters()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+        Clear Filters
+    </button>
 </div>
 </div>
 </section>
@@ -707,9 +790,9 @@ Explore our complete collection of published journal issues
                 <div>
                     <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
                     <ul class="space-y-2">
-                        <li><a href="#about" class="text-gray-300 hover:text-white transition-colors">About Journal</a></li>
-                        <li><a href="#editorial" class="text-gray-300 hover:text-white transition-colors">Editorial Board</a></li>
-                        <li><a href="#guidelines" class="text-gray-300 hover:text-white transition-colors">Submission Guidelines</a></li>
+                        <li><a href="index.html#about" class="text-gray-300 hover:text-white transition-colors">About Journal</a></li>
+                        <li><a href="editors.html" class="text-gray-300 hover:text-white transition-colors">Editorial Board</a></li>
+                        <li><a href="index.html#guidelines" class="text-gray-300 hover:text-white transition-colors">Submission Guidelines</a></li>
                         <li><a href="#contact" class="text-gray-300 hover:text-white transition-colors">Contact Us</a></li>
                     </ul>
                 </div>
@@ -739,387 +822,6 @@ Explore our complete collection of published journal issues
         </div>
     </footer>
 
-<script>
-// Issues data with corrected redirect URLs (removed duplicates)
-const allIssues = [
-    {
-        id: 1,
-        title: "Vol. 7 No. 2 (2024): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
-        authors: "",
-        journal: "Islamic Insight",
-        date: "2024-12-01",
-        volume: "Vol. 7 No. 2 (2024)",
-        pages: "",
-        doi: "",
-        categories: ["Latest", "Current Issue"],
-        abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world. It welcomes original scholarship across various disciplines, encompassing textual analysis of the Quran and Hadith, Islamic legal and theological discourse, philosophy, comparative religion, social sciences, and the historical and cultural experiences of Muslims. Notably, IIJIS employs a rigorous double-blind peer review process to ensure the quality of published works.",
-        keywords: ["Islamic Studies", "Peer Review", "Academic Research"],
-        imageUrl: "https://dqdhiu.netlify.app/vol7no2.jpg",
-        redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue1"
-    },
-    {
-        id: 2,
-        title: "Vol. 7 No. 1 (2024): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
-        authors: "",
-        journal: "Islamic Insight",
-        date: "2024-06-30",
-        volume: "Vol. 7 No. 1 (2024)",
-        pages: "",
-        doi: "",
-        categories: ["Previous", "Issued"],
-        abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world. It welcomes original scholarship across various disciplines, encompassing textual analysis of the Quran and Hadith, Islamic legal and theological discourse, philosophy, comparative religion, social sciences, and the historical and cultural experiences of Muslims.",
-        keywords: ["Islamic Studies", "Bilingual", "Research"],
-        imageUrl: "https://dqdhiu.netlify.app/vol7no1.jpg",
-        redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue2"
-    },
-    {
-        id: 3,
-        title: "Vol. 5 No. 01 (2022): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
-        authors: "",
-        journal: "Islamic Insight",
-        date: "2022-05-01",
-        volume: "Vol. 5 No. 01 (2022)",
-        pages: "",
-        doi: "",
-        categories: ["Previous", "Issued"],
-        abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) is a bilingual (English and Arabic) academic journal published twice a year by the Kulliyyah of Qur'an and Sunnah, Darul Huda Islamic University. It is a multi-disciplinary journal devoted for publishing original scholarship of exceptional quality on all aspects of Islam and the Muslim world.",
-        keywords: ["Multi-disciplinary", "Qur'an", "Sunnah"],
-        imageUrl: "https://dqdhiu.netlify.app/vol5no1.jpg",
-        redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue3"
-    },
-    {
-        id: 4,
-        title: "Vol. 1 No. 2 (2018): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
-        authors: "",
-        journal: "Islamic Insight",
-        date: "2018-12-01",
-        volume: "Vol. 1 No. 2 (2018)",
-        pages: "",
-        doi: "",
-        categories: ["Previous", "Issued"],
-        abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world. This issue represents our continued commitment to scholarly excellence and rigorous peer review standards.",
-        keywords: ["Scholarly Excellence", "Islamic Research", "Academic"],
-        imageUrl: "https://dqdhiu.netlify.app/vol1no2.jpg",
-        redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue4"
-    },
-    {
-        id: 5,
-        title: "Vol. 1 No. 1 (2018): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
-        authors: "",
-        journal: "Islamic Insight",
-        date: "2018-06-01",
-        volume: "Vol. 1 No. 1 (2018)",
-        pages: "",
-        doi: "",
-        categories: ["Previous", "Issued", "First Issue"],
-        abstract: "The inaugural issue of Islamic Insight Journal of Islamic Studies (IIJIS), marking the beginning of our academic journey. This bilingual platform was established to disseminate exceptional academic research on Islam and the Muslim world, setting the foundation for future scholarly contributions.",
-        keywords: ["Inaugural Issue", "Foundation", "Academic Journey"],
-        imageUrl: "https://dqdhiu.netlify.app/vol1no1.jpg",
-        redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue5"
-    }
-];
-
-// DOM Elements
-const issuesGrid = document.getElementById('issues-grid');
-const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-const mobileMenu = document.getElementById('mobile-menu');
-
-// Enhanced search elements
-const searchToggleBtn = document.getElementById('search-toggle-btn');
-const navbarSearchInput = document.getElementById('navbar-search-input');
-const navbarSearchResults = document.getElementById('navbar-search-results');
-const searchIcon = document.getElementById('search-icon');
-const navItems = document.getElementById('nav-items');
-
-// Mobile search elements
-const mobileSearchToggleBtn = document.getElementById('mobile-search-toggle-btn');
-const mobileSearchInput = document.getElementById('mobile-search-input');
-const mobileSearchResults = document.getElementById('mobile-search-results');
-const mobileSearchIcon = document.getElementById('mobile-search-icon');
-
-// Search state tracking
-let isDesktopSearchExpanded = false;
-let isMobileSearchExpanded = false;
-
-// Initialize the application
-document.addEventListener('DOMContentLoaded', function() {
-    renderAllIssues();
-    setupEventListeners();
-});
-
-// Render all issues in horizontal layout (like current issue)
-function renderAllIssues() {
-    issuesGrid.innerHTML = '';
-
-    allIssues.forEach(issue => {
-        const issueCard = createIssueCard(issue);
-        issuesGrid.appendChild(issueCard);
-    });
-}
-
-// Create issue card with horizontal layout (same as current issue design)
-function createIssueCard(issue) {
-    const div = document.createElement('div');
-    div.className = 'bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden current-issue-card';
-
-    const badgeColors = ['badge-blue', 'badge-green', 'badge-red', 'badge-purple', 'badge-yellow'];
-    const categoryBadges = issue.categories.map((category, index) => 
-        `<span class="badge ${badgeColors[index % badgeColors.length]}">${category}</span>`
-    ).join('');
-
-    div.innerHTML = `
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
-            <!-- Journal cover - Left side -->
-            <div class="lg:col-span-1 p-2 flex justify-center items-center bg-gray-50">
-                <div class="current-issue-image-container">
-                    <img src="${issue.imageUrl}" alt="${issue.title}" class="current-issue-image">
-                </div>
-            </div>
-            <!-- Content - Right side -->
-            <div class="lg:col-span-2 p-6">
-                <div class="mb-4">
-                    ${categoryBadges}
-                </div>
-                
-                <h3 class="text-xl sm:text-2xl font-semibold academic-title text-gray-900 mb-4">
-                    ${issue.title}
-                </h3>
-                <p class="text-gray-700 mb-6 leading-relaxed text-justify">
-                    ${issue.abstract}
-                </p>
-                <div class="mb-6">
-                    <p class="text-sm text-gray-600">
-                        <i class="far fa-calendar-alt mr-2"></i><strong>Published:</strong> ${issue.date}
-                    </p>
-                </div>
-                <div class="flex justify-between items-center">
-                    <button 
-                        onclick="redirectToIssue('${issue.redirectUrl}')" 
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                        View Articles <i class="fas fa-arrow-right ml-2"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    `;
-
-    return div;
-}
-
-// Function to redirect to specific issue page
-function redirectToIssue(url) {
-    window.location.href = url;
-}
-
-// Setup event listeners
-function setupEventListeners() {
-    // Mobile menu toggle
-    mobileMenuBtn.addEventListener('click', function() {
-        mobileMenu.classList.toggle('hidden');
-    });
-
-    // Desktop navbar search functionality
-    searchToggleBtn.addEventListener('click', toggleNavbarSearch);
-    navbarSearchInput.addEventListener('input', handleNavbarSearch);
-    navbarSearchInput.addEventListener('focus', function() {
-        if (navbarSearchInput.value.trim()) {
-            navbarSearchResults.classList.remove('hidden');
-        }
-    });
-
-    // Mobile search functionality
-    if (mobileSearchToggleBtn) {
-        mobileSearchToggleBtn.addEventListener('click', toggleMobileSearch);
-        mobileSearchInput.addEventListener('input', handleMobileSearch);
-        mobileSearchInput.addEventListener('focus', function() {
-            if (mobileSearchInput.value.trim()) {
-                mobileSearchResults.classList.remove('hidden');
-            }
-        });
-    }
-
-    // Enhanced keyboard support for search
-    navbarSearchInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            toggleNavbarSearch();
-        }
-    });
-
-    mobileSearchInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            toggleMobileSearch();
-        }
-    });
-
-    // Close search results when clicking outside
-    document.addEventListener('click', function(e) {
-        // Desktop search
-        if (!navbarSearchInput.contains(e.target) && 
-            !navbarSearchResults.contains(e.target) && 
-            !searchToggleBtn.contains(e.target)) {
-            navbarSearchResults.classList.add('hidden');
-        }
-
-        // Mobile search
-        if (!mobileSearchInput.contains(e.target) && 
-            !mobileSearchResults.contains(e.target) && 
-            !mobileSearchToggleBtn.contains(e.target)) {
-            mobileSearchResults.classList.add('hidden');
-        }
-    });
-
-    // Smooth scrolling for navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-                // Close mobile menu if open
-                mobileMenu.classList.add('hidden');
-            }
-        });
-    });
-}
-
-// Enhanced toggle navbar search with better state management
-function toggleNavbarSearch() {
-    isDesktopSearchExpanded = !isDesktopSearchExpanded;
-
-    if (isDesktopSearchExpanded) {
-        // Expand search
-        navbarSearchInput.classList.add('expanded');
-        navItems.classList.add('hidden-for-search');
-        searchIcon.className = 'fas fa-times text-lg';
-        navbarSearchInput.focus();
-    } else {
-        // Collapse search
-        navbarSearchInput.classList.remove('expanded');
-        navItems.classList.remove('hidden-for-search');
-        searchIcon.className = 'fas fa-search text-lg';
-        navbarSearchResults.classList.add('hidden');
-        navbarSearchInput.value = '';
-    }
-}
-
-// Enhanced toggle mobile search with proper cross functionality
-function toggleMobileSearch() {
-    isMobileSearchExpanded = !isMobileSearchExpanded;
-
-    if (isMobileSearchExpanded) {
-        // Expand search
-        mobileSearchInput.classList.add('expanded');
-        mobileSearchIcon.className = 'fas fa-times text-lg';
-        mobileSearchInput.focus();
-    } else {
-        // Collapse search
-        mobileSearchInput.classList.remove('expanded');
-        mobileSearchIcon.className = 'fas fa-search text-lg';
-        mobileSearchResults.classList.add('hidden');
-        mobileSearchInput.value = '';
-    }
-}
-
-// Handle navbar search with improved filtering
-function handleNavbarSearch() {
-    const query = navbarSearchInput.value.toLowerCase().trim();
-
-    if (!query) {
-        navbarSearchResults.classList.add('hidden');
-        return;
-    }
-
-    const filteredIssues = allIssues.filter(issue => {
-        return issue.title.toLowerCase().includes(query) ||
-            issue.abstract.toLowerCase().includes(query) ||
-            issue.keywords.some(keyword => keyword.toLowerCase().includes(query)) ||
-            issue.categories.some(category => category.toLowerCase().includes(query)) ||
-            issue.volume.toLowerCase().includes(query);
-    });
-
-    displayNavbarSearchResults(filteredIssues, query);
-}
-
-// Enhanced display navbar search results with redirect functionality
-function displayNavbarSearchResults(results, query) {
-    if (results.length === 0) {
-        navbarSearchResults.innerHTML = `
-            <div class="p-4 text-center text-gray-500">
-                <i class="fas fa-search text-2xl mb-2 text-gray-400"></i>
-                <p>No issues found for "<strong>${query}</strong>"</p>
-            </div>
-        `;
-    } else {
-        navbarSearchResults.innerHTML = results.map(issue => `
-            <div class="search-result-item" onclick="redirectToIssue('${issue.redirectUrl}'); toggleNavbarSearch();">
-                <h4 class="font-semibold text-gray-900 mb-1 text-sm">${highlightSearchTerm(issue.title, query)}</h4>
-                <p class="text-xs text-gray-500 mb-2">${issue.volume} • ${issue.date}</p>
-                <p class="text-xs text-gray-500">${highlightSearchTerm(issue.abstract.substring(0, 120), query)}...</p>
-                <div class="flex flex-wrap gap-1 mt-2">
-                    ${issue.categories.slice(0, 2).map(cat => `<span class="badge badge-blue text-xs">${cat}</span>`).join('')}
-                </div>
-            </div>
-        `).join('');
-    }
-
-    navbarSearchResults.classList.remove('hidden');
-}
-
-// Handle mobile search with improved filtering
-function handleMobileSearch() {
-    const query = mobileSearchInput.value.toLowerCase().trim();
-
-    if (!query) {
-        mobileSearchResults.classList.add('hidden');
-        return;
-    }
-
-    const filteredIssues = allIssues.filter(issue => {
-        return issue.title.toLowerCase().includes(query) ||
-            issue.abstract.toLowerCase().includes(query) ||
-            issue.keywords.some(keyword => keyword.toLowerCase().includes(query)) ||
-            issue.categories.some(category => category.toLowerCase().includes(query)) ||
-            issue.volume.toLowerCase().includes(query);
-    });
-
-    displayMobileSearchResults(filteredIssues, query);
-}
-
-// Enhanced display mobile search results with redirect functionality
-function displayMobileSearchResults(results, query) {
-    if (results.length === 0) {
-        mobileSearchResults.innerHTML = `
-            <div class="p-3 text-center text-gray-500 text-sm">
-                <i class="fas fa-search text-lg mb-1 text-gray-400"></i>
-                <p>No issues found for "<strong>${query}</strong>"</p>
-            </div>
-        `;
-    } else {
-        mobileSearchResults.innerHTML = results.map(issue => `
-            <div class="search-result-item text-sm" onclick="redirectToIssue('${issue.redirectUrl}'); toggleMobileSearch();">
-                <h4 class="font-semibold text-gray-900 mb-1">${highlightSearchTerm(issue.title, query)}</h4>
-                <p class="text-xs text-gray-600 mb-1">${issue.volume} • ${issue.date}</p>
-                <p class="text-xs text-gray-500">${highlightSearchTerm(issue.abstract.substring(0, 100), query)}...</p>
-                <div class="flex flex-wrap gap-1 mt-1">
-                    ${issue.categories.slice(0, 2).map(cat => `<span class="badge badge-blue text-xs">${cat}</span>`).join('')}
-                </div>
-            </div>
-        `).join('');
-    }
-
-    mobileSearchResults.classList.remove('hidden');
-}
-
-// Highlight search terms in results
-function highlightSearchTerm(text, query) {
-    if (!query) return text;
-    const regex = new RegExp(`(${query})`, 'gi');
-    return text.replace(regex, '<mark class="bg-yellow-200 px-1 rounded">$1</mark>');
-}
-</script>
-
+<script src="all-issues-dynamic.js"></script>
 </body>
 </html>
