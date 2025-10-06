@@ -488,6 +488,16 @@
 
     <!-- Form Section -->
     <div class="form-wrapper">
+      <div class="form-header">
+        <h1>Academic Publication Submission</h1>
+        <p>Submit your research article to Islamic Insight Journal</p>
+      </div>
+
+      <div class="form-container">
+        <div class="sample-note">
+          <i class="fas fa-info-circle"></i>
+          <strong>Note:</strong> Please ensure all required fields are completed accurately. The form data will be saved to our database for review and publication processing.
+        </div>
 
         <form id="publication-form">
           <!-- Issue Information Section -->
@@ -613,7 +623,7 @@
                 <input type="url" id="html_file" name="html_file" value="https://dqdhiu.netlify.app/articles.html?id=2" required>
               </div>
               <div class="form-group">
-                <label for="pdf_url">PDF URL <span class="optional">*</span></label>
+                <label for="pdf_url">PDF URL <span class="optional">(Optional)</span></label>
                 <input type="url" id="pdf_url" name="pdf_url" value="https://dqdhiu.netlify.app/file/a2.pdf">
               </div>
             </div>
@@ -696,7 +706,7 @@
     </footer>
 
     <script>
-      // Google Apps Script Web App URL - Make sure this is your actual deployed URL
+      // Google Apps Script Web App URL - Replace with your actual deployed URL
       const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzrTbBUlx41l-zEbOXz1-KSBAGNjFRDvFNIvIgp-H_HiwklyPg6faRXg-MpO2kdDdw1/exec';
 
       // Form submission handler
@@ -725,65 +735,68 @@
         submitBtn.disabled = true;
         loadingState.style.display = 'block';
 
-        // Replace the existing try-catch block in your form submission with this:
-try {
-  const formData = new FormData(this);
-  const data = {};
+        try {
+          // Collect form data
+          const formData = new FormData(this);
+          const data = {};
 
-  // Convert FormData to regular object
-  for (let [key, value] of formData.entries()) {
-    data[key] = value.trim();
-  }
+          // Convert FormData to regular object
+          for (let [key, value] of formData.entries()) {
+            data[key] = value.trim();
+          }
 
-  console.log('Submitting data:', data);
+          console.log('Submitting data:', data);
 
-  // Submit to Google Apps Script
-  const response = await fetch(SCRIPT_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
+          // Submit to Google Apps Script
+          const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+            mode: 'cors'
+          });
 
-  console.log('Response status:', response.status);
-  
-  if (response.ok) {
-    const responseText = await response.text();
-    console.log('Response text:', responseText);
-    
-    // Try to parse as JSON
-    try {
-      const result = JSON.parse(responseText);
-      if (result.status === 'success') {
-        loadingState.style.display = 'none';
-        successMessage.style.display = 'block';
-        successMessage.scrollIntoView({ behavior: 'smooth' });
-      } else {
-        throw new Error(result.message || 'Unknown error');
-      }
-    } catch (parseError) {
-      // If can't parse as JSON, assume success
-      loadingState.style.display = 'none';
-      successMessage.style.display = 'block';
-      successMessage.scrollIntoView({ behavior: 'smooth' });
-    }
-  } else {
-    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-  }
+          console.log('Response status:', response.status);
+          
+          if (response.ok) {
+            const responseText = await response.text();
+            console.log('Response text:', responseText);
+            
+            try {
+              const result = JSON.parse(responseText);
+              if (result.status === 'success') {
+                loadingState.style.display = 'none';
+                successMessage.style.display = 'block';
+                successMessage.scrollIntoView({ behavior: 'smooth' });
+                
+                // Optional: Reset form after successful submission
+                // this.reset();
+              } else {
+                throw new Error(result.message || 'Submission failed');
+              }
+            } catch (parseError) {
+              // If response is not JSON, assume success (Google Apps Script sometimes returns HTML)
+              loadingState.style.display = 'none';
+              successMessage.style.display = 'block';
+              successMessage.scrollIntoView({ behavior: 'smooth' });
+            }
+          } else {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
 
-} catch (error) {
-  console.error('Submission error:', error);
-  loadingState.style.display = 'none';
-  
-  document.getElementById('error-text').textContent = 
-    `Submission failed: ${error.message}. Please check your internet connection and try again.`;
-  errorMessage.style.display = 'block';
-  errorMessage.scrollIntoView({ behavior: 'smooth' });
-} finally {
-  submitBtn.disabled = false;
-}
-
+        } catch (error) {
+          console.error('Submission error:', error);
+          loadingState.style.display = 'none';
+          
+          document.getElementById('error-text').textContent = 
+            `Submission failed: ${error.message}. Please check your internet connection and try again.`;
+          errorMessage.style.display = 'block';
+          errorMessage.scrollIntoView({ behavior: 'smooth' });
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
 
       // Form validation function
       function validateForm() {
@@ -809,18 +822,6 @@ try {
             try {
               new URL(field.value.trim());
             } catch {
-              field.classList.add('error');
-              isValid = false;
-            }
-          }
-        });
-
-        // Validate email fields
-        const emailFields = document.querySelectorAll('input[type="email"]');
-        emailFields.forEach((field) => {
-          if (field.hasAttribute('required') && field.value.trim()) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(field.value.trim())) {
               field.classList.add('error');
               isValid = false;
             }
