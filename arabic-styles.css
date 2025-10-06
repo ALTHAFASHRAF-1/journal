@@ -1,0 +1,137 @@
+/* Arabic Journal Styling Solutions */
+
+/* 1. Import Arabic Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Scheherazade+New:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
+
+/* 2. Arabic Text Detection and Styling */
+.arabic-content,
+[lang="ar"],
+.rtl-text {
+    font-family: 'Amiri', 'Scheherazade New', 'Noto Naskh Arabic', 'Traditional Arabic', 'Al Bayan', 'Geeza Pro', serif !important;
+    direction: rtl;
+    text-align: right;
+    line-height: 2.2 !important; /* Increased line height for Arabic readability */
+    font-size: 1.15em !important; /* Slightly larger for Arabic */
+    letter-spacing: 0.02em;
+    word-spacing: 0.1em;
+}
+
+/* 3. Arabic Title Styling */
+.arabic-title,
+h1.arabic-content,
+h2.arabic-content,
+h3.arabic-content {
+    font-family: 'Scheherazade New', 'Amiri', serif !important;
+    font-weight: 600 !important;
+    line-height: 1.8 !important;
+    margin-bottom: 1.5rem !important;
+    margin-top: 2rem !important;
+}
+
+/* 4. Arabic Paragraph Styling */
+p.arabic-content {
+    text-align: justify !important;
+    text-justify: inter-word;
+    hyphens: none; /* Disable hyphenation for Arabic */
+    word-break: keep-all;
+    line-height: 2.4 !important;
+    margin-bottom: 1.8rem !important;
+}
+
+/* 5. Mixed Content Container */
+.mixed-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.mixed-content .english-part {
+    direction: ltr;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
+}
+
+.mixed-content .arabic-part {
+    direction: rtl;
+    text-align: right;
+    font-family: 'Amiri', serif;
+}
+
+/* 6. Automatic Language Detection Classes */
+.auto-arabic {
+    font-family: 'Amiri', serif;
+    direction: rtl;
+    text-align: right;
+    line-height: 2.2;
+    font-size: 1.15em;
+}
+
+.auto-english {
+    font-family: 'Inter', sans-serif;
+    direction: ltr;
+    text-align: left;
+    line-height: 1.7;
+}
+
+/* 7. Article Card Arabic Support */
+.article-card .arabic-title {
+    font-size: 1.4rem !important;
+    line-height: 1.9 !important;
+}
+
+.article-card .arabic-abstract {
+    line-height: 2.3 !important;
+    font-size: 1.1em !important;
+}
+
+/* 8. Special Arabic Elements */
+.quranic-verse.arabic-content {
+    background: #f0f9f0;
+    border-right: 4px solid #22c55e;
+    border-left: none;
+    padding: 2rem;
+    font-family: 'Scheherazade New', serif !important;
+    font-size: 1.3em !important;
+    line-height: 2.5 !important;
+    text-align: center;
+}
+
+.hadith-quote.arabic-content {
+    background: #f8fafc;
+    border-right: 4px solid #22c55e;
+    border-left: none;
+    padding: 2rem;
+    font-family: 'Amiri', serif !important;
+    font-size: 1.2em !important;
+    line-height: 2.4 !important;
+}
+
+/* 9. Arabic Keywords */
+.arabic-keyword {
+    font-family: 'Amiri', serif !important;
+    direction: rtl;
+    font-size: 0.9em;
+}
+
+/* 10. Responsive Arabic Typography */
+@media (max-width: 768px) {
+    .arabic-content {
+        font-size: 1.1em !important;
+        line-height: 2.1 !important;
+    }
+    
+    .arabic-title {
+        font-size: 1.2rem !important;
+        line-height: 1.7 !important;
+    }
+}
+
+/* 11. Arabic Number Styling */
+.arabic-numbers {
+    font-feature-settings: "ss01" on; /* Use Arabic-Indic numerals */
+}
+
+/* 12. Arabic Punctuation */
+.arabic-content {
+    font-feature-settings: "ss01" on, "ss02" on, "ss03" on;
+}
