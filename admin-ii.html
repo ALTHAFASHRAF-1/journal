@@ -488,9 +488,15 @@
 
     <!-- Form Section -->
     <div class="form-wrapper">
-      
+      <div class="form-header">
+        <h1 class="academic-title">Academic Publication Submission</h1>
+        <p>Submit your research for publication in Islamic Insight Journal</p>
+      </div>
 
       <div class="form-container">
+        <div class="sample-note">
+          <i class="fas fa-info-circle"></i> <strong>Note:</strong> Please fill out all required fields marked with <span class="required">*</span>. Your submission will be reviewed by our editorial team.
+        </div>
        
         <form id="publication-form">
           <!-- Issue Information Section -->
@@ -744,35 +750,28 @@
           const response = await fetch(SCRIPT_URL, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: JSON.stringify(data),
-            mode: 'cors'
+            body: new URLSearchParams(data).toString()
           });
 
           console.log('Response status:', response.status);
           
           if (response.ok) {
-            const responseText = await response.text();
-            console.log('Response text:', responseText);
+            const result = await response.json();
+            console.log('Response result:', result);
             
-            try {
-              const result = JSON.parse(responseText);
-              if (result.status === 'success') {
-                loadingState.style.display = 'none';
-                successMessage.style.display = 'block';
-                successMessage.scrollIntoView({ behavior: 'smooth' });
-                
-                // Optional: Reset form after successful submission
-                // this.reset();
-              } else {
-                throw new Error(result.message || 'Submission failed');
-              }
-            } catch (parseError) {
-              // If response is not JSON, assume success (Google Apps Script sometimes returns HTML)
+            if (result.status === 'success') {
               loadingState.style.display = 'none';
               successMessage.style.display = 'block';
               successMessage.scrollIntoView({ behavior: 'smooth' });
+              
+              // Reset form after successful submission
+              setTimeout(() => {
+                this.reset();
+              }, 2000);
+            } else {
+              throw new Error(result.message || 'Submission failed');
             }
           } else {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
