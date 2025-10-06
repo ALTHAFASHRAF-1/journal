@@ -725,68 +725,65 @@
         submitBtn.disabled = true;
         loadingState.style.display = 'block';
 
-        try {
-          // Collect form data
-          const formData = new FormData(this);
-          const data = {};
+        // Replace the existing try-catch block in your form submission with this:
+try {
+  const formData = new FormData(this);
+  const data = {};
 
-          // Convert FormData to regular object
-          for (let [key, value] of formData.entries()) {
-            data[key] = value.trim();
-          }
+  // Convert FormData to regular object
+  for (let [key, value] of formData.entries()) {
+    data[key] = value.trim();
+  }
 
-          console.log('Submitting data:', data);
+  console.log('Submitting data:', data);
 
-          // Submit to Google Apps Script using fetch with proper CORS handling
-          const response = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'text/plain',
-            },
-            body: JSON.stringify(data),
-          });
+  // Submit to Google Apps Script
+  const response = await fetch(SCRIPT_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
 
-          console.log('Response status:', response.status);
-          
-          // For Google Apps Script, we need to check if the request was successful
-          if (response.ok) {
-            // Try to read response text
-            try {
-              const responseText = await response.text();
-              console.log('Response text:', responseText);
-              
-              // Show success message
-              loadingState.style.display = 'none';
-              successMessage.style.display = 'block';
-              successMessage.scrollIntoView({ behavior: 'smooth' });
-              
-              // Optional: Reset form or redirect
-              // this.reset();
-              
-            } catch (textError) {
-              console.log('Could not read response text, but request was successful');
-              // Show success anyway since the request went through
-              loadingState.style.display = 'none';
-              successMessage.style.display = 'block';
-              successMessage.scrollIntoView({ behavior: 'smooth' });
-            }
-          } else {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-          }
+  console.log('Response status:', response.status);
+  
+  if (response.ok) {
+    const responseText = await response.text();
+    console.log('Response text:', responseText);
+    
+    // Try to parse as JSON
+    try {
+      const result = JSON.parse(responseText);
+      if (result.status === 'success') {
+        loadingState.style.display = 'none';
+        successMessage.style.display = 'block';
+        successMessage.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        throw new Error(result.message || 'Unknown error');
+      }
+    } catch (parseError) {
+      // If can't parse as JSON, assume success
+      loadingState.style.display = 'none';
+      successMessage.style.display = 'block';
+      successMessage.scrollIntoView({ behavior: 'smooth' });
+    }
+  } else {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
 
-        } catch (error) {
-          console.error('Submission error:', error);
-          loadingState.style.display = 'none';
-          
-          // Show error message with details
-          document.getElementById('error-text').textContent = 
-            `Submission failed: ${error.message}. Please check your internet connection and try again.`;
-          errorMessage.style.display = 'block';
-          errorMessage.scrollIntoView({ behavior: 'smooth' });
-        } finally {
-          submitBtn.disabled = false;
-        }
-      });
+} catch (error) {
+  console.error('Submission error:', error);
+  loadingState.style.display = 'none';
+  
+  document.getElementById('error-text').textContent = 
+    `Submission failed: ${error.message}. Please check your internet connection and try again.`;
+  errorMessage.style.display = 'block';
+  errorMessage.scrollIntoView({ behavior: 'smooth' });
+} finally {
+  submitBtn.disabled = false;
+}
+
 
       // Form validation function
       function validateForm() {
