@@ -564,56 +564,6 @@ background: #f8fafc;
         font-size: 0.55rem;
     }
 }
-
-/* Loading and Error States */
-.loading-spinner {
-    border: 3px solid #f3f4f6;
-    border-top: 3px solid #3b82f6;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin: 0 auto;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.retry-button {
-    background-color: #3b82f6;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    border: none;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.2s;
-}
-
-.retry-button:hover {
-    background-color: #2563eb;
-}
-
-.error-container {
-    text-align: center;
-    padding: 2rem;
-    background-color: #fef2f2;
-    border: 1px solid #fecaca;
-    border-radius: 0.5rem;
-    margin: 1rem 0;
-}
-
-.success-container {
-    text-align: center;
-    padding: 1rem;
-    background-color: #f0fdf4;
-    border: 1px solid #bbf7d0;
-    border-radius: 0.5rem;
-    margin: 1rem 0;
-    color: #166534;
-}
 </style>
 </head>
 
@@ -734,9 +684,6 @@ Explore our complete collection of published journal issues
 <div class="space-y-6" id="issues-grid">
     <!-- Issues will be populated by JavaScript -->
 </div>
-
-<!-- Connection Status -->
-<div id="connection-status" class="mt-4 text-center text-sm text-gray-500"></div>
 </div>
 </section>
 
@@ -793,18 +740,87 @@ Explore our complete collection of published journal issues
     </footer>
 
 <script>
-// ===== CONFIGURATION =====
-// Replace this URL with your deployed Google Apps Script Web App URL
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzwSi7SBmbBMX6wX1vXZu5Nc08lk51C_Wo8FgjUF6ysBEzV47w3QxmanXrzg-diG9XliQ/exec';
-
-// Global variables
-let allIssues = [];
-let isLoading = false;
-let connectionStatus = 'unknown';
+// Issues data with corrected redirect URLs (removed duplicates)
+const allIssues = [
+    {
+        id: 1,
+        title: "Vol. 7 No. 2 (2024): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
+        authors: "",
+        journal: "Islamic Insight",
+        date: "2024-12-01",
+        volume: "Vol. 7 No. 2 (2024)",
+        pages: "",
+        doi: "",
+        categories: ["Latest", "Current Issue"],
+        abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world. It welcomes original scholarship across various disciplines, encompassing textual analysis of the Quran and Hadith, Islamic legal and theological discourse, philosophy, comparative religion, social sciences, and the historical and cultural experiences of Muslims. Notably, IIJIS employs a rigorous double-blind peer review process to ensure the quality of published works.",
+        keywords: ["Islamic Studies", "Peer Review", "Academic Research"],
+        imageUrl: "https://dqdhiu.netlify.app/vol7no2.jpg",
+        redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue1"
+    },
+    {
+        id: 2,
+        title: "Vol. 7 No. 1 (2024): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
+        authors: "",
+        journal: "Islamic Insight",
+        date: "2024-06-30",
+        volume: "Vol. 7 No. 1 (2024)",
+        pages: "",
+        doi: "",
+        categories: ["Previous", "Issued"],
+        abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world. It welcomes original scholarship across various disciplines, encompassing textual analysis of the Quran and Hadith, Islamic legal and theological discourse, philosophy, comparative religion, social sciences, and the historical and cultural experiences of Muslims.",
+        keywords: ["Islamic Studies", "Bilingual", "Research"],
+        imageUrl: "https://dqdhiu.netlify.app/vol7no1.jpg",
+        redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue2"
+    },
+    {
+        id: 3,
+        title: "Vol. 5 No. 01 (2022): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
+        authors: "",
+        journal: "Islamic Insight",
+        date: "2022-05-01",
+        volume: "Vol. 5 No. 01 (2022)",
+        pages: "",
+        doi: "",
+        categories: ["Previous", "Issued"],
+        abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) is a bilingual (English and Arabic) academic journal published twice a year by the Kulliyyah of Qur'an and Sunnah, Darul Huda Islamic University. It is a multi-disciplinary journal devoted for publishing original scholarship of exceptional quality on all aspects of Islam and the Muslim world.",
+        keywords: ["Multi-disciplinary", "Qur'an", "Sunnah"],
+        imageUrl: "https://dqdhiu.netlify.app/vol5no1.jpg",
+        redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue3"
+    },
+    {
+        id: 4,
+        title: "Vol. 1 No. 2 (2018): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
+        authors: "",
+        journal: "Islamic Insight",
+        date: "2018-12-01",
+        volume: "Vol. 1 No. 2 (2018)",
+        pages: "",
+        doi: "",
+        categories: ["Previous", "Issued"],
+        abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world. This issue represents our continued commitment to scholarly excellence and rigorous peer review standards.",
+        keywords: ["Scholarly Excellence", "Islamic Research", "Academic"],
+        imageUrl: "https://dqdhiu.netlify.app/vol1no2.jpg",
+        redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue4"
+    },
+    {
+        id: 5,
+        title: "Vol. 1 No. 1 (2018): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
+        authors: "",
+        journal: "Islamic Insight",
+        date: "2018-06-01",
+        volume: "Vol. 1 No. 1 (2018)",
+        pages: "",
+        doi: "",
+        categories: ["Previous", "Issued", "First Issue"],
+        abstract: "The inaugural issue of Islamic Insight Journal of Islamic Studies (IIJIS), marking the beginning of our academic journey. This bilingual platform was established to disseminate exceptional academic research on Islam and the Muslim world, setting the foundation for future scholarly contributions.",
+        keywords: ["Inaugural Issue", "Foundation", "Academic Journey"],
+        imageUrl: "https://dqdhiu.netlify.app/vol1no1.jpg",
+        redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue5"
+    }
+];
 
 // DOM Elements
 const issuesGrid = document.getElementById('issues-grid');
-const connectionStatusElement = document.getElementById('connection-status');
 const mobileMenuBtn = document.getElementById('mobile-menu-btn');
 const mobileMenu = document.getElementById('mobile-menu');
 
@@ -827,282 +843,36 @@ let isMobileSearchExpanded = false;
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Application initializing...');
-    checkConfiguration();
-    fetchIssuesFromGoogleSheets();
+    renderAllIssues();
     setupEventListeners();
 });
 
-// ===== CONFIGURATION CHECK =====
-function checkConfiguration() {
-    if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
-        console.warn('⚠️ Google Apps Script URL not configured!');
-        updateConnectionStatus('Configuration Required', 'error');
-        showConfigurationError();
-        return false;
-    }
-    return true;
-}
-
-function showConfigurationError() {
-    issuesGrid.innerHTML = `
-        <div class="error-container">
-            <div class="text-red-500 mb-4">
-                <i class="fas fa-exclamation-triangle text-3xl"></i>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">Configuration Required</h3>
-            <p class="text-gray-600 mb-4">Please update the GOOGLE_SCRIPT_URL in the JavaScript code with your deployed Google Apps Script URL.</p>
-            <div class="text-left bg-gray-100 p-4 rounded-lg text-sm">
-                <p class="font-semibold mb-2">Steps to configure:</p>
-                <ol class="list-decimal list-inside space-y-1 text-gray-700">
-                    <li>Deploy your Google Apps Script as a web app</li>
-                    <li>Copy the deployment URL</li>
-                    <li>Replace 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE' in the code</li>
-                    <li>Refresh this page</li>
-                </ol>
-            </div>
-        </div>
-    `;
-}
-
-// ===== CONNECTION STATUS =====
-function updateConnectionStatus(message, type = 'info') {
-    if (!connectionStatusElement) return;
-    
-    const icons = {
-        success: 'fas fa-check-circle text-green-500',
-        error: 'fas fa-exclamation-circle text-red-500',
-        loading: 'fas fa-spinner fa-spin text-blue-500',
-        info: 'fas fa-info-circle text-blue-500'
-    };
-    
-    connectionStatusElement.innerHTML = `
-        <i class="${icons[type]} mr-1"></i>
-        ${message}
-    `;
-    connectionStatus = type;
-}
-
-// ===== GOOGLE SHEETS INTEGRATION =====
-async function fetchIssuesFromGoogleSheets() {
-    if (isLoading || !checkConfiguration()) return;
-    
-    isLoading = true;
-    
-    try {
-        // Show loading state
-        showLoadingState();
-        updateConnectionStatus('Connecting to database...', 'loading');
-        
-        // Test the URL first
-        console.log('Testing Google Apps Script URL:', GOOGLE_SCRIPT_URL);
-        
-        const url = `${GOOGLE_SCRIPT_URL}?sheet=Sheet1&action=getAll&timestamp=${Date.now()}&test=1`;
-        console.log('Full request URL:', url);
-        
-        // Add timeout to prevent hanging
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
-        
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            mode: 'cors',
-            cache: 'no-cache',
-            signal: controller.signal
-        });
-        
-        clearTimeout(timeoutId);
-        
-        console.log('Response received:');
-        console.log('- Status:', response.status);
-        console.log('- Status Text:', response.statusText);
-        console.log('- Headers:', Object.fromEntries(response.headers.entries()));
-        console.log('- URL:', response.url);
-        console.log('- Type:', response.type);
-        
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}. Check if your Google Apps Script is properly deployed and accessible.`);
-        }
-        
-        const textResult = await response.text();
-        console.log('Response body length:', textResult.length);
-        console.log('Response body preview:', textResult.substring(0, 1000));
-        
-        if (!textResult.trim()) {
-            throw new Error('Empty response from server. Check Google Apps Script logs.');
-        }
-        
-        let result;
-        try {
-            result = JSON.parse(textResult);
-        } catch (parseError) {
-            console.error('JSON parse error:', parseError);
-            console.error('Raw response:', textResult);
-            throw new Error(`Invalid JSON response: ${parseError.message}. Raw response: ${textResult.substring(0, 200)}`);
-        }
-        
-        console.log('Parsed result:', result);
-        
-        if (result.status === 'success') {
-            allIssues = result.data || [];
-            console.log(`✅ Successfully fetched ${allIssues.length} issues from Google Sheets`);
-            console.log('Sample issue:', allIssues[0]);
-            updateConnectionStatus(`Connected successfully • ${allIssues.length} issues loaded`, 'success');
-            renderAllIssues();
-        } else {
-            throw new Error(result.message || 'Unknown error from Google Apps Script');
-        }
-        
-    } catch (error) {
-        console.error('❌ Detailed error information:');
-        console.error('- Error name:', error.name);
-        console.error('- Error message:', error.message);
-        console.error('- Error stack:', error.stack);
-        
-        let errorMessage = error.message;
-        
-        if (error.name === 'AbortError') {
-            errorMessage = 'Request timeout. The server took too long to respond.';
-        } else if (error.message.includes('Failed to fetch')) {
-            errorMessage = 'Network error. Check if your Google Apps Script URL is correct and the script is deployed properly.';
-        }
-        
-        updateConnectionStatus(`Connection failed: ${errorMessage}`, 'error');
-        showErrorState(errorMessage);
-        
-    } finally {
-        isLoading = false;
-    }
-}
-
-// ===== UI STATE MANAGEMENT =====
-function showLoadingState() {
-    issuesGrid.innerHTML = `
-        <div class="text-center py-12">
-            <div class="loading-spinner mb-4"></div>
-            <p class="text-gray-600">Loading issues from database...</p>
-            <p class="text-sm text-gray-500 mt-2">This may take a few seconds</p>
-        </div>
-    `;
-}
-
-function showErrorState(errorMessage) {
-    issuesGrid.innerHTML = `
-        <div class="error-container">
-            <div class="text-red-500 mb-4">
-                <i class="fas fa-exclamation-triangle text-3xl"></i>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">Failed to Load Issues</h3>
-            <p class="text-gray-600 mb-4">${errorMessage}</p>
-            <button onclick="retryFetch()" class="retry-button">
-                <i class="fas fa-redo mr-2"></i>Try Again
-            </button>
-            <div class="mt-4 text-left bg-gray-100 p-4 rounded-lg text-sm">
-                <p class="font-semibold mb-2">Troubleshooting:</p>
-                <ul class="list-disc list-inside space-y-1 text-gray-700">
-                    <li>Check if your Google Apps Script is deployed properly</li>
-                    <li>Verify the script URL is correct</li>
-                    <li>Ensure Sheet1 exists with proper data structure</li>
-                    <li>Check if the script has necessary permissions</li>
-                </ul>
-            </div>
-        </div>
-    `;
-}
-
-function retryFetch() {
-    console.log('🔄 Retrying fetch...');
-    fetchIssuesFromGoogleSheets();
-}
-
-// ===== RENDERING =====
+// Render all issues in horizontal layout (like current issue)
 function renderAllIssues() {
-    if (!allIssues || allIssues.length === 0) {
-        issuesGrid.innerHTML = `
-            <div class="text-center py-12">
-                <div class="text-gray-400 mb-4">
-                    <i class="fas fa-book-open text-4xl"></i>
-                </div>
-                <h3 class="text-lg font-semibold text-gray-900 mb-2">No Issues Found</h3>
-                <p class="text-gray-600">No journal issues are currently available in the database.</p>
-                <button onclick="retryFetch()" class="retry-button mt-4">
-                    <i class="fas fa-redo mr-2"></i>Refresh
-                </button>
-            </div>
-        `;
-        return;
-    }
-
     issuesGrid.innerHTML = '';
 
-    // Sort issues by date (newest first)
-    const sortedIssues = [...allIssues].sort((a, b) => {
-        const dateA = new Date(a.date || '1900-01-01');
-        const dateB = new Date(b.date || '1900-01-01');
-        return dateB - dateA;
+    allIssues.forEach(issue => {
+        const issueCard = createIssueCard(issue);
+        issuesGrid.appendChild(issueCard);
     });
-
-    console.log(`📋 Rendering ${sortedIssues.length} issues`);
-
-    sortedIssues.forEach((issue, index) => {
-        try {
-            const issueCard = createIssueCard(issue);
-            issuesGrid.appendChild(issueCard);
-        } catch (error) {
-            console.error(`Error rendering issue ${index}:`, error, issue);
-        }
-    });
-
-    // Show success message if first load
-    if (connectionStatus === 'success') {
-        const successDiv = document.createElement('div');
-        successDiv.className = 'success-container';
-        successDiv.innerHTML = `
-            <i class="fas fa-check-circle mr-2"></i>
-            Successfully loaded ${sortedIssues.length} issues from Google Sheets database
-        `;
-        issuesGrid.insertBefore(successDiv, issuesGrid.firstChild);
-        
-        // Remove success message after 5 seconds
-        setTimeout(() => {
-            if (successDiv.parentNode) {
-                successDiv.parentNode.removeChild(successDiv);
-            }
-        }, 5000);
-    }
 }
 
+// Create issue card with horizontal layout (same as current issue design)
 function createIssueCard(issue) {
     const div = document.createElement('div');
     div.className = 'bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden current-issue-card';
 
     const badgeColors = ['badge-blue', 'badge-green', 'badge-red', 'badge-purple', 'badge-yellow'];
-    const categories = Array.isArray(issue.categories) ? issue.categories : [];
-    const categoryBadges = categories.map((category, index) => 
-        `<span class="badge ${badgeColors[index % badgeColors.length]}">${escapeHtml(category)}</span>`
+    const categoryBadges = issue.categories.map((category, index) => 
+        `<span class="badge ${badgeColors[index % badgeColors.length]}">${category}</span>`
     ).join('');
-
-    // Format date for display
-    const displayDate = formatDisplayDate(issue.date);
-    
-    // Escape HTML to prevent XSS
-    const title = escapeHtml(issue.title || 'Untitled');
-    const abstract = escapeHtml(issue.abstract || 'No abstract available.');
-    const volume = escapeHtml(issue.volume || '');
 
     div.innerHTML = `
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
             <!-- Journal cover - Left side -->
             <div class="lg:col-span-1 p-2 flex justify-center items-center bg-gray-50">
                 <div class="current-issue-image-container">
-                    <img src="${issue.imageUrl || 'https://via.placeholder.com/300x400?text=No+Image'}" 
-                         alt="${title}" 
-                         class="current-issue-image"
-                         onerror="this.src='https://via.placeholder.com/300x400?text=No+Image'">
+                    <img src="${issue.imageUrl}" alt="${issue.title}" class="current-issue-image">
                 </div>
             </div>
             <!-- Content - Right side -->
@@ -1112,28 +882,22 @@ function createIssueCard(issue) {
                 </div>
                 
                 <h3 class="text-xl sm:text-2xl font-semibold academic-title text-gray-900 mb-4">
-                    ${title}
+                    ${issue.title}
                 </h3>
                 <p class="text-gray-700 mb-6 leading-relaxed text-justify">
-                    ${abstract}
+                    ${issue.abstract}
                 </p>
                 <div class="mb-6">
                     <p class="text-sm text-gray-600">
-                        <i class="far fa-calendar-alt mr-2"></i><strong>Published:</strong> ${displayDate}
+                        <i class="far fa-calendar-alt mr-2"></i><strong>Published:</strong> ${issue.date}
                     </p>
-                    ${volume ? `<p class="text-sm text-gray-600 mt-1">
-                        <i class="fas fa-book mr-2"></i><strong>Volume:</strong> ${volume}
-                    </p>` : ''}
                 </div>
                 <div class="flex justify-between items-center">
                     <button 
-                        onclick="redirectToIssue('${issue.redirectUrl || '#'}')" 
+                        onclick="redirectToIssue('${issue.redirectUrl}')" 
                         class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
                         View Articles <i class="fas fa-arrow-right ml-2"></i>
                     </button>
-                    <div class="text-xs text-gray-500">
-                        ID: ${issue.id}
-                    </div>
                 </div>
             </div>
         </div>
@@ -1142,68 +906,26 @@ function createIssueCard(issue) {
     return div;
 }
 
-// ===== UTILITY FUNCTIONS =====
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-function formatDisplayDate(dateString) {
-    if (!dateString) return 'Not specified';
-    
-    try {
-        const date = new Date(dateString);
-        if (isNaN(date.getTime())) return dateString;
-        
-        return date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-    } catch (error) {
-        console.error('Date formatting error:', error);
-        return dateString;
-    }
-}
-
+// Function to redirect to specific issue page
 function redirectToIssue(url) {
-    if (url && url !== '#') {
-        console.log('Redirecting to:', url);
-        window.location.href = url;
-    } else {
-        alert('This issue is not yet available online.');
-    }
+    window.location.href = url;
 }
 
-// ===== DATA MANAGEMENT =====
-async function refreshData() {
-    console.log('🔄 Manual refresh requested');
-    await fetchIssuesFromGoogleSheets();
-}
-
-// Add global refresh function for manual testing
-window.refreshIssues = refreshData;
-
-// ===== EVENT LISTENERS =====
+// Setup event listeners
 function setupEventListeners() {
     // Mobile menu toggle
-    if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', function() {
-            mobileMenu.classList.toggle('hidden');
-        });
-    }
+    mobileMenuBtn.addEventListener('click', function() {
+        mobileMenu.classList.toggle('hidden');
+    });
 
     // Desktop navbar search functionality
-    if (searchToggleBtn) {
-        searchToggleBtn.addEventListener('click', toggleNavbarSearch);
-        navbarSearchInput.addEventListener('input', handleNavbarSearch);
-        navbarSearchInput.addEventListener('focus', function() {
-            if (navbarSearchInput.value.trim()) {
-                navbarSearchResults.classList.remove('hidden');
-            }
-        });
-    }
+    searchToggleBtn.addEventListener('click', toggleNavbarSearch);
+    navbarSearchInput.addEventListener('input', handleNavbarSearch);
+    navbarSearchInput.addEventListener('focus', function() {
+        if (navbarSearchInput.value.trim()) {
+            navbarSearchResults.classList.remove('hidden');
+        }
+    });
 
     // Mobile search functionality
     if (mobileSearchToggleBtn) {
@@ -1217,40 +939,32 @@ function setupEventListeners() {
     }
 
     // Enhanced keyboard support for search
-    if (navbarSearchInput) {
-        navbarSearchInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                toggleNavbarSearch();
-            }
-        });
-    }
+    navbarSearchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            toggleNavbarSearch();
+        }
+    });
 
-    if (mobileSearchInput) {
-        mobileSearchInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                toggleMobileSearch();
-            }
-        });
-    }
+    mobileSearchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            toggleMobileSearch();
+        }
+    });
 
     // Close search results when clicking outside
     document.addEventListener('click', function(e) {
         // Desktop search
-        if (navbarSearchInput && navbarSearchResults && searchToggleBtn) {
-            if (!navbarSearchInput.contains(e.target) && 
-                !navbarSearchResults.contains(e.target) && 
-                !searchToggleBtn.contains(e.target)) {
-                navbarSearchResults.classList.add('hidden');
-            }
+        if (!navbarSearchInput.contains(e.target) && 
+            !navbarSearchResults.contains(e.target) && 
+            !searchToggleBtn.contains(e.target)) {
+            navbarSearchResults.classList.add('hidden');
         }
 
         // Mobile search
-        if (mobileSearchInput && mobileSearchResults && mobileSearchToggleBtn) {
-            if (!mobileSearchInput.contains(e.target) && 
-                !mobileSearchResults.contains(e.target) && 
-                !mobileSearchToggleBtn.contains(e.target)) {
-                mobileSearchResults.classList.add('hidden');
-            }
+        if (!mobileSearchInput.contains(e.target) && 
+            !mobileSearchResults.contains(e.target) && 
+            !mobileSearchToggleBtn.contains(e.target)) {
+            mobileSearchResults.classList.add('hidden');
         }
     });
 
@@ -1265,34 +979,33 @@ function setupEventListeners() {
                     block: 'start'
                 });
                 // Close mobile menu if open
-                if (mobileMenu) {
-                    mobileMenu.classList.add('hidden');
-                }
+                mobileMenu.classList.add('hidden');
             }
         });
     });
 }
 
-// ===== SEARCH FUNCTIONALITY =====
+// Enhanced toggle navbar search with better state management
 function toggleNavbarSearch() {
     isDesktopSearchExpanded = !isDesktopSearchExpanded;
 
     if (isDesktopSearchExpanded) {
         // Expand search
         navbarSearchInput.classList.add('expanded');
-        if (navItems) navItems.classList.add('hidden-for-search');
+        navItems.classList.add('hidden-for-search');
         searchIcon.className = 'fas fa-times text-lg';
         navbarSearchInput.focus();
     } else {
         // Collapse search
         navbarSearchInput.classList.remove('expanded');
-        if (navItems) navItems.classList.remove('hidden-for-search');
+        navItems.classList.remove('hidden-for-search');
         searchIcon.className = 'fas fa-search text-lg';
         navbarSearchResults.classList.add('hidden');
         navbarSearchInput.value = '';
     }
 }
 
+// Enhanced toggle mobile search with proper cross functionality
 function toggleMobileSearch() {
     isMobileSearchExpanded = !isMobileSearchExpanded;
 
@@ -1310,6 +1023,7 @@ function toggleMobileSearch() {
     }
 }
 
+// Handle navbar search with improved filtering
 function handleNavbarSearch() {
     const query = navbarSearchInput.value.toLowerCase().trim();
 
@@ -1318,52 +1032,34 @@ function handleNavbarSearch() {
         return;
     }
 
-    const filteredIssues = searchIssues(query);
+    const filteredIssues = allIssues.filter(issue => {
+        return issue.title.toLowerCase().includes(query) ||
+            issue.abstract.toLowerCase().includes(query) ||
+            issue.keywords.some(keyword => keyword.toLowerCase().includes(query)) ||
+            issue.categories.some(category => category.toLowerCase().includes(query)) ||
+            issue.volume.toLowerCase().includes(query);
+    });
+
     displayNavbarSearchResults(filteredIssues, query);
 }
 
-function handleMobileSearch() {
-    const query = mobileSearchInput.value.toLowerCase().trim();
-
-    if (!query) {
-        mobileSearchResults.classList.add('hidden');
-        return;
-    }
-
-    const filteredIssues = searchIssues(query);
-    displayMobileSearchResults(filteredIssues, query);
-}
-
-function searchIssues(query) {
-    return allIssues.filter(issue => {
-        const keywords = Array.isArray(issue.keywords) ? issue.keywords : [];
-        const categories = Array.isArray(issue.categories) ? issue.categories : [];
-        
-        return (issue.title || '').toLowerCase().includes(query) ||
-            (issue.abstract || '').toLowerCase().includes(query) ||
-            (issue.authors || '').toLowerCase().includes(query) ||
-            keywords.some(keyword => keyword.toLowerCase().includes(query)) ||
-            categories.some(category => category.toLowerCase().includes(query)) ||
-            (issue.volume && issue.volume.toLowerCase().includes(query));
-    });
-}
-
+// Enhanced display navbar search results with redirect functionality
 function displayNavbarSearchResults(results, query) {
     if (results.length === 0) {
         navbarSearchResults.innerHTML = `
             <div class="p-4 text-center text-gray-500">
                 <i class="fas fa-search text-2xl mb-2 text-gray-400"></i>
-                <p>No issues found for "<strong>${escapeHtml(query)}</strong>"</p>
+                <p>No issues found for "<strong>${query}</strong>"</p>
             </div>
         `;
     } else {
         navbarSearchResults.innerHTML = results.map(issue => `
             <div class="search-result-item" onclick="redirectToIssue('${issue.redirectUrl}'); toggleNavbarSearch();">
-                <h4 class="font-semibold text-gray-900 mb-1 text-sm">${highlightSearchTerm(escapeHtml(issue.title || 'Untitled'), query)}</h4>
-                <p class="text-xs text-gray-500 mb-2">${escapeHtml(issue.volume || 'No volume')} • ${formatDisplayDate(issue.date)}</p>
-                <p class="text-xs text-gray-500">${highlightSearchTerm(escapeHtml((issue.abstract || '').substring(0, 120)), query)}...</p>
+                <h4 class="font-semibold text-gray-900 mb-1 text-sm">${highlightSearchTerm(issue.title, query)}</h4>
+                <p class="text-xs text-gray-500 mb-2">${issue.volume} • ${issue.date}</p>
+                <p class="text-xs text-gray-500">${highlightSearchTerm(issue.abstract.substring(0, 120), query)}...</p>
                 <div class="flex flex-wrap gap-1 mt-2">
-                    ${(issue.categories || []).slice(0, 2).map(cat => `<span class="badge badge-blue text-xs">${escapeHtml(cat)}</span>`).join('')}
+                    ${issue.categories.slice(0, 2).map(cat => `<span class="badge badge-blue text-xs">${cat}</span>`).join('')}
                 </div>
             </div>
         `).join('');
@@ -1372,22 +1068,43 @@ function displayNavbarSearchResults(results, query) {
     navbarSearchResults.classList.remove('hidden');
 }
 
+// Handle mobile search with improved filtering
+function handleMobileSearch() {
+    const query = mobileSearchInput.value.toLowerCase().trim();
+
+    if (!query) {
+        mobileSearchResults.classList.add('hidden');
+        return;
+    }
+
+    const filteredIssues = allIssues.filter(issue => {
+        return issue.title.toLowerCase().includes(query) ||
+            issue.abstract.toLowerCase().includes(query) ||
+            issue.keywords.some(keyword => keyword.toLowerCase().includes(query)) ||
+            issue.categories.some(category => category.toLowerCase().includes(query)) ||
+            issue.volume.toLowerCase().includes(query);
+    });
+
+    displayMobileSearchResults(filteredIssues, query);
+}
+
+// Enhanced display mobile search results with redirect functionality
 function displayMobileSearchResults(results, query) {
     if (results.length === 0) {
         mobileSearchResults.innerHTML = `
             <div class="p-3 text-center text-gray-500 text-sm">
                 <i class="fas fa-search text-lg mb-1 text-gray-400"></i>
-                <p>No issues found for "<strong>${escapeHtml(query)}</strong>"</p>
+                <p>No issues found for "<strong>${query}</strong>"</p>
             </div>
         `;
     } else {
         mobileSearchResults.innerHTML = results.map(issue => `
             <div class="search-result-item text-sm" onclick="redirectToIssue('${issue.redirectUrl}'); toggleMobileSearch();">
-                <h4 class="font-semibold text-gray-900 mb-1">${highlightSearchTerm(escapeHtml(issue.title || 'Untitled'), query)}</h4>
-                <p class="text-xs text-gray-600 mb-1">${escapeHtml(issue.volume || 'No volume')} • ${formatDisplayDate(issue.date)}</p>
-                <p class="text-xs text-gray-500">${highlightSearchTerm(escapeHtml((issue.abstract || '').substring(0, 100)), query)}...</p>
+                <h4 class="font-semibold text-gray-900 mb-1">${highlightSearchTerm(issue.title, query)}</h4>
+                <p class="text-xs text-gray-600 mb-1">${issue.volume} • ${issue.date}</p>
+                <p class="text-xs text-gray-500">${highlightSearchTerm(issue.abstract.substring(0, 100), query)}...</p>
                 <div class="flex flex-wrap gap-1 mt-1">
-                    ${(issue.categories || []).slice(0, 2).map(cat => `<span class="badge badge-blue text-xs">${escapeHtml(cat)}</span>`).join('')}
+                    ${issue.categories.slice(0, 2).map(cat => `<span class="badge badge-blue text-xs">${cat}</span>`).join('')}
                 </div>
             </div>
         `).join('');
@@ -1396,32 +1113,13 @@ function displayMobileSearchResults(results, query) {
     mobileSearchResults.classList.remove('hidden');
 }
 
+// Highlight search terms in results
 function highlightSearchTerm(text, query) {
-    if (!query || !text) return text;
-    const regex = new RegExp(`(${escapeRegExp(query)})`, 'gi');
+    if (!query) return text;
+    const regex = new RegExp(`(${query})`, 'gi');
     return text.replace(regex, '<mark class="bg-yellow-200 px-1 rounded">$1</mark>');
 }
-
-function escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-// ===== DEBUGGING & TESTING =====
-// Add some global functions for debugging
-window.debugApp = {
-    fetchIssues: fetchIssuesFromGoogleSheets,
-    refreshData: refreshData,
-    viewAllIssues: () => console.table(allIssues),
-    getConnectionStatus: () => connectionStatus,
-    testSearch: (query) => console.table(searchIssues(query))
-};
-
-console.log('🚀 Islamic Insight All Issues page loaded');
-console.log('📝 Debug functions available: window.debugApp');
 </script>
 
 </body>
 </html>
-
-
-
