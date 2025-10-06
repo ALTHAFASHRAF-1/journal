@@ -894,36 +894,55 @@ async function fetchIssuesFromGoogleSheets() {
         showLoadingState();
         updateConnectionStatus('Connecting to database...', 'loading');
         
-        const url = `${GOOGLE_SCRIPT_URL}?sheet=Sheet1&action=getAll&timestamp=${Date.now()}`;
-        console.log('Fetching from URL:', url);
+        // Test the URL first
+        console.log('Testing Google Apps Script URL:', GOOGLE_SCRIPT_URL);
+        
+        const url = `${GOOGLE_SCRIPT_URL}?sheet=Sheet1&action=getAll&timestamp=${Date.now()}&test=1`;
+        console.log('Full request URL:', url);
+        
+        // Add timeout to prevent hanging
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
         
         const response = await fetch(url, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
+                'Content-Type': 'application/json',
             },
             mode: 'cors',
-            cache: 'no-cache'
+            cache: 'no-cache',
+            signal: controller.signal
         });
         
-        console.log('Response status:', response.status);
-        console.log('Response headers:', [...response.headers.entries()]);
+        clearTimeout(timeoutId);
+        
+        console.log('Response received:');
+        console.log('- Status:', response.status);
+        console.log('- Status Text:', response.statusText);
+        console.log('- Headers:', Object.fromEntries(response.headers.entries()));
+        console.log('- URL:', response.url);
+        console.log('- Type:', response.type);
         
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
+            throw new Error(`HTTP ${response.status}: ${response.statusText}. Check if your Google Apps Script is properly deployed and accessible.`);
         }
         
         const textResult = await response.text();
-        console.log('Raw response length:', textResult.length);
-        console.log('Raw response preview:', textResult.substring(0, 500));
+        console.log('Response body length:', textResult.length);
+        console.log('Response body preview:', textResult.substring(0, 1000));
+        
+        if (!textResult.trim()) {
+            throw new Error('Empty response from server. Check Google Apps Script logs.');
+        }
         
         let result;
         try {
             result = JSON.parse(textResult);
         } catch (parseError) {
             console.error('JSON parse error:', parseError);
-            console.error('Problematic response:', textResult);
-            throw new Error(`Invalid JSON response: ${parseError.message}`);
+            console.error('Raw response:', textResult);
+            throw new Error(`Invalid JSON response: ${parseError.message}. Raw response: ${textResult.substring(0, 200)}`);
         }
         
         console.log('Parsed result:', result);
@@ -931,16 +950,29 @@ async function fetchIssuesFromGoogleSheets() {
         if (result.status === 'success') {
             allIssues = result.data || [];
             console.log(`✅ Successfully fetched ${allIssues.length} issues from Google Sheets`);
+            console.log('Sample issue:', allIssues[0]);
             updateConnectionStatus(`Connected successfully • ${allIssues.length} issues loaded`, 'success');
             renderAllIssues();
         } else {
-            throw new Error(result.message || 'Failed to fetch data from Google Sheets');
+            throw new Error(result.message || 'Unknown error from Google Apps Script');
         }
         
     } catch (error) {
-        console.error('❌ Error fetching issues from Google Sheets:', error);
-        updateConnectionStatus(`Connection failed: ${error.message}`, 'error');
-        showErrorState(error.message);
+        console.error('❌ Detailed error information:');
+        console.error('- Error name:', error.name);
+        console.error('- Error message:', error.message);
+        console.error('- Error stack:', error.stack);
+        
+        let errorMessage = error.message;
+        
+        if (error.name === 'AbortError') {
+            errorMessage = 'Request timeout. The server took too long to respond.';
+        } else if (error.message.includes('Failed to fetch')) {
+            errorMessage = 'Network error. Check if your Google Apps Script URL is correct and the script is deployed properly.';
+        }
+        
+        updateConnectionStatus(`Connection failed: ${errorMessage}`, 'error');
+        showErrorState(errorMessage);
         
     } finally {
         isLoading = false;
@@ -1390,5 +1422,6 @@ console.log('📝 Debug functions available: window.debugApp');
 
 </body>
 </html>
+
 
 
