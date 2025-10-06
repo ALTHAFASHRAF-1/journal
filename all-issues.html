@@ -795,7 +795,7 @@ Explore our complete collection of published journal issues
 <script>
 // ===== CONFIGURATION =====
 // Replace this URL with your deployed Google Apps Script Web App URL
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyh-WQ1O-EgIZFW4MJAo-IrSJXEcuL8Uw-LQZvhr-JS9GV5qtpIB3EEF2EytIqNiieY1Q/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzwSi7SBmbBMX6wX1vXZu5Nc08lk51C_Wo8FgjUF6ysBEzV47w3QxmanXrzg-diG9XliQ/exec';
 
 // Global variables
 let allIssues = [];
@@ -901,26 +901,28 @@ async function fetchIssuesFromGoogleSheets() {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
             },
-            // Add cache busting
+            mode: 'cors',
             cache: 'no-cache'
         });
         
         console.log('Response status:', response.status);
+        console.log('Response headers:', [...response.headers.entries()]);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
         }
         
         const textResult = await response.text();
-        console.log('Raw response:', textResult.substring(0, 200) + '...');
+        console.log('Raw response length:', textResult.length);
+        console.log('Raw response preview:', textResult.substring(0, 500));
         
         let result;
         try {
             result = JSON.parse(textResult);
         } catch (parseError) {
             console.error('JSON parse error:', parseError);
+            console.error('Problematic response:', textResult);
             throw new Error(`Invalid JSON response: ${parseError.message}`);
         }
         
@@ -1388,4 +1390,5 @@ console.log('📝 Debug functions available: window.debugApp');
 
 </body>
 </html>
+
 
