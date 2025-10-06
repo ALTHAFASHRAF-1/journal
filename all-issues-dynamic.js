@@ -126,9 +126,7 @@ class AllIssuesLoader {
             categories.push('First Issue');
         }
         
-        if (issue.articles && issue.articles.length > 0) {
-            categories.push('Full Issue');
-        }
+        
         
         return categories;
     }
