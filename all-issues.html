@@ -740,84 +740,12 @@ Explore our complete collection of published journal issues
     </footer>
 
 <script>
-// Issues data with corrected redirect URLs (removed duplicates)
-const allIssues = [
-    {
-        id: 1,
-        title: "Vol. 7 No. 2 (2024): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
-        authors: "",
-        journal: "Islamic Insight",
-        date: "2024-12-01",
-        volume: "Vol. 7 No. 2 (2024)",
-        pages: "",
-        doi: "",
-        categories: ["Latest", "Current Issue"],
-        abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world. It welcomes original scholarship across various disciplines, encompassing textual analysis of the Quran and Hadith, Islamic legal and theological discourse, philosophy, comparative religion, social sciences, and the historical and cultural experiences of Muslims. Notably, IIJIS employs a rigorous double-blind peer review process to ensure the quality of published works.",
-        keywords: ["Islamic Studies", "Peer Review", "Academic Research"],
-        imageUrl: "https://dqdhiu.netlify.app/vol7no2.jpg",
-        redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue1"
-    },
-    {
-        id: 2,
-        title: "Vol. 7 No. 1 (2024): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
-        authors: "",
-        journal: "Islamic Insight",
-        date: "2024-06-30",
-        volume: "Vol. 7 No. 1 (2024)",
-        pages: "",
-        doi: "",
-        categories: ["Previous", "Issued"],
-        abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world. It welcomes original scholarship across various disciplines, encompassing textual analysis of the Quran and Hadith, Islamic legal and theological discourse, philosophy, comparative religion, social sciences, and the historical and cultural experiences of Muslims.",
-        keywords: ["Islamic Studies", "Bilingual", "Research"],
-        imageUrl: "https://dqdhiu.netlify.app/vol7no1.jpg",
-        redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue2"
-    },
-    {
-        id: 3,
-        title: "Vol. 5 No. 01 (2022): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
-        authors: "",
-        journal: "Islamic Insight",
-        date: "2022-05-01",
-        volume: "Vol. 5 No. 01 (2022)",
-        pages: "",
-        doi: "",
-        categories: ["Previous", "Issued"],
-        abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) is a bilingual (English and Arabic) academic journal published twice a year by the Kulliyyah of Qur'an and Sunnah, Darul Huda Islamic University. It is a multi-disciplinary journal devoted for publishing original scholarship of exceptional quality on all aspects of Islam and the Muslim world.",
-        keywords: ["Multi-disciplinary", "Qur'an", "Sunnah"],
-        imageUrl: "https://dqdhiu.netlify.app/vol5no1.jpg",
-        redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue3"
-    },
-    {
-        id: 4,
-        title: "Vol. 1 No. 2 (2018): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
-        authors: "",
-        journal: "Islamic Insight",
-        date: "2018-12-01",
-        volume: "Vol. 1 No. 2 (2018)",
-        pages: "",
-        doi: "",
-        categories: ["Previous", "Issued"],
-        abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world. This issue represents our continued commitment to scholarly excellence and rigorous peer review standards.",
-        keywords: ["Scholarly Excellence", "Islamic Research", "Academic"],
-        imageUrl: "https://dqdhiu.netlify.app/vol1no2.jpg",
-        redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue4"
-    },
-    {
-        id: 5,
-        title: "Vol. 1 No. 1 (2018): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
-        authors: "",
-        journal: "Islamic Insight",
-        date: "2018-06-01",
-        volume: "Vol. 1 No. 1 (2018)",
-        pages: "",
-        doi: "",
-        categories: ["Previous", "Issued", "First Issue"],
-        abstract: "The inaugural issue of Islamic Insight Journal of Islamic Studies (IIJIS), marking the beginning of our academic journey. This bilingual platform was established to disseminate exceptional academic research on Islam and the Muslim world, setting the foundation for future scholarly contributions.",
-        keywords: ["Inaugural Issue", "Foundation", "Academic Journey"],
-        imageUrl: "https://dqdhiu.netlify.app/vol1no1.jpg",
-        redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue5"
-    }
-];
+// Configuration - Replace with your Google Apps Script Web App URL
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzrTbBUlx41l-zEbOXz1-KSBAGNjFRDvFNIvIgp-H_HiwklyPg6faRXg-MpO2kdDdw1/exec';
+
+// Global variables
+let allIssues = [];
+let isLoading = false;
 
 // DOM Elements
 const issuesGrid = document.getElementById('issues-grid');
@@ -843,36 +771,206 @@ let isMobileSearchExpanded = false;
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
-    renderAllIssues();
+    fetchIssuesFromGoogleSheets();
     setupEventListeners();
 });
 
-// Render all issues in horizontal layout (like current issue)
+// Fetch issues data from Google Sheets
+async function fetchIssuesFromGoogleSheets() {
+    if (isLoading) return;
+    
+    isLoading = true;
+    
+    try {
+        // Show loading state
+        showLoadingState();
+        
+        const response = await fetch(`${GOOGLE_SCRIPT_URL}?sheet=Sheet2`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        
+        if (result.status === 'success') {
+            allIssues = result.data || [];
+            console.log('Fetched issues from Google Sheets:', allIssues.length);
+            renderAllIssues();
+        } else {
+            throw new Error(result.message || 'Failed to fetch data');
+        }
+        
+    } catch (error) {
+        console.error('Error fetching issues from Google Sheets:', error);
+        showErrorState(error.message);
+        
+        // Fallback to static data if Google Sheets fails
+        console.log('Falling back to static data...');
+        loadFallbackData();
+        renderAllIssues();
+        
+    } finally {
+        isLoading = false;
+    }
+}
+
+// Show loading state
+function showLoadingState() {
+    issuesGrid.innerHTML = `
+        <div class="text-center py-12">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <p class="mt-4 text-gray-600">Loading issues from database...</p>
+        </div>
+    `;
+}
+
+// Show error state
+function showErrorState(errorMessage) {
+    issuesGrid.innerHTML = `
+        <div class="text-center py-12">
+            <div class="text-red-500 mb-4">
+                <i class="fas fa-exclamation-triangle text-3xl"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Failed to Load Issues</h3>
+            <p class="text-gray-600 mb-4">${errorMessage}</p>
+            <button onclick="fetchIssuesFromGoogleSheets()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                <i class="fas fa-redo mr-2"></i>Try Again
+            </button>
+        </div>
+    `;
+}
+
+// Fallback static data (your original data)
+function loadFallbackData() {
+    allIssues = [
+        {
+            id: 1,
+            title: "Vol. 7 No. 2 (2024): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
+            authors: "",
+            journal: "Islamic Insight",
+            date: "2024-12-01",
+            volume: "Vol. 7 No. 2 (2024)",
+            pages: "",
+            doi: "",
+            categories: ["Latest", "Current Issue"],
+            abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world. It welcomes original scholarship across various disciplines, encompassing textual analysis of the Quran and Hadith, Islamic legal and theological discourse, philosophy, comparative religion, social sciences, and the historical and cultural experiences of Muslims. Notably, IIJIS employs a rigorous double-blind peer review process to ensure the quality of published works.",
+            keywords: ["Islamic Studies", "Peer Review", "Academic Research"],
+            imageUrl: "https://dqdhiu.netlify.app/vol7no2.jpg",
+            redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue1"
+        },
+        {
+            id: 2,
+            title: "Vol. 7 No. 1 (2024): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
+            authors: "",
+            journal: "Islamic Insight",
+            date: "2024-06-30",
+            volume: "Vol. 7 No. 1 (2024)",
+            pages: "",
+            doi: "",
+            categories: ["Previous", "Issued"],
+            abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world. It welcomes original scholarship across various disciplines, encompassing textual analysis of the Quran and Hadith, Islamic legal and theological discourse, philosophy, comparative religion, social sciences, and the historical and cultural experiences of Muslims.",
+            keywords: ["Islamic Studies", "Bilingual", "Research"],
+            imageUrl: "https://dqdhiu.netlify.app/vol7no1.jpg",
+            redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue2"
+        },
+        {
+            id: 3,
+            title: "Vol. 5 No. 01 (2022): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
+            authors: "",
+            journal: "Islamic Insight",
+            date: "2022-05-01",
+            volume: "Vol. 5 No. 01 (2022)",
+            pages: "",
+            doi: "",
+            categories: ["Previous", "Issued"],
+            abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) is a bilingual (English and Arabic) academic journal published twice a year by the Kulliyyah of Qur'an and Sunnah, Darul Huda Islamic University. It is a multi-disciplinary journal devoted for publishing original scholarship of exceptional quality on all aspects of Islam and the Muslim world.",
+            keywords: ["Multi-disciplinary", "Qur'an", "Sunnah"],
+            imageUrl: "https://dqdhiu.netlify.app/vol5no1.jpg",
+            redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue3"
+        },
+        {
+            id: 4,
+            title: "Vol. 1 No. 2 (2018): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
+            authors: "",
+            journal: "Islamic Insight",
+            date: "2018-12-01",
+            volume: "Vol. 1 No. 2 (2018)",
+            pages: "",
+            doi: "",
+            categories: ["Previous", "Issued"],
+            abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world. This issue represents our continued commitment to scholarly excellence and rigorous peer review standards.",
+            keywords: ["Scholarly Excellence", "Islamic Research", "Academic"],
+            imageUrl: "https://dqdhiu.netlify.app/vol1no2.jpg",
+            redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue4"
+        },
+        {
+            id: 5,
+            title: "Vol. 1 No. 1 (2018): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
+            authors: "",
+            journal: "Islamic Insight",
+            date: "2018-06-01",
+            volume: "Vol. 1 No. 1 (2018)",
+            pages: "",
+            doi: "",
+            categories: ["Previous", "Issued", "First Issue"],
+            abstract: "The inaugural issue of Islamic Insight Journal of Islamic Studies (IIJIS), marking the beginning of our academic journey. This bilingual platform was established to disseminate exceptional academic research on Islam and the Muslim world, setting the foundation for future scholarly contributions.",
+            keywords: ["Inaugural Issue", "Foundation", "Academic Journey"],
+            imageUrl: "https://dqdhiu.netlify.app/vol1no1.jpg",
+            redirectUrl: "https://dqdhiu.netlify.app/issues?issue=issue5"
+        }
+    ];
+}
+
+// Render all issues
 function renderAllIssues() {
+    if (!allIssues || allIssues.length === 0) {
+        issuesGrid.innerHTML = `
+            <div class="text-center py-12">
+                <div class="text-gray-400 mb-4">
+                    <i class="fas fa-book-open text-4xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">No Issues Found</h3>
+                <p class="text-gray-600">No journal issues are currently available.</p>
+            </div>
+        `;
+        return;
+    }
+
     issuesGrid.innerHTML = '';
 
-    allIssues.forEach(issue => {
+    // Sort issues by date (newest first)
+    const sortedIssues = [...allIssues].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    sortedIssues.forEach(issue => {
         const issueCard = createIssueCard(issue);
         issuesGrid.appendChild(issueCard);
     });
 }
 
-// Create issue card with horizontal layout (same as current issue design)
+// Create issue card
 function createIssueCard(issue) {
     const div = document.createElement('div');
     div.className = 'bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden current-issue-card';
 
     const badgeColors = ['badge-blue', 'badge-green', 'badge-red', 'badge-purple', 'badge-yellow'];
-    const categoryBadges = issue.categories.map((category, index) => 
+    const categories = Array.isArray(issue.categories) ? issue.categories : [];
+    const categoryBadges = categories.map((category, index) => 
         `<span class="badge ${badgeColors[index % badgeColors.length]}">${category}</span>`
     ).join('');
+
+    // Format date for display
+    const displayDate = formatDisplayDate(issue.date);
 
     div.innerHTML = `
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
             <!-- Journal cover - Left side -->
             <div class="lg:col-span-1 p-2 flex justify-center items-center bg-gray-50">
                 <div class="current-issue-image-container">
-                    <img src="${issue.imageUrl}" alt="${issue.title}" class="current-issue-image">
+                    <img src="${issue.imageUrl || 'https://via.placeholder.com/300x400?text=No+Image'}" 
+                         alt="${issue.title}" 
+                         class="current-issue-image"
+                         onerror="this.src='https://via.placeholder.com/300x400?text=No+Image'">
                 </div>
             </div>
             <!-- Content - Right side -->
@@ -885,16 +983,19 @@ function createIssueCard(issue) {
                     ${issue.title}
                 </h3>
                 <p class="text-gray-700 mb-6 leading-relaxed text-justify">
-                    ${issue.abstract}
+                    ${issue.abstract || 'No abstract available.'}
                 </p>
                 <div class="mb-6">
                     <p class="text-sm text-gray-600">
-                        <i class="far fa-calendar-alt mr-2"></i><strong>Published:</strong> ${issue.date}
+                        <i class="far fa-calendar-alt mr-2"></i><strong>Published:</strong> ${displayDate}
                     </p>
+                    ${issue.volume ? `<p class="text-sm text-gray-600 mt-1">
+                        <i class="fas fa-book mr-2"></i><strong>Volume:</strong> ${issue.volume}
+                    </p>` : ''}
                 </div>
                 <div class="flex justify-between items-center">
                     <button 
-                        onclick="redirectToIssue('${issue.redirectUrl}')" 
+                        onclick="redirectToIssue('${issue.redirectUrl || '#'}')" 
                         class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
                         View Articles <i class="fas fa-arrow-right ml-2"></i>
                     </button>
@@ -906,26 +1007,57 @@ function createIssueCard(issue) {
     return div;
 }
 
+// Format date for display
+function formatDisplayDate(dateString) {
+    if (!dateString) return 'Not specified';
+    
+    try {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return dateString;
+        
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    } catch (error) {
+        return dateString;
+    }
+}
+
 // Function to redirect to specific issue page
 function redirectToIssue(url) {
-    window.location.href = url;
+    if (url && url !== '#') {
+        window.location.href = url;
+    } else {
+        alert('This issue is not yet available online.');
+    }
+}
+
+// Refresh data from Google Sheets
+async function refreshData() {
+    await fetchIssuesFromGoogleSheets();
 }
 
 // Setup event listeners
 function setupEventListeners() {
     // Mobile menu toggle
-    mobileMenuBtn.addEventListener('click', function() {
-        mobileMenu.classList.toggle('hidden');
-    });
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
 
     // Desktop navbar search functionality
-    searchToggleBtn.addEventListener('click', toggleNavbarSearch);
-    navbarSearchInput.addEventListener('input', handleNavbarSearch);
-    navbarSearchInput.addEventListener('focus', function() {
-        if (navbarSearchInput.value.trim()) {
-            navbarSearchResults.classList.remove('hidden');
-        }
-    });
+    if (searchToggleBtn) {
+        searchToggleBtn.addEventListener('click', toggleNavbarSearch);
+        navbarSearchInput.addEventListener('input', handleNavbarSearch);
+        navbarSearchInput.addEventListener('focus', function() {
+            if (navbarSearchInput.value.trim()) {
+                navbarSearchResults.classList.remove('hidden');
+            }
+        });
+    }
 
     // Mobile search functionality
     if (mobileSearchToggleBtn) {
@@ -939,32 +1071,40 @@ function setupEventListeners() {
     }
 
     // Enhanced keyboard support for search
-    navbarSearchInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            toggleNavbarSearch();
-        }
-    });
+    if (navbarSearchInput) {
+        navbarSearchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                toggleNavbarSearch();
+            }
+        });
+    }
 
-    mobileSearchInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            toggleMobileSearch();
-        }
-    });
+    if (mobileSearchInput) {
+        mobileSearchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                toggleMobileSearch();
+            }
+        });
+    }
 
     // Close search results when clicking outside
     document.addEventListener('click', function(e) {
         // Desktop search
-        if (!navbarSearchInput.contains(e.target) && 
-            !navbarSearchResults.contains(e.target) && 
-            !searchToggleBtn.contains(e.target)) {
-            navbarSearchResults.classList.add('hidden');
+        if (navbarSearchInput && navbarSearchResults && searchToggleBtn) {
+            if (!navbarSearchInput.contains(e.target) && 
+                !navbarSearchResults.contains(e.target) && 
+                !searchToggleBtn.contains(e.target)) {
+                navbarSearchResults.classList.add('hidden');
+            }
         }
 
         // Mobile search
-        if (!mobileSearchInput.contains(e.target) && 
-            !mobileSearchResults.contains(e.target) && 
-            !mobileSearchToggleBtn.contains(e.target)) {
-            mobileSearchResults.classList.add('hidden');
+        if (mobileSearchInput && mobileSearchResults && mobileSearchToggleBtn) {
+            if (!mobileSearchInput.contains(e.target) && 
+                !mobileSearchResults.contains(e.target) && 
+                !mobileSearchToggleBtn.contains(e.target)) {
+                mobileSearchResults.classList.add('hidden');
+            }
         }
     });
 
@@ -979,7 +1119,9 @@ function setupEventListeners() {
                     block: 'start'
                 });
                 // Close mobile menu if open
-                mobileMenu.classList.add('hidden');
+                if (mobileMenu) {
+                    mobileMenu.classList.add('hidden');
+                }
             }
         });
     });
@@ -992,13 +1134,13 @@ function toggleNavbarSearch() {
     if (isDesktopSearchExpanded) {
         // Expand search
         navbarSearchInput.classList.add('expanded');
-        navItems.classList.add('hidden-for-search');
+        if (navItems) navItems.classList.add('hidden-for-search');
         searchIcon.className = 'fas fa-times text-lg';
         navbarSearchInput.focus();
     } else {
         // Collapse search
         navbarSearchInput.classList.remove('expanded');
-        navItems.classList.remove('hidden-for-search');
+        if (navItems) navItems.classList.remove('hidden-for-search');
         searchIcon.className = 'fas fa-search text-lg';
         navbarSearchResults.classList.add('hidden');
         navbarSearchInput.value = '';
@@ -1033,11 +1175,14 @@ function handleNavbarSearch() {
     }
 
     const filteredIssues = allIssues.filter(issue => {
+        const keywords = Array.isArray(issue.keywords) ? issue.keywords : [];
+        const categories = Array.isArray(issue.categories) ? issue.categories : [];
+        
         return issue.title.toLowerCase().includes(query) ||
             issue.abstract.toLowerCase().includes(query) ||
-            issue.keywords.some(keyword => keyword.toLowerCase().includes(query)) ||
-            issue.categories.some(category => category.toLowerCase().includes(query)) ||
-            issue.volume.toLowerCase().includes(query);
+            keywords.some(keyword => keyword.toLowerCase().includes(query)) ||
+            categories.some(category => category.toLowerCase().includes(query)) ||
+            (issue.volume && issue.volume.toLowerCase().includes(query));
     });
 
     displayNavbarSearchResults(filteredIssues, query);
@@ -1056,10 +1201,10 @@ function displayNavbarSearchResults(results, query) {
         navbarSearchResults.innerHTML = results.map(issue => `
             <div class="search-result-item" onclick="redirectToIssue('${issue.redirectUrl}'); toggleNavbarSearch();">
                 <h4 class="font-semibold text-gray-900 mb-1 text-sm">${highlightSearchTerm(issue.title, query)}</h4>
-                <p class="text-xs text-gray-500 mb-2">${issue.volume} • ${issue.date}</p>
-                <p class="text-xs text-gray-500">${highlightSearchTerm(issue.abstract.substring(0, 120), query)}...</p>
+                <p class="text-xs text-gray-500 mb-2">${issue.volume || 'No volume'} • ${formatDisplayDate(issue.date)}</p>
+                <p class="text-xs text-gray-500">${highlightSearchTerm((issue.abstract || '').substring(0, 120), query)}...</p>
                 <div class="flex flex-wrap gap-1 mt-2">
-                    ${issue.categories.slice(0, 2).map(cat => `<span class="badge badge-blue text-xs">${cat}</span>`).join('')}
+                    ${(issue.categories || []).slice(0, 2).map(cat => `<span class="badge badge-blue text-xs">${cat}</span>`).join('')}
                 </div>
             </div>
         `).join('');
@@ -1078,11 +1223,14 @@ function handleMobileSearch() {
     }
 
     const filteredIssues = allIssues.filter(issue => {
+        const keywords = Array.isArray(issue.keywords) ? issue.keywords : [];
+        const categories = Array.isArray(issue.categories) ? issue.categories : [];
+        
         return issue.title.toLowerCase().includes(query) ||
             issue.abstract.toLowerCase().includes(query) ||
-            issue.keywords.some(keyword => keyword.toLowerCase().includes(query)) ||
-            issue.categories.some(category => category.toLowerCase().includes(query)) ||
-            issue.volume.toLowerCase().includes(query);
+            keywords.some(keyword => keyword.toLowerCase().includes(query)) ||
+            categories.some(category => category.toLowerCase().includes(query)) ||
+            (issue.volume && issue.volume.toLowerCase().includes(query));
     });
 
     displayMobileSearchResults(filteredIssues, query);
@@ -1101,10 +1249,10 @@ function displayMobileSearchResults(results, query) {
         mobileSearchResults.innerHTML = results.map(issue => `
             <div class="search-result-item text-sm" onclick="redirectToIssue('${issue.redirectUrl}'); toggleMobileSearch();">
                 <h4 class="font-semibold text-gray-900 mb-1">${highlightSearchTerm(issue.title, query)}</h4>
-                <p class="text-xs text-gray-600 mb-1">${issue.volume} • ${issue.date}</p>
-                <p class="text-xs text-gray-500">${highlightSearchTerm(issue.abstract.substring(0, 100), query)}...</p>
+                <p class="text-xs text-gray-600 mb-1">${issue.volume || 'No volume'} • ${formatDisplayDate(issue.date)}</p>
+                <p class="text-xs text-gray-500">${highlightSearchTerm((issue.abstract || '').substring(0, 100), query)}...</p>
                 <div class="flex flex-wrap gap-1 mt-1">
-                    ${issue.categories.slice(0, 2).map(cat => `<span class="badge badge-blue text-xs">${cat}</span>`).join('')}
+                    ${(issue.categories || []).slice(0, 2).map(cat => `<span class="badge badge-blue text-xs">${cat}</span>`).join('')}
                 </div>
             </div>
         `).join('');
@@ -1115,11 +1263,13 @@ function displayMobileSearchResults(results, query) {
 
 // Highlight search terms in results
 function highlightSearchTerm(text, query) {
-    if (!query) return text;
+    if (!query || !text) return text;
     const regex = new RegExp(`(${query})`, 'gi');
     return text.replace(regex, '<mark class="bg-yellow-200 px-1 rounded">$1</mark>');
 }
+
 </script>
 
 </body>
 </html>
+
