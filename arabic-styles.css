@@ -1,0 +1,136 @@
+/* Arabic Journal Styling */
+.arabic-article {
+    direction: rtl;
+    text-align: right;
+    font-family: 'Traditional Arabic', 'Scheherazade New', 'Amiri', 'Lateef', serif;
+    line-height: 2;
+    font-size: 1.1em;
+}
+
+/* Arabic Typography */
+.arabic-article .article-title {
+    font-family: 'Traditional Arabic', 'Scheherazade New', 'Amiri', serif;
+    font-weight: 700;
+    font-size: 2.2rem;
+    line-height: 1.4;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.arabic-article .article-content {
+    text-align: justify;
+    line-height: 2.2;
+}
+
+.arabic-article .article-content p {
+    margin-bottom: 1.5rem;
+    text-align: justify;
+    line-height: 2.2;
+    font-size: 1.15em;
+}
+
+.arabic-article .article-content h1,
+.arabic-article .article-content h2,
+.arabic-article .article-content h3 {
+    font-family: 'Traditional Arabic', 'Scheherazade New', 'Amiri', serif;
+    font-weight: 700;
+    text-align: right;
+    margin: 2.5rem 0 1.5rem 0;
+}
+
+.arabic-article .article-content h2 {
+    font-size: 1.6rem;
+    border-bottom: 2px solid #c49a6c;
+    padding-bottom: 0.5rem;
+}
+
+.arabic-article .article-content h3 {
+    font-size: 1.3rem;
+    color: #7d5d38;
+}
+
+/* Arabic Metadata Styling */
+.arabic-article .author-info,
+.arabic-article .article-metadata {
+    text-align: right;
+}
+
+.arabic-article .keywords {
+    justify-content: flex-end;
+}
+
+.arabic-article .author-info h3,
+.arabic-article .article-metadata .font-semibold {
+    font-family: 'Traditional Arabic', 'Scheherazade New', serif;
+}
+
+/* Arabic Special Elements */
+.arabic-article .quranic-verse {
+    font-family: 'Traditional Arabic', 'Scheherazade New', 'Amiri', serif;
+    font-size: 1.3em;
+    font-weight: 500;
+    text-align: center;
+    line-height: 2.5;
+    background: #fff9e6;
+    border-right: 4px solid #d4af37;
+    border-left: none;
+    padding: 2rem;
+}
+
+.arabic-article .hadith-quote {
+    font-family: 'Traditional Arabic', 'Scheherazade New', 'Amiri', serif;
+    font-size: 1.2em;
+    text-align: justify;
+    line-height: 2.3;
+    background: #f0f8f0;
+    border-right: 4px solid #2e8b57;
+    border-left: none;
+}
+
+.arabic-article .citation-box {
+    text-align: right;
+    border-right: 4px solid #4299e1;
+    border-left: none;
+}
+
+/* Arabic Numbers and Lists */
+.arabic-article ol,
+.arabic-article ul {
+    margin-right: 2rem;
+    margin-left: 0;
+}
+
+.arabic-article .article-content li {
+    margin-bottom: 0.5rem;
+    text-align: right;
+}
+
+/* Responsive Arabic Design */
+@media (max-width: 768px) {
+    .arabic-article .article-title {
+        font-size: 1.8rem;
+    }
+    
+    .arabic-article .article-content p {
+        font-size: 1.1em;
+        line-height: 2;
+    }
+    
+    .arabic-article .quranic-verse,
+    .arabic-article .hadith-quote {
+        padding: 1rem;
+        font-size: 1.1em;
+    }
+}
+
+/* Arabic Font Face Definitions */
+@font-face {
+    font-family: 'Traditional Arabic';
+    src: local('Traditional Arabic'),
+         url('https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&display=swap');
+}
+
+/* Fallback Arabic Font Stack */
+.arabic-text {
+    font-family: 'Traditional Arabic', 'Scheherazade New', 'Amiri', 'Lateef', 'Geeza Pro', 'DecoType Naskh', serif;
+}
