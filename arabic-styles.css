@@ -109,6 +109,7 @@
     line-height: 1.8;
     font-size: 1.05em;
     direction: rtl;
+    border: none !important; /* Remove all borders */
 }
 
 /* Arabic Author Information */
