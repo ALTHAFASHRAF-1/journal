@@ -154,15 +154,15 @@ function updateArticleDisplay(article) {
     document.getElementById('loading-state').style.display = 'none';
     document.getElementById('article-container').style.display = 'block';
     
+    // Apply Arabic styling if needed
+    setTimeout(() => {
+        if (window.arabicStyler) {
+            window.arabicStyler.styleAllContent();
+        }
+    }, 100);
+    
     console.log('Article display updated successfully');
 }
-// After updating the content, apply Arabic styling
-setTimeout(() => {
-    if (window.arabicStyler) {
-        window.arabicStyler.styleAllContent();
-    }
-}, 100);
-
 
 // Enhanced initialization
 async function initializeArticlePage() {
