@@ -2028,17 +2028,6 @@
     dateField.value = today;
   }
 
-  // Add debug button (remove in production)
-  const debugBtn = document.createElement('button');
-  debugBtn.textContent = 'Debug Validation';
-  debugBtn.type = 'button';
-  debugBtn.onclick = debugFormValidation;
-  debugBtn.style.margin = '10px';
-  debugBtn.style.background = '#f59e0b';
-  debugBtn.style.color = 'white';
-  debugBtn.style.padding = '5px 10px';
-  debugBtn.style.borderRadius = '5px';
-  debugBtn.style.border = 'none';
   
   // Insert debug button before submit button
   const submitSection = document.querySelector('.submit-section');
