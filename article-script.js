@@ -338,4 +338,90 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Arabic Language Detection and Styling
+class ArabicStyler {
+    constructor() {
+        this.isArabic = false;
+    }
 
+    // Detect if content contains Arabic text
+    detectArabic(text) {
+        const arabicPattern = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
+        return arabicPattern.test(text);
+    }
+
+    // Apply Arabic styling to elements
+    applyArabicStyling() {
+        const articleContainer = document.getElementById('article-container');
+        if (!articleContainer) return;
+
+        // Check title and abstract for Arabic content
+        const title = document.getElementById('article-title')?.textContent || '';
+        const abstract = document.getElementById('abstract-content')?.textContent || '';
+        
+        this.isArabic = this.detectArabic(title) || this.detectArabic(abstract);
+
+        if (this.isArabic) {
+            console.log('Arabic content detected, applying RTL styling');
+            this.applyRTLLayout();
+        }
+    }
+
+    applyRTLLayout() {
+        const articleContainer = document.getElementById('article-container');
+        articleContainer.classList.add('arabic-article');
+
+        // Update metadata alignment
+        const metadataElements = [
+            '.author-info',
+            '.article-metadata',
+            '.keywords',
+            '#author-container'
+        ];
+
+        metadataElements.forEach(selector => {
+            const elements = document.querySelectorAll(selector);
+            elements.forEach(el => {
+                el.style.textAlign = 'right';
+                el.style.direction = 'rtl';
+            });
+        });
+
+        // Update grid layout for metadata
+        const metadataGrid = document.querySelector('.article-metadata .grid');
+        if (metadataGrid) {
+            metadataGrid.style.direction = 'rtl';
+        }
+
+        // Update PDF button position
+        const pdfButton = document.querySelector('button[onclick="openPDF()"]');
+        if (pdfButton) {
+            pdfButton.style.marginRight = 'auto';
+            pdfButton.style.marginLeft = '0';
+        }
+    }
+
+    // Style Arabic text in content
+    styleArabicText() {
+        const contentElements = document.querySelectorAll('.article-content p, .article-content h1, .article-content h2, .article-content h3');
+        
+        contentElements.forEach(element => {
+            if (this.detectArabic(element.textContent)) {
+                element.classList.add('arabic-text');
+                element.style.direction = 'rtl';
+                element.style.textAlign = 'right';
+            }
+        });
+    }
+
+    // Apply styling to all content
+    styleAllContent() {
+        this.applyArabicStyling();
+        setTimeout(() => {
+            this.styleArabicText();
+        }, 100);
+    }
+}
+
+// Initialize Arabic styler
+window.arabicStyler = new ArabicStyler();
