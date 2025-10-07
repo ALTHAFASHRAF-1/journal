@@ -1,8 +1,9 @@
-// article-script.js - Fixed version with better error handling
+// article-script.js - Enhanced version with professional language detection and styling
 
 // Global variables
 let currentArticleId = null;
 let currentPdfUrl = null;
+let currentLanguage = 'auto'; // 'auto', 'arabic', 'english'
 
 // Get article ID from URL parameter
 function getArticleIdFromUrl() {
@@ -154,10 +155,10 @@ function updateArticleDisplay(article) {
     document.getElementById('loading-state').style.display = 'none';
     document.getElementById('article-container').style.display = 'block';
     
-    // Apply Arabic styling if needed
+    // Apply language-specific styling
     setTimeout(() => {
         if (window.arabicStyler) {
-            window.arabicStyler.styleAllContent();
+            window.arabicStyler.styleAllContent(article);
         }
     }, 100);
     
@@ -338,90 +339,313 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Arabic Language Detection and Styling
+// Enhanced Arabic Language Detection and Styling
 class ArabicStyler {
     constructor() {
         this.isArabic = false;
+        this.isEnglish = false;
+        this.isMixed = false;
     }
 
-    // Detect if content contains Arabic text
+    // Enhanced Arabic detection with better accuracy
     detectArabic(text) {
-        const arabicPattern = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
-        return arabicPattern.test(text);
+        if (!text || typeof text !== 'string') return false;
+        
+        const arabicPattern = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/g;
+        const arabicMatches = text.match(arabicPattern) || [];
+        const totalChars = text.replace(/[\s\d\p{P}]/gu, '').length;
+        
+        if (totalChars === 0) return false;
+        
+        const arabicRatio = arabicMatches.length / totalChars;
+        return arabicRatio > 0.3; // 30% threshold for Arabic content
     }
 
-    // Apply Arabic styling to elements
-    applyArabicStyling() {
+    // Enhanced English detection
+    detectEnglish(text) {
+        if (!text || typeof text !== 'string') return false;
+        
+        const englishPattern = /[a-zA-Z]/g;
+        const englishMatches = text.match(englishPattern) || [];
+        const totalChars = text.replace(/[\s\d\p{P}]/gu, '').length;
+        
+        if (totalChars === 0) return false;
+        
+        const englishRatio = englishMatches.length / totalChars;
+        return englishRatio > 0.5; // 50% threshold for English content
+    }
+
+    // Detect content language with improved logic
+    detectContentLanguage(article) {
+        const titleText = article.title || '';
+        const abstractText = article.abstract || '';
+        const combinedText = titleText + ' ' + abstractText;
+
+        if (!combinedText.trim()) return 'english'; // Default to English
+
+        const hasArabic = this.detectArabic(combinedText);
+        const hasEnglish = this.detectEnglish(combinedText);
+
+        // Calculate precise ratios
+        const arabicMatches = (combinedText.match(/[\u0600-\u06FF]/g) || []).length;
+        const englishMatches = (combinedText.match(/[a-zA-Z]/g) || []).length;
+        const totalLetters = arabicMatches + englishMatches;
+
+        if (totalLetters === 0) return 'english';
+
+        const arabicRatio = arabicMatches / totalLetters;
+        const englishRatio = englishMatches / totalLetters;
+
+        // Determine language based on ratios
+        if (hasArabic && hasEnglish) {
+            this.isMixed = true;
+            // Use Arabic styling if Arabic content is dominant
+            return arabicRatio > 0.4 ? 'arabic' : 'english';
+        } else if (hasArabic || arabicRatio > 0.2) {
+            this.isArabic = true;
+            return 'arabic';
+        } else {
+            this.isEnglish = true;
+            return 'english';
+        }
+    }
+
+    // Apply appropriate styling based on detected language
+    applyLanguageStyling(article) {
+        const detectedLang = this.detectContentLanguage(article);
         const articleContainer = document.getElementById('article-container');
+        
         if (!articleContainer) return;
 
-        // Check title and abstract for Arabic content
-        const title = document.getElementById('article-title')?.textContent || '';
-        const abstract = document.getElementById('abstract-content')?.textContent || '';
+        // Remove existing language classes
+        articleContainer.classList.remove('arabic-article', 'english-article');
         
-        this.isArabic = this.detectArabic(title) || this.detectArabic(abstract);
-
-        if (this.isArabic) {
-            console.log('Arabic content detected, applying RTL styling');
-            this.applyRTLLayout();
+        // Apply appropriate language class
+        if (detectedLang === 'arabic') {
+            articleContainer.classList.add('arabic-article');
+            document.body.classList.add('arabic-layout');
+            console.log('Applied Arabic styling');
+        } else {
+            articleContainer.classList.add('english-article');
+            document.body.classList.remove('arabic-layout');
+            console.log('Applied English styling');
         }
+
+        // Set language attribute for better accessibility
+        articleContainer.setAttribute('lang', detectedLang === 'arabic' ? 'ar' : 'en');
+
+        this.styleSpecificElements(detectedLang, article);
     }
 
-    applyRTLLayout() {
-        const articleContainer = document.getElementById('article-container');
-        articleContainer.classList.add('arabic-article');
+    // Style specific elements based on language with enhanced logic
+    styleSpecificElements(language, article) {
+        const elements = {
+            title: document.getElementById('article-title'),
+            abstract: document.getElementById('abstract-content'),
+            authorContainer: document.getElementById('author-container'),
+            articleContent: document.querySelector('.article-content'),
+            keywordsContainer: document.getElementById('keywords-container'),
+            authorInfo: document.querySelector('.author-info'),
+            articleMetadata: document.querySelector('.article-metadata')
+        };
 
-        // Update metadata alignment
-        const metadataElements = [
-            '.author-info',
-            '.article-metadata',
-            '.keywords',
-            '#author-container'
-        ];
-
-        metadataElements.forEach(selector => {
-            const elements = document.querySelectorAll(selector);
-            elements.forEach(el => {
-                el.style.textAlign = 'right';
-                el.style.direction = 'rtl';
-            });
+        Object.entries(elements).forEach(([key, element]) => {
+            if (element) {
+                if (language === 'arabic') {
+                    element.classList.add('arabic-content');
+                    element.classList.remove('english-content');
+                    element.setAttribute('lang', 'ar');
+                    
+                    // Apply RTL direction and right alignment
+                    element.style.direction = 'rtl';
+                    element.style.textAlign = 'right';
+                    
+                    // Special handling for specific elements
+                    if (key === 'title') {
+                        element.style.fontFamily = "'Amiri', 'Scheherazade New', serif";
+                        element.style.fontSize = '2.5rem';
+                        element.style.fontWeight = '700';
+                        element.style.lineHeight = '1.5';
+                    } else if (key === 'abstract' || key === 'articleContent') {
+                        element.style.fontFamily = "'Amiri', serif";
+                        element.style.fontSize = '1.15em';
+                        element.style.lineHeight = '2.2';
+                        element.style.textAlign = 'justify';
+                    }
+                } else {
+                    element.classList.add('english-content');
+                    element.classList.remove('arabic-content');
+                    element.setAttribute('lang', 'en');
+                    
+                    // Apply LTR direction and left alignment
+                    element.style.direction = 'ltr';
+                    element.style.textAlign = 'left';
+                    
+                    // Special handling for specific elements
+                    if (key === 'title') {
+                        element.style.fontFamily = "'Crimson Text', 'Times New Roman', serif";
+                        element.style.fontSize = '2.25rem';
+                        element.style.fontWeight = '600';
+                        element.style.lineHeight = '1.4';
+                    } else if (key === 'abstract' || key === 'articleContent') {
+                        element.style.fontFamily = "'Crimson Text', serif";
+                        element.style.fontSize = '1.05em';
+                        element.style.lineHeight = '1.8';
+                        element.style.textAlign = 'justify';
+                    }
+                }
+            }
         });
 
-        // Update grid layout for metadata
-        const metadataGrid = document.querySelector('.article-metadata .grid');
-        if (metadataGrid) {
-            metadataGrid.style.direction = 'rtl';
-        }
-
-        // Update PDF button position
-        const pdfButton = document.querySelector('button[onclick="openPDF()"]');
-        if (pdfButton) {
-            pdfButton.style.marginRight = 'auto';
-            pdfButton.style.marginLeft = '0';
+        // Style metadata grid for Arabic
+        if (language === 'arabic') {
+            const metadataGrid = document.querySelector('.article-metadata .grid');
+            if (metadataGrid) {
+                metadataGrid.style.direction = 'rtl';
+            }
+            
+            // Style keywords container
+            const keywordsContainer = document.getElementById('keywords-container');
+            if (keywordsContainer) {
+                keywordsContainer.style.justifyContent = 'flex-end';
+            }
         }
     }
 
-    // Style Arabic text in content
-    styleArabicText() {
-        const contentElements = document.querySelectorAll('.article-content p, .article-content h1, .article-content h2, .article-content h3');
+    // Style mixed content (paragraphs with both languages)
+    styleMixedContent() {
+        const paragraphs = document.querySelectorAll('.article-content p');
         
-        contentElements.forEach(element => {
-            if (this.detectArabic(element.textContent)) {
-                element.classList.add('arabic-text');
-                element.style.direction = 'rtl';
-                element.style.textAlign = 'right';
+        paragraphs.forEach(p => {
+            const text = p.textContent;
+            if (!text) return;
+            
+            const hasArabic = this.detectArabic(text);
+            const hasEnglish = this.detectEnglish(text);
+            
+            if (hasArabic && hasEnglish) {
+                // Mixed content - use neutral styling
+                p.classList.add('mixed-content', 'bidi-content');
+                p.style.unicodeBidi = 'plaintext';
+                p.style.textAlign = 'start';
+                p.style.fontFamily = "'Amiri', 'Crimson Text', serif";
+            } else if (hasArabic) {
+                // Pure Arabic content
+                p.setAttribute('lang', 'ar');
+                p.classList.add('arabic-text');
+                p.style.direction = 'rtl';
+                p.style.textAlign = 'right';
+                p.style.fontFamily = "'Amiri', serif";
+                p.style.fontSize = '1.15em';
+                p.style.lineHeight = '2.2';
+            } else if (hasEnglish) {
+                // Pure English content
+                p.setAttribute('lang', 'en');
+                p.classList.add('english-text');
+                p.style.direction = 'ltr';
+                p.style.textAlign = 'left';
+                p.style.fontFamily = "'Crimson Text', serif";
+                p.style.fontSize = '1.05em';
+                p.style.lineHeight = '1.8';
             }
         });
     }
 
-    // Apply styling to all content
-    styleAllContent() {
-        this.applyArabicStyling();
+    // Style headers based on content
+    styleHeaders() {
+        const headers = document.querySelectorAll('.article-content h1, .article-content h2, .article-content h3');
+        
+        headers.forEach(header => {
+            const text = header.textContent;
+            if (!text) return;
+            
+            const hasArabic = this.detectArabic(text);
+            
+            if (hasArabic) {
+                header.style.fontFamily = "'Amiri', 'Scheherazade New', serif";
+                header.style.direction = 'rtl';
+                header.style.textAlign = 'right';
+                header.style.fontWeight = '700';
+            } else {
+                header.style.fontFamily = "'Crimson Text', serif";
+                header.style.direction = 'ltr';
+                header.style.textAlign = 'left';
+                header.style.fontWeight = '600';
+            }
+        });
+    }
+
+    // Apply all content styling with enhanced detection
+    styleAllContent(article) {
+        console.log('Styling content for article:', article.title);
+        
+        // Apply main language styling
+        this.applyLanguageStyling(article);
+        
+        // Apply detailed content styling after a short delay
         setTimeout(() => {
-            this.styleArabicText();
-        }, 100);
+            this.styleMixedContent();
+            this.styleHeaders();
+            this.styleSpecialElements();
+        }, 150);
+    }
+
+    // Style special elements like quotes and citations
+    styleSpecialElements() {
+        // Style Quranic verses
+        const quranVerses = document.querySelectorAll('.quranic-verse');
+        quranVerses.forEach(verse => {
+            const text = verse.textContent;
+            if (this.detectArabic(text)) {
+                verse.style.fontFamily = "'Amiri', serif";
+                verse.style.direction = 'rtl';
+                verse.style.textAlign = 'center';
+                verse.style.fontSize = '1.4em';
+                verse.style.lineHeight = '2.5';
+            } else {
+                verse.style.fontFamily = "'Crimson Text', serif";
+                verse.style.direction = 'ltr';
+                verse.style.textAlign = 'center';
+                verse.style.fontSize = '1.1em';
+                verse.style.lineHeight = '1.8';
+            }
+        });
+
+        // Style Hadith quotes
+        const hadithQuotes = document.querySelectorAll('.hadith-quote');
+        hadithQuotes.forEach(quote => {
+            const text = quote.textContent;
+            if (this.detectArabic(text)) {
+                quote.style.fontFamily = "'Amiri', serif";
+                quote.style.direction = 'rtl';
+                quote.style.textAlign = 'justify';
+                quote.style.fontSize = '1.25em';
+                quote.style.lineHeight = '2.3';
+            } else {
+                quote.style.fontFamily = "'Crimson Text', serif";
+                quote.style.direction = 'ltr';
+                quote.style.textAlign = 'justify';
+                quote.style.fontSize = '1.05em';
+                quote.style.lineHeight = '1.8';
+            }
+        });
+
+        // Style citation boxes
+        const citations = document.querySelectorAll('.citation-box');
+        citations.forEach(citation => {
+            const text = citation.textContent;
+            if (this.detectArabic(text)) {
+                citation.style.fontFamily = "'Amiri', serif";
+                citation.style.direction = 'rtl';
+                citation.style.textAlign = 'right';
+            } else {
+                citation.style.fontFamily = "'Crimson Text', serif";
+                citation.style.direction = 'ltr';
+                citation.style.textAlign = 'left';
+            }
+        });
     }
 }
 
-// Initialize Arabic styler
+// Initialize enhanced Arabic styler
 window.arabicStyler = new ArabicStyler();
