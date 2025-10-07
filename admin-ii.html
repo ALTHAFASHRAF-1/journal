@@ -1356,21 +1356,7 @@
     <!-- Data Management Tab Content -->
     <div id="data-tab" class="tab-content">
       <div class="data-wrapper">
-        <div class="data-header">
-          <div>
-            <h1 class="academic-title">Publication Data Management</h1>
-            <p>View and manage all submitted publications</p>
-          </div>
-          <div class="data-controls">
-            <input type="text" class="search-box" id="search-input" placeholder="Search publications...">
-            <button class="action-btn" onclick="refreshData()">
-              <i class="fas fa-sync-alt"></i> Refresh
-            </button>
-            <button class="action-btn" onclick="exportData()">
-              <i class="fas fa-download"></i> Export CSV
-            </button>
-          </div>
-        </div>
+        
 
         <div class="data-container">
           <div class="data-stats" id="data-stats">
@@ -1432,7 +1418,15 @@
             <p>No publications found. Add your first publication using the form.</p>
           </div>
 
-          
+          <div class="pagination" id="pagination" style="display: none;">
+            <button id="prev-btn" onclick="changePage(-1)">
+              <i class="fas fa-chevron-left"></i> Previous
+            </button>
+            <span id="page-info">Page 1 of 1</span>
+            <button id="next-btn" onclick="changePage(1)">
+              Next <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>
