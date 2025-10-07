@@ -1357,8 +1357,19 @@
     <div id="data-tab" class="tab-content">
       <div class="data-wrapper">
         <div class="data-header">
-          
-          
+          <div>
+            <h1 class="academic-title">Publication Data Management</h1>
+            <p>View and manage all submitted publications</p>
+          </div>
+          <div class="data-controls">
+            <input type="text" class="search-box" id="search-input" placeholder="Search publications...">
+            <button class="action-btn" onclick="refreshData()">
+              <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+            <button class="action-btn" onclick="exportData()">
+              <i class="fas fa-download"></i> Export CSV
+            </button>
+          </div>
         </div>
 
         <div class="data-container">
