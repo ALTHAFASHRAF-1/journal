@@ -462,15 +462,16 @@
       .data-table {
         width: 100%;
         border-collapse: collapse;
-        min-width: 1000px;
+        min-width: 1200px;
       }
 
       .data-table th,
       .data-table td {
-        padding: 1rem;
+        padding: 0.75rem;
         text-align: left;
         border-bottom: 1px solid var(--gray-200);
-        font-size: 0.875rem;
+        font-size: 0.8rem;
+        vertical-align: top;
       }
 
       .data-table th {
@@ -480,6 +481,7 @@
         position: sticky;
         top: 0;
         z-index: 10;
+        white-space: nowrap;
       }
 
       .data-table tbody tr:hover {
@@ -488,17 +490,19 @@
 
       .data-table .actions {
         display: flex;
-        gap: 0.5rem;
+        gap: 0.3rem;
         justify-content: center;
+        min-width: 120px;
       }
 
       .action-icon {
-        padding: 0.5rem;
+        padding: 0.4rem;
         border: none;
         border-radius: 4px;
         cursor: pointer;
-        font-size: 0.875rem;
+        font-size: 0.75rem;
         transition: all 0.2s;
+        min-width: 28px;
       }
 
       .action-icon.edit {
@@ -518,6 +522,20 @@
 
       .action-icon:hover {
         transform: scale(1.1);
+      }
+
+      .truncate-text {
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .truncate-short {
+        max-width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       .loading-spinner {
@@ -594,11 +612,12 @@
         background: white;
         padding: 2rem;
         border-radius: 12px;
-        max-width: 90%;
-        max-height: 90%;
+        max-width: 90vw;
+        max-height: 90vh;
         overflow-y: auto;
         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
         animation: slideIn 0.3s;
+        width: 800px;
       }
 
       .modal-header {
@@ -775,6 +794,18 @@
           flex-direction: column;
           align-items: center;
         }
+
+        .data-table {
+          min-width: 800px;
+        }
+
+        .truncate-text {
+          max-width: 120px;
+        }
+
+        .truncate-short {
+          max-width: 80px;
+        }
       }
 
       @media (max-width: 480px) {
@@ -796,6 +827,7 @@
         .modal-content {
           padding: 1rem;
           max-width: 95%;
+          width: 95%;
         }
       }
     </style>
@@ -858,7 +890,7 @@
               <div class="form-row two-cols">
                 <div class="form-group">
                   <label for="issue_id">Issue ID <span class="required">*</span></label>
-                  <input type="text" id="issue_id" name="issue_id" value="issue7" required>
+                  <input type="text" id="issue_id" name="issue_id" value="issue8" required>
                 </div>
                 <div class="form-group">
                   <label for="volume">Volume <span class="required">*</span></label>
@@ -925,7 +957,7 @@
                 </div>
                 <div class="form-group">
                   <label for="authors">All Authors <span class="optional">(Optional)</span></label>
-                  <input type="text" id="authors" name="authors" value="">
+                  <input type="text" id="authors" name="authors" value="" placeholder="Separate multiple authors with commas">
                 </div>
               </div>
 
@@ -1060,14 +1092,24 @@
             <table class="data-table" id="data-table">
               <thead>
                 <tr>
-                  <th>Article ID</th>
-                  <th>Title</th>
-                  <th>Author</th>
+                  <th>Issue ID</th>
                   <th>Volume</th>
                   <th>Number</th>
                   <th>Year</th>
-                  <th>Pages</th>
+                  <th>Issue Title</th>
+                  <th>Issue Date</th>
+                  <th>Cover Image</th>
+                  <th>Article ID</th>
+                  <th>Article Title</th>
+                  <th>Author</th>
+                  <th>Abstract</th>
+                  <th>Submission Date</th>
                   <th>Published Date</th>
+                  <th>Keywords</th>
+                  <th>Pages</th>
+                  <th>HTML File</th>
+                  <th>PDF URL</th>
+                  <th>DOI</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -1153,15 +1195,15 @@
         </div>
 
         <div class="footer-bottom">
-          <p>© 2025 Islamic Insight Journal. All rights reserved. | Admin Panel v1.0</p>
+          <p>© 2025 Islamic Insight Journal. All rights reserved. | Admin Panel v2.0</p>
         </div>
       </div>
     </footer>
 
     <script>
-      // Configuration
-      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzrTbBUlx41l-zEbOXz1-KSBAGNjFRDvFNIvIgp-H_HiwklyPg6faRXg-MpO2kdDdw1/exec';
-      const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSkzubKLpyPWDjAWl5XS83-4huOcBJDZeeLRKVbntV2sDo-uG5Tzw5aFA6PQw3rNNv4-L-_44asHfTr/pub?gid=0&single=true&output=csv';
+      // Configuration - UPDATE THESE WITH YOUR ACTUAL URLS
+      const SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
+      const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/YOUR_PUBLISHED_CSV_URL/pub?gid=0&single=true&output=csv';
       
       // Global variables
       let publicationsData = [];
@@ -1171,33 +1213,27 @@
 
       // Tab switching functionality
       function switchTab(tabName) {
-        // Hide all tab contents
         document.querySelectorAll('.tab-content').forEach(tab => {
           tab.classList.remove('active');
         });
 
-        // Remove active class from all nav links
         document.querySelectorAll('.nav-link').forEach(link => {
           link.classList.remove('active');
         });
 
-        // Show selected tab
         const targetTab = document.getElementById(tabName + '-tab');
         if (targetTab) {
           targetTab.classList.add('active');
         }
 
-        // Add active class to corresponding nav links
         document.querySelectorAll(`[data-tab="${tabName}"]`).forEach(link => {
           link.classList.add('active');
         });
 
-        // Load data if switching to data tab
         if (tabName === 'data') {
           loadPublicationsData();
         }
 
-        // Close mobile menu if open
         document.getElementById('mobile-nav').classList.remove('active');
       }
 
@@ -1209,7 +1245,6 @@
 
       // Event listeners for navigation
       document.addEventListener('DOMContentLoaded', function() {
-        // Set up tab switching
         document.querySelectorAll('[data-tab]').forEach(link => {
           link.addEventListener('click', function(e) {
             e.preventDefault();
@@ -1218,10 +1253,7 @@
           });
         });
 
-        // Initialize form
         initializeForm();
-        
-        // Load data on page load
         loadPublicationsData();
       });
 
@@ -1230,25 +1262,19 @@
         const form = document.getElementById('publication-form');
         const dateField = document.getElementById('date');
         
-        // Set current date for submission date if empty
         if (!dateField.value) {
           const today = new Date().toISOString().split('T')[0];
           dateField.value = today;
         }
 
-        // Auto-resize textareas on load
         document.querySelectorAll('textarea').forEach((textarea) => {
           textarea.style.height = 'auto';
           textarea.style.height = textarea.scrollHeight + 'px';
         });
 
-        // Form submission handler
         form.addEventListener('submit', handleFormSubmission);
-
-        // Clear form button
         document.getElementById('clear-btn').addEventListener('click', clearForm);
 
-        // Real-time validation
         document.querySelectorAll('input, textarea, select').forEach((field) => {
           field.addEventListener('blur', function () {
             if (this.hasAttribute('required') && !this.value.trim()) {
@@ -1265,7 +1291,6 @@
           });
         });
 
-        // Auto-resize textareas
         document.querySelectorAll('textarea').forEach((textarea) => {
           textarea.addEventListener('input', function () {
             this.style.height = 'auto';
@@ -1286,35 +1311,29 @@
         const errorMessage = document.getElementById('error-message');
         const validationError = document.getElementById('validation-error');
 
-        // Hide all messages
         successMessage.style.display = 'none';
         errorMessage.style.display = 'none';
         validationError.style.display = 'none';
 
-        // Validate form first
         if (!validateForm()) {
           validationError.style.display = 'block';
           validationError.scrollIntoView({ behavior: 'smooth' });
           return;
         }
 
-        // Show loading state
         submitBtn.disabled = true;
         loadingState.style.display = 'block';
 
         try {
-          // Collect form data
           const formData = new FormData(e.target);
           const data = {};
 
-          // Convert FormData to regular object
           for (let [key, value] of formData.entries()) {
             data[key] = value.trim();
           }
 
           console.log('Submitting data:', data);
 
-          // Submit to Google Apps Script
           const response = await fetch(SCRIPT_URL, {
             method: 'POST',
             headers: {
@@ -1334,10 +1353,8 @@
               successMessage.style.display = 'block';
               successMessage.scrollIntoView({ behavior: 'smooth' });
               
-              // Reset form after successful submission
               setTimeout(() => {
                 clearForm();
-                // Refresh data if on data tab
                 if (document.getElementById('data-tab').classList.contains('active')) {
                   loadPublicationsData();
                 }
@@ -1367,7 +1384,6 @@
         const requiredFields = document.querySelectorAll('input[required], textarea[required], select[required]');
         let isValid = true;
 
-        // Clear previous error states
         document.querySelectorAll('.error').forEach(field => {
           field.classList.remove('error');
         });
@@ -1379,7 +1395,6 @@
           }
         });
 
-        // Validate URL fields
         const urlFields = document.querySelectorAll('input[type="url"]');
         urlFields.forEach((field) => {
           if (field.hasAttribute('required') && field.value.trim()) {
@@ -1400,16 +1415,13 @@
         const form = document.getElementById('publication-form');
         form.reset();
         
-        // Reset specific fields
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('date').value = today;
         
-        // Clear error states
         document.querySelectorAll('.error').forEach(field => {
           field.classList.remove('error');
         });
 
-        // Hide messages
         document.querySelectorAll('.message').forEach(msg => {
           msg.style.display = 'none';
         });
@@ -1535,19 +1547,24 @@
         pageData.forEach((pub, index) => {
           const row = document.createElement('tr');
           row.innerHTML = `
-            <td>${pub.article_id || 'N/A'}</td>
-            <td>
-              <div style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" 
-                   title="${pub.article_title || 'N/A'}">
-                ${pub.article_title || 'N/A'}
-              </div>
-            </td>
-            <td>${pub.author || 'N/A'}</td>
+            <td class="truncate-short" title="${pub.issue_id || 'N/A'}">${pub.issue_id || 'N/A'}</td>
             <td>${pub.volume || 'N/A'}</td>
             <td>${pub.number || 'N/A'}</td>
             <td>${pub.year || 'N/A'}</td>
-            <td>${pub.pages || 'N/A'}</td>
-            <td>${pub.published_date || 'N/A'}</td>
+            <td class="truncate-text" title="${pub.issue_title || 'N/A'}">${pub.issue_title || 'N/A'}</td>
+            <td class="truncate-short">${pub.issue_published_date || 'N/A'}</td>
+            <td class="truncate-short">${pub.issue_cover_image ? `<a href="${pub.issue_cover_image}" target="_blank">View</a>` : 'N/A'}</td>
+            <td class="truncate-short" title="${pub.article_id || 'N/A'}">${pub.article_id || 'N/A'}</td>
+            <td class="truncate-text" title="${pub.article_title || 'N/A'}">${pub.article_title || 'N/A'}</td>
+            <td class="truncate-text" title="${pub.author || 'N/A'}">${pub.author || 'N/A'}</td>
+            <td class="truncate-text" title="${pub.abstract || 'N/A'}">${pub.abstract ? pub.abstract.substring(0, 50) + '...' : 'N/A'}</td>
+            <td class="truncate-short">${pub.date || 'N/A'}</td>
+            <td class="truncate-text">${pub.published_date || 'N/A'}</td>
+            <td class="truncate-text" title="${pub.keywords || 'N/A'}">${pub.keywords || 'N/A'}</td>
+            <td class="truncate-short">${pub.pages || 'N/A'}</td>
+            <td class="truncate-short">${pub.html_file ? `<a href="${pub.html_file}" target="_blank">View</a>` : 'N/A'}</td>
+            <td class="truncate-short">${pub.pdf_url ? `<a href="${pub.pdf_url}" target="_blank">View</a>` : 'N/A'}</td>
+            <td class="truncate-short">${pub.doi || 'N/A'}</td>
             <td class="actions">
               <button class="action-icon view" onclick="viewPublication(${startIndex + index})" title="View Details">
                 <i class="fas fa-eye"></i>
@@ -1557,9 +1574,6 @@
               </button>
               ${pub.html_file ? `<button class="action-icon view" onclick="window.open('${pub.html_file}', '_blank')" title="View Article">
                 <i class="fas fa-external-link-alt"></i>
-              </button>` : ''}
-              ${pub.pdf_url ? `<button class="action-icon view" onclick="window.open('${pub.pdf_url}', '_blank')" title="View PDF">
-                <i class="fas fa-file-pdf"></i>
               </button>` : ''}
             </td>
           `;
@@ -1669,10 +1683,8 @@
       function editPublication(index) {
         const pub = filteredData[index];
         
-        // Switch to form tab
         switchTab('form');
         
-        // Populate form fields
         Object.keys(pub).forEach(key => {
           const field = document.getElementById(key);
           if (field) {
@@ -1680,10 +1692,8 @@
           }
         });
 
-        // Scroll to form
         document.querySelector('.form-wrapper').scrollIntoView({ behavior: 'smooth' });
         
-        // Show success message
         const successMsg = document.getElementById('success-message');
         successMsg.innerHTML = '<strong><i class="fas fa-info-circle"></i> Info:</strong> Publication data loaded for editing. Make your changes and submit to update.';
         successMsg.style.display = 'block';
@@ -1707,14 +1717,6 @@
       // Refresh data
       function refreshData() {
         loadPublicationsData();
-        
-        // Show loading message
-        const successMsg = document.getElementById('success-message');
-        successMsg.innerHTML = '<strong><i class="fas fa-sync-alt"></i> Refreshing:</strong> Data refreshed successfully.';
-        successMsg.style.display = 'block';
-        setTimeout(() => {
-          successMsg.style.display = 'none';
-        }, 3000);
       }
 
       // Export data as CSV
@@ -1730,7 +1732,6 @@
           ...publicationsData.map(row => 
             headers.map(header => {
               const value = row[header] || '';
-              // Escape commas and quotes in CSV
               return value.includes(',') || value.includes('"') ? `"${value.replace(/"/g, '""')}"` : value;
             }).join(',')
           )
@@ -1754,18 +1755,6 @@
         const maxId = Math.max(...publicationsData.map(pub => parseInt(pub.article_id) || 0));
         return (maxId + 1).toString();
       }
-
-      // Update article ID when switching to form
-      document.addEventListener('DOMContentLoaded', function() {
-        const articleIdField = document.getElementById('article_id');
-        
-        // Update article ID when form tab is activated
-        document.querySelector('[data-tab="form"]').addEventListener('click', function() {
-          if (publicationsData.length > 0 && !articleIdField.value) {
-            articleIdField.value = generateNextArticleId();
-          }
-        });
-      });
 
       console.log('Admin panel initialized successfully');
     </script>
