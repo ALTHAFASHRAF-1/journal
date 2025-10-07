@@ -106,13 +106,9 @@
 .arabic-article #abstract-content {
     font-family: 'Amiri', serif;
     text-align: justify;
-    line-height: 2.2;
-    font-size: 1.1em;
+    line-height: 1.8;
+    font-size: 1.05em;
     direction: rtl;
-    padding: 1.5rem;
-    border-right: none; /* Remove right golden border */
-    border-left: none; /* Remove left border */
-    border-radius: 8px; /* Apply border radius to all corners */
 }
 
 /* Arabic Author Information */
