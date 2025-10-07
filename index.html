@@ -638,6 +638,28 @@ background: #f8fafc;
         font-size: 0.55rem;
     }
 }
+
+/* Loading spinner for search */
+.search-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.spinner {
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #3b82f6;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 </style>
 
 </head>
@@ -725,7 +747,7 @@ class="navbar-search-input"
 <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
 <div class="px-2 pt-2 pb-3 space-y-1">
 <a href="#home" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Home</a>
-<a href="#publications" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Call For Paper</a>
+<a href="call-for-papers.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Call For Paper</a>
 <a href="#featured" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Current Issue</a>
 <a href="all-issues.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">All Issues</a>
 <a href="#about" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">About</a>
@@ -794,7 +816,7 @@ class="navbar-search-input"
                                 <i class="far fa-calendar-alt mr-2"></i> <strong>Deadline:</strong> Mid-June 2025
                             </div>
                             <button 
-                                onclick="openArticle(1)" 
+                                onclick="location.href='call-for-papers.html'" 
                                 class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm w-full">
                                 Read More Details <i class="fas fa-arrow-right ml-2"></i>
                             </button>
@@ -856,6 +878,85 @@ View Articles <i class="fas fa-arrow-right ml-2"></i>
 </div>
 </section>
 
+<!-- Contact Section -->
+<section id="contact" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold academic-title text-gray-900 mb-4">Contact Us</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Get in touch with our editorial team for submissions, inquiries, or collaboration opportunities.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Contact Information -->
+            <div class="space-y-8">
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-envelope text-blue-600 text-xl mt-1"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Email</h3>
+                        <p class="text-gray-600">islamicinsight@dhiu.in</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-map-marker-alt text-blue-600 text-xl mt-1"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Address</h3>
+                        <p class="text-gray-600">
+                            Editor, Islamic Insight Journal of Islamic Studies<br>
+                            Darul Huda Islamic University, Chemmad<br>
+                            P.B.NO. 3, Tirurangadi (PO)<br>
+                            Malappuram (Dt.), 676306 (PIN)<br>
+                            Kerala, India
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-globe text-blue-600 text-xl mt-1"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Website</h3>
+                        <p class="text-gray-600">www.islamicinsight.in</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Form -->
+            <div class="bg-gray-50 rounded-lg p-8">
+                <form id="contact-form" class="space-y-6">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                        <input type="text" id="name" name="name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                        <input type="email" id="email" name="email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    
+                    <div>
+                        <label for="subject" class="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                        <input type="text" id="subject" name="subject" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                        <textarea id="message" name="message" rows="4" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                        Send Message <i class="fas fa-paper-plane ml-2"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
 
  <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
@@ -878,8 +979,8 @@ View Articles <i class="fas fa-arrow-right ml-2"></i>
                     <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
                     <ul class="space-y-2">
                         <li><a href="#about" class="text-gray-300 hover:text-white transition-colors">About Journal</a></li>
-                        <li><a href="#editorial" class="text-gray-300 hover:text-white transition-colors">Editorial Board</a></li>
-                        <li><a href="#guidelines" class="text-gray-300 hover:text-white transition-colors">Submission Guidelines</a></li>
+                        <li><a href="editors.html" class="text-gray-300 hover:text-white transition-colors">Editorial Board</a></li>
+                        <li><a href="call-for-papers.html" class="text-gray-300 hover:text-white transition-colors">Submission Guidelines</a></li>
                         <li><a href="#contact" class="text-gray-300 hover:text-white transition-colors">Contact Us</a></li>
                     </ul>
                 </div>
@@ -909,75 +1010,17 @@ View Articles <i class="fas fa-arrow-right ml-2"></i>
         </div>
     </footer>
 
-<!-- Article Modal -->
-<div id="article-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden modal">
-<div class="flex items-start justify-center min-h-screen pt-4 px-4 pb-20">
-<div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-screen overflow-hidden">
-<div class="flex justify-between items-center p-6 border-b border-gray-200">
-<h3 class="text-lg font-semibold text-gray-900">Details</h3>
-<button id="close-modal" class="text-gray-400 hover:text-gray-600">
-<i class="fas fa-times text-xl"></i>
-</button>
-</div>
-
-<div class="overflow-y-auto max-h-screen pb-20">
-<div class="p-6" id="modal-content">
-<!-- Content will be populated by JavaScript -->
-</div>
-</div>
-</div>
-</div>
-</div>
+<!-- Include the unified data loader -->
+<script src="sheets-loader.js"></script>
 
 <script>
-// Additional publications for the Publications section (without images)
-const publications = [
-{
-id: 1,
-title: "Call For Papers",
-authors: "",
-journal: "Islamic Insight",
-date: "2025-05-14",
-volume: "Vol. 8, No 1",
-pages: "",
-doi: "",
-categories: ["Announcement"],
-abstract: "We are pleased to invite original research articles for the upcoming issue of Islamic Insight, a biannual peer-reviewed journal published by the Kulliyyah of Qur'an and Sunnah, Darul Huda Islamic University, Kerala, India.",
-keywords: ["For submission: islamicinsight@dhiu.in"],
-redirectToCallForPapers: true // Flag to indicate this should redirect to call-for-papers.html
-},
-];
-
-// Articles Data - Current issue that should redirect to index1.html
-const featuredArticles = [
-{
-id: 2,
-title: "Vol. 7 No. 2 (2024): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES",
-authors: "",
-journal: "Islamic Insight",
-date: "2024-12-01",
-volume: "",
-pages: "",
-doi: "",
-categories: ["Current Issue","Latest"],
-abstract: "Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world...",
-keywords: [""],
-imageUrl: "vol7no2.jpg",
-redirectToIndex1: true // Flag to indicate this should redirect to index1.html
-},
-];
-
-// Combine all articles for search functionality
-const allArticles = [...featuredArticles, ...publications];
+// Global variables for search functionality
+let allArticles = [];
+let isDataLoaded = false;
 
 // DOM Elements
-const featuredArticlesGrid = document.getElementById('featured-articles-grid');
-const publicationsGrid = document.getElementById('publications-grid');
 const mobileMenuBtn = document.getElementById('mobile-menu-btn');
 const mobileMenu = document.getElementById('mobile-menu');
-const articleModal = document.getElementById('article-modal');
-const modalContent = document.getElementById('modal-content');
-const closeModal = document.getElementById('close-modal');
 const contactForm = document.getElementById('contact-form');
 
 // Enhanced search elements
@@ -999,177 +1042,188 @@ let isMobileSearchExpanded = false;
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
-setupEventListeners();
+    setupEventListeners();
+    loadJournalData();
 });
+
+// Load journal data from sheets
+async function loadJournalData() {
+    try {
+        console.log('Loading journal data for search...');
+        
+        // Wait for the data to be loaded by sheets-loader.js
+        if (typeof sheetsDataManager !== 'undefined') {
+            await sheetsDataManager.loadFromSheets();
+            allArticles = await sheetsDataManager.getAllArticles();
+        } else {
+            // Fallback: wait for global data to be available
+            await new Promise((resolve) => {
+                const checkData = () => {
+                    if (window.journalData && window.articlesData) {
+                        allArticles = Object.values(window.articlesData);
+                        resolve();
+                    } else {
+                        setTimeout(checkData, 100);
+                    }
+                };
+                checkData();
+            });
+        }
+        
+        isDataLoaded = true;
+        console.log('Articles loaded for search:', allArticles.length);
+        
+    } catch (error) {
+        console.error('Error loading journal data:', error);
+        isDataLoaded = false;
+    }
+}
 
 // Setup event listeners
 function setupEventListeners() {
-// Mobile menu toggle
-mobileMenuBtn.addEventListener('click', function() {
-mobileMenu.classList.toggle('hidden');
-});
+    // Mobile menu toggle
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
 
-// Desktop navbar search functionality
-searchToggleBtn.addEventListener('click', toggleNavbarSearch);
-navbarSearchInput.addEventListener('input', handleNavbarSearch);
-navbarSearchInput.addEventListener('focus', function() {
-if (navbarSearchInput.value.trim()) {
-navbarSearchResults.classList.remove('hidden');
-}
-});
+    // Desktop navbar search functionality
+    if (searchToggleBtn) {
+        searchToggleBtn.addEventListener('click', toggleNavbarSearch);
+        navbarSearchInput.addEventListener('input', handleNavbarSearch);
+        navbarSearchInput.addEventListener('focus', function() {
+            if (navbarSearchInput.value.trim()) {
+                navbarSearchResults.classList.remove('hidden');
+            }
+        });
+    }
 
-// Mobile search functionality
-if (mobileSearchToggleBtn) {
-    mobileSearchToggleBtn.addEventListener('click', toggleMobileSearch);
-    mobileSearchInput.addEventListener('input', handleMobileSearch);
-    mobileSearchInput.addEventListener('focus', function() {
-        if (mobileSearchInput.value.trim()) {
-            mobileSearchResults.classList.remove('hidden');
+    // Mobile search functionality
+    if (mobileSearchToggleBtn) {
+        mobileSearchToggleBtn.addEventListener('click', toggleMobileSearch);
+        mobileSearchInput.addEventListener('input', handleMobileSearch);
+        mobileSearchInput.addEventListener('focus', function() {
+            if (mobileSearchInput.value.trim()) {
+                mobileSearchResults.classList.remove('hidden');
+            }
+        });
+    }
+
+    // Enhanced keyboard support for search
+    if (navbarSearchInput) {
+        navbarSearchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                toggleNavbarSearch();
+            }
+        });
+    }
+
+    if (mobileSearchInput) {
+        mobileSearchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                toggleMobileSearch();
+            }
+        });
+    }
+
+    // Close search results when clicking outside
+    document.addEventListener('click', function(e) {
+        // Desktop search
+        if (navbarSearchInput && navbarSearchResults && searchToggleBtn &&
+            !navbarSearchInput.contains(e.target) && 
+            !navbarSearchResults.contains(e.target) && 
+            !searchToggleBtn.contains(e.target)) {
+            navbarSearchResults.classList.add('hidden');
+        }
+
+        // Mobile search
+        if (mobileSearchInput && mobileSearchResults && mobileSearchToggleBtn &&
+            !mobileSearchInput.contains(e.target) && 
+            !mobileSearchResults.contains(e.target) && 
+            !mobileSearchToggleBtn.contains(e.target)) {
+            mobileSearchResults.classList.add('hidden');
         }
     });
-}
 
-// Enhanced keyboard support for search
-navbarSearchInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        toggleNavbarSearch();
+    // Contact form
+    if (contactForm) {
+        contactForm.addEventListener('submit', handleContactForm);
     }
-});
 
-mobileSearchInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        toggleMobileSearch();
-    }
-});
-
-// Close search results when clicking outside
-document.addEventListener('click', function(e) {
-// Desktop search
-if (!navbarSearchInput.contains(e.target) && 
-    !navbarSearchResults.contains(e.target) && 
-    !searchToggleBtn.contains(e.target)) {
-    navbarSearchResults.classList.add('hidden');
-}
-
-// Mobile search
-if (!mobileSearchInput.contains(e.target) && 
-    !mobileSearchResults.contains(e.target) && 
-    !mobileSearchToggleBtn.contains(e.target)) {
-    mobileSearchResults.classList.add('hidden');
-}
-});
-
-// Modal close
-closeModal.addEventListener('click', closeArticleModal);
-articleModal.addEventListener('click', function(e) {
-if (e.target === articleModal) {
-closeArticleModal();
-}
-});
-
-// Contact form
-if (contactForm) {
-contactForm.addEventListener('submit', handleContactForm);
-}
-
-// Smooth scrolling for navigation links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-anchor.addEventListener('click', function(e) {
-e.preventDefault();
-const target = document.querySelector(this.getAttribute('href'));
-if (target) {
-target.scrollIntoView({
-behavior: 'smooth',
-block: 'start'
-});
-// Close mobile menu if open
-mobileMenu.classList.add('hidden');
-}
-});
-});
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                // Close mobile menu if open
+                if (mobileMenu) {
+                    mobileMenu.classList.add('hidden');
+                }
+            }
+        });
+    });
 }
 
 // Enhanced toggle navbar search with better state management
 function toggleNavbarSearch() {
-isDesktopSearchExpanded = !isDesktopSearchExpanded;
+    isDesktopSearchExpanded = !isDesktopSearchExpanded;
 
-if (isDesktopSearchExpanded) {
-// Expand search
-navbarSearchInput.classList.add('expanded');
-navItems.classList.add('hidden-for-search');
-searchIcon.className = 'fas fa-times text-lg';
-navbarSearchInput.focus();
-} else {
-// Collapse search
-navbarSearchInput.classList.remove('expanded');
-navItems.classList.remove('hidden-for-search');
-searchIcon.className = 'fas fa-search text-lg';
-navbarSearchResults.classList.add('hidden');
-navbarSearchInput.value = '';
-}
+    if (isDesktopSearchExpanded) {
+        // Expand search
+        navbarSearchInput.classList.add('expanded');
+        navItems.classList.add('hidden-for-search');
+        searchIcon.className = 'fas fa-times text-lg';
+        navbarSearchInput.focus();
+    } else {
+        // Collapse search
+        navbarSearchInput.classList.remove('expanded');
+        navItems.classList.remove('hidden-for-search');
+        searchIcon.className = 'fas fa-search text-lg';
+        navbarSearchResults.classList.add('hidden');
+        navbarSearchInput.value = '';
+    }
 }
 
 // Enhanced toggle mobile search with proper cross functionality
 function toggleMobileSearch() {
-isMobileSearchExpanded = !isMobileSearchExpanded;
+    isMobileSearchExpanded = !isMobileSearchExpanded;
 
-if (isMobileSearchExpanded) {
-// Expand search
-mobileSearchInput.classList.add('expanded');
-mobileSearchIcon.className = 'fas fa-times text-lg';
-mobileSearchInput.focus();
-} else {
-// Collapse search
-mobileSearchInput.classList.remove('expanded');
-mobileSearchIcon.className = 'fas fa-search text-lg';
-mobileSearchResults.classList.add('hidden');
-mobileSearchInput.value = '';
-}
+    if (isMobileSearchExpanded) {
+        // Expand search
+        mobileSearchInput.classList.add('expanded');
+        mobileSearchIcon.className = 'fas fa-times text-lg';
+        mobileSearchInput.focus();
+    } else {
+        // Collapse search
+        mobileSearchInput.classList.remove('expanded');
+        mobileSearchIcon.className = 'fas fa-search text-lg';
+        mobileSearchResults.classList.add('hidden');
+        mobileSearchInput.value = '';
+    }
 }
 
 // Handle navbar search with improved filtering
 function handleNavbarSearch() {
-const query = navbarSearchInput.value.toLowerCase().trim();
+    const query = navbarSearchInput.value.toLowerCase().trim();
 
-if (!query) {
-navbarSearchResults.classList.add('hidden');
-return;
-}
+    if (!query) {
+        navbarSearchResults.classList.add('hidden');
+        return;
+    }
 
-const filteredArticles = allArticles.filter(article => {
-return article.title.toLowerCase().includes(query) ||
-article.authors.toLowerCase().includes(query) ||
-article.abstract.toLowerCase().includes(query) ||
-article.keywords.some(keyword => keyword.toLowerCase().includes(query)) ||
-article.categories.some(category => category.toLowerCase().includes(query));
-});
+    if (!isDataLoaded) {
+        displaySearchLoading(navbarSearchResults);
+        return;
+    }
 
-displayNavbarSearchResults(filteredArticles, query);
-}
-
-// Enhanced display navbar search results with redirect functionality
-function displayNavbarSearchResults(results, query) {
-if (results.length === 0) {
-navbarSearchResults.innerHTML = `
-    <div class="p-4 text-center text-gray-500">
-        <i class="fas fa-search text-2xl mb-2 text-gray-400"></i>
-        <p>No articles found for "<strong>${query}</strong>"</p>
-    </div>
-`;
-} else {
-navbarSearchResults.innerHTML = results.map(article => `
-    <div class="search-result-item" onclick="handleArticleClick(${article.id}); toggleNavbarSearch();">
-        <h4 class="font-semibold text-gray-900 mb-1 text-sm">${highlightSearchTerm(article.title, query)}</h4>
-        ${article.authors ? `<p class="text-sm text-gray-600 mb-2">${highlightSearchTerm(article.authors, query)}</p>` : ''}
-        <p class="text-xs text-gray-500">${highlightSearchTerm(article.abstract.substring(0, 120), query)}...</p>
-        <div class="flex flex-wrap gap-1 mt-2">
-            ${article.categories.slice(0, 2).map(cat => `<span class="badge badge-blue text-xs">${cat}</span>`).join('')}
-        </div>
-    </div>
-`).join('');
-}
-
-navbarSearchResults.classList.remove('hidden');
+    const filteredArticles = searchArticles(query);
+    displayNavbarSearchResults(filteredArticles, query);
 }
 
 // Handle mobile search with improved filtering
@@ -1181,15 +1235,71 @@ function handleMobileSearch() {
         return;
     }
 
-    const filteredArticles = allArticles.filter(article => {
-        return article.title.toLowerCase().includes(query) ||
-            article.authors.toLowerCase().includes(query) ||
-            article.abstract.toLowerCase().includes(query) ||
-            article.keywords.some(keyword => keyword.toLowerCase().includes(query)) ||
-            article.categories.some(category => category.toLowerCase().includes(query));
-    });
+    if (!isDataLoaded) {
+        displaySearchLoading(mobileSearchResults);
+        return;
+    }
 
+    const filteredArticles = searchArticles(query);
     displayMobileSearchResults(filteredArticles, query);
+}
+
+// Search articles function
+function searchArticles(query) {
+    if (!allArticles || allArticles.length === 0) {
+        return [];
+    }
+
+    return allArticles.filter(article => {
+        const searchableText = [
+            article.title || '',
+            article.author || '',
+            ...(article.authors ? article.authors.map(a => a.name || '') : []),
+            article.abstract || '',
+            ...(article.keywords || []),
+            article.issueTitle || '',
+            `Vol. ${article.volume} No. ${article.number}` || ''
+        ].join(' ').toLowerCase();
+
+        return searchableText.includes(query);
+    });
+}
+
+// Display loading state
+function displaySearchLoading(resultsContainer) {
+    resultsContainer.innerHTML = `
+        <div class="search-loading">
+            <div class="spinner"></div>
+            <span class="ml-2 text-gray-600">Loading articles...</span>
+        </div>
+    `;
+    resultsContainer.classList.remove('hidden');
+}
+
+// Enhanced display navbar search results with redirect functionality
+function displayNavbarSearchResults(results, query) {
+    if (results.length === 0) {
+        navbarSearchResults.innerHTML = `
+            <div class="p-4 text-center text-gray-500">
+                <i class="fas fa-search text-2xl mb-2 text-gray-400"></i>
+                <p>No articles found for "<strong>${query}</strong>"</p>
+            </div>
+        `;
+    } else {
+        navbarSearchResults.innerHTML = results.slice(0, 10).map(article => `
+            <div class="search-result-item" onclick="redirectToArticle(${article.id}); toggleNavbarSearch();">
+                <h4 class="font-semibold text-gray-900 mb-1 text-sm">${highlightSearchTerm(article.title, query)}</h4>
+                ${getAuthorDisplay(article) ? `<p class="text-sm text-gray-600 mb-2">${highlightSearchTerm(getAuthorDisplay(article), query)}</p>` : ''}
+                <p class="text-xs text-gray-500">${highlightSearchTerm((article.abstract || '').substring(0, 120), query)}${article.abstract && article.abstract.length > 120 ? '...' : ''}</p>
+                <div class="flex flex-wrap gap-1 mt-2">
+                    <span class="badge badge-blue text-xs">${article.issueTitle || `Vol. ${article.volume} No. ${article.number}`}</span>
+                    ${article.publishedDate ? `<span class="badge badge-green text-xs">${article.publishedDate}</span>` : ''}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    navbarSearchResults.classList.remove('hidden');
 }
 
 // Enhanced display mobile search results with redirect functionality
@@ -1202,13 +1312,13 @@ function displayMobileSearchResults(results, query) {
             </div>
         `;
     } else {
-        mobileSearchResults.innerHTML = results.map(article => `
-            <div class="search-result-item text-sm" onclick="handleArticleClick(${article.id}); toggleMobileSearch();">
+        mobileSearchResults.innerHTML = results.slice(0, 8).map(article => `
+            <div class="search-result-item text-sm" onclick="redirectToArticle(${article.id}); toggleMobileSearch();">
                 <h4 class="font-semibold text-gray-900 mb-1">${highlightSearchTerm(article.title, query)}</h4>
-                ${article.authors ? `<p class="text-xs text-gray-600 mb-1">${highlightSearchTerm(article.authors, query)}</p>` : ''}
-                <p class="text-xs text-gray-500">${highlightSearchTerm(article.abstract.substring(0, 100), query)}...</p>
+                ${getAuthorDisplay(article) ? `<p class="text-xs text-gray-600 mb-1">${highlightSearchTerm(getAuthorDisplay(article), query)}</p>` : ''}
+                <p class="text-xs text-gray-500">${highlightSearchTerm((article.abstract || '').substring(0, 100), query)}${article.abstract && article.abstract.length > 100 ? '...' : ''}</p>
                 <div class="flex flex-wrap gap-1 mt-1">
-                    ${article.categories.slice(0, 2).map(cat => `<span class="badge badge-blue text-xs">${cat}</span>`).join('')}
+                    <span class="badge badge-blue text-xs">${article.issueTitle || `Vol. ${article.volume} No. ${article.number}`}</span>
                 </div>
             </div>
         `).join('');
@@ -1217,108 +1327,46 @@ function displayMobileSearchResults(results, query) {
     mobileSearchResults.classList.remove('hidden');
 }
 
-// Updated function to handle article clicks with redirect logic
-function handleArticleClick(articleId) {
-    const article = allArticles.find(a => a.id === articleId);
-    if (!article) return;
-
-    // Check if this article should redirect to index1.html (current issue)
-    if (article.redirectToIndex1) {
-        location.href = 'https://dqdhiu.netlify.app/issues?issue=issue5';
-    } 
-    // Check if this article should redirect to call-for-papers.html
-    else if (article.redirectToCallForPapers) {
-        location.href = 'call-for-papers.html';
-    } 
-    else {
-        // Open in modal for other articles
-        openArticle(articleId);
+// Helper function to get author display
+function getAuthorDisplay(article) {
+    if (article.authors && article.authors.length > 0) {
+        return article.authors.map(author => author.name).join(', ');
     }
+    return article.author || '';
 }
 
-// Updated openArticle function to handle redirects
-function openArticle(articleId) {
-    const article = allArticles.find(a => a.id === articleId);
-    if (!article) return;
-
-    // Handle redirects
-    if (article.redirectToIndex1) {
-        location.href = 'https://dqdhiu.netlify.app/issues?issue=issue5';
-        return;
-    }
-    
-    if (article.redirectToCallForPapers) {
-        location.href = 'call-for-papers.html';
-        return;
-    }
-
-    // Rest of the existing modal code for other articles...
-    let imageHtml = '';
-    if (article.imageUrl) {
-    imageHtml = `
-        <div class="mb-6">
-            <img src="${article.imageUrl}" alt="${article.title}" class="w-full rounded-lg shadow-sm">
-        </div>
-    `;
-    }
-
-    modalContent.innerHTML = `
-        ${imageHtml}
-        <div class="mb-6">
-            <div class="mb-4">
-                ${article.categories.map(category => `<span class="badge badge-blue">${category}</span>`).join('')}
-            </div>
-            <h1 class="text-2xl sm:text-3xl font-bold academic-title text-gray-900 mb-4">
-                ${article.title}
-            </h1>
-            <div class="text-gray-600 mb-4">
-                <p class="font-medium">${article.authors}</p>
-                <p class="text-sm">${article.journal}, ${article.volume}, ${article.pages} <i class="far fa-calendar-alt"></i> ${article.date}</p>
-            </div>
-            <div class="flex flex-wrap gap-2 mb-6">
-                ${article.keywords.map(keyword => `<span class="text-xs bg-gray-100 text-gray-600 rounded-full px-2 py-1">${keyword}</span>`).join('')}
-            </div>
-        </div>
-        <div class="article-content prose max-w-none">
-            ${article.fullContent}
-        </div>
-    `;
-
-    articleModal.classList.remove('hidden');
-    navbarSearchResults.classList.add('hidden');
-    mobileSearchResults.classList.add('hidden');
-
-    // Reset search states
-    if (isDesktopSearchExpanded) toggleNavbarSearch();
-    if (isMobileSearchExpanded) toggleMobileSearch();
+// Redirect to article page
+function redirectToArticle(articleId) {
+    window.location.href = `articles.html?id=${articleId}`;
 }
 
 // Highlight search terms in results
 function highlightSearchTerm(text, query) {
-    if (!query) return text;
-    const regex = new RegExp(`(${query})`, 'gi');
+    if (!query || !text) return text;
+    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
     return text.replace(regex, '<mark class="bg-yellow-200 px-1 rounded">$1</mark>');
-}
-
-// Close article modal
-function closeArticleModal() {
-articleModal.classList.add('hidden');
 }
 
 // Handle contact form submission
 function handleContactForm(e) {
-e.preventDefault();
+    e.preventDefault();
 
-const formData = new FormData(contactForm);
-const name = formData.get('name') || document.getElementById('name').value;
-const email = formData.get('email') || document.getElementById('email').value;
-const subject = formData.get('subject') || document.getElementById('subject').value;
-const message = formData.get('message') || document.getElementById('message').value;
+    const formData = new FormData(contactForm);
+    const name = formData.get('name') || document.getElementById('name').value;
+    const email = formData.get('email') || document.getElementById('email').value;
+    const subject = formData.get('subject') || document.getElementById('subject').value;
+    const message = formData.get('message') || document.getElementById('message').value;
 
-// Simulate form submission
-alert('Thank you for your message! We will get back to you soon.');
-contactForm.reset();
+    // Simulate form submission
+    alert('Thank you for your message! We will get back to you soon.');
+    contactForm.reset();
 }
+
+// Listen for the journalDataLoaded event
+window.addEventListener('journalDataLoaded', function() {
+    console.log('Journal data loaded event received');
+    loadJournalData();
+});
 </script>
 </body>
 </html>
