@@ -5,39 +5,6 @@ let currentArticleId = null;
 let currentPdfUrl = null;
 let currentLanguage = 'auto'; // 'auto', 'arabic', 'english'
 
-// Google Drive Link Converter
-function convertGoogleDriveLink(url) {
-    if (!url) return url;
-    
-    // Check if it's already a direct link
-    if (url.includes('drive.google.com/uc?') || url.includes('/preview')) {
-        return url;
-    }
-    
-    // Extract file ID from various Google Drive URL formats
-    const patterns = [
-        /\/file\/d\/([a-zA-Z0-9-_]+)/,
-        /id=([a-zA-Z0-9-_]+)/,
-        /\/open\?id=([a-zA-Z0-9-_]+)/
-    ];
-    
-    for (const pattern of patterns) {
-        const match = url.match(pattern);
-        if (match && match[1]) {
-            const fileId = match[1];
-            // Return preview URL which works better for PDFs
-            return `https://drive.google.com/file/d/${fileId}/preview`;
-        }
-    }
-    
-    return url; // Return original if no pattern matches
-}
-
-// Enhanced PDF URL getter
-function getPDFUrl(article) {
-    const originalUrl = article.pdfUrl || '';
-    return convertGoogleDriveLink(originalUrl);
-}
 
 
 // Get article ID from URL parameter
@@ -138,40 +105,27 @@ function updateArticleDisplay(article) {
     document.getElementById('volume-info').textContent = article.volume ? `Vol. ${article.volume}, No. ${article.number}` : 'Not specified';
     document.getElementById('issn-number').textContent = article.issn || '2581-3269';
     
-    // Update PDF links - REPLACE the existing PDF links section
-if (currentPdfUrl) {
-    const convertedUrl = convertGoogleDriveLink(currentPdfUrl);
-    
-    document.getElementById('direct-pdf-link').href = convertedUrl;
-    document.getElementById('modal-download-link').href = convertedUrl;
-    document.getElementById('fallback-download-link').href = convertedUrl;
-    
-    // Update currentPdfUrl to use converted URL
-    currentPdfUrl = convertedUrl;
-    
-    // Enable PDF button
-    const pdfButton = document.querySelector('button[onclick="openPDF()"]');
-    if (pdfButton) {
-        pdfButton.disabled = false;
-        pdfButton.classList.remove('opacity-50', 'cursor-not-allowed');
+    // Update PDF links
+    if (currentPdfUrl) {
+        document.getElementById('direct-pdf-link').href = currentPdfUrl;
+        document.getElementById('modal-download-link').href = currentPdfUrl;
+        document.getElementById('fallback-download-link').href = currentPdfUrl;
         
-        // Show Google Drive indicator if it's a Google Drive link
-        if (convertedUrl.includes('drive.google.com')) {
-            pdfButton.innerHTML = '<i class="fab fa-google-drive mr-1"></i>VIEW PDF (Google Drive)';
-        } else {
-            pdfButton.innerHTML = '<i class="fas fa-file-pdf mr-1"></i>VIEW FULL PDF';
+        // Enable PDF button
+        const pdfButton = document.querySelector('button[onclick="openPDF()"]');
+        if (pdfButton) {
+            pdfButton.disabled = false;
+            pdfButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+    } else {
+        // Disable PDF button if no PDF available
+        const pdfButton = document.querySelector('button[onclick="openPDF()"]');
+        if (pdfButton) {
+            pdfButton.disabled = true;
+            pdfButton.classList.add('opacity-50', 'cursor-not-allowed');
+            pdfButton.textContent = 'PDF NOT AVAILABLE';
         }
     }
-} else {
-    // Disable PDF button if no PDF available
-    const pdfButton = document.querySelector('button[onclick="openPDF()"]');
-    if (pdfButton) {
-        pdfButton.disabled = true;
-        pdfButton.classList.add('opacity-50', 'cursor-not-allowed');
-        pdfButton.textContent = 'PDF NOT AVAILABLE';
-    }
-}
-
     
     // Update keywords
     const keywordsContainer = document.getElementById('keywords-container');
@@ -290,31 +244,21 @@ function loadPDFInIframe() {
     fallback.classList.remove('active');
     
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    const convertedUrl = convertGoogleDriveLink(currentPdfUrl);
     
-    console.log('Original PDF URL:', currentPdfUrl);
-    console.log('Converted PDF URL:', convertedUrl);
-    
-    // Try direct embed first
-    iframe.src = convertedUrl;
+    if (isMobile) {
+        iframe.src = `https://docs.google.com/gview?url=${encodeURIComponent(currentPdfUrl)}&embedded=true`;
+    } else {
+        iframe.src = currentPdfUrl;
+    }
     
     iframe.onload = function() {
         console.log('PDF loaded successfully');
     };
     
     iframe.onerror = function() {
-        console.log('Direct embed failed, trying alternatives...');
+        console.log('Direct embed failed, trying Google Docs viewer');
+        iframe.src = `https://docs.google.com/gview?url=${encodeURIComponent(currentPdfUrl)}&embedded=true`;
         
-        // Try Google Docs viewer as fallback
-        if (convertedUrl.includes('drive.google.com')) {
-            // For Google Drive, try the embedded viewer
-            iframe.src = convertedUrl.replace('/preview', '/preview');
-        } else {
-            // For other URLs, try Google Docs viewer
-            iframe.src = `https://docs.google.com/gview?url=${encodeURIComponent(convertedUrl)}&embedded=true`;
-        }
-        
-        // Final fallback check
         setTimeout(() => {
             try {
                 const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
@@ -342,18 +286,9 @@ function refreshPDF() {
 
 function openInNewTab() {
     if (currentPdfUrl) {
-        const convertedUrl = convertGoogleDriveLink(currentPdfUrl);
-        
-        // For Google Drive links, try to open in view mode
-        if (convertedUrl.includes('drive.google.com')) {
-            const viewUrl = convertedUrl.replace('/preview', '/view');
-            window.open(viewUrl, '_blank');
-        } else {
-            window.open(convertedUrl, '_blank');
-        }
+        window.open(currentPdfUrl, '_blank');
     }
 }
-
 
 function closePDF() {
     const modal = document.getElementById('pdfModal');
