@@ -134,3 +134,44 @@
 .arabic-text {
     font-family: 'Traditional Arabic', 'Scheherazade New', 'Amiri', 'Lateef', 'Geeza Pro', 'DecoType Naskh', serif;
 }
+
+/* Enhanced Arabic Support */
+.arabic-article .logo-container {
+    direction: ltr; /* Keep logo LTR */
+}
+
+.arabic-article .pdf-controls {
+    direction: ltr; /* Keep PDF controls LTR */
+}
+
+.arabic-article footer {
+    direction: ltr; /* Keep footer LTR */
+}
+
+/* Arabic page numbers and navigation */
+.arabic-article .page-numbers {
+    font-family: 'Traditional Arabic', serif;
+    direction: rtl;
+}
+
+/* Arabic abstract styling */
+.arabic-article #abstract-content {
+    text-align: justify;
+    line-height: 2.2;
+    font-size: 1.1em;
+}
+
+/* Ensure proper spacing for Arabic text */
+.arabic-article .article-content {
+    word-spacing: 0.1em;
+    letter-spacing: 0;
+}
+
+/* Arabic quotation marks */
+.arabic-article .quranic-verse::before {
+    content: "«";
+}
+
+.arabic-article .quranic-verse::after {
+    content: "»";
+}
