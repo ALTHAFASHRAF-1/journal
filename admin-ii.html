@@ -2018,8 +2018,7 @@
         loadPublicationsData();
       });
 
-      // Form initialization
-      function initializeForm() {
+     function initializeForm() {
   const form = document.getElementById('publication-form');
   const dateField = document.getElementById('date');
   
@@ -2028,6 +2027,17 @@
     dateField.value = today;
   }
 
+  // Add debug button (remove in production)
+  const debugBtn = document.createElement('button');
+  debugBtn.textContent = 'Debug Validation';
+  debugBtn.type = 'button';
+  debugBtn.onclick = debugFormValidation;
+  debugBtn.style.margin = '10px';
+  debugBtn.style.background = '#f59e0b';
+  debugBtn.style.color = 'white';
+  debugBtn.style.padding = '5px 10px';
+  debugBtn.style.borderRadius = '5px';
+  debugBtn.style.border = 'none';
   
   // Insert debug button before submit button
   const submitSection = document.querySelector('.submit-section');
@@ -2577,6 +2587,36 @@
       }
 
       console.log('Admin panel initialized successfully');
+
+     function debugFormValidation() {
+  console.log('=== FORM VALIDATION DEBUG ===');
+  
+  const requiredFields = document.querySelectorAll('input[required], textarea[required], select[required]');
+  console.log('Total required fields:', requiredFields.length);
+  
+  requiredFields.forEach((field, index) => {
+    const fieldName = field.name || field.id;
+    const fieldValue = field.value.trim();
+    const isFile = field.type === 'file';
+    
+    if (isFile) {
+      const hiddenInput = field.name === 'issue_cover_image' ? 
+        document.getElementById('issue_cover_image_url') : 
+        document.getElementById('pdf_url_link');
+      
+      console.log(`${index + 1}. ${fieldName} (file):`, {
+        filesSelected: field.files.length,
+        hiddenValue: hiddenInput ? hiddenInput.value : 'No hidden input',
+        uploadedFile: uploadedFiles[field.name === 'issue_cover_image' ? 'cover' : 'pdf']
+      });
+    } else {
+      console.log(`${index + 1}. ${fieldName}:`, fieldValue ? `"${fieldValue}"` : 'EMPTY');
+    }
+  });
+  
+  console.log('Uploaded files object:', uploadedFiles);
+  console.log('=== END DEBUG ===');
+}   
     </script>
   </body>
 </html>
