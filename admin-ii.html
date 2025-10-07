@@ -1808,20 +1808,22 @@
       }
 
       function handleFileChange(event, type) {
-        const file = event.target.files[0];
-        if (!file) return;
+  const file = event.target.files[0];
+  if (!file) return;
 
-        // Validate file
-        if (!validateFile(file, type)) {
-          return;
-        }
+  console.log(`File selected for ${type}:`, file.name);
 
-        // Show preview
-        showFilePreview(file, type);
+  // Validate file
+  if (!validateFile(file, type)) {
+    return;
+  }
 
-        // Upload file
-        uploadFile(file, type);
-      }
+  // Show preview
+  showFilePreview(file, type);
+
+  // Upload file
+  uploadFile(file, type);
+}
 
       function validateFile(file, type) {
         const maxSizes = {
@@ -1890,81 +1892,85 @@
       }
 
       async function uploadFile(file, type) {
-        const progress = document.getElementById(`${type}-progress`);
-        const progressFill = document.getElementById(`${type}-progress-fill`);
-        const progressText = document.getElementById(`${type}-progress-text`);
-        
-        progress.classList.add('active');
-        progressText.textContent = 'Uploading...';
+  const progress = document.getElementById(`${type}-progress`);
+  const progressFill = document.getElementById(`${type}-progress-fill`);
+  const progressText = document.getElementById(`${type}-progress-text`);
+  
+  progress.classList.add('active');
+  progressText.textContent = 'Uploading...';
 
-        try {
-          // Create FormData for file upload
-          const formData = new FormData();
-          formData.append('file', file);
-          formData.append('type', type);
-          formData.append('action', 'upload');
+  try {
+    // Create FormData for file upload
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('type', type);
+    formData.append('action', 'upload');
 
-          // Simulate progress (since we can't track real progress with Google Scripts)
-          let progressValue = 0;
-          const progressInterval = setInterval(() => {
-            progressValue += Math.random() * 15;
-            if (progressValue > 90) {
-              clearInterval(progressInterval);
-              progressValue = 90;
-            }
-            progressFill.style.width = progressValue + '%';
-          }, 200);
+    console.log(`Starting upload for ${type} file:`, file.name);
 
-          // Upload to Google Script
-          const response = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            body: formData
-          });
-
-          clearInterval(progressInterval);
-
-          if (response.ok) {
-            const result = await response.json();
-            
-            if (result.status === 'success') {
-              // Set the appropriate Google Drive URL format
-              const driveUrl = type === 'cover' 
-                ? result.fileUrl // For cover images: view format
-                : result.fileUrl.replace('/view?usp=drive_link', '/preview'); // For PDFs: preview format
-
-              const hiddenInput = document.getElementById(type === 'cover' ? 'issue_cover_image_url' : 'pdf_url_link');
-              hiddenInput.value = driveUrl;
-              
-              uploadedFiles[type] = {
-                file: file,
-                url: driveUrl,
-                fileId: result.fileId
-              };
-
-              progressFill.style.width = '100%';
-              progressText.textContent = 'Upload complete!';
-              
-              setTimeout(() => {
-                progress.classList.remove('active');
-              }, 2000);
-
-            } else {
-              throw new Error(result.message || 'Upload failed');
-            }
-          } else {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-          }
-
-        } catch (error) {
-          console.error('Upload error:', error);
-          progressText.textContent = 'Upload failed: ' + error.message;
-          progressFill.style.width = '0%';
-          
-          setTimeout(() => {
-            progress.classList.remove('active');
-          }, 3000);
-        }
+    // Simulate progress
+    let progressValue = 0;
+    const progressInterval = setInterval(() => {
+      progressValue += Math.random() * 15;
+      if (progressValue > 90) {
+        clearInterval(progressInterval);
+        progressValue = 90;
       }
+      progressFill.style.width = progressValue + '%';
+    }, 200);
+
+    // Upload to Google Script
+    const response = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: formData
+    });
+
+    clearInterval(progressInterval);
+
+    if (response.ok) {
+      const result = await response.json();
+      console.log(`Upload result for ${type}:`, result);
+      
+      if (result.status === 'success') {
+        const driveUrl = result.fileUrl;
+        const hiddenInput = document.getElementById(type === 'cover' ? 'issue_cover_image_url' : 'pdf_url_link');
+        hiddenInput.value = driveUrl;
+        
+        // Update global uploadedFiles object
+        uploadedFiles[type] = {
+          file: file,
+          url: driveUrl,
+          fileId: result.fileId
+        };
+
+        progressFill.style.width = '100%';
+        progressText.textContent = 'Upload complete!';
+        
+        console.log(`${type} file uploaded successfully:`, driveUrl);
+        
+        setTimeout(() => {
+          progress.classList.remove('active');
+        }, 2000);
+
+      } else {
+        throw new Error(result.message || 'Upload failed');
+      }
+    } else {
+      const errorText = await response.text();
+      throw new Error(`HTTP ${response.status}: ${response.statusText}. ${errorText}`);
+    }
+
+  } catch (error) {
+    console.error(`Upload error for ${type}:`, error);
+    progressText.textContent = 'Upload failed: ' + error.message;
+    progressFill.style.width = '0%';
+    
+    setTimeout(() => {
+      progress.classList.remove('active');
+    }, 3000);
+  }
+}
+
 
       // Tab switching functionality
       function switchTab(tabName) {
@@ -2014,170 +2020,212 @@
 
       // Form initialization
       function initializeForm() {
-        const form = document.getElementById('publication-form');
-        const dateField = document.getElementById('date');
-        
-        if (!dateField.value) {
-          const today = new Date().toISOString().split('T')[0];
-          dateField.value = today;
-        }
+  const form = document.getElementById('publication-form');
+  const dateField = document.getElementById('date');
+  
+  if (!dateField.value) {
+    const today = new Date().toISOString().split('T')[0];
+    dateField.value = today;
+  }
 
-        document.querySelectorAll('textarea').forEach((textarea) => {
-          textarea.style.height = 'auto';
-          textarea.style.height = textarea.scrollHeight + 'px';
-        });
+  // Add debug button (remove in production)
+  const debugBtn = document.createElement('button');
+  debugBtn.textContent = 'Debug Validation';
+  debugBtn.type = 'button';
+  debugBtn.onclick = debugFormValidation;
+  debugBtn.style.margin = '10px';
+  debugBtn.style.background = '#f59e0b';
+  debugBtn.style.color = 'white';
+  debugBtn.style.padding = '5px 10px';
+  debugBtn.style.borderRadius = '5px';
+  debugBtn.style.border = 'none';
+  
+  // Insert debug button before submit button
+  const submitSection = document.querySelector('.submit-section');
+  submitSection.insertBefore(debugBtn, submitSection.firstChild);
 
-        form.addEventListener('submit', handleFormSubmission);
+  form.addEventListener('submit', handleFormSubmission);
 
-        document.querySelectorAll('input, textarea, select').forEach((field) => {
-          field.addEventListener('blur', function () {
-            if (this.hasAttribute('required') && !this.value.trim()) {
-              this.classList.add('error');
-            } else {
-              this.classList.remove('error');
-            }
-          });
-
-          field.addEventListener('input', function () {
-            if (this.classList.contains('error') && this.value.trim()) {
-              this.classList.remove('error');
-            }
-          });
-        });
-
-        document.querySelectorAll('textarea').forEach((textarea) => {
-          textarea.addEventListener('input', function () {
-            this.style.height = 'auto';
-            this.style.height = this.scrollHeight + 'px';
-          });
-        });
-
-        console.log('Form initialized and ready for submission');
+  // Rest of your existing initialization code...
+  document.querySelectorAll('input, textarea, select').forEach((field) => {
+    field.addEventListener('blur', function () {
+      if (this.hasAttribute('required') && !this.value.trim()) {
+        this.classList.add('error');
+      } else {
+        this.classList.remove('error');
       }
+    });
+
+    field.addEventListener('input', function () {
+      if (this.classList.contains('error') && this.value.trim()) {
+        this.classList.remove('error');
+      }
+    });
+  });
+
+  console.log('Form initialized and ready for submission');
+}
+
 
       // Form submission handler
       async function handleFormSubmission(e) {
-        e.preventDefault();
+  e.preventDefault();
 
-        const submitBtn = document.getElementById('submit-btn');
-        const loadingState = document.getElementById('loading-state');
-        const successMessage = document.getElementById('success-message');
-        const errorMessage = document.getElementById('error-message');
-        const validationError = document.getElementById('validation-error');
+  const submitBtn = document.getElementById('submit-btn');
+  const loadingState = document.getElementById('loading-state');
+  const successMessage = document.getElementById('success-message');
+  const errorMessage = document.getElementById('error-message');
+  const validationError = document.getElementById('validation-error');
 
-        successMessage.style.display = 'none';
-        errorMessage.style.display = 'none';
-        validationError.style.display = 'none';
+  // Hide all messages
+  successMessage.style.display = 'none';
+  errorMessage.style.display = 'none';
+  validationError.style.display = 'none';
 
-        if (!validateForm()) {
-          validationError.style.display = 'block';
-          validationError.scrollIntoView({ behavior: 'smooth' });
-          return;
-        }
+  console.log('Form submission started...');
 
-        submitBtn.disabled = true;
-        loadingState.style.display = 'block';
+  if (!validateForm()) {
+    console.log('Validation failed');
+    validationError.style.display = 'block';
+    validationError.scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
 
-        try {
-          const formData = new FormData(e.target);
-          const data = {};
+  submitBtn.disabled = true;
+  loadingState.style.display = 'block';
 
-          for (let [key, value] of formData.entries()) {
-            data[key] = value.trim();
+  try {
+    const formData = new FormData(e.target);
+    const data = {};
+
+    // Collect all form data
+    for (let [key, value] of formData.entries()) {
+      data[key] = value.trim();
+    }
+
+    // Override with uploaded file URLs if they exist
+    const coverImageUrl = document.getElementById('issue_cover_image_url').value;
+    const pdfUrl = document.getElementById('pdf_url_link').value;
+
+    if (coverImageUrl) {
+      data.issue_cover_image = coverImageUrl;
+      data.issue_cover_image_url = coverImageUrl;
+    }
+
+    if (pdfUrl) {
+      data.pdf_url = pdfUrl;
+      data.pdf_url_link = pdfUrl;
+    }
+
+    console.log('Submitting data:', data);
+
+    const response = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams(data).toString()
+    });
+
+    console.log('Response status:', response.status);
+    
+    if (response.ok) {
+      const result = await response.json();
+      console.log('Response result:', result);
+      
+      if (result.status === 'success') {
+        loadingState.style.display = 'none';
+        successMessage.style.display = 'block';
+        successMessage.scrollIntoView({ behavior: 'smooth' });
+        
+        setTimeout(() => {
+          clearForm();
+          if (document.getElementById('data-tab').classList.contains('active')) {
+            loadPublicationsData();
           }
-
-          // Override with uploaded file URLs
-          if (uploadedFiles.cover && uploadedFiles.cover.url) {
-            data.issue_cover_image = uploadedFiles.cover.url;
-          }
-          if (uploadedFiles.pdf && uploadedFiles.pdf.url) {
-            data.pdf_url = uploadedFiles.pdf.url;
-          }
-
-          console.log('Submitting data:', data);
-
-          const response = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams(data).toString()
-          });
-
-          console.log('Response status:', response.status);
-          
-          if (response.ok) {
-            const result = await response.json();
-            console.log('Response result:', result);
-            
-            if (result.status === 'success') {
-              loadingState.style.display = 'none';
-              successMessage.style.display = 'block';
-              successMessage.scrollIntoView({ behavior: 'smooth' });
-              
-              setTimeout(() => {
-                clearForm();
-                if (document.getElementById('data-tab').classList.contains('active')) {
-                  loadPublicationsData();
-                }
-              }, 2000);
-            } else {
-              throw new Error(result.message || 'Submission failed');
-            }
-          } else {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-          }
-
-        } catch (error) {
-          console.error('Submission error:', error);
-          loadingState.style.display = 'none';
-          
-          document.getElementById('error-text').textContent = 
-            `Submission failed: ${error.message}. Please check your internet connection and try again.`;
-          errorMessage.style.display = 'block';
-          errorMessage.scrollIntoView({ behavior: 'smooth' });
-        } finally {
-          submitBtn.disabled = false;
-        }
+        }, 2000);
+      } else {
+        throw new Error(result.message || 'Submission failed');
       }
+    } else {
+      const errorText = await response.text();
+      throw new Error(`HTTP ${response.status}: ${response.statusText}. ${errorText}`);
+    }
+
+  } catch (error) {
+    console.error('Submission error:', error);
+    loadingState.style.display = 'none';
+    
+    document.getElementById('error-text').textContent = 
+      `Submission failed: ${error.message}. Please check your internet connection and try again.`;
+    errorMessage.style.display = 'block';
+    errorMessage.scrollIntoView({ behavior: 'smooth' });
+  } finally {
+    submitBtn.disabled = false;
+  }
+}
+
 
       // Form validation function
       function validateForm() {
-        const requiredFields = document.querySelectorAll('input[required], textarea[required], select[required]');
-        let isValid = true;
+  const requiredFields = document.querySelectorAll('input[required], textarea[required], select[required]');
+  let isValid = true;
+  const missingFields = [];
 
-        document.querySelectorAll('.error').forEach(field => {
-          field.classList.remove('error');
-        });
+  // Clear previous error states
+  document.querySelectorAll('.error').forEach(field => {
+    field.classList.remove('error');
+  });
 
-        requiredFields.forEach((field) => {
-          if (!field.value.trim()) {
-            field.classList.add('error');
-            isValid = false;
-          }
-        });
-
-        // Check if required files are uploaded
-        const coverImageRequired = document.getElementById('issue_cover_image').hasAttribute('required');
-        if (coverImageRequired && !uploadedFiles.cover) {
-          document.getElementById('issue_cover_image').classList.add('error');
+  requiredFields.forEach((field) => {
+    let fieldValue = '';
+    
+    // Special handling for file inputs
+    if (field.type === 'file') {
+      const fieldName = field.name;
+      if (fieldName === 'issue_cover_image') {
+        // Check if cover image is uploaded (either file selected or URL exists)
+        const hiddenUrl = document.getElementById('issue_cover_image_url').value;
+        if (!field.files.length && !hiddenUrl && !uploadedFiles.cover) {
+          field.classList.add('error');
+          missingFields.push('Cover Image');
           isValid = false;
         }
-
-        const urlFields = document.querySelectorAll('input[type="url"]');
-        urlFields.forEach((field) => {
-          if (field.hasAttribute('required') && field.value.trim()) {
-            try {
-              new URL(field.value.trim());
-            } catch {
-              field.classList.add('error');
-              isValid = false;
-            }
-          }
-        });
-
-        return isValid;
+      } else if (fieldName === 'pdf_url') {
+        // PDF is optional, so skip validation
       }
+    } else {
+      fieldValue = field.value.trim();
+      if (!fieldValue) {
+        field.classList.add('error');
+        missingFields.push(field.name || field.id);
+        isValid = false;
+      }
+    }
+  });
+
+  // Validate URL fields
+  const urlFields = document.querySelectorAll('input[type="url"]');
+  urlFields.forEach((field) => {
+    if (field.hasAttribute('required') && field.value.trim()) {
+      try {
+        new URL(field.value.trim());
+      } catch {
+        field.classList.add('error');
+        missingFields.push(field.name || field.id);
+        isValid = false;
+      }
+    }
+  });
+
+  // Debug log to see what's missing
+  if (!isValid) {
+    console.log('Validation failed. Missing fields:', missingFields);
+  }
+
+  return isValid;
+}
+
 
       // Clear form function
       function clearForm() {
@@ -2528,6 +2576,37 @@
         const maxId = Math.max(...publicationsData.map(pub => parseInt(pub.article_id) || 0));
         return (maxId + 1).toString();
       }
+
+      function debugFormValidation() {
+  console.log('=== FORM VALIDATION DEBUG ===');
+  
+  const requiredFields = document.querySelectorAll('input[required], textarea[required], select[required]');
+  console.log('Total required fields:', requiredFields.length);
+  
+  requiredFields.forEach((field, index) => {
+    const fieldName = field.name || field.id;
+    const fieldValue = field.value.trim();
+    const isFile = field.type === 'file';
+    
+    if (isFile) {
+      const hiddenInput = field.name === 'issue_cover_image' ? 
+        document.getElementById('issue_cover_image_url') : 
+        document.getElementById('pdf_url_link');
+      
+      console.log(`${index + 1}. ${fieldName} (file):`, {
+        filesSelected: field.files.length,
+        hiddenValue: hiddenInput ? hiddenInput.value : 'No hidden input',
+        uploadedFile: uploadedFiles[field.name === 'issue_cover_image' ? 'cover' : 'pdf']
+      });
+    } else {
+      console.log(`${index + 1}. ${fieldName}:`, fieldValue ? `"${fieldValue}"` : 'EMPTY');
+    }
+  });
+  
+  console.log('Uploaded files object:', uploadedFiles);
+  console.log('=== END DEBUG ===');
+}
+  
 
       console.log('Admin panel initialized successfully');
     </script>
