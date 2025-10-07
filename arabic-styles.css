@@ -1,148 +1,177 @@
-/* Bilingual Metadata Styling */
-.author-info,
-.article-metadata {
-    transition: all 0.3s ease;
+/* Arabic Journal Styling */
+.arabic-article {
+direction: rtl;
+text-align: right;
+font-family: 'Traditional Arabic', 'Scheherazade New', 'Amiri', 'Lateef', serif;
+line-height: 2;
+font-size: 1.1em;
 }
 
-/* Arabic Article Metadata */
+/* Arabic Typography */
+.arabic-article .article-title {
+font-family: 'Traditional Arabic', 'Scheherazade New', 'Amiri', serif;
+font-weight: 700;
+font-size: 2.2rem;
+line-height: 1.4;
+text-align: center;
+margin-bottom: 2rem;
+}
+
+.arabic-article .article-content {
+text-align: justify;
+line-height: 2.2;
+}
+
+.arabic-article .article-content p {
+margin-bottom: 1.5rem;
+text-align: justify;
+line-height: 2.2;
+font-size: 1.15em;
+}
+
+.arabic-article .article-content h1,
+.arabic-article .article-content h2,
+.arabic-article .article-content h3 {
+font-family: 'Traditional Arabic', 'Scheherazade New', 'Amiri', serif;
+font-weight: 700;
+text-align: right;
+margin: 2.5rem 0 1.5rem 0;
+}
+
+.arabic-article .article-content h2 {
+font-size: 1.6rem;
+border-bottom: 2px solid #c49a6c;
+padding-bottom: 0.5rem;
+}
+
+.arabic-article .article-content h3 {
+font-size: 1.3rem;
+color: #7d5d38;
+}
+
+/* Arabic Metadata Styling */
 .arabic-article .author-info,
 .arabic-article .article-metadata {
-    direction: rtl;
-    text-align: right;
+text-align: right;
+}
+
+.arabic-article .keywords {
+justify-content: flex-end;
 }
 
 .arabic-article .author-info h3,
 .arabic-article .article-metadata .font-semibold {
-    font-family: 'Traditional Arabic', 'Scheherazade New', serif;
-    font-weight: 600;
+font-family: 'Traditional Arabic', 'Scheherazade New', serif;
 }
 
-/* Author Name Styling - Bilingual Support */
-.author-name {
-    font-family: inherit;
-    direction: inherit;
-    text-align: inherit;
+/* Arabic Special Elements */
+.arabic-article .quranic-verse {
+font-family: 'Traditional Arabic', 'Scheherazade New', 'Amiri', serif;
+font-size: 1.3em;
+font-weight: 500;
+text-align: center;
+line-height: 2.5;
+background: #fff9e6;
+border-right: 4px solid #d4af37;
+border-left: none;
+padding: 2rem;
 }
 
-.arabic-article .author-name {
-    font-family: 'Traditional Arabic', 'Scheherazade New', 'Amiri', serif;
-    font-size: 1.2em;
-    font-weight: 600;
-    line-height: 1.8;
+.arabic-article .hadith-quote {
+font-family: 'Traditional Arabic', 'Scheherazade New', 'Amiri', serif;
+font-size: 1.2em;
+text-align: justify;
+line-height: 2.3;
+background: #f0f8f0;
+border-right: 4px solid #2e8b57;
+border-left: none;
 }
 
-.author-position {
-    font-size: 0.9em;
-    color: #666;
-    direction: inherit;
+.arabic-article .citation-box {
+text-align: right;
+border-right: 4px solid #4299e1;
+border-left: none;
 }
 
-.arabic-article .author-position {
-    font-family: 'Traditional Arabic', 'Scheherazade New', serif;
+/* Arabic Numbers and Lists */
+.arabic-article ol,
+.arabic-article ul {
+margin-right: 2rem;
+margin-left: 0;
 }
 
-/* Metadata Grid - Bilingual Support */
-.metadata-grid {
-    direction: ltr;
-    text-align: left;
+.arabic-article .article-content li {
+margin-bottom: 0.5rem;
+text-align: right;
 }
 
-.arabic-article .metadata-grid {
-    direction: rtl;
-    text-align: right;
-}
-
-/* PDF Button - Maintain consistent positioning */
-.pdf-button-container {
-    display: flex;
-    direction: ltr;
-}
-
-.arabic-article .pdf-button-container {
-    direction: rtl;
-    justify-content: flex-start;
-}
-
-/* Individual Metadata Items */
-.metadata-item {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.arabic-article .metadata-item {
-    flex-direction: row-reverse;
-}
-
-.metadata-label {
-    font-weight: 600;
-    color: #374151;
-    white-space: nowrap;
-}
-
-.metadata-value {
-    color: #6b7280;
-}
-
-/* Keywords Container */
-.keywords-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-.arabic-article .keywords-container {
-    direction: rtl;
-    justify-content: flex-start;
-}
-
-.keyword-tag {
-    background: #ebf8ff;
-    color: #2b6cb0;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    direction: ltr;
-}
-
-.arabic-article .keyword-tag {
-    direction: rtl;
-}
-
-/* Email Styling */
-.author-email {
-    direction: ltr;
-    text-align: left;
-    unicode-bidi: embed;
-}
-
-.arabic-article .author-email {
-    direction: ltr;
-    text-align: left;
-}
-
-/* Volume/Issue Formatting */
-.volume-info {
-    direction: ltr;
-}
-
-.arabic-article .volume-info {
-    direction: ltr;
-}
-
-/* Responsive Design */
+/* Responsive Arabic Design */
 @media (max-width: 768px) {
-    .arabic-article .metadata-grid {
-        grid-template-columns: 1fr;
-        gap: 0.75rem;
-    }
-    
-    .arabic-article .metadata-item {
-        flex-direction: row-reverse;
-        justify-content: flex-end;
-    }
-    
-    .arabic-article .pdf-button-container {
-        justify-content: flex-start;
-    }
+.arabic-article .article-title {
+font-size: 1.8rem;
+}
+
+.arabic-article .article-content p {
+font-size: 1.1em;
+line-height: 2;
+}
+
+.arabic-article .quranic-verse,
+.arabic-article .hadith-quote {
+padding: 1rem;
+font-size: 1.1em;
+}
+}
+
+/* Arabic Font Face Definitions */
+@font-face {
+font-family: 'Traditional Arabic';
+src: local('Traditional Arabic'),
+url('https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&display=swap');
+}
+
+/* Fallback Arabic Font Stack */
+.arabic-text {
+font-family: 'Traditional Arabic', 'Scheherazade New', 'Amiri', 'Lateef', 'Geeza Pro', 'DecoType Naskh', serif;
+}
+
+/* Enhanced Arabic Support */
+.arabic-article .logo-container {
+    direction: ltr; /* Keep logo LTR */
+}
+
+.arabic-article .pdf-controls {
+    direction: ltr; /* Keep PDF controls LTR */
+}
+
+.arabic-article footer {
+    direction: ltr; /* Keep footer LTR */
+}
+
+/* Arabic page numbers and navigation */
+.arabic-article .page-numbers {
+    font-family: 'Traditional Arabic', serif;
+    direction: rtl;
+}
+
+/* Arabic abstract styling */
+.arabic-article #abstract-content {
+    text-align: justify;
+    line-height: 2.2;
+    font-size: 1.1em;
+}
+
+/* Ensure proper spacing for Arabic text */
+.arabic-article .article-content {
+    word-spacing: 0.1em;
+    letter-spacing: 0;
+}
+
+/* Arabic quotation marks */
+.arabic-article .quranic-verse::before {
+    content: "«";
+}
+
+.arabic-article .quranic-verse::after {
+    content: "»";
 }
