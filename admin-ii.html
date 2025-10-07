@@ -55,7 +55,7 @@
     font-family: 'Crimson Text', serif;
   }
 
-  /* Navigation Styles - Fixed for perfect alignment */
+  /* Navigation Styles - Improved Responsiveness */
   .navbar {
     background: white;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -70,17 +70,17 @@
     margin: 0 auto;
     padding: 0 1rem;
     display: flex;
-    justify-content: space-between; /* This ensures left-right distribution */
+    justify-content: space-between;
     align-items: center;
     height: 4.5rem;
-    width: 100%; /* Ensure full width */
+    width: 100%;
   }
 
   .logo-container {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    flex-shrink: 0; /* Prevent logo from shrinking */
+    flex-shrink: 0;
   }
 
   .logo-image {
@@ -113,13 +113,11 @@
     letter-spacing: 0.5px;
   }
 
-  /* Right-aligned navigation menu - Fixed */
+  /* Improved Navigation Menu */
   .nav-menu {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-left: 0; /* Remove auto margin */
-    /* No need for margin-left: auto since justify-content: space-between handles it */
+    gap: 0.75rem;
   }
 
   .nav-link {
@@ -127,7 +125,7 @@
     text-decoration: none;
     font-weight: 500;
     font-size: 0.875rem;
-    padding: 0.75rem 1.25rem;
+    padding: 0.625rem 1rem;
     border-radius: 8px;
     transition: all 0.3s ease;
     cursor: pointer;
@@ -137,12 +135,15 @@
     white-space: nowrap;
     background: var(--gray-50);
     border: 1px solid var(--gray-200);
+    min-height: 38px;
+    justify-content: center;
   }
 
   .nav-link:hover {
     color: var(--primary-color);
     background-color: rgba(59, 130, 246, 0.1);
     border-color: var(--secondary-color);
+    transform: translateY(-1px);
   }
 
   .nav-link.active {
@@ -154,19 +155,23 @@
 
   .mobile-menu-btn {
     display: none;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    font-size: 1.25rem;
     color: var(--gray-700);
     cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 6px;
-    transition: background-color 0.2s;
-    margin-left: auto; /* Push mobile menu button to the right */
+    padding: 0.625rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    width: 38px;
+    height: 38px;
+    align-items: center;
+    justify-content: center;
   }
 
   .mobile-menu-btn:hover {
     background: var(--gray-100);
+    color: var(--primary-color);
   }
 
   .mobile-nav {
@@ -187,8 +192,8 @@
     gap: 0.75rem;
     color: var(--gray-700);
     text-decoration: none;
-    padding: 1rem;
-    border-bottom: 1px solid var(--gray-100);
+    padding: 0.875rem 1rem;
+    border-bottom: none;
     font-weight: 500;
     cursor: pointer;
     border-radius: 8px;
@@ -196,6 +201,8 @@
     transition: all 0.2s;
     background: var(--gray-50);
     border: 1px solid var(--gray-200);
+    min-height: 44px;
+    justify-content: flex-start;
   }
 
   .mobile-nav .nav-link:hover {
@@ -383,21 +390,20 @@
     line-height: 1.5;
   }
 
+  /* Improved Submit Section */
   .submit-section {
     margin-top: 2.5rem;
     padding-top: 2rem;
     border-top: 2px solid var(--gray-200);
-    text-align: center;
     display: flex;
-    gap: 1rem;
     justify-content: center;
-    flex-wrap: wrap;
+    align-items: center;
   }
 
-  .submit-btn, .action-btn {
+  .submit-btn {
     background: linear-gradient(135deg, var(--secondary-color) 0%, var(--accent-color) 100%);
     color: white;
-    padding: 1rem 2rem;
+    padding: 1rem 2.5rem;
     border: none;
     border-radius: 50px;
     font-size: 1rem;
@@ -406,37 +412,27 @@
     transition: all 0.3s ease;
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: center;
+    gap: 0.75rem;
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    min-height: 50px;
+    white-space: nowrap;
   }
 
-  .submit-btn:hover:not(:disabled),
-  .action-btn:hover:not(:disabled) {
+  .submit-btn:hover:not(:disabled) {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
   }
 
-  .submit-btn:active:not(:disabled),
-  .action-btn:active:not(:disabled) {
+  .submit-btn:active:not(:disabled) {
     transform: translateY(-1px);
   }
 
-  .submit-btn:disabled,
-  .action-btn:disabled {
+  .submit-btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
-  }
-
-  .action-btn.danger {
-    background: linear-gradient(135deg, var(--error-color) 0%, #dc2626 100%);
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-  }
-
-  .action-btn.warning {
-    background: linear-gradient(135deg, var(--warning-color) 0%, #d97706 100%);
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
   }
 
   .loading-state {
@@ -510,9 +506,10 @@
     margin-top: 0.5rem;
   }
 
+  /* Improved Data Controls */
   .data-controls {
     display: flex;
-    gap: 1rem;
+    gap: 0.75rem;
     align-items: center;
     flex-wrap: wrap;
   }
@@ -520,13 +517,14 @@
   .search-box {
     padding: 0.75rem 1.25rem;
     border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50px;
+    border-radius: 25px;
     background: rgba(255, 255, 255, 0.15);
     color: white;
     font-size: 0.95rem;
-    min-width: 250px;
+    min-width: 200px;
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
+    height: 44px;
   }
 
   .search-box:focus {
@@ -538,6 +536,39 @@
 
   .search-box::placeholder {
     color: rgba(255, 255, 255, 0.7);
+  }
+
+  .action-btn {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    padding: 0.75rem 1.25rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 25px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    backdrop-filter: blur(10px);
+    white-space: nowrap;
+    min-height: 44px;
+  }
+
+  .action-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .action-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
   }
 
   .data-container {
@@ -701,69 +732,79 @@
     margin: 1rem 0;
   }
 
-  /* Pagination Styles - Fixed alignment */
-.pagination {
-  display: flex;
-  justify-content: space-between; /* This will push buttons to edges */
-  align-items: center;
-  margin-top: 2rem;
-  flex-wrap: wrap;
-  position: relative; /* For absolute positioning of center element */
-}
+  /* Improved Pagination Styles */
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+    position: relative;
+    min-height: 44px;
+  }
 
-.pagination button {
-  padding: 0.75rem 1.25rem;
-  border: 1px solid var(--gray-300);
-  background: white;
-  color: var(--gray-700);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-shrink: 0; /* Prevent buttons from shrinking */
-}
+  .pagination button {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--gray-300);
+    background: white;
+    color: var(--gray-700);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 36px;
+    flex-shrink: 0;
+  }
 
-#prev-btn {
-  order: 1; /* Left side */
-}
+  #prev-btn {
+    order: 1;
+  }
 
-#page-info {
-  order: 2; /* Center */
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  color: var(--gray-700);
-  font-weight: 500;
-  white-space: nowrap;
-}
+  #page-info {
+    order: 2;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--gray-700);
+    font-weight: 500;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    background: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border: 1px solid var(--gray-200);
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+  }
 
-#next-btn {
-  order: 3; /* Right side */
-  margin-left: auto; /* Push to right */
-}
+  #next-btn {
+    order: 3;
+    margin-left: auto;
+  }
 
-.pagination button:hover:not(:disabled) {
-  background: var(--gray-100);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+  .pagination button:hover:not(:disabled) {
+    background: var(--gray-100);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
 
-.pagination button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
+  .pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
 
-.pagination button.active {
-  background: var(--secondary-color);
-  color: white;
-  border-color: var(--secondary-color);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-}
+  .pagination button.active {
+    background: var(--secondary-color);
+    color: white;
+    border-color: var(--secondary-color);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  }
 
   /* Modal Styles */
   .modal {
@@ -947,6 +988,11 @@
     
     .data-controls {
       justify-content: center;
+      width: 100%;
+    }
+
+    .search-box {
+      min-width: 250px;
     }
   }
 
@@ -956,11 +1002,11 @@
     }
 
     .mobile-menu-btn {
-      display: block;
+      display: flex;
     }
 
     .navbar-container {
-      justify-content: space-between; /* Ensure space between logo and menu button on mobile */
+      justify-content: space-between;
     }
 
     .form-header h1 {
@@ -997,18 +1043,29 @@
       font-size: 1.75rem;
     }
 
+    .data-controls {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.75rem;
+    }
+
     .search-box {
       min-width: 100%;
+      width: 100%;
+    }
+
+    .action-btn {
+      width: 100%;
+      justify-content: center;
     }
 
     .submit-section {
-      flex-direction: column;
-      align-items: stretch;
+      padding: 1.5rem 0;
     }
-    
-    .submit-btn, .action-btn {
+
+    .submit-btn {
       width: 100%;
-      justify-content: center;
+      max-width: 280px;
     }
 
     .data-table {
@@ -1026,6 +1083,24 @@
     .modal-content {
       padding: 1.5rem;
       width: 95%;
+    }
+
+    .pagination {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    #page-info {
+      position: static;
+      transform: none;
+      order: 4;
+      margin-top: 0.5rem;
+      width: 100%;
+      text-align: center;
+    }
+
+    .pagination button {
+      min-width: 80px;
     }
   }
 
@@ -1057,6 +1132,23 @@
     
     .data-stats {
       grid-template-columns: 1fr;
+    }
+
+    .nav-link {
+      font-size: 0.8rem;
+      padding: 0.5rem 0.75rem;
+    }
+
+    .mobile-nav .nav-link {
+      font-size: 0.875rem;
+    }
+
+    .logo-text {
+      font-size: 1rem;
+    }
+
+    .logo-subtitle {
+      font-size: 0.65rem;
     }
   }
 </style>
@@ -1102,11 +1194,7 @@
     <!-- Form Tab Content -->
     <div id="form-tab" class="tab-content active">
       <div class="form-wrapper">
-        
-
         <div class="form-container">
-          
-         
           <form id="publication-form">
             <!-- Issue Information Section -->
             <div class="form-section">
@@ -1240,10 +1328,6 @@
             <div class="submit-section">
               <button type="submit" class="submit-btn" id="submit-btn">
                 <i class="fas fa-paper-plane"></i> Submit Publication
-              </button>
-
-              <button type="button" class="action-btn warning" id="clear-btn">
-                <i class="fas fa-eraser"></i> Clear Form
               </button>
 
               <div class="loading-state" id="loading-state">
@@ -1498,7 +1582,6 @@
         });
 
         form.addEventListener('submit', handleFormSubmission);
-        document.getElementById('clear-btn').addEventListener('click', clearForm);
 
         document.querySelectorAll('input, textarea, select').forEach((field) => {
           field.addEventListener('blur', function () {
