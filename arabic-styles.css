@@ -110,10 +110,9 @@
     font-size: 1.1em;
     direction: rtl;
     padding: 1.5rem;
-    background: #fafafa;
-    border-right: 4px solid #d4af37;
-    border-left: none;
-    border-radius: 0 8px 8px 0;
+    border-right: none; /* Remove right golden border */
+    border-left: none; /* Remove left border */
+    border-radius: 8px; /* Apply border radius to all corners */
 }
 
 /* Arabic Author Information */
