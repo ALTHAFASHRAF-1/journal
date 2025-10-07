@@ -238,7 +238,7 @@
 .english-article .article-title,
 .english-article #article-title {
     font-family: 'Crimson Text', 'Times New Roman', serif;
-    font-weight: 700; /* Increased weight for better visibility */
+    font-weight: 600; /* Increased weight for better visibility */
     font-size: 2.8rem !important; /* Significantly increased from 2.25rem */
     line-height: 1.3;
     text-align: center;
