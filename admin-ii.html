@@ -2067,8 +2067,7 @@
 }
 
 
-      // Form submission handler
-      async function handleFormSubmission(e) {
+     async function handleFormSubmission(e) {
   e.preventDefault();
 
   const submitBtn = document.getElementById('submit-btn');
@@ -2098,9 +2097,11 @@
     const formData = new FormData(e.target);
     const data = {};
 
-    // Collect all form data
+    // Collect all form data with proper type handling
     for (let [key, value] of formData.entries()) {
-      data[key] = value.trim();
+      // Convert value to string first, then trim
+      const stringValue = String(value || '');
+      data[key] = stringValue.trim();
     }
 
     // Override with uploaded file URLs if they exist
@@ -2166,8 +2167,7 @@
 }
 
 
-      // Form validation function
-      function validateForm() {
+     function validateForm() {
   const requiredFields = document.querySelectorAll('input[required], textarea[required], select[required]');
   let isValid = true;
   const missingFields = [];
@@ -2191,11 +2191,11 @@
           missingFields.push('Cover Image');
           isValid = false;
         }
-      } else if (fieldName === 'pdf_url') {
-        // PDF is optional, so skip validation
       }
+      // PDF is optional, so skip validation for pdf_url
     } else {
-      fieldValue = field.value.trim();
+      // Convert to string first, then trim to avoid the error
+      fieldValue = String(field.value || '').trim();
       if (!fieldValue) {
         field.classList.add('error');
         missingFields.push(field.name || field.id);
@@ -2207,9 +2207,10 @@
   // Validate URL fields
   const urlFields = document.querySelectorAll('input[type="url"]');
   urlFields.forEach((field) => {
-    if (field.hasAttribute('required') && field.value.trim()) {
+    const fieldValue = String(field.value || '').trim();
+    if (field.hasAttribute('required') && fieldValue) {
       try {
-        new URL(field.value.trim());
+        new URL(fieldValue);
       } catch {
         field.classList.add('error');
         missingFields.push(field.name || field.id);
@@ -2227,28 +2228,37 @@
 }
 
 
-      // Clear form function
+
       function clearForm() {
-        const form = document.getElementById('publication-form');
-        form.reset();
-        
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('date').value = today;
-        
-        document.querySelectorAll('.error').forEach(field => {
-          field.classList.remove('error');
-        });
+  const form = document.getElementById('publication-form');
+  form.reset();
+  
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('date').value = today;
+  
+  // Reset default values
+  document.getElementById('issue_id').value = 'issue8';
+  document.getElementById('volume').value = '8';
+  document.getElementById('number').value = '2';
+  document.getElementById('year').value = '2025';
+  document.getElementById('issue_title').value = 'Vol. 8 No. 2 (2025)';
+  document.getElementById('issue_published_date').value = '2025-06-15';
+  
+  document.querySelectorAll('.error').forEach(field => {
+    field.classList.remove('error');
+  });
 
-        document.querySelectorAll('.message').forEach(msg => {
-          msg.style.display = 'none';
-        });
+  document.querySelectorAll('.message').forEach(msg => {
+    msg.style.display = 'none';
+  });
 
-        // Clear uploaded files
-        removeFile('cover');
-        removeFile('pdf');
+  // Clear uploaded files
+  removeFile('cover');
+  removeFile('pdf');
 
-        console.log('Form cleared');
-      }
+  console.log('Form cleared');
+}
+
 
       // Data management functions
       async function loadPublicationsData() {
