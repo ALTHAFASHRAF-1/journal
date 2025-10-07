@@ -6,7 +6,7 @@
     <meta name="description" content="Academic Publication Submission Form - Islamic Insight Journal">
     <meta name="keywords" content="academic journal, research papers, submission form, Islamic studies">
     <meta name="author" content="Islamic Insight Journal">
-    <title>Academic Publication Submission Form - Islamic Insight</title>
+    <title>Academic Publication Admin Panel - Islamic Insight</title>
     <link rel="icon" type="image/png" href="https://dqdhiu.netlify.app/logo.png">
 
     <!-- CSS Libraries -->
@@ -109,7 +109,7 @@
       }
 
       .nav-links {
-        display: none;
+        display: flex;
         align-items: center;
         gap: 2rem;
       }
@@ -119,16 +119,20 @@
         text-decoration: none;
         font-weight: 500;
         font-size: 0.875rem;
-        padding: 0.5rem 0;
-        transition: color 0.2s;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        transition: all 0.2s;
+        cursor: pointer;
       }
 
-      .nav-links a:hover {
+      .nav-links a:hover,
+      .nav-links a.active {
         color: var(--primary-color);
+        background-color: var(--gray-100);
       }
 
       .mobile-menu-btn {
-        display: block;
+        display: none;
         background: none;
         border: none;
         font-size: 1.5rem;
@@ -154,6 +158,16 @@
         padding: 0.75rem 0;
         border-bottom: 1px solid var(--gray-100);
         font-weight: 500;
+        cursor: pointer;
+      }
+
+      /* Tab Content */
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
       }
 
       /* Form Container */
@@ -285,9 +299,13 @@
         padding-top: 2rem;
         border-top: 2px solid var(--gray-200);
         text-align: center;
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
       }
 
-      .submit-btn {
+      .submit-btn, .action-btn {
         background: linear-gradient(135deg, var(--secondary-color) 0%, var(--accent-color) 100%);
         color: white;
         padding: 1rem 2rem;
@@ -297,17 +315,30 @@
         font-weight: 600;
         cursor: pointer;
         transition: transform 0.2s, box-shadow 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
       }
 
-      .submit-btn:hover:not(:disabled) {
+      .submit-btn:hover:not(:disabled),
+      .action-btn:hover:not(:disabled) {
         transform: translateY(-2px);
         box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
       }
 
-      .submit-btn:disabled {
+      .submit-btn:disabled,
+      .action-btn:disabled {
         opacity: 0.6;
         cursor: not-allowed;
         transform: none;
+      }
+
+      .action-btn.danger {
+        background: linear-gradient(135deg, var(--error-color) 0%, #dc2626 100%);
+      }
+
+      .action-btn.warning {
+        background: linear-gradient(135deg, var(--warning-color) 0%, #d97706 100%);
       }
 
       .loading-state {
@@ -339,6 +370,275 @@
         background: #fef3c7;
         color: #92400e;
         border: 1px solid #fbbf24;
+      }
+
+      /* Data Management Styles */
+      .data-wrapper {
+        max-width: 1400px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+
+      .data-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 12px 12px 0 0;
+        text-align: center;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .data-header h1 {
+        font-size: 2rem;
+        margin: 0;
+        font-family: 'Crimson Text', serif;
+      }
+
+      .data-controls {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .search-box {
+        padding: 0.5rem 1rem;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 25px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-size: 0.9rem;
+        min-width: 200px;
+      }
+
+      .search-box::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .data-container {
+        background: white;
+        border-radius: 0 0 12px 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+      }
+
+      .data-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .stat-card {
+        background: var(--gray-50);
+        padding: 1.5rem;
+        border-radius: 8px;
+        border-left: 4px solid var(--secondary-color);
+        text-align: center;
+      }
+
+      .stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-label {
+        color: var(--gray-600);
+        font-size: 0.875rem;
+      }
+
+      .data-table-container {
+        overflow-x: auto;
+        border-radius: 8px;
+        border: 1px solid var(--gray-200);
+      }
+
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 1000px;
+      }
+
+      .data-table th,
+      .data-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid var(--gray-200);
+        font-size: 0.875rem;
+      }
+
+      .data-table th {
+        background: var(--gray-50);
+        font-weight: 600;
+        color: var(--gray-800);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .data-table tbody tr:hover {
+        background-color: var(--gray-50);
+      }
+
+      .data-table .actions {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+      }
+
+      .action-icon {
+        padding: 0.5rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        transition: all 0.2s;
+      }
+
+      .action-icon.edit {
+        background: var(--warning-color);
+        color: white;
+      }
+
+      .action-icon.delete {
+        background: var(--error-color);
+        color: white;
+      }
+
+      .action-icon.view {
+        background: var(--secondary-color);
+        color: white;
+      }
+
+      .action-icon:hover {
+        transform: scale(1.1);
+      }
+
+      .loading-spinner {
+        display: none;
+        text-align: center;
+        padding: 3rem;
+        color: var(--gray-600);
+      }
+
+      .loading-spinner.active {
+        display: block;
+      }
+
+      .no-data {
+        text-align: center;
+        padding: 3rem;
+        color: var(--gray-600);
+      }
+
+      .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .pagination button {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--gray-300);
+        background: white;
+        color: var(--gray-700);
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .pagination button:hover:not(:disabled) {
+        background: var(--gray-100);
+      }
+
+      .pagination button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .pagination button.active {
+        background: var(--secondary-color);
+        color: white;
+        border-color: var(--secondary-color);
+      }
+
+      /* Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        animation: fadeIn 0.3s;
+      }
+
+      .modal.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        max-width: 90%;
+        max-height: 90%;
+        overflow-y: auto;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        animation: slideIn 0.3s;
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--gray-200);
+      }
+
+      .modal-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--gray-800);
+      }
+
+      .close-modal {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--gray-600);
+        cursor: pointer;
+        padding: 0.25rem;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+      }
+
+      .close-modal:hover {
+        background: var(--gray-100);
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      @keyframes slideIn {
+        from { transform: translateY(-50px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
       }
 
       /* Footer Styles */
@@ -419,16 +719,20 @@
 
       /* Responsive Design */
       @media (min-width: 768px) {
-        .nav-links {
-          display: flex;
-        }
-
         .mobile-menu-btn {
           display: none;
         }
       }
 
       @media (max-width: 767px) {
+        .nav-links {
+          display: none;
+        }
+
+        .mobile-menu-btn {
+          display: block;
+        }
+
         .form-header h1 {
           font-size: 1.5rem;
         }
@@ -453,20 +757,45 @@
         .logo-subtitle {
           font-size: 0.65rem;
         }
+
+        .data-header {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .data-controls {
+          justify-content: center;
+        }
+
+        .search-box {
+          min-width: 250px;
+        }
+
+        .submit-section {
+          flex-direction: column;
+          align-items: center;
+        }
       }
 
       @media (max-width: 480px) {
-        .form-wrapper {
+        .form-wrapper,
+        .data-wrapper {
           margin: 1rem auto;
           padding: 0 0.5rem;
         }
 
-        .form-container {
+        .form-container,
+        .data-container {
           padding: 1rem;
         }
 
         .form-section {
           padding: 1rem;
+        }
+
+        .modal-content {
+          padding: 1rem;
+          max-width: 95%;
         }
       }
     </style>
@@ -480,178 +809,303 @@
           <img src="https://dqdhiu.netlify.app/logo.png" alt="Islamic Insight Logo" class="logo-image">
           <div class="logo-text-container">
             <h1 class="logo-text academic-title">ISLAMIC INSIGHT</h1>
-            <p class="logo-subtitle">Journal of Islamic Studies</p>
+            <p class="logo-subtitle">Journal Admin Panel</p>
           </div>
         </div>
+        
+        <div class="nav-links">
+          <a href="#" data-tab="form" class="nav-link active">
+            <i class="fas fa-plus-circle"></i> Add Publication
+          </a>
+          <a href="#" data-tab="data" class="nav-link">
+            <i class="fas fa-database"></i> Manage Data
+          </a>
+        </div>
+
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+
+      <div class="mobile-nav" id="mobile-nav">
+        <a href="#" data-tab="form" class="nav-link">
+          <i class="fas fa-plus-circle"></i> Add Publication
+        </a>
+        <a href="#" data-tab="data" class="nav-link">
+          <i class="fas fa-database"></i> Manage Data
+        </a>
       </div>
     </nav>
 
-    <!-- Form Section -->
-    <div class="form-wrapper">
-      <div class="form-header">
-        <h1 class="academic-title">Academic Publication Submission</h1>
-        <p>Submit your research for publication in Islamic Insight Journal</p>
-      </div>
-
-      <div class="form-container">
-        <div class="sample-note">
-          <i class="fas fa-info-circle"></i> <strong>Note:</strong> Please fill out all required fields marked with <span class="required">*</span>. Your submission will be reviewed by our editorial team.
+    <!-- Form Tab Content -->
+    <div id="form-tab" class="tab-content active">
+      <div class="form-wrapper">
+        <div class="form-header">
+          <h1 class="academic-title">Academic Publication Submission</h1>
+          <p>Submit your research for publication in Islamic Insight Journal</p>
         </div>
-       
-        <form id="publication-form">
-          <!-- Issue Information Section -->
-          <div class="form-section">
-            <h2 class="section-title"><i class="fas fa-book"></i> Issue Information</h2>
 
-            <div class="form-row two-cols">
-              <div class="form-group">
-                <label for="issue_id">Issue ID <span class="required">*</span></label>
-                <input type="text" id="issue_id" name="issue_id" value="issue6" required>
-              </div>
-              <div class="form-group">
-                <label for="volume">Volume <span class="required">*</span></label>
-                <input type="number" id="volume" name="volume" value="8" required>
-              </div>
-            </div>
-
-            <div class="form-row two-cols">
-              <div class="form-group">
-                <label for="number">Number <span class="required">*</span></label>
-                <input type="number" id="number" name="number" value="1" required>
-              </div>
-              <div class="form-group">
-                <label for="year">Year <span class="required">*</span></label>
-                <input type="number" id="year" name="year" min="1900" max="2100" value="2025" required>
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label for="issue_title">Issue Title <span class="required">*</span></label>
-                <input type="text" id="issue_title" name="issue_title" value="Vol. 8 No. 1 (2025)" required>
-              </div>
-            </div>
-
-            <div class="form-row two-cols">
-              <div class="form-group">
-                <label for="issue_published_date">Issue Published Date <span class="required">*</span></label>
-                <input type="date" id="issue_published_date" name="issue_published_date" value="2025-06-15" required>
-              </div>
-              <div class="form-group">
-                <label for="issue_cover_image">Issue Cover Image URL <span class="required">*</span></label>
-                <input type="url" id="issue_cover_image" name="issue_cover_image" value="https://dqdhiu.netlify.app/vol8no1.jpg" required>
-              </div>
-            </div>
+        <div class="form-container">
+          <div class="sample-note">
+            <i class="fas fa-info-circle"></i> <strong>Note:</strong> Please fill out all required fields marked with <span class="required">*</span>. Your submission will be reviewed by our editorial team.
           </div>
+         
+          <form id="publication-form">
+            <!-- Issue Information Section -->
+            <div class="form-section">
+              <h2 class="section-title"><i class="fas fa-book"></i> Issue Information</h2>
 
-          <!-- Article Information Section -->
-          <div class="form-section">
-            <h2 class="section-title"><i class="fas fa-document"></i> Article Information</h2>
-
-            <div class="form-row two-cols">
-              <div class="form-group">
-                <label for="article_id">Article ID <span class="required">*</span></label>
-                <input type="text" id="article_id" name="article_id" value="2" required>
+              <div class="form-row two-cols">
+                <div class="form-group">
+                  <label for="issue_id">Issue ID <span class="required">*</span></label>
+                  <input type="text" id="issue_id" name="issue_id" value="issue7" required>
+                </div>
+                <div class="form-group">
+                  <label for="volume">Volume <span class="required">*</span></label>
+                  <input type="number" id="volume" name="volume" value="8" required>
+                </div>
               </div>
-              <div class="form-group">
-                <label for="doi">DOI <span class="optional">(Optional)</span></label>
-                <input type="text" id="doi" name="doi" value="10.1000/183" placeholder="e.g., 10.1000/183">
+
+              <div class="form-row two-cols">
+                <div class="form-group">
+                  <label for="number">Number <span class="required">*</span></label>
+                  <input type="number" id="number" name="number" value="2" required>
+                </div>
+                <div class="form-group">
+                  <label for="year">Year <span class="required">*</span></label>
+                  <input type="number" id="year" name="year" min="1900" max="2100" value="2025" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="issue_title">Issue Title <span class="required">*</span></label>
+                  <input type="text" id="issue_title" name="issue_title" value="Vol. 8 No. 2 (2025)" required>
+                </div>
+              </div>
+
+              <div class="form-row two-cols">
+                <div class="form-group">
+                  <label for="issue_published_date">Issue Published Date <span class="required">*</span></label>
+                  <input type="date" id="issue_published_date" name="issue_published_date" value="2025-06-15" required>
+                </div>
+                <div class="form-group">
+                  <label for="issue_cover_image">Issue Cover Image URL <span class="required">*</span></label>
+                  <input type="url" id="issue_cover_image" name="issue_cover_image" value="https://dqdhiu.netlify.app/vol8no2.jpg" required>
+                </div>
               </div>
             </div>
 
-            <div class="form-row">
-              <div class="form-group">
-                <label for="article_title">Article Title <span class="required">*</span></label>
-                <input type="text" id="article_title" name="article_title" value="Contemporary Approaches to Quranic Hermeneutics: A Critical Analysis of Modern Interpretive Methodologies" required>
+            <!-- Article Information Section -->
+            <div class="form-section">
+              <h2 class="section-title"><i class="fas fa-document"></i> Article Information</h2>
+
+              <div class="form-row two-cols">
+                <div class="form-group">
+                  <label for="article_id">Article ID <span class="required">*</span></label>
+                  <input type="text" id="article_id" name="article_id" value="" required>
+                </div>
+                <div class="form-group">
+                  <label for="doi">DOI <span class="optional">(Optional)</span></label>
+                  <input type="text" id="doi" name="doi" value="" placeholder="e.g., 10.1000/183">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="article_title">Article Title <span class="required">*</span></label>
+                  <input type="text" id="article_title" name="article_title" value="" required>
+                </div>
+              </div>
+
+              <div class="form-row two-cols">
+                <div class="form-group">
+                  <label for="author">Main Author <span class="required">*</span></label>
+                  <input type="text" id="author" name="author" value="" required>
+                </div>
+                <div class="form-group">
+                  <label for="authors">All Authors <span class="optional">(Optional)</span></label>
+                  <input type="text" id="authors" name="authors" value="">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="abstract">Abstract <span class="required">*</span></label>
+                  <textarea id="abstract" name="abstract" required placeholder="Enter the article abstract here..."></textarea>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="keywords">Keywords <span class="required">*</span></label>
+                  <input type="text" id="keywords" name="keywords" value="" required placeholder="Separate keywords with commas">
+                </div>
               </div>
             </div>
 
-            <div class="form-row two-cols">
-              <div class="form-group">
-                <label for="author">Main Author <span class="required">*</span></label>
-                <input type="text" id="author" name="author" value="Dr. Ahmad Hassan Al-Qaradawi" required>
-              </div>
-              <div class="form-group">
-                <label for="authors">All Authors <span class="optional">(Optional)</span></label>
-                <input type="text" id="authors" name="authors" value="Dr. Ahmad Hassan Al-Qaradawi, Prof. Sarah Mitchell, Dr. Muhammad Ibrahim">
+            <!-- Publication Details Section -->
+            <div class="form-section">
+              <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Publication Details</h2>
+
+              <div class="form-row three-cols">
+                <div class="form-group">
+                  <label for="date">Submission Date <span class="required">*</span></label>
+                  <input type="date" id="date" name="date" required>
+                </div>
+                <div class="form-group">
+                  <label for="published_date">Published Date <span class="required">*</span></label>
+                  <input type="text" id="published_date" name="published_date" value="" required placeholder="e.g., June 15, 2025">
+                </div>
+                <div class="form-group">
+                  <label for="pages">Pages <span class="required">*</span></label>
+                  <input type="text" id="pages" name="pages" value="" required placeholder="e.g., 25-48">
+                </div>
               </div>
             </div>
 
-            <div class="form-row">
-              <div class="form-group">
-                <label for="abstract">Abstract <span class="required">*</span></label>
-                <textarea id="abstract" name="abstract" required>This comprehensive study examines the evolution of Quranic hermeneutics in contemporary Islamic scholarship, analyzing how modern interpretive methodologies have transformed traditional approaches to understanding the sacred text. The research employs a comparative analysis framework to investigate the integration of linguistic, historical, and contextual approaches in modern Quranic interpretation. Through systematic examination of prominent contemporary scholars' works, this study identifies key trends, methodological innovations, and debates that characterize modern Quranic hermeneutics. The findings reveal significant developments in interpretive strategies that bridge classical scholarship with contemporary academic rigor, while maintaining theological authenticity and scholarly integrity.</textarea>
+            <!-- File Links Section -->
+            <div class="form-section">
+              <h2 class="section-title"><i class="fas fa-link"></i> File Links</h2>
+
+              <div class="form-row two-cols">
+                <div class="form-group">
+                  <label for="html_file">HTML File URL <span class="required">*</span></label>
+                  <input type="url" id="html_file" name="html_file" value="" required placeholder="https://...">
+                </div>
+                <div class="form-group">
+                  <label for="pdf_url">PDF URL <span class="optional">(Optional)</span></label>
+                  <input type="url" id="pdf_url" name="pdf_url" value="" placeholder="https://...">
+                </div>
               </div>
             </div>
 
-            <div class="form-row">
-              <div class="form-group">
-                <label for="keywords">Keywords <span class="required">*</span></label>
-                <input type="text" id="keywords" name="keywords" value="Quranic hermeneutics, Contemporary Islamic scholarship, Interpretive methodology, Tafsir studies, Islamic exegesis" required>
+            <div class="submit-section">
+              <button type="submit" class="submit-btn" id="submit-btn">
+                <i class="fas fa-paper-plane"></i> Submit Publication
+              </button>
+
+              <button type="button" class="action-btn warning" id="clear-btn">
+                <i class="fas fa-eraser"></i> Clear Form
+              </button>
+
+              <div class="loading-state" id="loading-state">
+                <i class="fas fa-spinner fa-spin"></i> Submitting your publication...
+              </div>
+
+              <div class="message success-message" id="success-message">
+                <strong><i class="fas fa-check-circle"></i> Success!</strong> Your publication has been submitted successfully and saved to the database.
+              </div>
+
+              <div class="message error-message" id="error-message">
+                <strong><i class="fas fa-exclamation-triangle"></i> Submission Error!</strong>
+                <span id="error-text">There was an error submitting your form. Please try again.</span>
+              </div>
+
+              <div class="message validation-error" id="validation-error">
+                <strong><i class="fas fa-exclamation-triangle"></i> Validation Error!</strong>
+                Please fill in all required fields before submitting.
               </div>
             </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Management Tab Content -->
+    <div id="data-tab" class="tab-content">
+      <div class="data-wrapper">
+        <div class="data-header">
+          <div>
+            <h1 class="academic-title">Publication Data Management</h1>
+            <p>View and manage all submitted publications</p>
           </div>
-
-          <!-- Publication Details Section -->
-          <div class="form-section">
-            <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Publication Details</h2>
-
-            <div class="form-row three-cols">
-              <div class="form-group">
-                <label for="date">Submission Date <span class="required">*</span></label>
-                <input type="date" id="date" name="date" value="2025-01-15" required>
-              </div>
-              <div class="form-group">
-                <label for="published_date">Published Date <span class="required">*</span></label>
-                <input type="text" id="published_date" name="published_date" value="June 15, 2025" required>
-              </div>
-              <div class="form-group">
-                <label for="pages">Pages <span class="required">*</span></label>
-                <input type="text" id="pages" name="pages" value="25-48" required>
-              </div>
-            </div>
-          </div>
-
-          <!-- File Links Section -->
-          <div class="form-section">
-            <h2 class="section-title"><i class="fas fa-link"></i> File Links</h2>
-
-            <div class="form-row two-cols">
-              <div class="form-group">
-                <label for="html_file">HTML File URL <span class="required">*</span></label>
-                <input type="url" id="html_file" name="html_file" value="https://dqdhiu.netlify.app/articles.html?id=2" required>
-              </div>
-              <div class="form-group">
-                <label for="pdf_url">PDF URL <span class="optional">(Optional)</span></label>
-                <input type="url" id="pdf_url" name="pdf_url" value="https://dqdhiu.netlify.app/file/a2.pdf">
-              </div>
-            </div>
-          </div>
-
-          <div class="submit-section">
-            <button type="submit" class="submit-btn" id="submit-btn">
-              <i class="fas fa-paper-plane"></i> Submit Publication
+          <div class="data-controls">
+            <input type="text" class="search-box" id="search-input" placeholder="Search publications...">
+            <button class="action-btn" onclick="refreshData()">
+              <i class="fas fa-sync-alt"></i> Refresh
             </button>
+            <button class="action-btn" onclick="exportData()">
+              <i class="fas fa-download"></i> Export CSV
+            </button>
+          </div>
+        </div>
 
-            <div class="loading-state" id="loading-state">
-              <i class="fas fa-spinner fa-spin"></i> Submitting your publication...
+        <div class="data-container">
+          <div class="data-stats" id="data-stats">
+            <div class="stat-card">
+              <div class="stat-number" id="total-publications">0</div>
+              <div class="stat-label">Total Publications</div>
             </div>
-
-            <div class="message success-message" id="success-message">
-              <strong><i class="fas fa-check-circle"></i> Success!</strong> Your publication has been submitted successfully and saved to the database.
+            <div class="stat-card">
+              <div class="stat-number" id="current-year-publications">0</div>
+              <div class="stat-label">Current Year</div>
             </div>
-
-            <div class="message error-message" id="error-message">
-              <strong><i class="fas fa-exclamation-triangle"></i> Submission Error!</strong>
-              <span id="error-text">There was an error submitting your form. Please try again.</span>
+            <div class="stat-card">
+              <div class="stat-number" id="total-authors">0</div>
+              <div class="stat-label">Unique Authors</div>
             </div>
-
-            <div class="message validation-error" id="validation-error">
-              <strong><i class="fas fa-exclamation-triangle"></i> Validation Error!</strong>
-              Please fill in all required fields before submitting.
+            <div class="stat-card">
+              <div class="stat-number" id="total-volumes">0</div>
+              <div class="stat-label">Volumes</div>
             </div>
           </div>
-        </form>
+
+          <div class="loading-spinner" id="data-loading">
+            <i class="fas fa-spinner fa-spin fa-3x"></i>
+            <p>Loading publication data...</p>
+          </div>
+
+          <div class="data-table-container" id="data-table-container" style="display: none;">
+            <table class="data-table" id="data-table">
+              <thead>
+                <tr>
+                  <th>Article ID</th>
+                  <th>Title</th>
+                  <th>Author</th>
+                  <th>Volume</th>
+                  <th>Number</th>
+                  <th>Year</th>
+                  <th>Pages</th>
+                  <th>Published Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="data-table-body">
+              </tbody>
+            </table>
+          </div>
+
+          <div class="no-data" id="no-data" style="display: none;">
+            <i class="fas fa-inbox fa-3x" style="color: var(--gray-400); margin-bottom: 1rem;"></i>
+            <p>No publications found. Add your first publication using the form.</p>
+          </div>
+
+          <div class="pagination" id="pagination" style="display: none;">
+            <button id="prev-btn" onclick="changePage(-1)">
+              <i class="fas fa-chevron-left"></i> Previous
+            </button>
+            <span id="page-info">Page 1 of 1</span>
+            <button id="next-btn" onclick="changePage(1)">
+              Next <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for viewing/editing publication details -->
+    <div class="modal" id="publication-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" id="modal-title">Publication Details</h2>
+          <button class="close-modal" onclick="closeModal()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div id="modal-body">
+          <!-- Content will be dynamically loaded here -->
+        </div>
       </div>
     </div>
 
@@ -678,12 +1132,12 @@
           </div>
 
           <div class="footer-section">
-            <h3>Quick Links</h3>
+            <h3>Admin Functions</h3>
             <ul class="footer-links">
-              <li><a href="#about">About Journal</a></li>
-              <li><a href="editors.html">Editorial Board</a></li>
-              <li><a href="#guidelines">Submission Guidelines</a></li>
-              <li><a href="#contact">Contact Us</a></li>
+              <li><a href="#" data-tab="form">Add Publication</a></li>
+              <li><a href="#" data-tab="data">Manage Data</a></li>
+              <li><a href="#" onclick="exportData()">Export Data</a></li>
+              <li><a href="#" onclick="refreshData()">Refresh Database</a></li>
             </ul>
           </div>
 
@@ -699,17 +1153,131 @@
         </div>
 
         <div class="footer-bottom">
-          <p>© 2025 Islamic Insight Journal. All rights reserved.</p>
+          <p>© 2025 Islamic Insight Journal. All rights reserved. | Admin Panel v1.0</p>
         </div>
       </div>
     </footer>
 
     <script>
-      // Google Apps Script Web App URL - Replace with your actual deployed URL
+      // Configuration
       const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzrTbBUlx41l-zEbOXz1-KSBAGNjFRDvFNIvIgp-H_HiwklyPg6faRXg-MpO2kdDdw1/exec';
+      const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSkzubKLpyPWDjAWl5XS83-4huOcBJDZeeLRKVbntV2sDo-uG5Tzw5aFA6PQw3rNNv4-L-_44asHfTr/pub?gid=0&single=true&output=csv';
+      
+      // Global variables
+      let publicationsData = [];
+      let filteredData = [];
+      let currentPage = 1;
+      const itemsPerPage = 10;
+
+      // Tab switching functionality
+      function switchTab(tabName) {
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(tab => {
+          tab.classList.remove('active');
+        });
+
+        // Remove active class from all nav links
+        document.querySelectorAll('.nav-link').forEach(link => {
+          link.classList.remove('active');
+        });
+
+        // Show selected tab
+        const targetTab = document.getElementById(tabName + '-tab');
+        if (targetTab) {
+          targetTab.classList.add('active');
+        }
+
+        // Add active class to corresponding nav links
+        document.querySelectorAll(`[data-tab="${tabName}"]`).forEach(link => {
+          link.classList.add('active');
+        });
+
+        // Load data if switching to data tab
+        if (tabName === 'data') {
+          loadPublicationsData();
+        }
+
+        // Close mobile menu if open
+        document.getElementById('mobile-nav').classList.remove('active');
+      }
+
+      // Mobile menu toggle
+      function toggleMobileMenu() {
+        const mobileNav = document.getElementById('mobile-nav');
+        mobileNav.classList.toggle('active');
+      }
+
+      // Event listeners for navigation
+      document.addEventListener('DOMContentLoaded', function() {
+        // Set up tab switching
+        document.querySelectorAll('[data-tab]').forEach(link => {
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const tabName = this.getAttribute('data-tab');
+            switchTab(tabName);
+          });
+        });
+
+        // Initialize form
+        initializeForm();
+        
+        // Load data on page load
+        loadPublicationsData();
+      });
+
+      // Form initialization
+      function initializeForm() {
+        const form = document.getElementById('publication-form');
+        const dateField = document.getElementById('date');
+        
+        // Set current date for submission date if empty
+        if (!dateField.value) {
+          const today = new Date().toISOString().split('T')[0];
+          dateField.value = today;
+        }
+
+        // Auto-resize textareas on load
+        document.querySelectorAll('textarea').forEach((textarea) => {
+          textarea.style.height = 'auto';
+          textarea.style.height = textarea.scrollHeight + 'px';
+        });
+
+        // Form submission handler
+        form.addEventListener('submit', handleFormSubmission);
+
+        // Clear form button
+        document.getElementById('clear-btn').addEventListener('click', clearForm);
+
+        // Real-time validation
+        document.querySelectorAll('input, textarea, select').forEach((field) => {
+          field.addEventListener('blur', function () {
+            if (this.hasAttribute('required') && !this.value.trim()) {
+              this.classList.add('error');
+            } else {
+              this.classList.remove('error');
+            }
+          });
+
+          field.addEventListener('input', function () {
+            if (this.classList.contains('error') && this.value.trim()) {
+              this.classList.remove('error');
+            }
+          });
+        });
+
+        // Auto-resize textareas
+        document.querySelectorAll('textarea').forEach((textarea) => {
+          textarea.addEventListener('input', function () {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+          });
+        });
+
+        console.log('Form initialized and ready for submission');
+      }
 
       // Form submission handler
-      document.getElementById('publication-form').addEventListener('submit', async function (e) {
+      async function handleFormSubmission(e) {
         e.preventDefault();
 
         const submitBtn = document.getElementById('submit-btn');
@@ -736,7 +1304,7 @@
 
         try {
           // Collect form data
-          const formData = new FormData(this);
+          const formData = new FormData(e.target);
           const data = {};
 
           // Convert FormData to regular object
@@ -768,7 +1336,11 @@
               
               // Reset form after successful submission
               setTimeout(() => {
-                this.reset();
+                clearForm();
+                // Refresh data if on data tab
+                if (document.getElementById('data-tab').classList.contains('active')) {
+                  loadPublicationsData();
+                }
               }, 2000);
             } else {
               throw new Error(result.message || 'Submission failed');
@@ -788,7 +1360,7 @@
         } finally {
           submitBtn.disabled = false;
         }
-      });
+      }
 
       // Form validation function
       function validateForm() {
@@ -823,48 +1395,379 @@
         return isValid;
       }
 
-      // Real-time validation
-      document.querySelectorAll('input, textarea, select').forEach((field) => {
-        field.addEventListener('blur', function () {
-          if (this.hasAttribute('required') && !this.value.trim()) {
-            this.classList.add('error');
+      // Clear form function
+      function clearForm() {
+        const form = document.getElementById('publication-form');
+        form.reset();
+        
+        // Reset specific fields
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('date').value = today;
+        
+        // Clear error states
+        document.querySelectorAll('.error').forEach(field => {
+          field.classList.remove('error');
+        });
+
+        // Hide messages
+        document.querySelectorAll('.message').forEach(msg => {
+          msg.style.display = 'none';
+        });
+
+        console.log('Form cleared');
+      }
+
+      // Data management functions
+      async function loadPublicationsData() {
+        const loading = document.getElementById('data-loading');
+        const tableContainer = document.getElementById('data-table-container');
+        const noData = document.getElementById('no-data');
+        const pagination = document.getElementById('pagination');
+
+        try {
+          loading.classList.add('active');
+          tableContainer.style.display = 'none';
+          noData.style.display = 'none';
+          pagination.style.display = 'none';
+
+          console.log('Fetching data from:', CSV_URL);
+          
+          const response = await fetch(CSV_URL);
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+
+          const csvText = await response.text();
+          console.log('CSV data received, length:', csvText.length);
+          
+          publicationsData = parseCSV(csvText);
+          filteredData = [...publicationsData];
+          
+          console.log('Parsed publications:', publicationsData.length);
+
+          if (publicationsData.length === 0) {
+            noData.style.display = 'block';
           } else {
-            this.classList.remove('error');
+            updateDataStats();
+            renderDataTable();
+            updatePagination();
+            tableContainer.style.display = 'block';
+            pagination.style.display = 'flex';
           }
-        });
 
-        field.addEventListener('input', function () {
-          if (this.classList.contains('error') && this.value.trim()) {
-            this.classList.remove('error');
+        } catch (error) {
+          console.error('Error loading data:', error);
+          noData.style.display = 'block';
+          document.querySelector('#no-data p').textContent = 
+            `Error loading data: ${error.message}. Please check your connection and try again.`;
+        } finally {
+          loading.classList.remove('active');
+        }
+      }
+
+      // CSV parsing function
+      function parseCSV(csvText) {
+        const lines = csvText.trim().split('\n');
+        if (lines.length < 2) return [];
+
+        const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+        const data = [];
+
+        for (let i = 1; i < lines.length; i++) {
+          const values = parseCSVLine(lines[i]);
+          if (values.length === headers.length) {
+            const row = {};
+            headers.forEach((header, index) => {
+              row[header] = values[index] || '';
+            });
+            data.push(row);
           }
-        });
-      });
-
-      // Auto-resize textareas
-      document.querySelectorAll('textarea').forEach((textarea) => {
-        textarea.addEventListener('input', function () {
-          this.style.height = 'auto';
-          this.style.height = this.scrollHeight + 'px';
-        });
-      });
-
-      // Initialize form
-      document.addEventListener('DOMContentLoaded', function () {
-        // Set current date for submission date if empty
-        const dateField = document.getElementById('date');
-        if (!dateField.value) {
-          const today = new Date().toISOString().split('T')[0];
-          dateField.value = today;
         }
 
-        // Auto-resize textareas on load
-        document.querySelectorAll('textarea').forEach((textarea) => {
-          textarea.style.height = 'auto';
-          textarea.style.height = textarea.scrollHeight + 'px';
+        return data;
+      }
+
+      // Helper function to parse CSV line with proper comma handling
+      function parseCSVLine(line) {
+        const result = [];
+        let current = '';
+        let inQuotes = false;
+        
+        for (let i = 0; i < line.length; i++) {
+          const char = line[i];
+          
+          if (char === '"') {
+            inQuotes = !inQuotes;
+          } else if (char === ',' && !inQuotes) {
+            result.push(current.trim());
+            current = '';
+          } else {
+            current += char;
+          }
+        }
+        
+        result.push(current.trim());
+        return result;
+      }
+
+      // Update data statistics
+      function updateDataStats() {
+        const currentYear = new Date().getFullYear();
+        const currentYearPubs = publicationsData.filter(pub => pub.year == currentYear).length;
+        const uniqueAuthors = [...new Set(publicationsData.map(pub => pub.author))].length;
+        const uniqueVolumes = [...new Set(publicationsData.map(pub => pub.volume))].length;
+
+        document.getElementById('total-publications').textContent = publicationsData.length;
+        document.getElementById('current-year-publications').textContent = currentYearPubs;
+        document.getElementById('total-authors').textContent = uniqueAuthors;
+        document.getElementById('total-volumes').textContent = uniqueVolumes;
+      }
+
+      // Render data table
+      function renderDataTable() {
+        const tbody = document.getElementById('data-table-body');
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const pageData = filteredData.slice(startIndex, endIndex);
+
+        tbody.innerHTML = '';
+
+        pageData.forEach((pub, index) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${pub.article_id || 'N/A'}</td>
+            <td>
+              <div style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" 
+                   title="${pub.article_title || 'N/A'}">
+                ${pub.article_title || 'N/A'}
+              </div>
+            </td>
+            <td>${pub.author || 'N/A'}</td>
+            <td>${pub.volume || 'N/A'}</td>
+            <td>${pub.number || 'N/A'}</td>
+            <td>${pub.year || 'N/A'}</td>
+            <td>${pub.pages || 'N/A'}</td>
+            <td>${pub.published_date || 'N/A'}</td>
+            <td class="actions">
+              <button class="action-icon view" onclick="viewPublication(${startIndex + index})" title="View Details">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="action-icon edit" onclick="editPublication(${startIndex + index})" title="Edit">
+                <i class="fas fa-edit"></i>
+              </button>
+              ${pub.html_file ? `<button class="action-icon view" onclick="window.open('${pub.html_file}', '_blank')" title="View Article">
+                <i class="fas fa-external-link-alt"></i>
+              </button>` : ''}
+              ${pub.pdf_url ? `<button class="action-icon view" onclick="window.open('${pub.pdf_url}', '_blank')" title="View PDF">
+                <i class="fas fa-file-pdf"></i>
+              </button>` : ''}
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+      }
+
+      // Update pagination
+      function updatePagination() {
+        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+        const pageInfo = document.getElementById('page-info');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+        prevBtn.disabled = currentPage === 1;
+        nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+      }
+
+      // Change page
+      function changePage(direction) {
+        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+        const newPage = currentPage + direction;
+
+        if (newPage >= 1 && newPage <= totalPages) {
+          currentPage = newPage;
+          renderDataTable();
+          updatePagination();
+        }
+      }
+
+      // Search functionality
+      document.getElementById('search-input').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        
+        if (searchTerm === '') {
+          filteredData = [...publicationsData];
+        } else {
+          filteredData = publicationsData.filter(pub => {
+            return Object.values(pub).some(value => 
+              value.toString().toLowerCase().includes(searchTerm)
+            );
+          });
+        }
+        
+        currentPage = 1;
+        renderDataTable();
+        updatePagination();
+      });
+
+      // View publication details
+      function viewPublication(index) {
+        const pub = filteredData[index];
+        const modal = document.getElementById('publication-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+
+        modalTitle.textContent = 'Publication Details';
+        modalBody.innerHTML = `
+          <div style="display: grid; gap: 1rem;">
+            <div class="form-section">
+              <h3 class="section-title">Issue Information</h3>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <div><strong>Issue ID:</strong> ${pub.issue_id || 'N/A'}</div>
+                <div><strong>Volume:</strong> ${pub.volume || 'N/A'}</div>
+                <div><strong>Number:</strong> ${pub.number || 'N/A'}</div>
+                <div><strong>Year:</strong> ${pub.year || 'N/A'}</div>
+                <div><strong>Issue Title:</strong> ${pub.issue_title || 'N/A'}</div>
+                <div><strong>Published Date:</strong> ${pub.issue_published_date || 'N/A'}</div>
+              </div>
+            </div>
+            
+            <div class="form-section">
+              <h3 class="section-title">Article Information</h3>
+              <div style="display: grid; gap: 1rem;">
+                <div><strong>Article ID:</strong> ${pub.article_id || 'N/A'}</div>
+                <div><strong>Title:</strong> ${pub.article_title || 'N/A'}</div>
+                <div><strong>Author:</strong> ${pub.author || 'N/A'}</div>
+                <div><strong>DOI:</strong> ${pub.doi || 'N/A'}</div>
+                <div><strong>Keywords:</strong> ${pub.keywords || 'N/A'}</div>
+                <div><strong>Pages:</strong> ${pub.pages || 'N/A'}</div>
+                <div><strong>Submission Date:</strong> ${pub.date || 'N/A'}</div>
+                <div><strong>Published Date:</strong> ${pub.published_date || 'N/A'}</div>
+              </div>
+            </div>
+            
+            <div class="form-section">
+              <h3 class="section-title">Abstract</h3>
+              <p style="line-height: 1.6; text-align: justify;">${pub.abstract || 'N/A'}</p>
+            </div>
+            
+            <div class="form-section">
+              <h3 class="section-title">File Links</h3>
+              <div style="display: grid; gap: 1rem;">
+                ${pub.html_file ? `<div><strong>HTML:</strong> <a href="${pub.html_file}" target="_blank">${pub.html_file}</a></div>` : ''}
+                ${pub.pdf_url ? `<div><strong>PDF:</strong> <a href="${pub.pdf_url}" target="_blank">${pub.pdf_url}</a></div>` : ''}
+                ${pub.issue_cover_image ? `<div><strong>Cover Image:</strong> <a href="${pub.issue_cover_image}" target="_blank">${pub.issue_cover_image}</a></div>` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+
+        modal.classList.add('active');
+      }
+
+      // Edit publication (populate form)
+      function editPublication(index) {
+        const pub = filteredData[index];
+        
+        // Switch to form tab
+        switchTab('form');
+        
+        // Populate form fields
+        Object.keys(pub).forEach(key => {
+          const field = document.getElementById(key);
+          if (field) {
+            field.value = pub[key] || '';
+          }
         });
 
-        console.log('Form initialized and ready for submission');
+        // Scroll to form
+        document.querySelector('.form-wrapper').scrollIntoView({ behavior: 'smooth' });
+        
+        // Show success message
+        const successMsg = document.getElementById('success-message');
+        successMsg.innerHTML = '<strong><i class="fas fa-info-circle"></i> Info:</strong> Publication data loaded for editing. Make your changes and submit to update.';
+        successMsg.style.display = 'block';
+        setTimeout(() => {
+          successMsg.style.display = 'none';
+        }, 5000);
+      }
+
+      // Close modal
+      function closeModal() {
+        document.getElementById('publication-modal').classList.remove('active');
+      }
+
+      // Close modal when clicking outside
+      document.getElementById('publication-modal').addEventListener('click', function(e) {
+        if (e.target === this) {
+          closeModal();
+        }
       });
+
+      // Refresh data
+      function refreshData() {
+        loadPublicationsData();
+        
+        // Show loading message
+        const successMsg = document.getElementById('success-message');
+        successMsg.innerHTML = '<strong><i class="fas fa-sync-alt"></i> Refreshing:</strong> Data refreshed successfully.';
+        successMsg.style.display = 'block';
+        setTimeout(() => {
+          successMsg.style.display = 'none';
+        }, 3000);
+      }
+
+      // Export data as CSV
+      function exportData() {
+        if (publicationsData.length === 0) {
+          alert('No data to export. Please load data first.');
+          return;
+        }
+
+        const headers = Object.keys(publicationsData[0]);
+        const csvContent = [
+          headers.join(','),
+          ...publicationsData.map(row => 
+            headers.map(header => {
+              const value = row[header] || '';
+              // Escape commas and quotes in CSV
+              return value.includes(',') || value.includes('"') ? `"${value.replace(/"/g, '""')}"` : value;
+            }).join(',')
+          )
+        ].join('\n');
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `publications_export_${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      // Auto-generate next article ID
+      function generateNextArticleId() {
+        if (publicationsData.length === 0) return '1';
+        
+        const maxId = Math.max(...publicationsData.map(pub => parseInt(pub.article_id) || 0));
+        return (maxId + 1).toString();
+      }
+
+      // Update article ID when switching to form
+      document.addEventListener('DOMContentLoaded', function() {
+        const articleIdField = document.getElementById('article_id');
+        
+        // Update article ID when form tab is activated
+        document.querySelector('[data-tab="form"]').addEventListener('click', function() {
+          if (publicationsData.length > 0 && !articleIdField.value) {
+            articleIdField.value = generateNextArticleId();
+          }
+        });
+      });
+
+      console.log('Admin panel initialized successfully');
     </script>
   </body>
 </html>
