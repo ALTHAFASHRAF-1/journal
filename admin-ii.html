@@ -701,48 +701,69 @@
     margin: 1rem 0;
   }
 
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 2rem;
-    flex-wrap: wrap;
-  }
+  /* Pagination Styles - Fixed alignment */
+.pagination {
+  display: flex;
+  justify-content: space-between; /* This will push buttons to edges */
+  align-items: center;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+  position: relative; /* For absolute positioning of center element */
+}
 
-  .pagination button {
-    padding: 0.75rem 1.25rem;
-    border: 1px solid var(--gray-300);
-    background: white;
-    color: var(--gray-700);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
+.pagination button {
+  padding: 0.75rem 1.25rem;
+  border: 1px solid var(--gray-300);
+  background: white;
+  color: var(--gray-700);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0; /* Prevent buttons from shrinking */
+}
 
-  .pagination button:hover:not(:disabled) {
-    background: var(--gray-100);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
+#prev-btn {
+  order: 1; /* Left side */
+}
 
-  .pagination button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-  }
+#page-info {
+  order: 2; /* Center */
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--gray-700);
+  font-weight: 500;
+  white-space: nowrap;
+}
 
-  .pagination button.active {
-    background: var(--secondary-color);
-    color: white;
-    border-color: var(--secondary-color);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-  }
+#next-btn {
+  order: 3; /* Right side */
+  margin-left: auto; /* Push to right */
+}
+
+.pagination button:hover:not(:disabled) {
+  background: var(--gray-100);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.pagination button.active {
+  background: var(--secondary-color);
+  color: white;
+  border-color: var(--secondary-color);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
 
   /* Modal Styles */
   .modal {
