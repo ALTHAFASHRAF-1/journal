@@ -561,7 +561,7 @@ nav.sticky {
                                         <i class="fas fa-file-pdf mr-1"></i>
                                         VIEW FULL PDF
                                     </button>
-                                    <a id="direct-pdf-link" href="#" style="display: none;"></a>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -588,49 +588,50 @@ nav.sticky {
     </main>
 
     <!-- Enhanced PDF Modal -->
-    <div id="pdfModal" class="pdf-modal">
-        <div class="pdf-modal-content">
-            <div class="pdf-header">
-                <div id="modal-pdf-title" class="pdf-title">Loading...</div>
-                <div class="pdf-controls">
-                    <button class="pdf-button" onclick="refreshPDF()" title="Refresh PDF">
-                        <i class="fas fa-sync-alt"></i>
-                        <span class="hidden sm:inline">Refresh</span>
-                    </button>
-                    <button class="pdf-button" onclick="openInNewTab()" title="Open in New Tab">
-                        <i class="fas fa-external-link-alt"></i>
-                        <span class="hidden sm:inline">New Tab</span>
-                    </button>
-                    <a id="modal-download-link" href="#" download class="pdf-button" title="Download PDF">
-                        <i class="fas fa-download"></i>
-                        <span class="hidden sm:inline">Download</span>
-                    </a>
-                    <button class="pdf-close" onclick="closePDF()" title="Close">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
+<div id="pdfModal" class="pdf-modal">
+    <div class="pdf-modal-content">
+        <div class="pdf-header">
+            <div id="modal-pdf-title" class="pdf-title">Loading...</div>
+            <div class="pdf-controls">
+                <button class="pdf-button" onclick="refreshPDF()" title="Refresh PDF">
+                    <i class="fas fa-sync-alt"></i>
+                    <span class="hidden sm:inline">Refresh</span>
+                </button>
+                <button class="pdf-button" onclick="openInNewTab()" title="Open in New Tab">
+                    <i class="fas fa-external-link-alt"></i>
+                    <span class="hidden sm:inline">New Tab</span>
+                </button>
+                <!-- CHANGED: Remove the anchor tag and use button with onclick -->
+                <button class="pdf-button" onclick="downloadPDF()" title="Download PDF">
+                    <i class="fas fa-download"></i>
+                    <span class="hidden sm:inline">Download</span>
+                </button>
+                <button class="pdf-close" onclick="closePDF()" title="Close">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            <div class="pdf-viewer-container">
-                <iframe id="pdfFrame" class="pdf-iframe" src=""></iframe>
-                <div id="pdfFallback" class="pdf-fallback">
-                    <div class="fallback-content">
-                        <div class="fallback-icon">
-                            <i class="fas fa-file-pdf"></i>
-                        </div>
-                        <div class="fallback-title">PDF Viewer Not Supported</div>
-                        <div class="fallback-description">
-                            Your browser doesn't support embedded PDF viewing. Please download the file to view it on your device.
-                        </div>
-                        <a id="fallback-download-link" href="#" download class="download-button">
-                            <i class="fas fa-download"></i>
-                            Download PDF
-                        </a>
+        </div>
+        <div class="pdf-viewer-container">
+            <iframe id="pdfFrame" class="pdf-iframe" src=""></iframe>
+            <div id="pdfFallback" class="pdf-fallback">
+                <div class="fallback-content">
+                    <div class="fallback-icon">
+                        <i class="fas fa-file-pdf"></i>
                     </div>
+                    <div class="fallback-title">PDF Viewer Not Supported</div>
+                    <div class="fallback-description">
+                        Your browser doesn't support embedded PDF viewing. Please download the file to view it on your device.
+                    </div>
+                    <!-- CHANGED: Update fallback download button -->
+                    <button onclick="downloadPDF()" class="download-button">
+                        <i class="fas fa-download"></i>
+                        Download PDF
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-
+</div>
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -689,8 +690,6 @@ nav.sticky {
 <script src="sheets-loader.js"></script>
 <!-- Include the main article script -->
 <script src="article-script.js"></script>
-<script src="arabic-detection.js"></script>
     
-
 </body>
 </html>
