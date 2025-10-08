@@ -97,24 +97,31 @@ class SheetsDataManager {
     }
 
     processCSVRow(row, journalData) {
-        const issueId = row.issue_id;
-        if (!issueId) {
-            console.warn('Skipping row without issue_id');
-            return;
-        }
+    const issueId = row.issue_id;
+    if (!issueId) {
+        console.warn('Skipping row without issue_id');
+        return;
+    }
 
-        // Create issue if it doesn't exist
-        if (!journalData.issues[issueId]) {
-            journalData.issues[issueId] = {
-                volume: parseInt(row.volume) || 1,
-                number: parseInt(row.number) || 1,
-                year: parseInt(row.year) || new Date().getFullYear(),
-                title: row.issue_title || `Vol. ${row.volume} No. ${row.number} (${row.year})`,
-                publishedDate: row.issue_published_date || new Date().toISOString().split('T')[0],
-                coverImage: row.issue_cover_image || journalData.config.defaultCoverImage,
-                articles: []
-            };
-        }
+    // Convert Google Drive link to direct download if needed
+    let coverImage = row.issue_cover_image || journalData.config.defaultCoverImage;
+    if (coverImage.includes('drive.google.com/file/d/')) {
+        const fileId = coverImage.match(/\/d\/([^\/]+)/)[1];
+        coverImage = `https://drive.google.com/uc?export=view&id=${fileId}`;
+    }
+
+    // Create issue if it doesn't exist
+    if (!journalData.issues[issueId]) {
+        journalData.issues[issueId] = {
+            volume: parseInt(row.volume) || 1,
+            number: parseInt(row.number) || 1,
+            year: parseInt(row.year) || new Date().getFullYear(),
+            title: row.issue_title || `Vol. ${row.volume} No. ${row.number} (${row.year})`,
+            publishedDate: row.issue_published_date || new Date().toISOString().split('T')[0],
+            coverImage: coverImage,
+            articles: []
+        };
+    }
 
         // Parse article ID properly - handle both string and number
         const articleId = this.parseArticleId(row.article_id);
