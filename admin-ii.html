@@ -2327,9 +2327,15 @@ function editPublication(index) {
                       <div class="file-size"><a href="${pub.issue_cover_image}" target="_blank">View Current</a></div>
                     </div>
                   </div>
+                  <div class="file-actions">
+                    <button type="button" class="file-remove-btn" onclick="removeFile('edit-cover')">
+                      <i class="fas fa-trash"></i> Remove
+                    </button>
+                  </div>
                 </div>
               ` : ''}
             </div>
+            <!-- Add this upload progress section for edit cover -->
             <div class="upload-progress" id="edit-cover-progress">
               <div class="progress-bar">
                 <div class="progress-fill" id="edit-cover-progress-fill"></div>
@@ -2440,9 +2446,15 @@ function editPublication(index) {
                       <div class="file-size"><a href="${pub.pdf_url}" target="_blank">View Current</a></div>
                     </div>
                   </div>
+                  <div class="file-actions">
+                    <button type="button" class="file-remove-btn" onclick="removeFile('edit-pdf')">
+                      <i class="fas fa-trash"></i> Remove
+                    </button>
+                  </div>
                 </div>
               ` : ''}
             </div>
+            <!-- Add this upload progress section for edit PDF -->
             <div class="upload-progress" id="edit-pdf-progress">
               <div class="progress-bar">
                 <div class="progress-fill" id="edit-pdf-progress-fill"></div>
