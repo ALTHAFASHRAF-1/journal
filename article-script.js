@@ -193,7 +193,6 @@ if (authors && authors.length > 0) {
                     <h4 class="text-lg font-semibold text-gray-900">${author.name}</h4>
                     <p class="text-sm text-blue-600 font-medium">${author.position || 'Research Scholar'}</p>
                     <p class="text-sm text-gray-600 mt-1">
-                        <i class="fas fa-envelope mr-1"></i>
                         <a href="mailto:${author.email}" class="hover:text-blue-600 transition-colors">
                             ${author.email || 'N/A'}
                         </a>
