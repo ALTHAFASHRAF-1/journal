@@ -39,6 +39,62 @@ function getPDFUrl(article) {
     return convertGoogleDriveLink(originalUrl);
 }
 
+// Download PDF function
+function downloadPDF() {
+    if (!currentPdfUrl) {
+        alert('PDF is not available for download.');
+        return;
+    }
+
+    // Create a temporary anchor element to trigger download
+    const downloadLink = document.createElement('a');
+    
+    // Convert Google Drive URL to direct download link if needed
+    let downloadUrl = currentPdfUrl;
+    
+    if (downloadUrl.includes('drive.google.com')) {
+        // Convert Google Drive preview link to download link
+        if (downloadUrl.includes('/preview')) {
+            downloadUrl = downloadUrl.replace('/preview', '');
+        }
+        
+        // Ensure it's a direct download link
+        if (downloadUrl.includes('/file/d/')) {
+            const fileIdMatch = downloadUrl.match(/\/file\/d\/([a-zA-Z0-9-_]+)/);
+            if (fileIdMatch && fileIdMatch[1]) {
+                downloadUrl = `https://drive.google.com/uc?export=download&id=${fileIdMatch[1]}`;
+            }
+        }
+    }
+    
+    downloadLink.href = downloadUrl;
+    downloadLink.download = getPDFFileName();
+    downloadLink.target = '_blank';
+    
+    // Append to body, click, and remove
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+    
+    console.log('Download initiated for:', downloadUrl);
+}
+
+// Helper function to generate PDF file name
+function getPDFFileName() {
+    const articleTitle = document.getElementById('article-title').textContent;
+    let fileName = 'document.pdf';
+    
+    if (articleTitle && articleTitle !== 'Loading...') {
+        // Clean the title for filename use
+        fileName = articleTitle
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, '_')
+            .replace(/_+/g, '_')
+            .replace(/^_|_$/g, '') + '.pdf';
+    }
+    
+    return fileName;
+}
 
 // Get article ID from URL parameter
 function getArticleIdFromUrl() {
@@ -138,40 +194,35 @@ function updateArticleDisplay(article) {
     document.getElementById('volume-info').textContent = article.volume ? `Vol. ${article.volume}, No. ${article.number}` : 'Not specified';
     document.getElementById('issn-number').textContent = article.issn || '2581-3269';
     
-    // Update PDF links - REPLACE the existing PDF links section
-if (currentPdfUrl) {
-    const convertedUrl = convertGoogleDriveLink(currentPdfUrl);
-    
-    document.getElementById('direct-pdf-link').href = convertedUrl;
-    document.getElementById('modal-download-link').href = convertedUrl;
-    document.getElementById('fallback-download-link').href = convertedUrl;
-    
-    // Update currentPdfUrl to use converted URL
-    currentPdfUrl = convertedUrl;
-    
-    // Enable PDF button
-    const pdfButton = document.querySelector('button[onclick="openPDF()"]');
-    if (pdfButton) {
-        pdfButton.disabled = false;
-        pdfButton.classList.remove('opacity-50', 'cursor-not-allowed');
+    // Update PDF links
+    if (currentPdfUrl) {
+        const convertedUrl = convertGoogleDriveLink(currentPdfUrl);
         
-        // Show Google Drive indicator if it's a Google Drive link
-        if (convertedUrl.includes('drive.google.com')) {
-            pdfButton.innerHTML = '<i class="fas fa-file-pdf mr-1"></i>VIEW FULL PDF';
-        } else {
-            pdfButton.innerHTML = '<i class="fas fa-file-pdf mr-1"></i>VIEW FULL PDF';
+        // Update currentPdfUrl to use converted URL
+        currentPdfUrl = convertedUrl;
+        
+        // Enable PDF button
+        const pdfButton = document.querySelector('button[onclick="openPDF()"]');
+        if (pdfButton) {
+            pdfButton.disabled = false;
+            pdfButton.classList.remove('opacity-50', 'cursor-not-allowed');
+            
+            // Show Google Drive indicator if it's a Google Drive link
+            if (convertedUrl.includes('drive.google.com')) {
+                pdfButton.innerHTML = '<i class="fas fa-file-pdf mr-1"></i>VIEW FULL PDF';
+            } else {
+                pdfButton.innerHTML = '<i class="fas fa-file-pdf mr-1"></i>VIEW FULL PDF';
+            }
+        }
+    } else {
+        // Disable PDF button if no PDF available
+        const pdfButton = document.querySelector('button[onclick="openPDF()"]');
+        if (pdfButton) {
+            pdfButton.disabled = true;
+            pdfButton.classList.add('opacity-50', 'cursor-not-allowed');
+            pdfButton.textContent = 'PDF NOT AVAILABLE';
         }
     }
-} else {
-    // Disable PDF button if no PDF available
-    const pdfButton = document.querySelector('button[onclick="openPDF()"]');
-    if (pdfButton) {
-        pdfButton.disabled = true;
-        pdfButton.classList.add('opacity-50', 'cursor-not-allowed');
-        pdfButton.textContent = 'PDF NOT AVAILABLE';
-    }
-}
-
     
     // Update keywords
     const keywordsContainer = document.getElementById('keywords-container');
@@ -353,7 +404,6 @@ function openInNewTab() {
         }
     }
 }
-
 
 function closePDF() {
     const modal = document.getElementById('pdfModal');
