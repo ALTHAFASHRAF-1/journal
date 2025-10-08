@@ -660,6 +660,59 @@ background: #f8fafc;
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+/* Mobile Menu Positioning Fixes */
+#mobile-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border-top: 1px solid #e5e7eb;
+}
+
+/* Ensure proper mobile menu button positioning */
+.md\:hidden {
+    display: flex;
+    align-items: center;
+}
+
+.mobile-nav-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Mobile menu button styling */
+.mobile-menu-btn {
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+}
+
+.mobile-menu-btn:hover {
+    background-color: #f3f4f6;
+}
+
+/* Mobile menu items styling */
+#mobile-menu a {
+    display: block;
+    padding: 0.75rem 1rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+}
+
+#mobile-menu a:hover {
+    background-color: #f3f4f6;
+}    
 </style>
 
 </head>
@@ -667,94 +720,94 @@ background: #f8fafc;
 <body class="bg-gray-50">
 <!-- Navigation -->
 <nav class="bg-white shadow-sm sticky top-0 z-40">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-<div class="flex justify-between items-center h-16">
-<div class="flex items-center">
-<div class="flex-shrink-0">
-<div class="logo-container">
-<img src="logo.png" alt="Islamic Insight Logo" class="logo-image">
-<div class="logo-text-container">
-<h1 class="logo-text text-xl font-bold text-black-900 academic-title">
-ISLAMIC INSIGHT
-</h1>
-<p class="logo-subtitle">Journal of Islamic Studies</p>
-</div>
-</div>
-</div>
-</div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="logo-container">
+                        <img src="logo.png" alt="Islamic Insight Logo" class="logo-image">
+                        <div class="logo-text-container">
+                            <h1 class="logo-text text-xl font-bold text-black-900 academic-title">
+                                ISLAMIC INSIGHT
+                            </h1>
+                            <p class="logo-subtitle">Journal of Islamic Studies</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-<!-- Desktop Navigation - Moved to right -->
-<div class="hidden md:block nav-right">
-<div class="flex items-center space-x-6">
-<!-- Navigation Items -->
-<div id="nav-items" class="nav-items flex items-baseline space-x-6">
-<a href="#home" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Home</a>
-<a href="call-for-papers.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Call For Paper</a>
-<a href="#featured" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Current Issue</a>
-<a href="all-issues.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">All Issues</a>
-<div class="dropdown">
-<a href="#about" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">About</a>
-<div class="dropdown-content">
-<a href="editors.html">Editorial Team</a>
-<a href="#contact">Contact</a>
-</div>
-</div>
-</div>
+            <!-- Desktop Navigation - Moved to right -->
+            <div class="hidden md:block nav-right">
+                <div class="flex items-center space-x-6">
+                    <!-- Navigation Items -->
+                    <div id="nav-items" class="nav-items flex items-baseline space-x-6">
+                        <a href="#home" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Home</a>
+                        <a href="call-for-papers.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Call For Paper</a>
+                        <a href="#featured" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Current Issue</a>
+                        <a href="all-issues.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">All Issues</a>
+                        <div class="dropdown">
+                            <a href="#about" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">About</a>
+                            <div class="dropdown-content">
+                                <a href="editors.html">Editorial Team</a>
+                                <a href="#contact">Contact</a>
+                            </div>
+                        </div>
+                    </div>
 
-<!-- Search Container -->
-<div class="navbar-search-container">
-<input
-type="text"
-id="navbar-search-input"
-placeholder="Search articles, authors..."
-class="navbar-search-input"
->
-<button id="search-toggle-btn" class="search-icon">
-<i id="search-icon" class="fas fa-search text-lg"></i>
-</button>
-<div id="navbar-search-results" class="navbar-search-results hidden"></div>
-</div>
-</div>
-</div>
+                    <!-- Search Container -->
+                    <div class="navbar-search-container">
+                        <input
+                            type="text"
+                            id="navbar-search-input"
+                            placeholder="Search articles, authors..."
+                            class="navbar-search-input"
+                        >
+                        <button id="search-toggle-btn" class="search-icon">
+                            <i id="search-icon" class="fas fa-search text-lg"></i>
+                        </button>
+                        <div id="navbar-search-results" class="navbar-search-results hidden"></div>
+                    </div>
+                </div>
+            </div>
 
-<!-- Mobile menu button and search - Moved to right -->
-<div class="md:hidden nav-right">
-    <div class="mobile-nav-container">
-        <!-- Mobile Search Container -->
-        <div class="mobile-search-container">
-            <input
-                type="text"
-                id="mobile-search-input"
-                placeholder="Search..."
-                class="mobile-search-input"
-            >
-            <button id="mobile-search-toggle-btn" class="search-icon">
-                <i id="mobile-search-icon" class="fas fa-search text-lg"></i>
-            </button>
-            <div id="mobile-search-results" class="mobile-search-results hidden"></div>
+            <!-- Mobile menu button and search - Moved to right -->
+            <div class="md:hidden flex items-center">
+                <div class="flex items-center gap-2">
+                    <!-- Mobile Search Container -->
+                    <div class="mobile-search-container relative">
+                        <input
+                            type="text"
+                            id="mobile-search-input"
+                            placeholder="Search..."
+                            class="mobile-search-input"
+                        >
+                        <button id="mobile-search-toggle-btn" class="search-icon p-2">
+                            <i id="mobile-search-icon" class="fas fa-search text-base"></i>
+                        </button>
+                        <div id="mobile-search-results" class="mobile-search-results hidden"></div>
+                    </div>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" class="mobile-menu-btn p-2 text-gray-700 hover:text-blue-900 focus:outline-none">
+                        <i class="fas fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
         </div>
-        
-        <!-- Mobile Menu Button -->
-        <button id="mobile-menu-btn" class="mobile-menu-btn text-gray-700 hover:text-blue-900 focus:outline-none">
-            <i class="fas fa-bars text-lg"></i>
-        </button>
-    </div>
-</div>
-</div>
-</div>
 
-<!-- Mobile Navigation -->
-<div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
-<div class="px-2 pt-2 pb-3 space-y-1">
-<a href="#home" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Home</a>
-<a href="call-for-papers.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Call For Paper</a>
-<a href="#featured" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Current Issue</a>
-<a href="all-issues.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">All Issues</a>
-<a href="#about" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">About</a>
-<a href="editors.html" class="block px-3 py-2 pl-6 text-sm font-medium text-gray-600 hover:text-blue-900 transition-colors">Editorial Team</a>
-<a href="#contact" class="block px-3 py-2 pl-6 text-sm font-medium text-gray-600 hover:text-blue-900 transition-colors">Contact</a>
-</div>
-</div>
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200 shadow-lg">
+            <div class="px-4 py-3 space-y-1">
+                <a href="#home" class="block px-3 py-3 text-base font-medium text-gray-700 hover:text-blue-900 hover:bg-gray-50 rounded-lg transition-colors">Home</a>
+                <a href="call-for-papers.html" class="block px-3 py-3 text-base font-medium text-gray-700 hover:text-blue-900 hover:bg-gray-50 rounded-lg transition-colors">Call For Paper</a>
+                <a href="#featured" class="block px-3 py-3 text-base font-medium text-gray-700 hover:text-blue-900 hover:bg-gray-50 rounded-lg transition-colors">Current Issue</a>
+                <a href="all-issues.html" class="block px-3 py-3 text-base font-medium text-gray-700 hover:text-blue-900 hover:bg-gray-50 rounded-lg transition-colors">All Issues</a>
+                <a href="#about" class="block px-3 py-3 text-base font-medium text-gray-700 hover:text-blue-900 hover:bg-gray-50 rounded-lg transition-colors">About</a>
+                <a href="editors.html" class="block px-3 py-3 pl-6 text-base font-medium text-gray-600 hover:text-blue-900 hover:bg-gray-50 rounded-lg transition-colors">Editorial Team</a>
+                <a href="#contact" class="block px-3 py-3 pl-6 text-base font-medium text-gray-600 hover:text-blue-900 hover:bg-gray-50 rounded-lg transition-colors">Contact</a>
+            </div>
+        </div>
+    </div>
 </nav>
 
 <!-- Updated Home Section with Banner Background -->
@@ -984,13 +1037,53 @@ async function loadJournalData() {
 
 // Setup event listeners
 function setupEventListeners() {
-    // Mobile menu toggle
+    // Mobile menu toggle - FIXED
     if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', function() {
+        mobileMenuBtn.addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent event bubbling
             mobileMenu.classList.toggle('hidden');
+            
+            // Hide search if open
+            if (isMobileSearchExpanded) {
+                toggleMobileSearch();
+            }
         });
     }
 
+    // Close mobile menu when clicking on links
+    document.querySelectorAll('#mobile-menu a').forEach(link => {
+        link.addEventListener('click', function() {
+            mobileMenu.classList.add('hidden');
+        });
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(e) {
+        if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+            if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                mobileMenu.classList.add('hidden');
+            }
+        }
+        
+        // Your existing click outside code for search...
+        // Desktop search
+        if (navbarSearchInput && navbarSearchResults && searchToggleBtn &&
+            !navbarSearchInput.contains(e.target) && 
+            !navbarSearchResults.contains(e.target) && 
+            !searchToggleBtn.contains(e.target)) {
+            navbarSearchResults.classList.add('hidden');
+        }
+
+        // Mobile search
+        if (mobileSearchInput && mobileSearchResults && mobileSearchToggleBtn &&
+            !mobileSearchInput.contains(e.target) && 
+            !mobileSearchResults.contains(e.target) && 
+            !mobileSearchToggleBtn.contains(e.target)) {
+            mobileSearchResults.classList.add('hidden');
+        }
+    });
+
+    // Rest of your existing event listeners...
     // Desktop navbar search functionality
     if (searchToggleBtn) {
         searchToggleBtn.addEventListener('click', toggleNavbarSearch);
@@ -1029,25 +1122,6 @@ function setupEventListeners() {
             }
         });
     }
-
-    // Close search results when clicking outside
-    document.addEventListener('click', function(e) {
-        // Desktop search
-        if (navbarSearchInput && navbarSearchResults && searchToggleBtn &&
-            !navbarSearchInput.contains(e.target) && 
-            !navbarSearchResults.contains(e.target) && 
-            !searchToggleBtn.contains(e.target)) {
-            navbarSearchResults.classList.add('hidden');
-        }
-
-        // Mobile search
-        if (mobileSearchInput && mobileSearchResults && mobileSearchToggleBtn &&
-            !mobileSearchInput.contains(e.target) && 
-            !mobileSearchResults.contains(e.target) && 
-            !mobileSearchToggleBtn.contains(e.target)) {
-            mobileSearchResults.classList.add('hidden');
-        }
-    });
 
     // Contact form
     if (contactForm) {
