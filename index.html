@@ -297,11 +297,6 @@ background: #f8fafc;
     transition: all 0.3s ease;
     padding: 0.5rem;
     border-radius: 0.375rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 44px;
-    min-height: 44px;
 }
 
 .search-icon:hover {
@@ -352,6 +347,12 @@ background: #f8fafc;
 }
 
 /* Mobile Search Enhancements */
+.mobile-nav-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 .mobile-search-container {
     position: relative;
     display: flex;
@@ -368,27 +369,30 @@ background: #f8fafc;
     background: transparent;
     position: absolute;
     right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
     font-size: 0.875rem;
-    height: 40px;
 }
 
 .mobile-search-input.expanded {
-    width: 180px;
+    width: 200px;
     opacity: 1;
-    padding: 0.5rem 0.75rem;
+    padding: 0.625rem 0.875rem;
     border: 2px solid #3b82f6;
     border-radius: 0.5rem;
     background: white;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     position: relative;
     right: 0;
+    top: 0;
+    transform: none;
 }
 
 .mobile-search-results {
     position: absolute;
     top: calc(100% + 8px);
-    left: 0;
     right: 0;
+    left: -120px;
     background: white;
     border: 1px solid #e5e7eb;
     border-radius: 0.5rem;
@@ -409,23 +413,29 @@ background: #f8fafc;
     .mobile-search-input.expanded {
         width: 180px;
     }
+    
+    .mobile-search-results {
+        left: -100px;
+    }
 }
 
 @media (max-width: 640px) {
     .mobile-search-input.expanded {
         width: 160px;
     }
+    
+    .mobile-search-results {
+        left: -80px;
+    }
 }
 
 @media (max-width: 480px) {
     .mobile-search-input.expanded {
-        width: 150px;
+        width: 140px;
     }
-}
-
-@media (max-width: 380px) {
-    .mobile-search-input.expanded {
-        width: 130px;
+    
+    .mobile-search-results {
+        left: -60px;
     }
 }
 
@@ -462,11 +472,6 @@ background: #f8fafc;
     padding: 0.5rem;
     border-radius: 0.375rem;
     transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 44px;
-    min-height: 44px;
 }
 
 .mobile-menu-btn:hover {
@@ -655,15 +660,6 @@ background: #f8fafc;
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
-
-/* Mobile menu styling */
-#mobile-menu {
-    transition: all 0.3s ease;
-}
-
-#mobile-menu a {
-    transition: all 0.2s ease;
-}
 </style>
 
 </head>
@@ -722,10 +718,10 @@ class="navbar-search-input"
 </div>
 
 <!-- Mobile menu button and search - Moved to right -->
-<div class="md:hidden">
-    <div class="flex items-center gap-2">
+<div class="md:hidden nav-right">
+    <div class="mobile-nav-container">
         <!-- Mobile Search Container -->
-        <div class="mobile-search-container relative">
+        <div class="mobile-search-container">
             <input
                 type="text"
                 id="mobile-search-input"
@@ -733,7 +729,7 @@ class="navbar-search-input"
                 class="mobile-search-input"
             >
             <button id="mobile-search-toggle-btn" class="search-icon">
-                <i id="mobile-search-icon" class="fas fa-search text-base"></i>
+                <i id="mobile-search-icon" class="fas fa-search text-lg"></i>
             </button>
             <div id="mobile-search-results" class="mobile-search-results hidden"></div>
         </div>
@@ -748,15 +744,15 @@ class="navbar-search-input"
 </div>
 
 <!-- Mobile Navigation -->
-<div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200 shadow-lg">
-<div class="px-4 py-3 space-y-1">
-<a href="#home" class="block px-3 py-3 text-base font-medium text-gray-700 hover:text-blue-900 hover:bg-gray-50 rounded-lg transition-colors">Home</a>
-<a href="call-for-papers.html" class="block px-3 py-3 text-base font-medium text-gray-700 hover:text-blue-900 hover:bg-gray-50 rounded-lg transition-colors">Call For Paper</a>
-<a href="#featured" class="block px-3 py-3 text-base font-medium text-gray-700 hover:text-blue-900 hover:bg-gray-50 rounded-lg transition-colors">Current Issue</a>
-<a href="all-issues.html" class="block px-3 py-3 text-base font-medium text-gray-700 hover:text-blue-900 hover:bg-gray-50 rounded-lg transition-colors">All Issues</a>
-<a href="#about" class="block px-3 py-3 text-base font-medium text-gray-700 hover:text-blue-900 hover:bg-gray-50 rounded-lg transition-colors">About</a>
-<a href="editors.html" class="block px-3 py-3 pl-6 text-base font-medium text-gray-600 hover:text-blue-900 hover:bg-gray-50 rounded-lg transition-colors">Editorial Team</a>
-<a href="#contact" class="block px-3 py-3 pl-6 text-base font-medium text-gray-600 hover:text-blue-900 hover:bg-gray-50 rounded-lg transition-colors">Contact</a>
+<div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+<div class="px-2 pt-2 pb-3 space-y-1">
+<a href="#home" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Home</a>
+<a href="call-for-papers.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Call For Paper</a>
+<a href="#featured" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Current Issue</a>
+<a href="all-issues.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">All Issues</a>
+<a href="#about" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">About</a>
+<a href="editors.html" class="block px-3 py-2 pl-6 text-sm font-medium text-gray-600 hover:text-blue-900 transition-colors">Editorial Team</a>
+<a href="#contact" class="block px-3 py-2 pl-6 text-sm font-medium text-gray-600 hover:text-blue-900 transition-colors">Contact</a>
 </div>
 </div>
 </nav>
@@ -765,16 +761,7 @@ class="navbar-search-input"
 <section id="home" class="hero-about-container">
     <!-- Hero Section - Now with Banner Background -->
     <div class="hero-section">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="hero-content">
-                <h2 class="text-4xl sm:text-5xl font-bold academic-title mb-4">
-                    Islamic Insight
-                </h2>
-                <p class="text-xl sm:text-2xl max-w-3xl mx-auto">
-                    Journal of Islamic Studies
-                </p>
-            </div>
-        </div>
+
     </div>
     
     <!-- About and Call for Papers Section - 75% / 25% Layout -->
@@ -989,17 +976,9 @@ async function loadJournalData() {
         isDataLoaded = true;
         console.log('Articles loaded for search:', allArticles.length);
         
-        // Initialize current issue after data is loaded
-        if (currentIssueLoader) {
-            await currentIssueLoader.init();
-        }
-        
     } catch (error) {
         console.error('Error loading journal data:', error);
         isDataLoaded = false;
-        if (currentIssueLoader) {
-            currentIssueLoader.showError();
-        }
     }
 }
 
@@ -1009,11 +988,6 @@ function setupEventListeners() {
     if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', function() {
             mobileMenu.classList.toggle('hidden');
-            
-            // Hide search if open
-            if (isMobileSearchExpanded) {
-                toggleMobileSearch();
-            }
         });
     }
 
@@ -1053,26 +1027,8 @@ function setupEventListeners() {
             if (e.key === 'Escape') {
                 toggleMobileSearch();
             }
-            if (e.key === 'Enter') {
-                const query = mobileSearchInput.value.trim();
-                if (query) {
-                    // Perform search and show first result if available
-                    const results = searchArticles(query);
-                    if (results.length > 0) {
-                        redirectToArticle(results[0].id);
-                        toggleMobileSearch();
-                    }
-                }
-            }
         });
     }
-
-    // Close mobile menu when clicking on links
-    document.querySelectorAll('#mobile-menu a').forEach(link => {
-        link.addEventListener('click', function() {
-            mobileMenu.classList.add('hidden');
-        });
-    });
 
     // Close search results when clicking outside
     document.addEventListener('click', function(e) {
@@ -1090,14 +1046,6 @@ function setupEventListeners() {
             !mobileSearchResults.contains(e.target) && 
             !mobileSearchToggleBtn.contains(e.target)) {
             mobileSearchResults.classList.add('hidden');
-        }
-
-        // Mobile menu
-        if (mobileMenu && mobileMenuBtn && 
-            !mobileMenu.contains(e.target) && 
-            !mobileMenuBtn.contains(e.target) &&
-            !mobileMenu.classList.contains('hidden')) {
-            mobileMenu.classList.add('hidden');
         }
     });
 
@@ -1152,17 +1100,12 @@ function toggleMobileSearch() {
     if (isMobileSearchExpanded) {
         // Expand search
         mobileSearchInput.classList.add('expanded');
-        mobileSearchIcon.className = 'fas fa-times text-base';
+        mobileSearchIcon.className = 'fas fa-times text-lg';
         mobileSearchInput.focus();
-        
-        // Hide mobile menu if open
-        if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
-            mobileMenu.classList.add('hidden');
-        }
     } else {
         // Collapse search
         mobileSearchInput.classList.remove('expanded');
-        mobileSearchIcon.className = 'fas fa-search text-base';
+        mobileSearchIcon.className = 'fas fa-search text-lg';
         mobileSearchResults.classList.add('hidden');
         mobileSearchInput.value = '';
     }
@@ -1501,6 +1444,53 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize current issue loader
     currentIssueLoader = new CurrentIssueLoader();
 });
+
+// Update the existing loadJournalData function
+async function loadJournalData() {
+    try {
+        console.log('Loading journal data for search...');
+        
+        // Wait for the data to be loaded by sheets-loader.js
+        if (typeof sheetsDataManager !== 'undefined') {
+            await sheetsDataManager.loadFromSheets();
+            allArticles = await sheetsDataManager.getAllArticles();
+        } else {
+            // Fallback: wait for global data to be available
+            await new Promise((resolve) => {
+                const checkData = () => {
+                    if (window.journalData && window.articlesData) {
+                        allArticles = Object.values(window.articlesData);
+                        resolve();
+                    } else {
+                        setTimeout(checkData, 100);
+                    }
+                };
+                checkData();
+            });
+        }
+        
+        isDataLoaded = true;
+        console.log('Articles loaded for search:', allArticles.length);
+        
+        // Initialize current issue after data is loaded
+        if (currentIssueLoader) {
+            await currentIssueLoader.init();
+        }
+        
+    } catch (error) {
+        console.error('Error loading journal data:', error);
+        isDataLoaded = false;
+        if (currentIssueLoader) {
+            currentIssueLoader.showError();
+        }
+    }
+}
+
+// Also listen for the journalDataLoaded event
+window.addEventListener('journalDataLoaded', async function() {
+    console.log('Journal data loaded event received');
+    await loadJournalData();
+});    
 </script>
 </body>
-</html>
+</html> 
