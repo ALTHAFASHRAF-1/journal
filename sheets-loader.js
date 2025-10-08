@@ -111,7 +111,7 @@ class SheetsDataManager {
                 year: parseInt(row.year) || new Date().getFullYear(),
                 title: row.issue_title || `Vol. ${row.volume} No. ${row.number} (${row.year})`,
                 publishedDate: row.issue_published_date || new Date().toISOString().split('T')[0],
-                coverImage: row.issue_cover_image || journalData.config.defaultCoverImage,
+                coverImage: this.convertGoogleDriveUrl(row.issue_cover_image) || journalData.config.defaultCoverImage,
                 articles: []
             };
         }
@@ -345,4 +345,19 @@ document.addEventListener('DOMContentLoaded', async function() {
 // Export for module systems
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { SheetsDataManager, initializeJournalData };
+}
+
+convertGoogleDriveUrl(url) {
+    if (!url) return url;
+    
+    // Convert Google Drive sharing URL to direct image URL
+    const driveRegex = /drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/;
+    const match = url.match(driveRegex);
+    
+    if (match) {
+        const fileId = match[1];
+        return `https://drive.google.com/uc?id=${fileId}&export=view`;
+    }
+    
+    return url; // Return original URL if not a Google Drive URL
 }
