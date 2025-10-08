@@ -123,88 +123,77 @@ class SheetsDataManager {
         };
     }
 
-        // Parse article ID properly - handle both string and number
-        const articleId = this.parseArticleId(row.article_id);
-        if (!articleId) {
-            console.warn('Skipping row without valid article_id:', row.article_id);
-            return;
-        }
-
-        // Add article to issue
-        const article = {
-            id: articleId,
-            title: row.article_title || 'Untitled Article',
-            author: row.author || 'Unknown Author',
-            authors: this.parseAuthors(row.authors) || [{
-                name: row.author || 'Unknown Author',
-                position: "Author",
-                email: "author@example.com"
-            }],
-            abstract: row.abstract || 'No abstract available.',
-            date: row.date || new Date().toISOString().split('T')[0],
-            publishedDate: row.published_date || row.date || new Date().toISOString().split('T')[0],
-            keywords: this.parseKeywords(row.keywords),
-            pages: row.pages || '1-1',
-            htmlFile: row.html_file || `articles.html?id=${articleId}`,
-            pdfUrl: row.pdf_url || '',
-            doi: row.doi || null,
-            volume: parseInt(row.volume) || 1,
-            number: parseInt(row.number) || 1
-        };
-
-        journalData.issues[issueId].articles.push(article);
+    // Parse article ID properly - handle both string and number
+    const articleId = this.parseArticleId(row.article_id);
+    if (!articleId) {
+        console.warn('Skipping row without valid article_id:', row.article_id);
+        return;
     }
 
-    parseArticleId(articleId) {
-        if (!articleId) return null;
-        
-        // Try to parse as number first
-        const numId = parseInt(articleId);
-        if (!isNaN(numId)) return numId;
-        
-        // If not a number, use string hash
-        let hash = 0;
-        for (let i = 0; i < articleId.length; i++) {
-            const char = articleId.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
-            hash = hash & hash; // Convert to 32bit integer
-        }
-        return Math.abs(hash);
-    }
+    // Parse authors from separate columns
+    const authors = this.parseSeparateAuthorColumns(row);
 
-    parseKeywords(keywordsString) {
-        if (!keywordsString) return [];
-        
-        try {
-            // Handle comma-separated keywords
-            return keywordsString.split(',').map(k => k.trim()).filter(k => k);
-        } catch (error) {
-            console.warn('Error parsing keywords:', error);
-            return [];
-        }
-    }
+    // Add article to issue
+    const article = {
+        id: articleId,
+        title: row.article_title || 'Untitled Article',
+        author: row.author || 'Unknown Author', // Legacy support
+        authors: authors,
+        abstract: row.abstract || 'No abstract available.',
+        date: row.date || new Date().toISOString().split('T')[0],
+        publishedDate: row.published_date || row.date || new Date().toISOString().split('T')[0],
+        keywords: this.parseKeywords(row.keywords),
+        pages: row.pages || '1-1',
+        htmlFile: row.html_file || `articles.html?id=${articleId}`,
+        pdfUrl: row.pdf_url || '',
+        doi: row.doi || null,
+        volume: parseInt(row.volume) || 1,
+        number: parseInt(row.number) || 1
+    };
 
-    parseAuthors(authorsString) {
-        if (!authorsString) return null;
-        
-        try {
-            // Handle JSON format
-            if (authorsString.startsWith('[') || authorsString.startsWith('{')) {
-                return JSON.parse(authorsString.replace(/'/g, '"'));
-            }
-            
-            // Handle simple string format
-            return authorsString.split(';').map(author => ({
-                name: author.trim(),
-                position: "Author",
-                email: `${author.trim().toLowerCase().replace(/\s+/g, '.')}@example.com`
-            }));
-        } catch (error) {
-            console.warn('Error parsing authors:', error);
-            return null;
-        }
-    }
+    journalData.issues[issueId].articles.push(article);
+}
 
+// New function to parse separate author columns
+parseSeparateAuthorColumns(row) {
+    const authors = [];
+    let authorIndex = 1;
+    
+    // Keep checking for author columns until we don't find any more
+    while (row[`author_${authorIndex}_name`] || 
+           row[`author_${authorIndex}_position`] || 
+           row[`author_${authorIndex}_email`]) {
+        
+        const authorName = row[`author_${authorIndex}_name`];
+        
+        // Only add author if we have at least a name
+        if (authorName && authorName.trim()) {
+            authors.push({
+                name: authorName.trim(),
+                position: row[`author_${authorIndex}_position`]?.trim() || 'Author',
+                email: row[`author_${authorIndex}_email`]?.trim() || `${authorName.toLowerCase().replace(/\s+/g, '.')}@example.com`
+            });
+        }
+        
+        authorIndex++;
+    }
+    
+    // If no separate author columns found, fall back to the old authors field
+    if (authors.length === 0 && row.authors) {
+        return this.parseAuthors(row.authors);
+    }
+    
+    // If still no authors, use the legacy author field
+    if (authors.length === 0 && row.author) {
+        return [{
+            name: row.author,
+            position: "Author",
+            email: `${row.author.toLowerCase().replace(/\s+/g, '.')}@example.com`
+        }];
+    }
+    
+    return authors;
+}
     // Data retrieval methods
     async getAllIssues() {
         await this.ensureLoaded();
