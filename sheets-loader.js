@@ -123,37 +123,36 @@ class SheetsDataManager {
         };
     }
 
-        // Parse article ID properly - handle both string and number
-        const articleId = this.parseArticleId(row.article_id);
-        if (!articleId) {
-            console.warn('Skipping row without valid article_id:', row.article_id);
-            return;
-        }
-
-        // Add article to issue
-        const article = {
-            id: articleId,
-            title: row.article_title || 'Untitled Article',
-            author: row.author || 'Unknown Author',
-            authors: this.parseAuthors(row.authors) || [{
-                name: row.author || 'Unknown Author',
-                position: "Author",
-                email: "author@example.com"
-            }],
-            abstract: row.abstract || 'No abstract available.',
-            date: row.date || new Date().toISOString().split('T')[0],
-            publishedDate: row.published_date || row.date || new Date().toISOString().split('T')[0],
-            keywords: this.parseKeywords(row.keywords),
-            pages: row.pages || '1-1',
-            htmlFile: row.html_file || `articles.html?id=${articleId}`,
-            pdfUrl: row.pdf_url || '',
-            doi: row.doi || null,
-            volume: parseInt(row.volume) || 1,
-            number: parseInt(row.number) || 1
-        };
-
-        journalData.issues[issueId].articles.push(article);
+    // Parse article ID properly - handle both string and number
+    const articleId = this.parseArticleId(row.article_id);
+    if (!articleId) {
+        console.warn('Skipping row without valid article_id:', row.article_id);
+        return;
     }
+
+    // Parse authors from the single author column
+    const authors = this.parseAuthors(row.author);
+
+    // Add article to issue
+    const article = {
+        id: articleId,
+        title: row.article_title || 'Untitled Article',
+        author: authors && authors.length > 0 ? authors[0].name : 'Unknown Author', // Backward compatibility
+        authors: authors,
+        abstract: row.abstract || 'No abstract available.',
+        date: row.date || new Date().toISOString().split('T')[0],
+        publishedDate: row.published_date || row.date || new Date().toISOString().split('T')[0],
+        keywords: this.parseKeywords(row.keywords),
+        pages: row.pages || '1-1',
+        htmlFile: row.html_file || `articles.html?id=${articleId}`,
+        pdfUrl: row.pdf_url || '',
+        doi: row.doi || null,
+        volume: parseInt(row.volume) || 1,
+        number: parseInt(row.number) || 1
+    };
+
+    journalData.issues[issueId].articles.push(article);
+}
 
     parseArticleId(articleId) {
         if (!articleId) return null;
@@ -185,25 +184,45 @@ class SheetsDataManager {
     }
 
     parseAuthors(authorsString) {
-        if (!authorsString) return null;
+    if (!authorsString) return null;
+    
+    try {
+        // Handle multiple authors separated by semicolons
+        const authorEntries = authorsString.split(';').map(entry => entry.trim()).filter(entry => entry);
         
-        try {
-            // Handle JSON format
-            if (authorsString.startsWith('[') || authorsString.startsWith('{')) {
-                return JSON.parse(authorsString.replace(/'/g, '"'));
+        return authorEntries.map(authorEntry => {
+            // Split by commas and clean up the parts
+            const parts = authorEntry.split(',').map(part => part.trim()).filter(part => part);
+            
+            // Extract name, position, and email
+            let name = parts[0] || 'Unknown Author';
+            let position = "Author"; // Default position
+            let email = "author@example.com"; // Default email
+            
+            if (parts.length >= 2) {
+                position = parts[1];
             }
             
-            // Handle simple string format
-            return authorsString.split(';').map(author => ({
-                name: author.trim(),
-                position: "Author",
-                email: `${author.trim().toLowerCase().replace(/\s+/g, '.')}@example.com`
-            }));
-        } catch (error) {
-            console.warn('Error parsing authors:', error);
-            return null;
-        }
+            if (parts.length >= 3) {
+                email = parts[2];
+            }
+            
+            return {
+                name: name,
+                position: position,
+                email: email
+            };
+        });
+    } catch (error) {
+        console.warn('Error parsing authors:', error);
+        // Return default author structure if parsing fails
+        return [{
+            name: authorsString || 'Unknown Author',
+            position: "Author",
+            email: "author@example.com"
+        }];
     }
+}
 
     // Data retrieval methods
     async getAllIssues() {
