@@ -455,6 +455,50 @@ nav.sticky {
     border-radius: 4px;
     margin-left: 0.5rem;
 }
+/* Enhanced Author Styling - ADD this to your existing styles */
+.author-info {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border: 1px solid #e2e8f0;
+}
+
+.author-info h3 {
+    color: #1e293b;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    font-size: 1.125rem;
+}
+
+#author-container .mb-4:last-child {
+    margin-bottom: 0 !important;
+}
+
+.author-info .fas.fa-user {
+    font-size: 0.875rem;
+}
+
+.author-info .fas.fa-envelope {
+    font-size: 0.75rem;
+}
+
+/* Mobile responsive for authors */
+@media (max-width: 640px) {
+    .author-info {
+        padding: 1rem;
+    }
+    
+    #author-container .flex {
+        flex-direction: column;
+        space-x: 0;
+    }
+    
+    #author-container .flex-shrink-0 {
+        margin-bottom: 0.75rem;
+        align-self: flex-start;
+    }
+}
 
 
     </style>
