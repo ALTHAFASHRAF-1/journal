@@ -167,26 +167,50 @@ function updateArticleDisplay(article) {
     document.getElementById('modal-pdf-title').textContent = article.title;
     
     // Update authors
-    const authorContainer = document.getElementById('author-container');
-    authorContainer.innerHTML = '';
-    
-    // Handle both old and new author format
-    const authors = article.authors || (article.author ? [{
-        name: article.author,
-        position: "Research Scholar",
-        email: "author@example.com"
-    }] : []);
-    
-    authors.forEach(author => {
+    // Update authors - REPLACE the existing author update section with this:
+const authorContainer = document.getElementById('author-container');
+authorContainer.innerHTML = '';
+
+// Handle both old and new author format
+const authors = article.authors || (article.author ? [{
+    name: article.author,
+    position: "Research Scholar",
+    email: "author@example.com"
+}] : []);
+
+if (authors && authors.length > 0) {
+    authors.forEach((author, index) => {
         const authorDiv = document.createElement('div');
-        authorDiv.className = 'mb-3';
+        authorDiv.className = 'mb-4 pb-3 border-b border-gray-200 last:border-b-0';
         authorDiv.innerHTML = `
-            <p class="text-gray-700 font-medium">${author.name}</p>
-            <p class="text-sm text-gray-600">${author.position || 'Author'}</p>
-            <p class="text-sm text-gray-500">Email: ${author.email || 'N/A'}</p>
+            <div class="flex items-start space-x-3">
+                <div class="flex-shrink-0">
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-blue-600"></i>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-lg font-semibold text-gray-900">${author.name}</h4>
+                    <p class="text-sm text-blue-600 font-medium">${author.position || 'Research Scholar'}</p>
+                    <p class="text-sm text-gray-600 mt-1">
+                        <i class="fas fa-envelope mr-1"></i>
+                        <a href="mailto:${author.email}" class="hover:text-blue-600 transition-colors">
+                            ${author.email || 'N/A'}
+                        </a>
+                    </p>
+                </div>
+            </div>
         `;
         authorContainer.appendChild(authorDiv);
     });
+} else {
+    authorContainer.innerHTML = `
+        <div class="text-gray-500 italic">
+            <i class="fas fa-exclamation-triangle mr-2"></i>
+            No author information available
+        </div>
+    `;
+}
     
     // Update metadata
     document.getElementById('published-date').textContent = article.publishedDate || article.date || 'Not specified';
