@@ -11,6 +11,29 @@ class JournalIssueLoader {
         this.currentIssueId = null;
     }
 
+    // Add this method inside the JournalIssueLoader class:
+getDisplayAuthors(article) {
+    let authorNames = '';
+    
+    if (article.authors && Array.isArray(article.authors) && article.authors.length > 0) {
+        // Use new authors array format
+        authorNames = article.authors.map(author => author.name).join(', ');
+    } else if (article.author) {
+        // Fallback to old single author format
+        authorNames = article.author;
+    } else {
+        authorNames = 'Unknown Author';
+    }
+    
+    // Apply search highlighting if needed
+    if (this.currentSearchTerm) {
+        return this.highlightSearchTerm(authorNames, this.currentSearchTerm);
+    } else {
+        return this.escapeHtml(authorNames);
+    }
+}
+
+
     // Get issue ID from URL parameters or default to latest
     getCurrentIssueId() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -543,16 +566,24 @@ class JournalIssueLoader {
         }
     }
 
-    // Enhanced search across all issues
-    searchAllArticles(query) {
-        return this.allArticles.filter(article => {
-            return article.title.toLowerCase().includes(query) ||
-                   article.author.toLowerCase().includes(query) ||
-                   article.abstract.toLowerCase().includes(query) ||
-                   (article.keywords && article.keywords.some(keyword => keyword.toLowerCase().includes(query))) ||
-                   article.issueTitle.toLowerCase().includes(query);
-        });
-    }
+    // Find the searchAllArticles method and replace the author search condition:
+searchAllArticles(query) {
+    return this.allArticles.filter(article => {
+        // Get all author names for search
+        let allAuthorNames = '';
+        if (article.authors && Array.isArray(article.authors)) {
+            allAuthorNames = article.authors.map(author => author.name).join(' ');
+        } else if (article.author) {
+            allAuthorNames = article.author;
+        }
+        
+        return article.title.toLowerCase().includes(query) ||
+               allAuthorNames.toLowerCase().includes(query) ||
+               article.abstract.toLowerCase().includes(query) ||
+               (article.keywords && article.keywords.some(keyword => keyword.toLowerCase().includes(query))) ||
+               article.issueTitle.toLowerCase().includes(query);
+    });
+}
 
     // Handle navbar search with multi-issue capability
     handleNavbarSearch() {
@@ -758,10 +789,10 @@ class JournalIssueLoader {
                         </h3>
 
                         <div class="mb-3" style="${directionStyle}">
-                            <p class="text-sm font-medium text-blue-600" 
-                               style="font-family: ${fontFamily}; font-weight: 600; ${directionStyle}">
-                                ${this.currentSearchTerm ? this.highlightSearchTerm(article.author, this.currentSearchTerm) : this.escapeHtml(article.author)}
-                            </p>
+                        <p class="text-sm font-medium text-blue-600" 
+                        style="font-family: ${fontFamily}; font-weight: 600; ${directionStyle}">
+                        ${this.getDisplayAuthors(article)}
+                        </p>
                         </div>
 
                         <div class="mb-4 text-sm text-gray-600" style="${directionStyle}">
