@@ -1557,7 +1557,7 @@
         return true;
       }
 
-  function showFilePreview(file, type) {
+ function showFilePreview(file, type) {
   console.log(`Showing preview for ${type}:`, file.name);
   
   // Determine correct preview element ID
@@ -1577,28 +1577,6 @@
     console.error(`Preview element not found for type: ${type}, looking for ID: ${previewId}`);
     return;
   }
-  
-  // Hide the upload container
-  let fileInputId;
-  if (type === 'cover') {
-    fileInputId = 'issue_cover_image';
-  } else if (type === 'pdf') {
-    fileInputId = 'pdf_url';
-  } else if (type === 'edit-cover') {
-    fileInputId = 'edit_issue_cover_image';
-  } else if (type === 'edit-pdf') {
-    fileInputId = 'edit_pdf_url';
-  }
-  
-  const fileInput = document.getElementById(fileInputId);
-  if (fileInput) {
-    const uploadContainer = fileInput.closest('.file-upload-container');
-    if (uploadContainer) {
-      uploadContainer.style.display = 'none';
-    }
-  }
-  
-  preview.classList.add('active'); // Show the preview immediately
   
   const fileSize = (file.size / 1024 / 1024).toFixed(2);
   const iconClass = type.includes('cover') ? 'fas fa-image' : 'fas fa-file-pdf';
@@ -1621,6 +1599,8 @@
       </div>
     </div>
   `;
+  
+  preview.style.display = 'block';
 }
 
 
@@ -1657,13 +1637,17 @@
   if (fileInput) fileInput.value = '';
   if (hiddenInput) hiddenInput.value = '';
   if (preview) {
-    preview.classList.remove('active');
+    preview.style.display = 'none';
     preview.innerHTML = '';
   }
-  if (progress) progress.classList.remove('active');
+  if (progress) {
+    progress.classList.remove('active');
+    progress.style.display = 'none';
+  }
   
   // Clear from global uploadedFiles object
   uploadedFiles[type] = null;
+}
   
   // Show the file upload container again
   const uploadContainer = fileInput ? fileInput.closest('.file-upload-container') : null;
@@ -2348,18 +2332,20 @@ function editPublication(index) {
       <div class="file-upload-icon">
         <i class="fas fa-cloud-upload-alt"></i>
       </div>
-      <div class="file-upload-text">Drag & drop new cover image here</div>
+      <div class="file-upload-text">Drag & drop cover image here</div>
       <div class="file-upload-hint">or click to browse (JPG, PNG, GIF - Max 10MB)</div>
     </div>
   </div>
-  <div class="file-preview" id="edit-cover-preview">
+  <div class="file-preview" id="edit-cover-preview" ${pub.issue_cover_image ? 'style="display: block;"' : ''}>
     ${pub.issue_cover_image ? `
       <div class="file-info">
         <div class="file-details">
-          <div class="file-icon"><i class="fas fa-image"></i></div>
+          <div class="file-icon">
+            <i class="fas fa-image"></i>
+          </div>
           <div>
-            <div class="file-name">Current: ${pub.issue_cover_image.split('/').pop() || 'Cover Image'}</div>
-            <div class="file-size"><a href="${pub.issue_cover_image}" target="_blank">View Current Image</a></div>
+            <div class="file-name">${getFileNameFromUrl(pub.issue_cover_image)}</div>
+            <div class="file-size"><a href="${pub.issue_cover_image}" target="_blank">View Current</a></div>
           </div>
         </div>
         <div class="file-actions">
@@ -2458,7 +2444,7 @@ function editPublication(index) {
             <label for="edit_html_file">HTML File URL <span class="required">*</span></label>
             <input type="url" id="edit_html_file" name="html_file" value="${pub.html_file || ''}" required>
           </div>
-          <div class="form-group">
+         <div class="form-group">
   <label for="edit_pdf_url">PDF File <span class="optional">(Optional)</span></label>
   <div class="file-upload-container" ondrop="handleDrop(event, 'edit-pdf')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
     <input type="file" id="edit_pdf_url" name="pdf_url" class="file-input" accept=".pdf" onchange="handleFileChange(event, 'edit-pdf')">
@@ -2466,18 +2452,20 @@ function editPublication(index) {
       <div class="file-upload-icon">
         <i class="fas fa-file-pdf"></i>
       </div>
-      <div class="file-upload-text">Drag & drop new PDF file here</div>
+      <div class="file-upload-text">Drag & drop PDF file here</div>
       <div class="file-upload-hint">or click to browse (PDF - Max 50MB)</div>
     </div>
   </div>
-  <div class="file-preview" id="edit-pdf-preview">
+  <div class="file-preview" id="edit-pdf-preview" ${pub.pdf_url ? 'style="display: block;"' : ''}>
     ${pub.pdf_url ? `
       <div class="file-info">
         <div class="file-details">
-          <div class="file-icon"><i class="fas fa-file-pdf"></i></div>
+          <div class="file-icon">
+            <i class="fas fa-file-pdf"></i>
+          </div>
           <div>
-            <div class="file-name">Current: ${pub.pdf_url.split('/').pop() || 'PDF File'}</div>
-            <div class="file-size"><a href="${pub.pdf_url}" target="_blank">View Current PDF</a></div>
+            <div class="file-name">${getFileNameFromUrl(pub.pdf_url)}</div>
+            <div class="file-size"><a href="${pub.pdf_url}" target="_blank">View Current</a></div>
           </div>
         </div>
         <div class="file-actions">
@@ -2725,6 +2713,15 @@ function validateEditForm(form) {
       });
 
       console.log('Admin panel initialized successfully');
+
+     // Helper function to extract filename from URL
+function getFileNameFromUrl(url) {
+  if (!url) return 'File';
+  // Extract filename from URL
+  const filename = url.split('/').pop();
+  // Remove query parameters if any
+  return filename.split('?')[0] || 'File';
+}   
     </script>
   </body>
 </html>
