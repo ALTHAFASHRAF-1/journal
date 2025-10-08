@@ -1634,7 +1634,6 @@
 }
 
 
-
  async function uploadFile(file, type) {
   console.log(`Starting upload for ${type}`, file.name);
   
@@ -1765,7 +1764,6 @@
     }, 3000);
   }
 }
-
 
 
 
@@ -2304,26 +2302,24 @@ function editPublication(index) {
               </div>
             </div>
             <div class="file-preview" id="edit-cover-preview">
-  ${pub.issue_cover_image ? `
-    <div class="file-info">
-      <div class="file-details">
-        <div class="file-icon"><i class="fas fa-image"></i></div>
-        <div>
-          <div class="file-name">Current Cover Image</div>
-          <div class="file-size"><a href="${pub.issue_cover_image}" target="_blank">View Current</a></div>
-        </div>
-      </div>
-    </div>
-  ` : ''}
-</div>
-<div class="upload-progress" id="edit-cover-progress">
-  <div class="progress-bar">
-    <div class="progress-fill" id="edit-cover-progress-fill"></div>
-  </div>
-  <div class="progress-text" id="edit-cover-progress-text">Uploading...</div>
-</div>
-
-
+              ${pub.issue_cover_image ? `
+                <div class="file-info">
+                  <div class="file-details">
+                    <div class="file-icon"><i class="fas fa-image"></i></div>
+                    <div>
+                      <div class="file-name">Current Cover Image</div>
+                      <div class="file-size"><a href="${pub.issue_cover_image}" target="_blank">View Current</a></div>
+                    </div>
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+            <div class="upload-progress" id="edit-cover-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" id="edit-cover-progress-fill"></div>
+              </div>
+              <div class="progress-text" id="edit-cover-progress-text">Uploading...</div>
+            </div>
             <input type="hidden" id="edit_issue_cover_image_url" name="issue_cover_image_url" value="${pub.issue_cover_image || ''}">
           </div>
         </div>
@@ -2419,26 +2415,24 @@ function editPublication(index) {
               </div>
             </div>
             <div class="file-preview" id="edit-pdf-preview">
-  ${pub.pdf_url ? `
-    <div class="file-info">
-      <div class="file-details">
-        <div class="file-icon"><i class="fas fa-file-pdf"></i></div>
-        <div>
-          <div class="file-name">Current PDF File</div>
-          <div class="file-size"><a href="${pub.pdf_url}" target="_blank">View Current</a></div>
-        </div>
-      </div>
-    </div>
-  ` : ''}
-</div>
-<div class="upload-progress" id="edit-pdf-progress">
-  <div class="progress-bar">
-    <div class="progress-fill" id="edit-pdf-progress-fill"></div>
-  </div>
-  <div class="progress-text" id="edit-pdf-progress-text">Uploading...</div>
-</div>
-
-
+              ${pub.pdf_url ? `
+                <div class="file-info">
+                  <div class="file-details">
+                    <div class="file-icon"><i class="fas fa-file-pdf"></i></div>
+                    <div>
+                      <div class="file-name">Current PDF File</div>
+                      <div class="file-size"><a href="${pub.pdf_url}" target="_blank">View Current</a></div>
+                    </div>
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+            <div class="upload-progress" id="edit-pdf-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" id="edit-pdf-progress-fill"></div>
+              </div>
+              <div class="progress-text" id="edit-pdf-progress-text">Uploading...</div>
+            </div>
             <input type="hidden" id="edit_pdf_url_link" name="pdf_url_link" value="${pub.pdf_url || ''}">
           </div>
         </div>
@@ -2469,7 +2463,6 @@ function editPublication(index) {
   initializeEditForm();
   modal.classList.add('active');
 }
-
         // Initialize edit form
 function initializeEditForm() {
   const editForm = document.getElementById('edit-publication-form');
