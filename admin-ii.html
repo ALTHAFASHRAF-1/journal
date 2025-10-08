@@ -1854,163 +1854,179 @@
       }
 
       async function handleFormSubmission(e) {
-        e.preventDefault();
+  e.preventDefault();
 
-        const submitBtn = document.getElementById('submit-btn');
-        const loadingState = document.getElementById('loading-state');
-        const successMessage = document.getElementById('success-message');
-        const errorMessage = document.getElementById('error-message');
-        const validationError = document.getElementById('validation-error');
+  const submitBtn = document.getElementById('submit-btn');
+  const loadingState = document.getElementById('loading-state');
+  const successMessage = document.getElementById('success-message');
+  const errorMessage = document.getElementById('error-message');
+  const validationError = document.getElementById('validation-error');
 
-        // Hide all messages
-        successMessage.style.display = 'none';
-        errorMessage.style.display = 'none';
-        validationError.style.display = 'none';
+  // Hide all messages
+  successMessage.style.display = 'none';
+  errorMessage.style.display = 'none';
+  validationError.style.display = 'none';
 
-        console.log('Form submission started...');
+  console.log('Form submission started...');
 
-        if (!validateForm()) {
-          console.log('Validation failed');
-          validationError.style.display = 'block';
-          validationError.scrollIntoView({ behavior: 'smooth' });
-          return;
-        }
+  if (!validateForm()) {
+    console.log('Validation failed');
+    validationError.style.display = 'block';
+    validationError.scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
 
-        submitBtn.disabled = true;
-        loadingState.style.display = 'block';
+  submitBtn.disabled = true;
+  loadingState.style.display = 'block';
 
-        try {
-          const formData = new FormData(e.target);
-          const data = {};
+  try {
+    // Create data object directly from form elements
+    const data = {
+      action: 'submit'
+    };
 
-          // Collect all form data with proper type handling
-          for (let [key, value] of formData.entries()) {
-            // Convert value to string first, then trim
-            const stringValue = String(value || '');
-            data[key] = stringValue.trim();
-          }
-
-          // Override with uploaded file URLs if they exist
-          const coverImageUrl = document.getElementById('issue_cover_image_url').value;
-          const pdfUrl = document.getElementById('pdf_url_link').value;
-
-          if (coverImageUrl) {
-            data.issue_cover_image = coverImageUrl;
-            data.issue_cover_image_url = coverImageUrl;
-          }
-
-          if (pdfUrl) {
-            data.pdf_url = pdfUrl;
-            data.pdf_url_link = pdfUrl;
-          }
-
-          console.log('Submitting data:', data);
-
-          const response = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams(data).toString()
-          });
-
-          console.log('Response status:', response.status);
-          
-          if (response.ok) {
-            const result = await response.json();
-            console.log('Response result:', result);
-            
-            if (result.status === 'success') {
-              loadingState.style.display = 'none';
-              successMessage.style.display = 'block';
-              successMessage.scrollIntoView({ behavior: 'smooth' });
-              
-              setTimeout(() => {
-                clearForm();
-                if (document.getElementById('data-tab').classList.contains('active')) {
-                  loadPublicationsData();
-                }
-              }, 2000);
-            } else {
-              throw new Error(result.message || 'Submission failed');
-            }
-          } else {
-            const errorText = await response.text();
-            throw new Error(`HTTP ${response.status}: ${response.statusText}. ${errorText}`);
-          }
-
-        } catch (error) {
-          console.error('Submission error:', error);
-          loadingState.style.display = 'none';
-          
-          document.getElementById('error-text').textContent = 
-            `Submission failed: ${error.message}. Please check your internet connection and try again.`;
-          errorMessage.style.display = 'block';
-          errorMessage.scrollIntoView({ behavior: 'smooth' });
-        } finally {
-          submitBtn.disabled = false;
-        }
+    // Collect all form data manually to avoid FormData issues
+    const formElements = e.target.elements;
+    for (let element of formElements) {
+      if (element.name && element.type !== 'file') {
+        // Skip file inputs, we'll handle them separately
+        if (element.type === 'file') continue;
+        
+        // Convert to string and trim
+        data[element.name] = String(element.value || '').trim();
       }
+    }
+
+    // Handle file URLs - use uploaded URLs or existing values
+    const coverImageUrl = document.getElementById('issue_cover_image_url').value;
+    const pdfUrl = document.getElementById('pdf_url_link').value;
+
+    // Use uploaded file URLs if available
+    if (coverImageUrl) {
+      data.issue_cover_image = coverImageUrl;
+      data.issue_cover_image_url = coverImageUrl;
+    } else {
+      // If no new upload, check if there's a file input value (should be empty string)
+      data.issue_cover_image = '';
+      data.issue_cover_image_url = '';
+    }
+
+    if (pdfUrl) {
+      data.pdf_url = pdfUrl;
+      data.pdf_url_link = pdfUrl;
+    } else {
+      data.pdf_url = '';
+      data.pdf_url_link = '';
+    }
+
+    console.log('Submitting data:', data);
+
+    const response = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams(data).toString()
+    });
+
+    console.log('Response status:', response.status);
+    
+    if (response.ok) {
+      const result = await response.json();
+      console.log('Response result:', result);
+      
+      if (result.status === 'success') {
+        loadingState.style.display = 'none';
+        successMessage.style.display = 'block';
+        successMessage.scrollIntoView({ behavior: 'smooth' });
+        
+        setTimeout(() => {
+          clearForm();
+          if (document.getElementById('data-tab').classList.contains('active')) {
+            loadPublicationsData();
+          }
+        }, 2000);
+      } else {
+        throw new Error(result.message || 'Submission failed');
+      }
+    } else {
+      const errorText = await response.text();
+      throw new Error(`HTTP ${response.status}: ${response.statusText}. ${errorText}`);
+    }
+
+  } catch (error) {
+    console.error('Submission error:', error);
+    loadingState.style.display = 'none';
+    
+    document.getElementById('error-text').textContent = 
+      `Submission failed: ${error.message}. Please check your internet connection and try again.`;
+    errorMessage.style.display = 'block';
+    errorMessage.scrollIntoView({ behavior: 'smooth' });
+  } finally {
+    submitBtn.disabled = false;
+  }
+}
 
       function validateForm() {
-        const requiredFields = document.querySelectorAll('input[required], textarea[required], select[required]');
-        let isValid = true;
-        const missingFields = [];
+  const requiredFields = document.querySelectorAll('input[required], textarea[required], select[required]');
+  let isValid = true;
+  const missingFields = [];
 
-        // Clear previous error states
-        document.querySelectorAll('.error').forEach(field => {
-          field.classList.remove('error');
-        });
+  // Clear previous error states
+  document.querySelectorAll('.error').forEach(field => {
+    field.classList.remove('error');
+  });
 
-        requiredFields.forEach((field) => {
-          let fieldValue = '';
-          
-          // Special handling for file inputs
-          if (field.type === 'file') {
-            const fieldName = field.name;
-            if (fieldName === 'issue_cover_image') {
-              // Check if cover image is uploaded (either file selected or URL exists)
-              const hiddenUrl = document.getElementById('issue_cover_image_url').value;
-              if (!field.files.length && !hiddenUrl && !uploadedFiles.cover) {
-                field.classList.add('error');
-                missingFields.push('Cover Image');
-                isValid = false;
-              }
-            }
-            // PDF is optional, so skip validation for pdf_url
-          } else {
-            // Convert to string first, then trim to avoid the error
-            fieldValue = String(field.value || '').trim();
-            if (!fieldValue) {
-              field.classList.add('error');
-              missingFields.push(field.name || field.id);
-              isValid = false;
-            }
-          }
-        });
-
-        // Validate URL fields
-        const urlFields = document.querySelectorAll('input[type="url"]');
-        urlFields.forEach((field) => {
-          const fieldValue = String(field.value || '').trim();
-          if (field.hasAttribute('required') && fieldValue) {
-            try {
-              new URL(fieldValue);
-            } catch {
-              field.classList.add('error');
-              missingFields.push(field.name || field.id);
-              isValid = false;
-            }
-          }
-        });
-
-        // Debug log to see what's missing
-        if (!isValid) {
-          console.log('Validation failed. Missing fields:', missingFields);
+  requiredFields.forEach((field) => {
+    let fieldValue = '';
+    
+    // Special handling for file inputs
+    if (field.type === 'file') {
+      const fieldName = field.name;
+      if (fieldName === 'issue_cover_image') {
+        // Check if cover image is uploaded (either file selected or URL exists)
+        const hiddenUrl = document.getElementById('issue_cover_image_url').value;
+        const hasFile = field.files.length > 0;
+        if (!hasFile && !hiddenUrl) {
+          field.classList.add('error');
+          missingFields.push('Cover Image');
+          isValid = false;
         }
-
-        return isValid;
       }
+      // PDF is optional, so skip validation for pdf_url
+    } else {
+      // Convert to string first, then trim to avoid the error
+      fieldValue = String(field.value || '').trim();
+      if (!fieldValue) {
+        field.classList.add('error');
+        missingFields.push(field.name || field.id);
+        isValid = false;
+      }
+    }
+  });
+
+  // Validate URL fields
+  const urlFields = document.querySelectorAll('input[type="url"]');
+  urlFields.forEach((field) => {
+    const fieldValue = String(field.value || '').trim();
+    if (field.hasAttribute('required') && fieldValue) {
+      try {
+        new URL(fieldValue);
+      } catch {
+        field.classList.add('error');
+        missingFields.push(field.name || field.id);
+        isValid = false;
+      }
+    }
+  });
+
+  // Debug log to see what's missing
+  if (!isValid) {
+    console.log('Validation failed. Missing fields:', missingFields);
+  }
+
+  return isValid;
+}
 
       function clearForm() {
         const form = document.getElementById('publication-form');
