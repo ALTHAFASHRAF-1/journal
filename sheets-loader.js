@@ -130,26 +130,26 @@ class SheetsDataManager {
         return;
     }
 
-    // Parse authors from the single author column
-    const authors = this.parseAuthors(row.author);
+    // In processCSVRow function, replace the authors parsing section:
+const authors = this.parseAuthors(row.author);
 
-    // Add article to issue
-    const article = {
-        id: articleId,
-        title: row.article_title || 'Untitled Article',
-        author: authors && authors.length > 0 ? authors[0].name : 'Unknown Author', // Backward compatibility
-        authors: authors,
-        abstract: row.abstract || 'No abstract available.',
-        date: row.date || new Date().toISOString().split('T')[0],
-        publishedDate: row.published_date || row.date || new Date().toISOString().split('T')[0],
-        keywords: this.parseKeywords(row.keywords),
-        pages: row.pages || '1-1',
-        htmlFile: row.html_file || `articles.html?id=${articleId}`,
-        pdfUrl: row.pdf_url || '',
-        doi: row.doi || null,
-        volume: parseInt(row.volume) || 1,
-        number: parseInt(row.number) || 1
-    };
+// Add article to issue
+const article = {
+    id: articleId,
+    title: row.article_title || 'Untitled Article',
+    author: authors && authors.length > 0 ? authors[0].name : 'Unknown Author', // Backward compatibility
+    authors: authors, // New multiple authors support
+    abstract: row.abstract || 'No abstract available.',
+    date: row.date || new Date().toISOString().split('T')[0],
+    publishedDate: row.published_date || row.date || new Date().toISOString().split('T')[0],
+    keywords: this.parseKeywords(row.keywords),
+    pages: row.pages || '1-1',
+    htmlFile: row.html_file || `articles.html?id=${articleId}`,
+    pdfUrl: row.pdf_url || '',
+    doi: row.doi || null,
+    volume: parseInt(row.volume) || 1,
+    number: parseInt(row.number) || 1
+};
 
     journalData.issues[issueId].articles.push(article);
 }
@@ -187,25 +187,16 @@ class SheetsDataManager {
     if (!authorsString) return null;
     
     try {
-        // Handle multiple authors separated by semicolons
-        const authorEntries = authorsString.split(';').map(entry => entry.trim()).filter(entry => entry);
+        // Handle multiple authors separated by pipe (|) or semicolons (;)
+        const authorEntries = authorsString.split(/[|;]/).map(entry => entry.trim()).filter(entry => entry);
         
         return authorEntries.map(authorEntry => {
-            // Split by commas and clean up the parts
+            // Split by commas for name, position, email
             const parts = authorEntry.split(',').map(part => part.trim()).filter(part => part);
             
-            // Extract name, position, and email
             let name = parts[0] || 'Unknown Author';
-            let position = "Author"; // Default position
-            let email = "author@example.com"; // Default email
-            
-            if (parts.length >= 2) {
-                position = parts[1];
-            }
-            
-            if (parts.length >= 3) {
-                email = parts[2];
-            }
+            let position = parts[1] || "Research Scholar";
+            let email = parts[2] || "author@example.com";
             
             return {
                 name: name,
@@ -215,14 +206,14 @@ class SheetsDataManager {
         });
     } catch (error) {
         console.warn('Error parsing authors:', error);
-        // Return default author structure if parsing fails
         return [{
             name: authorsString || 'Unknown Author',
-            position: "Author",
+            position: "Research Scholar",
             email: "author@example.com"
         }];
     }
 }
+
 
     // Data retrieval methods
     async getAllIssues() {
