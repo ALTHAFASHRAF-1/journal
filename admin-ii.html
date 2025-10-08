@@ -1513,7 +1513,7 @@
         }
       }
 
-      function handleFileChange(event, type) {
+  function handleFileChange(event, type) {
   const file = event.target.files[0];
   if (!file) return;
 
@@ -1556,9 +1556,12 @@
         return true;
       }
 
-      function showFilePreview(file, type) {
+   function showFilePreview(file, type) {
   const preview = document.getElementById(`${type}-preview`);
-  if (!preview) return;
+  if (!preview) {
+    console.error(`Preview element not found for type: ${type}`);
+    return;
+  }
   
   const fileSize = (file.size / 1024 / 1024).toFixed(2);
   
@@ -1585,6 +1588,7 @@
   
   preview.classList.add('active');
 }
+
 
 
       function removeFile(type) {
@@ -1619,90 +1623,111 @@
 
 
       async function uploadFile(file, type) {
-        const progress = document.getElementById(`${type}-progress`);
-        const progressFill = document.getElementById(`${type}-progress-fill`);
-        const progressText = document.getElementById(`${type}-progress-text`);
-        
-        progress.classList.add('active');
-        progressText.textContent = 'Uploading...';
+  const progress = document.getElementById(`${type}-progress`);
+  const progressFill = document.getElementById(`${type}-progress-fill`);
+  const progressText = document.getElementById(`${type}-progress-text`);
+  
+  if (!progress || !progressFill || !progressText) {
+    console.error(`Progress elements not found for type: ${type}`);
+    return;
+  }
+  
+  progress.classList.add('active');
+  progressText.textContent = 'Uploading...';
 
-        try {
-          console.log(`Starting upload for ${type} file:`, file.name, file.type, file.size);
+  try {
+    console.log(`Starting upload for ${type} file:`, file.name, file.type, file.size);
 
-          // Convert file to base64 for Google Apps Script
-          const base64Data = await fileToBase64(file);
-          
-          // Create form data with base64 content
-          const formData = new FormData();
-          formData.append('action', 'upload');
-          formData.append('type', type);
-          formData.append('fileName', file.name);
-          formData.append('fileType', file.type);
-          formData.append('fileSize', file.size);
-          formData.append('fileData', base64Data);
+    // Convert file to base64 for Google Apps Script
+    const base64Data = await fileToBase64(file);
+    
+    // Create form data with base64 content
+    const formData = new FormData();
+    formData.append('action', 'upload');
+    formData.append('type', type.replace('edit-', '')); // Remove edit- prefix for server
+    formData.append('fileName', file.name);
+    formData.append('fileType', file.type);
+    formData.append('fileSize', file.size);
+    formData.append('fileData', base64Data);
 
-          // Simulate progress
-          let progressValue = 0;
-          const progressInterval = setInterval(() => {
-            progressValue += Math.random() * 15;
-            if (progressValue > 90) {
-              clearInterval(progressInterval);
-              progressValue = 90;
-            }
-            progressFill.style.width = progressValue + '%';
-          }, 200);
-
-          // Upload to Google Script
-          const response = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            body: formData
-          });
-
-          clearInterval(progressInterval);
-
-          if (response.ok) {
-            const result = await response.json();
-            console.log(`Upload result for ${type}:`, result);
-            
-            if (result.status === 'success') {
-              const driveUrl = result.fileUrl;
-              const hiddenInput = document.getElementById(type === 'cover' ? 'issue_cover_image_url' : 'pdf_url_link');
-              hiddenInput.value = driveUrl;
-              
-              // Update global uploadedFiles object
-              uploadedFiles[type] = {
-                file: file,
-                url: driveUrl,
-                fileId: result.fileId
-              };
-
-              progressFill.style.width = '100%';
-              progressText.textContent = 'Upload complete!';
-              
-              console.log(`${type} file uploaded successfully:`, driveUrl);
-              
-              setTimeout(() => {
-                progress.classList.remove('active');
-              }, 2000);
-
-            } else {
-              throw new Error(result.message || 'Upload failed');
-            }
-          } else {
-            const errorText = await response.text();
-            throw new Error(`HTTP ${response.status}: ${response.statusText}. ${errorText}`);
-          }
-
-        } catch (error) {
-          console.error(`Upload error for ${type}:`, error);
-          progressText.textContent = 'Upload failed: ' + error.message;
-          progressFill.style.width = '0%';
-          
-          setTimeout(() => {
-            progress.classList.remove('active');
-          }, 3000);
-        }
+    // Simulate progress
+    let progressValue = 0;
+    const progressInterval = setInterval(() => {
+      progressValue += Math.random() * 15;
+      if (progressValue > 90) {
+        clearInterval(progressInterval);
+        progressValue = 90;
       }
+      progressFill.style.width = progressValue + '%';
+    }, 200);
+
+    // Upload to Google Script
+    const response = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: formData
+    });
+
+    clearInterval(progressInterval);
+
+    if (response.ok) {
+      const result = await response.json();
+      console.log(`Upload result for ${type}:`, result);
+      
+      if (result.status === 'success') {
+        const driveUrl = result.fileUrl;
+        
+        // Determine the correct hidden input ID
+        let hiddenInputId;
+        if (type === 'cover') {
+          hiddenInputId = 'issue_cover_image_url';
+        } else if (type === 'pdf') {
+          hiddenInputId = 'pdf_url_link';
+        } else if (type === 'edit-cover') {
+          hiddenInputId = 'edit_issue_cover_image_url';
+        } else if (type === 'edit-pdf') {
+          hiddenInputId = 'edit_pdf_url_link';
+        }
+        
+        const hiddenInput = document.getElementById(hiddenInputId);
+        if (hiddenInput) {
+          hiddenInput.value = driveUrl;
+        }
+        
+        // Update global uploadedFiles object
+        uploadedFiles[type] = {
+          file: file,
+          url: driveUrl,
+          fileId: result.fileId
+        };
+
+        progressFill.style.width = '100%';
+        progressText.textContent = 'Upload complete!';
+        
+        console.log(`${type} file uploaded successfully:`, driveUrl);
+        
+        setTimeout(() => {
+          progress.classList.remove('active');
+        }, 2000);
+
+      } else {
+        throw new Error(result.message || 'Upload failed');
+      }
+    } else {
+      const errorText = await response.text();
+      throw new Error(`HTTP ${response.status}: ${response.statusText}. ${errorText}`);
+    }
+
+  } catch (error) {
+    console.error(`Upload error for ${type}:`, error);
+    progressText.textContent = 'Upload failed: ' + error.message;
+    progressFill.style.width = '0%';
+    
+    setTimeout(() => {
+      progress.classList.remove('active');
+    }, 3000);
+  }
+}
+
 
       // Helper function to convert file to base64
       function fileToBase64(file) {
@@ -2430,6 +2455,7 @@ function initializeEditForm() {
 }
 
 // Handle edit form submission
+// Handle edit form submission
 async function handleEditFormSubmission(e) {
   e.preventDefault();
 
@@ -2447,6 +2473,7 @@ async function handleEditFormSubmission(e) {
   errorMessage.style.display = 'none';
 
   console.log('Edit form submission started for index:', index);
+  console.log('Original data:', originalData);
 
   // Validate form
   if (!validateEditForm(form)) {
@@ -2469,20 +2496,27 @@ async function handleEditFormSubmission(e) {
     // Add action and update info
     data.action = 'update';
     data.original_article_id = originalData.article_id;
-    data.row_index = index + 2; // +1 for header, +1 for 0-based index
 
-    // Override with uploaded file URLs if they exist
+    // Override with uploaded file URLs if they exist, otherwise keep original
     const editCoverImageUrl = document.getElementById('edit_issue_cover_image_url').value;
     const editPdfUrl = document.getElementById('edit_pdf_url_link').value;
 
     if (editCoverImageUrl) {
       data.issue_cover_image = editCoverImageUrl;
       data.issue_cover_image_url = editCoverImageUrl;
+    } else if (originalData.issue_cover_image) {
+      // Keep original if no new upload
+      data.issue_cover_image = originalData.issue_cover_image;
+      data.issue_cover_image_url = originalData.issue_cover_image;
     }
 
     if (editPdfUrl) {
       data.pdf_url = editPdfUrl;
       data.pdf_url_link = editPdfUrl;
+    } else if (originalData.pdf_url) {
+      // Keep original if no new upload
+      data.pdf_url = originalData.pdf_url;
+      data.pdf_url_link = originalData.pdf_url;
     }
 
     console.log('Submitting update data:', data);
@@ -2530,6 +2564,7 @@ async function handleEditFormSubmission(e) {
     submitBtn.disabled = false;
   }
 }
+
 
 // Validate edit form
 function validateEditForm(form) {
