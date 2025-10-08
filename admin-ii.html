@@ -1578,6 +1578,8 @@
     return;
   }
   
+  preview.classList.add('active'); // Show the preview immediately
+  
   const fileSize = (file.size / 1024 / 1024).toFixed(2);
   const iconClass = type.includes('cover') ? 'fas fa-image' : 'fas fa-file-pdf';
   
@@ -1599,39 +1601,51 @@
       </div>
     </div>
   `;
-  
-  preview.classList.add('active');
 }
 
+
  function removeFile(type) {
-  let fileInputId, hiddenInputId;
+  let fileInputId, hiddenInputId, previewId, progressId;
   
   if (type === 'cover') {
     fileInputId = 'issue_cover_image';
     hiddenInputId = 'issue_cover_image_url';
+    previewId = 'cover-preview';
+    progressId = 'cover-progress';
   } else if (type === 'pdf') {
     fileInputId = 'pdf_url';
     hiddenInputId = 'pdf_url_link';
+    previewId = 'pdf-preview';
+    progressId = 'pdf-progress';
   } else if (type === 'edit-cover') {
     fileInputId = 'edit_issue_cover_image';
     hiddenInputId = 'edit_issue_cover_image_url';
+    previewId = 'edit-cover-preview';
+    progressId = 'edit-cover-progress';
   } else if (type === 'edit-pdf') {
     fileInputId = 'edit_pdf_url';
     hiddenInputId = 'edit_pdf_url_link';
+    previewId = 'edit-pdf-preview';
+    progressId = 'edit-pdf-progress';
   }
 
   const fileInput = document.getElementById(fileInputId);
   const hiddenInput = document.getElementById(hiddenInputId);
-  const preview = document.getElementById(`${type}-preview`);
-  const progress = document.getElementById(`${type}-progress`);
+  const preview = document.getElementById(previewId);
+  const progress = document.getElementById(progressId);
 
   if (fileInput) fileInput.value = '';
   if (hiddenInput) hiddenInput.value = '';
-  if (preview) preview.classList.remove('active');
+  if (preview) {
+    preview.classList.remove('active');
+    preview.innerHTML = '';
+  }
   if (progress) progress.classList.remove('active');
   
+  // Clear from global uploadedFiles object
   uploadedFiles[type] = null;
 }
+
 
 
  async function uploadFile(file, type) {
@@ -1764,9 +1778,6 @@
     }, 3000);
   }
 }
-
-
-
       // Helper function to convert file to base64
       function fileToBase64(file) {
         return new Promise((resolve, reject) => {
@@ -2518,8 +2529,6 @@ function initializeEditForm() {
   console.log('Edit form initialized');
 }
 
-// Handle edit form submission
-// Handle edit form submission
 async function handleEditFormSubmission(e) {
   e.preventDefault();
 
@@ -2549,95 +2558,99 @@ async function handleEditFormSubmission(e) {
   loadingState.style.display = 'block';
 
   try {
-    const formData = new FormData(form);
-    const data = {};
+    // Create data object directly from form elements
+    const data = {
+      action: 'update',
+      original_article_id: originalData.article_id
+    };
 
-    // Collect all form data
-    for (let [key, value] of formData.entries()) {
-      data[key] = String(value || '').trim();
+    // Collect all form data manually to avoid FormData issues
+    const formElements = form.elements;
+    for (let element of formElements) {
+      if (element.name && element.type !== 'file') {
+        // Skip file inputs, we'll handle them separately
+        if (element.type === 'file') continue;
+        
+        // Convert to string and trim
+        data[element.name] = String(element.value || '').trim();
+      }
     }
 
-    // Add action and update info
-    data.action = 'update';
-    data.original_article_id = originalData.article_id;
+    // Handle file URLs - use uploaded URLs or existing values
+    const editCoverImageUrl = document.getElementById('edit_issue_cover_image_url').value;
+    const editPdfUrl = document.getElementById('edit_pdf_url_link').value;
 
-// Override with uploaded file URLs if they exist, otherwise keep original
-const editCoverImageUrl = document.getElementById('edit_issue_cover_image_url').value;
-const editPdfUrl = document.getElementById('edit_pdf_url_link').value;
+    // Handle cover image URL
+    if (editCoverImageUrl && editCoverImageUrl !== originalData.issue_cover_image) {
+      // New file uploaded
+      data.issue_cover_image = editCoverImageUrl;
+      data.issue_cover_image_url = editCoverImageUrl;
+      console.log('Using new cover image:', editCoverImageUrl);
+    } else if (originalData.issue_cover_image) {
+      // Keep original if no new upload
+      data.issue_cover_image = originalData.issue_cover_image;
+      data.issue_cover_image_url = originalData.issue_cover_image;
+      console.log('Keeping original cover image:', originalData.issue_cover_image);
+    }
 
-// Handle cover image URL
-if (editCoverImageUrl && editCoverImageUrl !== originalData.issue_cover_image) {
-  // New file uploaded
-  data.issue_cover_image = editCoverImageUrl;
-  data.issue_cover_image_url = editCoverImageUrl;
-  console.log('Using new cover image:', editCoverImageUrl);
-} else if (originalData.issue_cover_image) {
-  // Keep original if no new upload
-  data.issue_cover_image = originalData.issue_cover_image;
-  data.issue_cover_image_url = originalData.issue_cover_image;
-  console.log('Keeping original cover image:', originalData.issue_cover_image);
-}
+    // Handle PDF URL
+    if (editPdfUrl && editPdfUrl !== originalData.pdf_url) {
+      // New file uploaded
+      data.pdf_url = editPdfUrl;
+      data.pdf_url_link = editPdfUrl;
+      console.log('Using new PDF:', editPdfUrl);
+    } else if (originalData.pdf_url) {
+      // Keep original if no new upload
+      data.pdf_url = originalData.pdf_url;
+      data.pdf_url_link = originalData.pdf_url;
+      console.log('Keeping original PDF:', originalData.pdf_url);
+    }
 
-// Handle PDF URL
-if (editPdfUrl && editPdfUrl !== originalData.pdf_url) {
-  // New file uploaded
-  data.pdf_url = editPdfUrl;
-  data.pdf_url_link = editPdfUrl;
-  console.log('Using new PDF:', editPdfUrl);
-} else if (originalData.pdf_url) {
-  // Keep original if no new upload
-  data.pdf_url = originalData.pdf_url;
-  data.pdf_url_link = originalData.pdf_url;
-  console.log('Keeping original PDF:', originalData.pdf_url);
-}
+    console.log('Submitting update data:', data);
 
-console.log('Submitting update data:', data);
+    const response = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams(data).toString()
+    });
 
-const response = await fetch(SCRIPT_URL, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
-  },
-  body: new URLSearchParams(data).toString()
-});
+    console.log('Update response status:', response.status);
 
-console.log('Update response status:', response.status);
+    if (response.ok) {
+      const result = await response.json();
+      console.log('Update response result:', result);
+      
+      if (result.status === 'success') {
+        loadingState.style.display = 'none';
+        successMessage.style.display = 'block';
+        successMessage.scrollIntoView({ behavior: 'smooth' });
+        
+        setTimeout(() => {
+          closeModal();
+          loadPublicationsData(); // Refresh the data table
+        }, 2000);
+      } else {
+        throw new Error(result.message || 'Update failed');
+      }
+    } else {
+      const errorText = await response.text();
+      throw new Error(`HTTP ${response.status}: ${response.statusText}. ${errorText}`);
+    }
 
-if (response.ok) {
-  const result = await response.json();
-  console.log('Update response result:', result);
-  
-  if (result.status === 'success') {
+  } catch (error) {
+    console.error('Update error:', error);
     loadingState.style.display = 'none';
-    successMessage.style.display = 'block';
-    successMessage.scrollIntoView({ behavior: 'smooth' });
-    
-    setTimeout(() => {
-      closeModal();
-      loadPublicationsData(); // Refresh the data table
-    }, 2000);
-  } else {
-    throw new Error(result.message || 'Update failed');
+
+    document.getElementById('edit-error-text').textContent = 
+      `Update failed: ${error.message}. Please check your internet connection and try again.`;
+    errorMessage.style.display = 'block';
+    errorMessage.scrollIntoView({ behavior: 'smooth' });
+  } finally {
+    submitBtn.disabled = false;
   }
-} else {
-  const errorText = await response.text();
-  throw new Error(`HTTP ${response.status}: ${response.statusText}. ${errorText}`);
 }
-
-} catch (error) {
-console.error('Update error:', error);
-loadingState.style.display = 'none';
-
-document.getElementById('edit-error-text').textContent = 
-  `Update failed: ${error.message}. Please check your internet connection and try again.`;
-errorMessage.style.display = 'block';
-errorMessage.scrollIntoView({ behavior: 'smooth' });
-} finally {
-submitBtn.disabled = false;
-}
-}
-
-
 
 // Validate edit form
 function validateEditForm(form) {
