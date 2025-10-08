@@ -168,6 +168,7 @@ function updateArticleDisplay(article) {
     
     // Update authors
     // Update authors - REPLACE the existing author update section with this:
+// Update authors - REPLACE the existing author update section with this:
 const authorContainer = document.getElementById('author-container');
 authorContainer.innerHTML = '';
 
@@ -184,15 +185,12 @@ if (authors && authors.length > 0) {
         authorDiv.className = 'mb-4 pb-3 border-b border-gray-200 last:border-b-0';
         authorDiv.innerHTML = `
             <div class="flex items-start space-x-3">
-                <div class="flex-shrink-0">
-                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                        <i class="fas fa-user text-blue-600"></i>
-                    </div>
-                </div>
+                
                 <div class="flex-1">
                     <h4 class="text-lg font-semibold text-gray-900">${author.name}</h4>
                     <p class="text-sm text-blue-600 font-medium">${author.position || 'Research Scholar'}</p>
                     <p class="text-sm text-gray-600 mt-1">
+                        <i class="fas fa-envelope mr-1"></i>
                         <a href="mailto:${author.email}" class="hover:text-blue-600 transition-colors">
                             ${author.email || 'N/A'}
                         </a>
@@ -210,6 +208,7 @@ if (authors && authors.length > 0) {
         </div>
     `;
 }
+
     
     // Update metadata
     document.getElementById('published-date').textContent = article.publishedDate || article.date || 'Not specified';
