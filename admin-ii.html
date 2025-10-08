@@ -1556,15 +1556,28 @@
         return true;
       }
 
-   function showFilePreview(file, type) {
-  const preview = document.getElementById(`${type}-preview`);
+  function showFilePreview(file, type) {
+  console.log(`Showing preview for ${type}:`, file.name);
+  
+  // Determine correct preview element ID
+  let previewId;
+  if (type === 'cover') {
+    previewId = 'cover-preview';
+  } else if (type === 'pdf') {
+    previewId = 'pdf-preview';
+  } else if (type === 'edit-cover') {
+    previewId = 'edit-cover-preview';
+  } else if (type === 'edit-pdf') {
+    previewId = 'edit-pdf-preview';
+  }
+  
+  const preview = document.getElementById(previewId);
   if (!preview) {
-    console.error(`Preview element not found for type: ${type}`);
+    console.error(`Preview element not found for type: ${type}, looking for ID: ${previewId}`);
     return;
   }
   
   const fileSize = (file.size / 1024 / 1024).toFixed(2);
-  
   const iconClass = type.includes('cover') ? 'fas fa-image' : 'fas fa-file-pdf';
   
   preview.innerHTML = `
@@ -1588,6 +1601,7 @@
   
   preview.classList.add('active');
 }
+
 
 
 
@@ -1622,10 +1636,33 @@
 }
 
 
-      async function uploadFile(file, type) {
-  const progress = document.getElementById(`${type}-progress`);
-  const progressFill = document.getElementById(`${type}-progress-fill`);
-  const progressText = document.getElementById(`${type}-progress-text`);
+ async function uploadFile(file, type) {
+  console.log(`Starting upload for ${type}`, file.name);
+  
+  // Determine correct element IDs based on type
+  let progressId, progressFillId, progressTextId;
+  
+  if (type === 'cover') {
+    progressId = 'cover-progress';
+    progressFillId = 'cover-progress-fill';
+    progressTextId = 'cover-progress-text';
+  } else if (type === 'pdf') {
+    progressId = 'pdf-progress';
+    progressFillId = 'pdf-progress-fill';
+    progressTextId = 'pdf-progress-text';
+  } else if (type === 'edit-cover') {
+    progressId = 'edit-cover-progress';
+    progressFillId = 'edit-cover-progress-fill';
+    progressTextId = 'edit-cover-progress-text';
+  } else if (type === 'edit-pdf') {
+    progressId = 'edit-pdf-progress';
+    progressFillId = 'edit-pdf-progress-fill';
+    progressTextId = 'edit-pdf-progress-text';
+  }
+  
+  const progress = document.getElementById(progressId);
+  const progressFill = document.getElementById(progressFillId);
+  const progressText = document.getElementById(progressTextId);
   
   if (!progress || !progressFill || !progressText) {
     console.error(`Progress elements not found for type: ${type}`);
@@ -1634,6 +1671,7 @@
   
   progress.classList.add('active');
   progressText.textContent = 'Uploading...';
+  progressFill.style.width = '0%';
 
   try {
     console.log(`Starting upload for ${type} file:`, file.name, file.type, file.size);
@@ -1691,6 +1729,7 @@
         const hiddenInput = document.getElementById(hiddenInputId);
         if (hiddenInput) {
           hiddenInput.value = driveUrl;
+          console.log(`Set ${hiddenInputId} to:`, driveUrl);
         }
         
         // Update global uploadedFiles object
@@ -1727,6 +1766,7 @@
     }, 3000);
   }
 }
+
 
 
       // Helper function to convert file to base64
@@ -2264,24 +2304,25 @@ function editPublication(index) {
               </div>
             </div>
             <div class="file-preview" id="edit-cover-preview">
-              ${pub.issue_cover_image ? `
-                <div class="file-info">
-                  <div class="file-details">
-                    <div class="file-icon"><i class="fas fa-image"></i></div>
-                    <div>
-                      <div class="file-name">Current Cover Image</div>
-                      <div class="file-size"><a href="${pub.issue_cover_image}" target="_blank">View Current</a></div>
-                    </div>
-                  </div>
-                </div>
-              ` : ''}
-            </div>
-            <div class="upload-progress" id="edit-cover-progress">
-              <div class="progress-bar">
-                <div class="progress-fill" id="edit-cover-progress-fill"></div>
-              </div>
-              <div class="progress-text" id="edit-cover-progress-text">Uploading...</div>
-            </div>
+  ${pub.issue_cover_image ? `
+    <div class="file-info">
+      <div class="file-details">
+        <div class="file-icon"><i class="fas fa-image"></i></div>
+        <div>
+          <div class="file-name">Current Cover Image</div>
+          <div class="file-size"><a href="${pub.issue_cover_image}" target="_blank">View Current</a></div>
+        </div>
+      </div>
+    </div>
+  ` : ''}
+</div>
+<div class="upload-progress" id="edit-cover-progress">
+  <div class="progress-bar">
+    <div class="progress-fill" id="edit-cover-progress-fill"></div>
+  </div>
+  <div class="progress-text" id="edit-cover-progress-text">Uploading...</div>
+</div>
+
             <input type="hidden" id="edit_issue_cover_image_url" name="issue_cover_image_url" value="${pub.issue_cover_image || ''}">
           </div>
         </div>
@@ -2377,24 +2418,25 @@ function editPublication(index) {
               </div>
             </div>
             <div class="file-preview" id="edit-pdf-preview">
-              ${pub.pdf_url ? `
-                <div class="file-info">
-                  <div class="file-details">
-                    <div class="file-icon"><i class="fas fa-file-pdf"></i></div>
-                    <div>
-                      <div class="file-name">Current PDF File</div>
-                      <div class="file-size"><a href="${pub.pdf_url}" target="_blank">View Current</a></div>
-                    </div>
-                  </div>
-                </div>
-              ` : ''}
-            </div>
-            <div class="upload-progress" id="edit-pdf-progress">
-              <div class="progress-bar">
-                <div class="progress-fill" id="edit-pdf-progress-fill"></div>
-              </div>
-              <div class="progress-text" id="edit-pdf-progress-text">Uploading...</div>
-            </div>
+  ${pub.pdf_url ? `
+    <div class="file-info">
+      <div class="file-details">
+        <div class="file-icon"><i class="fas fa-file-pdf"></i></div>
+        <div>
+          <div class="file-name">Current PDF File</div>
+          <div class="file-size"><a href="${pub.pdf_url}" target="_blank">View Current</a></div>
+        </div>
+      </div>
+    </div>
+  ` : ''}
+</div>
+<div class="upload-progress" id="edit-pdf-progress">
+  <div class="progress-bar">
+    <div class="progress-fill" id="edit-pdf-progress-fill"></div>
+  </div>
+  <div class="progress-text" id="edit-pdf-progress-text">Uploading...</div>
+</div>
+
             <input type="hidden" id="edit_pdf_url_link" name="pdf_url_link" value="${pub.pdf_url || ''}">
           </div>
         </div>
@@ -2497,73 +2539,82 @@ async function handleEditFormSubmission(e) {
     data.action = 'update';
     data.original_article_id = originalData.article_id;
 
-    // Override with uploaded file URLs if they exist, otherwise keep original
-    const editCoverImageUrl = document.getElementById('edit_issue_cover_image_url').value;
-    const editPdfUrl = document.getElementById('edit_pdf_url_link').value;
+   // Override with uploaded file URLs if they exist, otherwise keep original
+const editCoverImageUrl = document.getElementById('edit_issue_cover_image_url').value;
+const editPdfUrl = document.getElementById('edit_pdf_url_link').value;
 
-    if (editCoverImageUrl) {
-      data.issue_cover_image = editCoverImageUrl;
-      data.issue_cover_image_url = editCoverImageUrl;
-    } else if (originalData.issue_cover_image) {
-      // Keep original if no new upload
-      data.issue_cover_image = originalData.issue_cover_image;
-      data.issue_cover_image_url = originalData.issue_cover_image;
-    }
-
-    if (editPdfUrl) {
-      data.pdf_url = editPdfUrl;
-      data.pdf_url_link = editPdfUrl;
-    } else if (originalData.pdf_url) {
-      // Keep original if no new upload
-      data.pdf_url = originalData.pdf_url;
-      data.pdf_url_link = originalData.pdf_url;
-    }
-
-    console.log('Submitting update data:', data);
-
-    const response = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams(data).toString()
-    });
-
-    console.log('Update response status:', response.status);
-    
-    if (response.ok) {
-      const result = await response.json();
-      console.log('Update response result:', result);
-      
-      if (result.status === 'success') {
-        loadingState.style.display = 'none';
-        successMessage.style.display = 'block';
-        successMessage.scrollIntoView({ behavior: 'smooth' });
-        
-        setTimeout(() => {
-          closeModal();
-          loadPublicationsData(); // Refresh the data table
-        }, 2000);
-      } else {
-        throw new Error(result.message || 'Update failed');
-      }
-    } else {
-      const errorText = await response.text();
-      throw new Error(`HTTP ${response.status}: ${response.statusText}. ${errorText}`);
-    }
-
-  } catch (error) {
-    console.error('Update error:', error);
-    loadingState.style.display = 'none';
-    
-    document.getElementById('edit-error-text').textContent = 
-      `Update failed: ${error.message}. Please check your internet connection and try again.`;
-    errorMessage.style.display = 'block';
-    errorMessage.scrollIntoView({ behavior: 'smooth' });
-  } finally {
-    submitBtn.disabled = false;
-  }
+// Handle cover image URL
+if (editCoverImageUrl && editCoverImageUrl !== originalData.issue_cover_image) {
+  // New file uploaded
+  data.issue_cover_image = editCoverImageUrl;
+  data.issue_cover_image_url = editCoverImageUrl;
+  console.log('Using new cover image:', editCoverImageUrl);
+} else if (originalData.issue_cover_image) {
+  // Keep original if no new upload
+  data.issue_cover_image = originalData.issue_cover_image;
+  data.issue_cover_image_url = originalData.issue_cover_image;
+  console.log('Keeping original cover image:', originalData.issue_cover_image);
 }
+
+// Handle PDF URL
+if (editPdfUrl && editPdfUrl !== originalData.pdf_url) {
+  // New file uploaded
+  data.pdf_url = editPdfUrl;
+  data.pdf_url_link = editPdfUrl;
+  console.log('Using new PDF:', editPdfUrl);
+} else if (originalData.pdf_url) {
+  // Keep original if no new upload
+  data.pdf_url = originalData.pdf_url;
+  data.pdf_url_link = originalData.pdf_url;
+  console.log('Keeping original PDF:', originalData.pdf_url);
+}
+
+console.log('Submitting update data:', data);
+
+const response = await fetch(SCRIPT_URL, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  },
+  body: new URLSearchParams(data).toString()
+});
+
+console.log('Update response status:', response.status);
+
+if (response.ok) {
+  const result = await response.json();
+  console.log('Update response result:', result);
+  
+  if (result.status === 'success') {
+    loadingState.style.display = 'none';
+    successMessage.style.display = 'block';
+    successMessage.scrollIntoView({ behavior: 'smooth' });
+    
+    setTimeout(() => {
+      closeModal();
+      loadPublicationsData(); // Refresh the data table
+    }, 2000);
+  } else {
+    throw new Error(result.message || 'Update failed');
+  }
+} else {
+  const errorText = await response.text();
+  throw new Error(`HTTP ${response.status}: ${response.statusText}. ${errorText}`);
+}
+
+} catch (error) {
+console.error('Update error:', error);
+loadingState.style.display = 'none';
+
+document.getElementById('edit-error-text').textContent = 
+  `Update failed: ${error.message}. Please check your internet connection and try again.`;
+errorMessage.style.display = 'block';
+errorMessage.scrollIntoView({ behavior: 'smooth' });
+} finally {
+submitBtn.disabled = false;
+}
+}
+
 
 
 // Validate edit form
