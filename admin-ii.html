@@ -1578,6 +1578,26 @@
     return;
   }
   
+  // Hide the upload container
+  let fileInputId;
+  if (type === 'cover') {
+    fileInputId = 'issue_cover_image';
+  } else if (type === 'pdf') {
+    fileInputId = 'pdf_url';
+  } else if (type === 'edit-cover') {
+    fileInputId = 'edit_issue_cover_image';
+  } else if (type === 'edit-pdf') {
+    fileInputId = 'edit_pdf_url';
+  }
+  
+  const fileInput = document.getElementById(fileInputId);
+  if (fileInput) {
+    const uploadContainer = fileInput.closest('.file-upload-container');
+    if (uploadContainer) {
+      uploadContainer.style.display = 'none';
+    }
+  }
+  
   preview.classList.add('active'); // Show the preview immediately
   
   const fileSize = (file.size / 1024 / 1024).toFixed(2);
@@ -1644,6 +1664,12 @@
   
   // Clear from global uploadedFiles object
   uploadedFiles[type] = null;
+  
+  // Show the file upload container again
+  const uploadContainer = fileInput ? fileInput.closest('.file-upload-container') : null;
+  if (uploadContainer) {
+    uploadContainer.style.display = 'block';
+  }
 }
 
 
@@ -2315,44 +2341,43 @@ function editPublication(index) {
             <input type="date" id="edit_issue_published_date" name="issue_published_date" value="${pub.issue_published_date || ''}" required>
           </div>
           <div class="form-group">
-            <label for="edit_issue_cover_image">Issue Cover Image</label>
-            <div class="file-upload-container" ondrop="handleDrop(event, 'edit-cover')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
-              <input type="file" id="edit_issue_cover_image" name="issue_cover_image" class="file-input" accept="image/*" onchange="handleFileChange(event, 'edit-cover')">
-              <div class="file-upload-content">
-                <div class="file-upload-icon">
-                  <i class="fas fa-cloud-upload-alt"></i>
-                </div>
-                <div class="file-upload-text">Drag & drop new cover image here</div>
-                <div class="file-upload-hint">or click to browse (JPG, PNG, GIF - Max 10MB)</div>
-              </div>
-            </div>
-            <div class="file-preview" id="edit-cover-preview">
-  ${pub.issue_cover_image ? `
-    <div class="file-info">
-      <div class="file-details">
-        <div class="file-icon"><i class="fas fa-image"></i></div>
-        <div>
-          <div class="file-name">Current Cover Image</div>
-          <div class="file-size"><a href="${pub.issue_cover_image}" target="_blank">View Current</a></div>
+  <label for="edit_issue_cover_image">Issue Cover Image</label>
+  <div class="file-upload-container" ondrop="handleDrop(event, 'edit-cover')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+    <input type="file" id="edit_issue_cover_image" name="issue_cover_image" class="file-input" accept="image/*" onchange="handleFileChange(event, 'edit-cover')">
+    <div class="file-upload-content">
+      <div class="file-upload-icon">
+        <i class="fas fa-cloud-upload-alt"></i>
+      </div>
+      <div class="file-upload-text">Drag & drop new cover image here</div>
+      <div class="file-upload-hint">or click to browse (JPG, PNG, GIF - Max 10MB)</div>
+    </div>
+  </div>
+  <div class="file-preview" id="edit-cover-preview">
+    ${pub.issue_cover_image ? `
+      <div class="file-info">
+        <div class="file-details">
+          <div class="file-icon"><i class="fas fa-image"></i></div>
+          <div>
+            <div class="file-name">Current: ${pub.issue_cover_image.split('/').pop() || 'Cover Image'}</div>
+            <div class="file-size"><a href="${pub.issue_cover_image}" target="_blank">View Current Image</a></div>
+          </div>
+        </div>
+        <div class="file-actions">
+          <button type="button" class="file-remove-btn" onclick="removeFile('edit-cover')">
+            <i class="fas fa-trash"></i> Remove
+          </button>
         </div>
       </div>
-      <div class="file-actions">
-        <button type="button" class="file-remove-btn" onclick="removeFile('edit-cover')">
-          <i class="fas fa-trash"></i> Remove
-        </button>
-      </div>
-    </div>
-  ` : ''}
-</div>
-<!-- ADD THIS UPLOAD PROGRESS SECTION -->
-<div class="upload-progress" id="edit-cover-progress">
-  <div class="progress-bar">
-    <div class="progress-fill" id="edit-cover-progress-fill"></div>
+    ` : ''}
   </div>
-  <div class="progress-text" id="edit-cover-progress-text">Uploading...</div>
+  <div class="upload-progress" id="edit-cover-progress">
+    <div class="progress-bar">
+      <div class="progress-fill" id="edit-cover-progress-fill"></div>
+    </div>
+    <div class="progress-text" id="edit-cover-progress-text">Uploading...</div>
+  </div>
+  <input type="hidden" id="edit_issue_cover_image_url" name="issue_cover_image_url" value="${pub.issue_cover_image || ''}">
 </div>
-<input type="hidden" id="edit_issue_cover_image_url" name="issue_cover_image_url" value="${pub.issue_cover_image || ''}">
-          </div>
         </div>
       </div>
 
@@ -2434,44 +2459,43 @@ function editPublication(index) {
             <input type="url" id="edit_html_file" name="html_file" value="${pub.html_file || ''}" required>
           </div>
           <div class="form-group">
-            <label for="edit_pdf_url">PDF File <span class="optional">(Optional)</span></label>
-            <div class="file-upload-container" ondrop="handleDrop(event, 'edit-pdf')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
-              <input type="file" id="edit_pdf_url" name="pdf_url" class="file-input" accept=".pdf" onchange="handleFileChange(event, 'edit-pdf')">
-              <div class="file-upload-content">
-                <div class="file-upload-icon">
-                  <i class="fas fa-file-pdf"></i>
-                </div>
-                <div class="file-upload-text">Drag & drop new PDF file here</div>
-                <div class="file-upload-hint">or click to browse (PDF - Max 50MB)</div>
-              </div>
-            </div>
-            <div class="file-preview" id="edit-pdf-preview">
-  ${pub.pdf_url ? `
-    <div class="file-info">
-      <div class="file-details">
-        <div class="file-icon"><i class="fas fa-file-pdf"></i></div>
-        <div>
-          <div class="file-name">Current PDF File</div>
-          <div class="file-size"><a href="${pub.pdf_url}" target="_blank">View Current</a></div>
+  <label for="edit_pdf_url">PDF File <span class="optional">(Optional)</span></label>
+  <div class="file-upload-container" ondrop="handleDrop(event, 'edit-pdf')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+    <input type="file" id="edit_pdf_url" name="pdf_url" class="file-input" accept=".pdf" onchange="handleFileChange(event, 'edit-pdf')">
+    <div class="file-upload-content">
+      <div class="file-upload-icon">
+        <i class="fas fa-file-pdf"></i>
+      </div>
+      <div class="file-upload-text">Drag & drop new PDF file here</div>
+      <div class="file-upload-hint">or click to browse (PDF - Max 50MB)</div>
+    </div>
+  </div>
+  <div class="file-preview" id="edit-pdf-preview">
+    ${pub.pdf_url ? `
+      <div class="file-info">
+        <div class="file-details">
+          <div class="file-icon"><i class="fas fa-file-pdf"></i></div>
+          <div>
+            <div class="file-name">Current: ${pub.pdf_url.split('/').pop() || 'PDF File'}</div>
+            <div class="file-size"><a href="${pub.pdf_url}" target="_blank">View Current PDF</a></div>
+          </div>
+        </div>
+        <div class="file-actions">
+          <button type="button" class="file-remove-btn" onclick="removeFile('edit-pdf')">
+            <i class="fas fa-trash"></i> Remove
+          </button>
         </div>
       </div>
-      <div class="file-actions">
-        <button type="button" class="file-remove-btn" onclick="removeFile('edit-pdf')">
-          <i class="fas fa-trash"></i> Remove
-        </button>
-      </div>
-    </div>
-  ` : ''}
-</div>
-<!-- ADD THIS UPLOAD PROGRESS SECTION -->
-<div class="upload-progress" id="edit-pdf-progress">
-  <div class="progress-bar">
-    <div class="progress-fill" id="edit-pdf-progress-fill"></div>
+    ` : ''}
   </div>
-  <div class="progress-text" id="edit-pdf-progress-text">Uploading...</div>
+  <div class="upload-progress" id="edit-pdf-progress">
+    <div class="progress-bar">
+      <div class="progress-fill" id="edit-pdf-progress-fill"></div>
+    </div>
+    <div class="progress-text" id="edit-pdf-progress-text">Uploading...</div>
+  </div>
+  <input type="hidden" id="edit_pdf_url_link" name="pdf_url_link" value="${pub.pdf_url || ''}">
 </div>
-<input type="hidden" id="edit_pdf_url_link" name="pdf_url_link" value="${pub.pdf_url || ''}">
-          </div>
         </div>
       </div>
 
