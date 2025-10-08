@@ -837,46 +837,29 @@ Current Issue
 </h2>
 </div>
 
-<!-- Horizontal layout for current issue -->
-<div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
-    <!-- Journal covers - Left side -->
-    <div class="lg:col-span-1 p-2 flex justify-center items-center bg-gray-50">
-    <div class="w-full h-full flex justify-center items-center">
-        <img src="https://dqdhiu.netlify.app/vol7no2.jpg" alt="Islamic Insight Journal Cover" class="w-full h-full max-w-none max-h-none object-contain rounded-lg shadow-md">
+<!-- Loading State -->
+<div id="current-issue-loading" class="text-center py-12">
+    <div class="inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+    <p class="mt-4 text-gray-600">Loading current issue...</p>
+</div>
+
+<!-- Error State -->
+<div id="current-issue-error" class="text-center py-12" style="display: none;">
+    <div class="text-red-500 mb-4">
+        <i class="fas fa-exclamation-triangle text-4xl"></i>
     </div>
+    <h3 class="text-lg font-medium text-gray-900 mb-2">Error Loading Current Issue</h3>
+    <p class="text-gray-600">Failed to load the latest issue. Please try again later.</p>
 </div>
 
-    <!-- Content - Right side -->
-    <div class="lg:col-span-2 p-6">
-        <h3 class="text-xl sm:text-2xl font-semibold academic-title text-gray-900 mb-4">
-        Vol. 7 No. 2 (2024): ISLAMIC INSIGHT JOURNAL OF ISLAMIC STUDIES
-        </h3>
-
-        <p class="text-gray-700 mb-6 leading-relaxed text-justify">
-        Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world. It welcomes original scholarship across various disciplines, encompassing textual analysis of the Quran and Hadith, Islamic legal and theological discourse, philosophy, comparative religion, social sciences, and the historical and cultural experiences of Muslims. Notably, IIJIS employs a rigorous double-blind peer review process to ensure the quality of published works.
-        </p>
-
-        <div class="mb-6">
-            <p class="text-sm text-gray-600">
-            <i class="far fa-calendar-alt mr-2"></i><strong>Published:</strong> 2024-12-01
-            </p>
-        </div>
-
-        <div class="flex justify-between items-center">
-            <button 
-onclick="location.href='https://dqdhiu.netlify.app/issues?issue=issue5'" 
-class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
->
-View Articles <i class="fas fa-arrow-right ml-2"></i>
-</button>
-
-        </div>
-    </div>
+<!-- Dynamic Current Issue Container -->
+<div id="current-issue-container" style="display: none;">
+    <!-- Content will be dynamically populated -->
 </div>
-</div>
+
 </div>
 </section>
+
 
  <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
@@ -1287,6 +1270,227 @@ window.addEventListener('journalDataLoaded', function() {
     console.log('Journal data loaded event received');
     loadJournalData();
 });
+
+// Current Issue Loader
+class CurrentIssueLoader {
+    constructor() {
+        this.currentIssue = null;
+    }
+
+    async init() {
+        try {
+            this.showLoading(true);
+            
+            // Wait for journal data to be loaded
+            if (!window.journalData) {
+                await this.waitForJournalData();
+            }
+
+            if (!window.journalData || !window.journalData.issues) {
+                throw new Error('Journal data not available');
+            }
+
+            this.loadCurrentIssue();
+            this.renderCurrentIssue();
+            
+            this.showLoading(false);
+            document.getElementById('current-issue-container').style.display = 'block';
+
+        } catch (error) {
+            console.error('Error loading current issue:', error);
+            this.showError();
+        }
+    }
+
+    waitForJournalData(timeout = 10000) {
+        return new Promise((resolve, reject) => {
+            const startTime = Date.now();
+            
+            const checkData = () => {
+                if (window.journalData && window.journalData.issues) {
+                    resolve();
+                } else if (Date.now() - startTime > timeout) {
+                    reject(new Error('Timeout waiting for journal data'));
+                } else {
+                    setTimeout(checkData, 100);
+                }
+            };
+            
+            checkData();
+        });
+    }
+
+    loadCurrentIssue() {
+        const issues = Object.entries(window.journalData.issues).map(([issueId, issue]) => ({
+            id: issueId,
+            ...issue
+        }));
+
+        // Sort to get the latest issue (by year, then volume, then number)
+        issues.sort((a, b) => {
+            if (b.year !== a.year) return b.year - a.year;
+            if (b.volume !== a.volume) return b.volume - a.volume;
+            return b.number - a.number;
+        });
+
+        if (issues.length > 0) {
+            this.currentIssue = issues[0];
+        }
+    }
+
+    renderCurrentIssue() {
+        if (!this.currentIssue) {
+            this.showError();
+            return;
+        }
+
+        const issue = this.currentIssue;
+        const abstract = issue.description || issue.abstract || this.generateDefaultAbstract(issue);
+        
+        const currentIssueHTML = `
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden current-issue-card">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
+                    <!-- Journal cover - Left side -->
+                    <div class="lg:col-span-1 p-2 flex justify-center items-center bg-gray-50">
+                        <div class="current-issue-image-container">
+                            <img src="${issue.coverImage || 'https://via.placeholder.com/300x400/4f46e5/ffffff?text=Journal+Cover'}" 
+                                 alt="${issue.title}" 
+                                 class="current-issue-image"
+                                 onerror="this.src='https://via.placeholder.com/300x400/4f46e5/ffffff?text=Journal+Cover'">
+                        </div>
+                    </div>
+                    <!-- Content - Right side -->
+                    <div class="lg:col-span-2 p-6">
+                        <h3 class="text-xl sm:text-2xl font-semibold academic-title text-gray-900 mb-4">
+                            ${issue.title}
+                        </h3>
+                        
+                        <p class="text-gray-700 mb-6 leading-relaxed text-justify">
+                            ${abstract}
+                        </p>
+                        
+                        <div class="mb-6 space-y-2">
+                            <p class="text-sm text-gray-600">
+                                <i class="far fa-calendar-alt mr-2"></i><strong>Published:</strong> ${this.formatDate(issue.publishedDate)}
+                            </p>
+                            <p class="text-sm text-gray-600">
+                                <i class="fas fa-book mr-2"></i><strong>Volume:</strong> ${issue.volume}, Number ${issue.number}
+                            </p>
+                            <p class="text-sm text-gray-600">
+                                <i class="fas fa-file-alt mr-2"></i><strong>Articles:</strong> ${issue.articles ? issue.articles.length : 0} article${issue.articles && issue.articles.length !== 1 ? 's' : ''}
+                            </p>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <button 
+                                onclick="window.location.href='issues.html?issue=${issue.id}'" 
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                                View Articles <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.getElementById('current-issue-container').innerHTML = currentIssueHTML;
+    }
+
+    generateDefaultAbstract(issue) {
+        return `Islamic Insight Journal of Islamic Studies (IIJIS) functions as a bilingual (English and Arabic) platform for disseminating exceptional academic research on Islam and the Muslim world. This issue contains ${issue.articles ? issue.articles.length : 0} scholarly articles covering various aspects of Islamic studies, including Quranic studies, Hadith analysis, Islamic jurisprudence, theology, philosophy, and contemporary Islamic thought.`;
+    }
+
+    formatDate(dateString) {
+        const date = new Date(dateString);
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+    }
+
+    showLoading(show) {
+        const loadingState = document.getElementById('current-issue-loading');
+        const errorState = document.getElementById('current-issue-error');
+        const container = document.getElementById('current-issue-container');
+
+        if (loadingState) {
+            loadingState.style.display = show ? 'block' : 'none';
+        }
+        if (errorState) {
+            errorState.style.display = 'none';
+        }
+        if (container && !show) {
+            container.style.display = 'block';
+        }
+    }
+
+    showError() {
+        const loadingState = document.getElementById('current-issue-loading');
+        const errorState = document.getElementById('current-issue-error');
+        const container = document.getElementById('current-issue-container');
+        
+        if (loadingState) loadingState.style.display = 'none';
+        if (container) container.style.display = 'none';
+        if (errorState) errorState.style.display = 'block';
+    }
+}
+
+// Initialize Current Issue Loader
+let currentIssueLoader;
+
+// Update the existing DOMContentLoaded event listener
+document.addEventListener('DOMContentLoaded', function() {
+    setupEventListeners();
+    loadJournalData();
+    
+    // Initialize current issue loader
+    currentIssueLoader = new CurrentIssueLoader();
+});
+
+// Update the existing loadJournalData function
+async function loadJournalData() {
+    try {
+        console.log('Loading journal data for search...');
+        
+        // Wait for the data to be loaded by sheets-loader.js
+        if (typeof sheetsDataManager !== 'undefined') {
+            await sheetsDataManager.loadFromSheets();
+            allArticles = await sheetsDataManager.getAllArticles();
+        } else {
+            // Fallback: wait for global data to be available
+            await new Promise((resolve) => {
+                const checkData = () => {
+                    if (window.journalData && window.articlesData) {
+                        allArticles = Object.values(window.articlesData);
+                        resolve();
+                    } else {
+                        setTimeout(checkData, 100);
+                    }
+                };
+                checkData();
+            });
+        }
+        
+        isDataLoaded = true;
+        console.log('Articles loaded for search:', allArticles.length);
+        
+        // Initialize current issue after data is loaded
+        if (currentIssueLoader) {
+            await currentIssueLoader.init();
+        }
+        
+    } catch (error) {
+        console.error('Error loading journal data:', error);
+        isDataLoaded = false;
+        if (currentIssueLoader) {
+            currentIssueLoader.showError();
+        }
+    }
+}
+
+// Also listen for the journalDataLoaded event
+window.addEventListener('journalDataLoaded', async function() {
+    console.log('Journal data loaded event received');
+    await loadJournalData();
+});    
 </script>
 </body>
 </html>
