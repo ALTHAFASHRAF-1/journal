@@ -1532,6 +1532,7 @@
 }
 
 
+
       function validateFile(file, type) {
         const maxSizes = {
           cover: 10 * 1024 * 1024, // 10MB for images
@@ -1602,10 +1603,7 @@
   preview.classList.add('active');
 }
 
-
-
-
-      function removeFile(type) {
+ function removeFile(type) {
   let fileInputId, hiddenInputId;
   
   if (type === 'cover') {
@@ -1634,6 +1632,7 @@
   
   uploadedFiles[type] = null;
 }
+
 
 
  async function uploadFile(file, type) {
@@ -1766,6 +1765,7 @@
     }, 3000);
   }
 }
+
 
 
 
@@ -2323,6 +2323,7 @@ function editPublication(index) {
   <div class="progress-text" id="edit-cover-progress-text">Uploading...</div>
 </div>
 
+
             <input type="hidden" id="edit_issue_cover_image_url" name="issue_cover_image_url" value="${pub.issue_cover_image || ''}">
           </div>
         </div>
@@ -2437,6 +2438,7 @@ function editPublication(index) {
   <div class="progress-text" id="edit-pdf-progress-text">Uploading...</div>
 </div>
 
+
             <input type="hidden" id="edit_pdf_url_link" name="pdf_url_link" value="${pub.pdf_url || ''}">
           </div>
         </div>
@@ -2539,7 +2541,7 @@ async function handleEditFormSubmission(e) {
     data.action = 'update';
     data.original_article_id = originalData.article_id;
 
-   // Override with uploaded file URLs if they exist, otherwise keep original
+// Override with uploaded file URLs if they exist, otherwise keep original
 const editCoverImageUrl = document.getElementById('edit_issue_cover_image_url').value;
 const editPdfUrl = document.getElementById('edit_pdf_url_link').value;
 
