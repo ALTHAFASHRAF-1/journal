@@ -1647,7 +1647,6 @@
 }
 
 
-
  async function uploadFile(file, type) {
   console.log(`Starting upload for ${type}`, file.name);
   
@@ -2328,31 +2327,31 @@ function editPublication(index) {
               </div>
             </div>
             <div class="file-preview" id="edit-cover-preview">
-              ${pub.issue_cover_image ? `
-                <div class="file-info">
-                  <div class="file-details">
-                    <div class="file-icon"><i class="fas fa-image"></i></div>
-                    <div>
-                      <div class="file-name">Current Cover Image</div>
-                      <div class="file-size"><a href="${pub.issue_cover_image}" target="_blank">View Current</a></div>
-                    </div>
-                  </div>
-                  <div class="file-actions">
-                    <button type="button" class="file-remove-btn" onclick="removeFile('edit-cover')">
-                      <i class="fas fa-trash"></i> Remove
-                    </button>
-                  </div>
-                </div>
-              ` : ''}
-            </div>
-            <!-- Add this upload progress section for edit cover -->
-            <div class="upload-progress" id="edit-cover-progress">
-              <div class="progress-bar">
-                <div class="progress-fill" id="edit-cover-progress-fill"></div>
-              </div>
-              <div class="progress-text" id="edit-cover-progress-text">Uploading...</div>
-            </div>
-            <input type="hidden" id="edit_issue_cover_image_url" name="issue_cover_image_url" value="${pub.issue_cover_image || ''}">
+  ${pub.issue_cover_image ? `
+    <div class="file-info">
+      <div class="file-details">
+        <div class="file-icon"><i class="fas fa-image"></i></div>
+        <div>
+          <div class="file-name">Current Cover Image</div>
+          <div class="file-size"><a href="${pub.issue_cover_image}" target="_blank">View Current</a></div>
+        </div>
+      </div>
+      <div class="file-actions">
+        <button type="button" class="file-remove-btn" onclick="removeFile('edit-cover')">
+          <i class="fas fa-trash"></i> Remove
+        </button>
+      </div>
+    </div>
+  ` : ''}
+</div>
+<!-- ADD THIS UPLOAD PROGRESS SECTION -->
+<div class="upload-progress" id="edit-cover-progress">
+  <div class="progress-bar">
+    <div class="progress-fill" id="edit-cover-progress-fill"></div>
+  </div>
+  <div class="progress-text" id="edit-cover-progress-text">Uploading...</div>
+</div>
+<input type="hidden" id="edit_issue_cover_image_url" name="issue_cover_image_url" value="${pub.issue_cover_image || ''}">
           </div>
         </div>
       </div>
@@ -2447,31 +2446,31 @@ function editPublication(index) {
               </div>
             </div>
             <div class="file-preview" id="edit-pdf-preview">
-              ${pub.pdf_url ? `
-                <div class="file-info">
-                  <div class="file-details">
-                    <div class="file-icon"><i class="fas fa-file-pdf"></i></div>
-                    <div>
-                      <div class="file-name">Current PDF File</div>
-                      <div class="file-size"><a href="${pub.pdf_url}" target="_blank">View Current</a></div>
-                    </div>
-                  </div>
-                  <div class="file-actions">
-                    <button type="button" class="file-remove-btn" onclick="removeFile('edit-pdf')">
-                      <i class="fas fa-trash"></i> Remove
-                    </button>
-                  </div>
-                </div>
-              ` : ''}
-            </div>
-            <!-- Add this upload progress section for edit PDF -->
-            <div class="upload-progress" id="edit-pdf-progress">
-              <div class="progress-bar">
-                <div class="progress-fill" id="edit-pdf-progress-fill"></div>
-              </div>
-              <div class="progress-text" id="edit-pdf-progress-text">Uploading...</div>
-            </div>
-            <input type="hidden" id="edit_pdf_url_link" name="pdf_url_link" value="${pub.pdf_url || ''}">
+  ${pub.pdf_url ? `
+    <div class="file-info">
+      <div class="file-details">
+        <div class="file-icon"><i class="fas fa-file-pdf"></i></div>
+        <div>
+          <div class="file-name">Current PDF File</div>
+          <div class="file-size"><a href="${pub.pdf_url}" target="_blank">View Current</a></div>
+        </div>
+      </div>
+      <div class="file-actions">
+        <button type="button" class="file-remove-btn" onclick="removeFile('edit-pdf')">
+          <i class="fas fa-trash"></i> Remove
+        </button>
+      </div>
+    </div>
+  ` : ''}
+</div>
+<!-- ADD THIS UPLOAD PROGRESS SECTION -->
+<div class="upload-progress" id="edit-pdf-progress">
+  <div class="progress-bar">
+    <div class="progress-fill" id="edit-pdf-progress-fill"></div>
+  </div>
+  <div class="progress-text" id="edit-pdf-progress-text">Uploading...</div>
+</div>
+<input type="hidden" id="edit_pdf_url_link" name="pdf_url_link" value="${pub.pdf_url || ''}">
           </div>
         </div>
       </div>
@@ -2576,35 +2575,36 @@ async function handleEditFormSubmission(e) {
       }
     }
 
-    // Handle file URLs - use uploaded URLs or existing values
-    const editCoverImageUrl = document.getElementById('edit_issue_cover_image_url').value;
-    const editPdfUrl = document.getElementById('edit_pdf_url_link').value;
+    // In handleEditFormSubmission function, make sure this part exists:
+// Handle file URLs - use uploaded URLs or existing values
+const editCoverImageUrl = document.getElementById('edit_issue_cover_image_url').value;
+const editPdfUrl = document.getElementById('edit_pdf_url_link').value;
 
-    // Handle cover image URL
-    if (editCoverImageUrl && editCoverImageUrl !== originalData.issue_cover_image) {
-      // New file uploaded
-      data.issue_cover_image = editCoverImageUrl;
-      data.issue_cover_image_url = editCoverImageUrl;
-      console.log('Using new cover image:', editCoverImageUrl);
-    } else if (originalData.issue_cover_image) {
-      // Keep original if no new upload
-      data.issue_cover_image = originalData.issue_cover_image;
-      data.issue_cover_image_url = originalData.issue_cover_image;
-      console.log('Keeping original cover image:', originalData.issue_cover_image);
-    }
+// Handle cover image URL
+if (editCoverImageUrl && editCoverImageUrl !== originalData.issue_cover_image) {
+  // New file uploaded
+  data.issue_cover_image = editCoverImageUrl;
+  data.issue_cover_image_url = editCoverImageUrl;
+  console.log('Using new cover image:', editCoverImageUrl);
+} else if (originalData.issue_cover_image) {
+  // Keep original if no new upload
+  data.issue_cover_image = originalData.issue_cover_image;
+  data.issue_cover_image_url = originalData.issue_cover_image;
+  console.log('Keeping original cover image:', originalData.issue_cover_image);
+}
 
-    // Handle PDF URL
-    if (editPdfUrl && editPdfUrl !== originalData.pdf_url) {
-      // New file uploaded
-      data.pdf_url = editPdfUrl;
-      data.pdf_url_link = editPdfUrl;
-      console.log('Using new PDF:', editPdfUrl);
-    } else if (originalData.pdf_url) {
-      // Keep original if no new upload
-      data.pdf_url = originalData.pdf_url;
-      data.pdf_url_link = originalData.pdf_url;
-      console.log('Keeping original PDF:', originalData.pdf_url);
-    }
+// Handle PDF URL
+if (editPdfUrl && editPdfUrl !== originalData.pdf_url) {
+  // New file uploaded
+  data.pdf_url = editPdfUrl;
+  data.pdf_url_link = editPdfUrl;
+  console.log('Using new PDF:', editPdfUrl);
+} else if (originalData.pdf_url) {
+  // Keep original if no new upload
+  data.pdf_url = originalData.pdf_url;
+  data.pdf_url_link = originalData.pdf_url;
+  console.log('Keeping original PDF:', originalData.pdf_url);
+}
 
     console.log('Submitting update data:', data);
 
