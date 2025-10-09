@@ -780,79 +780,81 @@ searchAllArticles(query) {
             const fontFamily = isArabic ? "'Amiri', 'Scheherazade New', serif" : "'Crimson Text', 'Times New Roman', serif";
             
             return `
-                <div id="article-${article.id}" class="article-card bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden fade-in ${contentClass}" 
-                     style="animation-delay: ${index * 0.1}s; ${directionStyle} font-family: ${fontFamily};" lang="${langAttr}">
-                    <div class="p-6 article-content">
-                        <h3 class="text-xl font-semibold academic-title text-gray-900 mb-3 leading-tight" 
-                            style="font-family: ${fontFamily}; font-weight: ${isArabic ? '700' : '600'}; ${directionStyle}">
-                            ${this.currentSearchTerm ? this.highlightSearchTerm(article.title, this.currentSearchTerm) : this.escapeHtml(article.title)}
-                        </h3>
+    <div id="article-${article.id}" class="article-card bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden fade-in ${contentClass}" 
+         style="animation-delay: ${index * 0.1}s; ${directionStyle} font-family: ${fontFamily};" lang="${langAttr}">
+        <div class="p-6 article-content">
+            <h3 class="text-xl font-semibold academic-title text-gray-900 mb-3 leading-tight" 
+                style="font-family: ${fontFamily}; font-weight: ${isArabic ? '700' : '600'}; ${directionStyle}">
+                ${this.currentSearchTerm ? this.highlightSearchTerm(article.title, this.currentSearchTerm) : this.escapeHtml(article.title)}
+            </h3>
 
-                        <div class="mb-3" style="${directionStyle}">
-                        <p class="text-sm font-medium text-blue-600" 
-                        style="font-family: ${fontFamily}; font-weight: 600; ${directionStyle}">
-                        ${this.getDisplayAuthors(article)}
-                        </p>
-                        </div>
+            <div class="mb-3" style="${directionStyle}">
+            <p class="text-sm font-medium text-blue-600" 
+            style="font-family: ${fontFamily}; font-weight: 600; ${directionStyle}">
+            ${this.getDisplayAuthors(article)}
+            </p>
+            </div>
 
-                        <div class="mb-4 text-sm text-gray-600" style="${directionStyle}">
-                            <i class="far fa-calendar-alt ${isArabic ? 'ml-2' : 'mr-2'}"></i>
-                            <span>${this.formatDate(article.date)}</span>
-                            <span class="mx-2">•</span>
-                            <span>Pages ${article.pages}</span>
-                            ${article.doi ? `<span class="mx-2">•</span><span>DOI: ${article.doi}</span>` : ''}
-                        </div>
+            <!-- METADATA SECTION - FORCE LTR FOR ARABIC ARTICLES -->
+            <div class="mb-4 text-sm text-gray-600" style="direction: ltr !important; text-align: left !important;">
+                <i class="far fa-calendar-alt mr-2"></i>
+                <span>${this.formatDate(article.date)}</span>
+                <span class="mx-2">•</span>
+                <span>Pages ${article.pages}</span>
+                ${article.doi ? `<span class="mx-2">•</span><span>DOI: ${article.doi}</span>` : ''}
+            </div>
 
-                        <div class="article-description" style="${directionStyle}">
-                            <p class="text-gray-700 text-sm leading-relaxed mb-4" 
-                               style="font-family: ${fontFamily}; font-size: ${isArabic ? '1.1em' : '0.95em'}; 
-                                      line-height: ${isArabic ? '2' : '1.7'}; text-align: justify; ${directionStyle}">
-                                ${this.currentSearchTerm ? this.highlightSearchTerm(article.abstract, this.currentSearchTerm) : this.escapeHtml(article.abstract)}
-                            </p>
+            <div class="article-description" style="${directionStyle}">
+    <p class="text-gray-700 text-sm leading-relaxed mb-4" 
+       style="font-family: ${fontFamily}; font-size: ${isArabic ? '0.9em' : '0.95em'}; 
+              line-height: ${isArabic ? '1.8' : '1.7'}; text-align: justify; ${directionStyle}">
+        ${this.currentSearchTerm ? this.highlightSearchTerm(article.abstract, this.currentSearchTerm) : this.escapeHtml(article.abstract)}
+    </p>
 
-                            <div class="mb-4">
-                                <div class="flex flex-wrap gap-2 ${isArabic ? 'justify-end' : 'justify-start'}" 
-                                     style="direction: ${isArabic ? 'rtl' : 'ltr'};">
-                                    ${(article.keywords || []).filter(k => k.trim()).map(keyword => 
-                                        `<span class="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full"
-                                                style="font-family: ${fontFamily}; direction: ${isArabic ? 'rtl' : 'ltr'};">
-                                            ${this.currentSearchTerm ? this.highlightSearchTerm(keyword, this.currentSearchTerm) : this.escapeHtml(keyword)}
-                                        </span>`
-                                    ).join('')}
-                                </div>
-                            </div>
-                        </div>
+    <div class="mb-4">
+        <div class="flex flex-wrap gap-2 ${isArabic ? 'justify-end' : 'justify-start'}" 
+             style="direction: ${isArabic ? 'rtl' : 'ltr'};">
+            ${(article.keywords || []).filter(k => k.trim()).map(keyword => 
+                `<span class="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full"
+                        style="font-family: ${fontFamily}; direction: ${isArabic ? 'rtl' : 'ltr'};">
+                    ${this.currentSearchTerm ? this.highlightSearchTerm(keyword, this.currentSearchTerm) : this.escapeHtml(keyword)}
+                </span>`
+            ).join('')}
+        </div>
+    </div>
+</div>
 
-                        <div class="article-footer">
-                            <div class="flex justify-between items-center" style="${directionStyle}">
-                                <a href="${article.htmlFile}" 
-                                   class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors text-center"
-                                   style="font-family: ${fontFamily};">
-                                    Read More <i class="fas fa-arrow-${isArabic ? 'left' : 'right'} ${isArabic ? 'mr-2' : 'ml-2'}"></i>
-                                </a>
+            <!-- FOOTER SECTION - FORCE LTR FOR ARABIC ARTICLES -->
+            <div class="article-footer" style="direction: ltr !important; text-align: left !important;">
+                <div class="flex justify-between items-center">
+                    <a href="${article.htmlFile}" 
+                       class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors text-center"
+                       style="font-family: ${fontFamily};">
+                        Read More <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
 
-                                <div class="flex space-x-2">
-                                    <button onclick="journalLoader.downloadPDF(${article.id})" 
-                                            class="text-gray-600 hover:text-blue-600 transition-colors p-2" 
-                                            title="Download PDF">
-                                        <i class="fas fa-download"></i>
-                                    </button>
-                                    <button onclick="journalLoader.shareArticle(${article.id})" 
-                                            class="text-gray-600 hover:text-blue-600 transition-colors p-2" 
-                                            title="Share Article">
-                                        <i class="fas fa-share-alt"></i>
-                                    </button>
-                                    <button onclick="journalLoader.citeArticle(${article.id})" 
-                                            class="text-gray-600 hover:text-blue-600 transition-colors p-2" 
-                                            title="Citation">
-                                        <i class="fas fa-quote-right"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="flex space-x-2">
+                        <button onclick="journalLoader.downloadPDF(${article.id})" 
+                                class="text-gray-600 hover:text-blue-600 transition-colors p-2" 
+                                title="Download PDF">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button onclick="journalLoader.shareArticle(${article.id})" 
+                                class="text-gray-600 hover:text-blue-600 transition-colors p-2" 
+                                title="Share Article">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                        <button onclick="journalLoader.citeArticle(${article.id})" 
+                                class="text-gray-600 hover:text-blue-600 transition-colors p-2" 
+                                title="Citation">
+                            <i class="fas fa-quote-right"></i>
+                        </button>
                     </div>
                 </div>
-            `;
+            </div>
+        </div>
+    </div>
+`;
         }).join('');
 
         articlesGrid.innerHTML = articlesHTML;
