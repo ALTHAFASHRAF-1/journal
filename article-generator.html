@@ -3,15 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Article Format Generator - Islamic Insight Journal">
-<meta name="keywords" content="article generator, academic formatting, Islamic studies, journal submission">
+<meta name="description" content="Article Generator - Islamic Insight Journal">
+<meta name="keywords" content="article generator, academic paper, Islamic studies, journal submission">
 <meta name="author" content="Islamic Insight Journal">
-<title>Article Format Generator - Islamic Insight</title>
+<title>Article Generator - Islamic Insight</title>
 <link rel="icon" type="image/png" href="logo.png">
 
 <!-- CSS Libraries -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -60,71 +61,130 @@ body {
     font-weight: 400;
 }
 
-/* Form Container */
-.form-container {
-    max-width: 1200px;
+.mobile-menu {
+    transition: all 0.3s ease;
+}
+
+/* Article Preview Styles */
+.article-preview {
+    max-width: 210mm;
+    min-height: 297mm;
     margin: 2rem auto;
     background: white;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    overflow: hidden;
+    padding: 25mm;
+    position: relative;
+    font-family: 'Crimson Text', serif;
+    line-height: 1.6;
+    font-size: 12pt;
 }
 
-.form-section {
-    padding: 2rem;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.form-section:last-child {
-    border-bottom: none;
-}
-
-.form-section h3 {
+.article-title {
+    font-size: 16pt;
+    font-weight: bold;
+    text-align: center;
     margin-bottom: 1rem;
-    color: #1f2937;
+}
+
+.article-author {
+    font-size: 12pt;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+.article-section {
+    margin-bottom: 1.5rem;
+}
+
+.article-heading {
+    font-size: 14pt;
+    font-weight: bold;
+    margin: 1.5rem 0 0.5rem 0;
+}
+
+.article-subheading {
+    font-size: 12pt;
+    font-weight: bold;
+    margin: 1rem 0 0.5rem 0;
+}
+
+.article-paragraph {
+    text-align: justify;
+    margin-bottom: 0.75rem;
+    text-indent: 1.5rem;
+}
+
+.article-keywords {
+    font-style: italic;
+    margin: 1rem 0;
+}
+
+.article-footnotes {
+    font-size: 10pt;
+    margin-top: 2rem;
+    border-top: 1px solid #ccc;
+    padding-top: 1rem;
+}
+
+.article-references {
+    font-size: 11pt;
+    margin-top: 2rem;
+}
+
+.footnote-ref {
+    vertical-align: super;
+    font-size: 0.7em;
+}
+
+/* Form Styles */
+.form-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .form-group {
     margin-bottom: 1.5rem;
 }
 
-.form-group label {
+.form-label {
     display: block;
     margin-bottom: 0.5rem;
-    font-weight: 500;
+    font-weight: 600;
     color: #374151;
 }
 
-.form-control {
+.form-input, .form-textarea, .form-select {
     width: 100%;
     padding: 0.75rem;
-    border: 2px solid #d1d5db;
+    border: 1px solid #d1d5db;
     border-radius: 4px;
-    font-size: 0.875rem;
-    transition: border-color 0.15s ease-in-out;
+    font-size: 14px;
+    transition: border-color 0.2s;
 }
 
-.form-control:focus {
+.form-input:focus, .form-textarea:focus, .form-select:focus {
     outline: none;
     border-color: #3b82f6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-textarea.form-control {
+.form-textarea {
+    min-height: 120px;
     resize: vertical;
-    min-height: 100px;
 }
 
 .btn {
     padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 4px;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.15s ease-in-out;
-    text-decoration: none;
-    display: inline-block;
-    text-align: center;
+    transition: all 0.2s;
 }
 
 .btn-primary {
@@ -136,15 +196,6 @@ textarea.form-control {
     background-color: #2563eb;
 }
 
-.btn-success {
-    background-color: #10b981;
-    color: white;
-}
-
-.btn-success:hover {
-    background-color: #059669;
-}
-
 .btn-secondary {
     background-color: #6b7280;
     color: white;
@@ -154,211 +205,92 @@ textarea.form-control {
     background-color: #4b5563;
 }
 
-/* Preview Container */
-.preview-container {
-    max-width: 210mm;
-    min-height: 297mm;
-    margin: 2rem auto;
-    background: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 20mm;
-    position: relative;
-    display: none;
+.btn-success {
+    background-color: #10b981;
+    color: white;
 }
 
-/* Article Styles (Matching the Word document) */
-.article-header {
-    text-align: right;
-    font-size: 10pt;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid #000;
-    padding-bottom: 0.5rem;
+.btn-success:hover {
+    background-color: #059669;
 }
 
-.article-title {
-    font-family: 'Crimson Text', serif;
-    font-size: 14pt;
-    font-weight: bold;
-    text-align: center;
-    margin: 2rem 0 1rem 0;
-    line-height: 1.3;
-}
-
-.article-author {
-    font-size: 12pt;
-    text-align: center;
-    margin-bottom: 2rem;
-    font-weight: 500;
-}
-
-.article-abstract {
-    margin: 2rem 0;
-}
-
-.article-abstract h4 {
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-.article-keywords {
-    margin: 1rem 0 2rem 0;
-}
-
-.article-keywords h4 {
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-.article-content {
-    text-align: justify;
-    line-height: 1.6;
-    font-size: 10pt;
-}
-
-.article-content h2 {
-    font-size: 12pt;
-    font-weight: bold;
-    margin: 2rem 0 1rem 0;
-}
-
-.article-content h3 {
-    font-size: 11pt;
-    font-weight: bold;
-    margin: 1.5rem 0 0.75rem 0;
-}
-
-.article-content p {
-    margin-bottom: 1rem;
-    text-indent: 0.5in;
-}
-
-.article-content p:first-child {
-    text-indent: 0;
-}
-
-.references {
-    margin-top: 2rem;
-    border-top: 1px solid #ccc;
-    padding-top: 1rem;
-}
-
-.references h3 {
-    font-size: 12pt;
-    font-weight: bold;
+.section-controls {
+    display: flex;
+    gap: 0.5rem;
     margin-bottom: 1rem;
 }
 
-.reference-item {
-    margin-bottom: 0.5rem;
-    text-indent: -0.5in;
-    padding-left: 0.5in;
-    font-size: 9pt;
-}
-
-.footnote {
-    font-size: 8pt;
-    border-top: 1px solid #ccc;
-    margin-top: 1rem;
-    padding-top: 0.5rem;
-}
-
-/* Page numbering */
-.page-number {
-    position: absolute;
-    bottom: 15mm;
-    right: 20mm;
-    font-size: 10pt;
-}
-
-/* Split view */
-.split-view {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    max-width: 1800px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-}
-
-.editor-panel, .preview-panel {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-}
-
-.panel-header {
-    background: #f8f9fa;
+.content-section {
+    background: #f9fafb;
     padding: 1rem;
-    border-bottom: 1px solid #e5e7eb;
-    font-weight: 600;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    border-left: 4px solid #3b82f6;
 }
 
-.editor-content {
-    max-height: 80vh;
-    overflow-y: auto;
+.footnote-item {
+    background: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    border-left: 3px solid #6b7280;
 }
 
-.preview-content {
-    max-height: 80vh;
-    overflow-y: auto;
-    padding: 2rem;
+/* Navigation adjustments */
+.nav-container {
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    margin-bottom: 0;
 }
 
-/* Responsive */
-@media (max-width: 1200px) {
-    .split-view {
-        grid-template-columns: 1fr;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .form-container {
+        margin: 1rem;
+        padding: 1rem;
     }
     
-    .preview-container {
-        max-width: 95%;
+    .logo-image {
+        height: 32px;
+    }
+
+    .logo-text {
+        font-size: 1rem;
+    }
+
+    .logo-subtitle {
+        font-size: 0.65rem;
+    }
+    
+    .article-preview {
+        margin: 1rem;
         padding: 15mm;
     }
 }
 
-@media (max-width: 768px) {
-    .form-container {
-        margin: 1rem;
-        border-radius: 0;
+@media (max-width: 480px) {
+    .logo-text {
+        font-size: 0.9rem;
     }
-    
-    .form-section {
-        padding: 1rem;
-    }
-    
-    .preview-container {
-        padding: 10mm;
-        margin: 1rem;
+
+    .logo-subtitle {
+        font-size: 0.6rem;
     }
 }
 
-/* Utility classes */
-.hidden {
-    display: none !important;
-}
-
-.text-center {
-    text-align: center;
-}
-
-.text-right {
-    text-align: right;
-}
-
-.mb-4 {
-    margin-bottom: 1rem;
-}
-
-.mt-4 {
-    margin-top: 1rem;
+/* Footer adjustments */
+footer {
+    margin-top: 0;
 }
 </style>
 </head>
 
 <body>
     <!-- Navigation -->
-    <nav class="bg-white shadow-md sticky top-0 z-40">
+    <nav class="nav-container">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
@@ -380,7 +312,10 @@ textarea.form-control {
                     <div class="flex items-center space-x-6">
                         <a href="index.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Home</a>
                         <a href="call-for-papers.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Call For Paper</a>
-                        <a href="#" class="text-blue-900 font-semibold px-3 py-2 text-sm font-medium">Article Generator</a>
+                        <a href="article-generator.html" class="text-blue-900 font-semibold px-3 py-2 text-sm font-medium">Article Format</a>
+                        <a href="index.html#featured" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Current Issue</a>
+                        <a href="all-issues.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">All Issues</a>
+                        <a href="index.html#about" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">About</a>
                     </div>
                 </div>
 
@@ -392,183 +327,136 @@ textarea.form-control {
                 </div>
             </div>
         </div>
+
+        <!-- Mobile Navigation -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200 mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Home</a>
+                <a href="call-for-papers.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Call For Paper</a>
+                <a href="article-generator.html" class="block px-3 py-2 text-sm font-medium text-blue-900 font-semibold">Article Format</a>
+                <a href="index.html#featured" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Current Issue</a>
+                <a href="all-issues.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">All Issues</a>
+                <a href="index.html#about" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">About</a>
+            </div>
+        </div>
     </nav>
 
-    <!-- Main Content -->
-    <div class="container mx-auto px-4 py-8">
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold academic-title text-gray-900 mb-4">Article Format Generator</h1>
-            <p class="text-gray-600">Create your academic article in Islamic Insight journal format</p>
-        </div>
+    <!-- Article Generator Form -->
+    <div class="form-container">
+        <h1 class="text-3xl font-bold academic-title text-center mb-2">Article Generator</h1>
+        <p class="text-gray-600 text-center mb-8">Create your article in Islamic Insight Journal format</p>
 
-        <!-- Control Buttons -->
-        <div class="flex justify-center space-x-4 mb-6">
-            <button id="form-view-btn" class="btn btn-primary">
-                <i class="fas fa-edit mr-2"></i>Form View
-            </button>
-            <button id="split-view-btn" class="btn btn-secondary">
-                <i class="fas fa-columns mr-2"></i>Split View
-            </button>
-            <button id="preview-btn" class="btn btn-success">
-                <i class="fas fa-eye mr-2"></i>Preview Article
-            </button>
-            <button id="download-btn" class="btn btn-secondary">
-                <i class="fas fa-download mr-2"></i>Download HTML
-            </button>
-        </div>
-
-        <!-- Form View -->
-        <div id="form-view" class="form-container">
-            <!-- Article Information -->
-            <div class="form-section">
-                <h3 class="text-xl font-bold academic-title"><i class="fas fa-info-circle mr-2"></i>Article Information</h3>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="form-group">
-                        <label for="volume">Volume</label>
-                        <input type="text" id="volume" class="form-control" placeholder="Vol. 8">
-                    </div>
-                    <div class="form-group">
-                        <label for="issue">Issue & Year</label>
-                        <input type="text" id="issue" class="form-control" placeholder="No. 1, 2025">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="form-group">
-                        <label for="page-start">Starting Page</label>
-                        <input type="number" id="page-start" class="form-control" placeholder="59" min="1">
-                    </div>
-                    <div class="form-group">
-                        <label for="header-title">Header Title (Short)</label>
-                        <input type="text" id="header-title" class="form-control" placeholder="Ḥadīth of Self-Knowing">
-                    </div>
-                </div>
+        <form id="article-form">
+            <!-- Basic Information -->
+            <div class="form-group">
+                <label class="form-label" for="article-title">Article Title</label>
+                <input type="text" id="article-title" class="form-input" placeholder="Enter article title" required>
             </div>
 
-            <!-- Article Content -->
-            <div class="form-section">
-                <h3 class="text-xl font-bold academic-title"><i class="fas fa-file-text mr-2"></i>Article Content</h3>
-                
-                <div class="form-group">
-                    <label for="article-title">Article Title</label>
-                    <textarea id="article-title" class="form-control" rows="2" placeholder="ḤADĪTH OF SELF-KNOWING BETWEEN SUFIS AND ḤADĪTH SCHOLARS"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="author-name">Author Name</label>
-                    <input type="text" id="author-name" class="form-control" placeholder="Muhammad Gufran-ul-Haque">
-                </div>
-
-                <div class="form-group">
-                    <label for="abstract">Abstract</label>
-                    <textarea id="abstract" class="form-control" rows="8" placeholder="This paper examines the 'Ḥadīth of Self-knowing,' often quoted as 'Whoever knows himself, knows his Lord,'..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="keywords">Keywords (comma-separated)</label>
-                    <input type="text" id="keywords" class="form-control" placeholder="Self-knowing, Ḥadīth authenticity, Sufi mysticism, kashf, ilhām, Takhrīj">
-                </div>
+            <div class="form-group">
+                <label class="form-label" for="author-name">Author Name</label>
+                <input type="text" id="author-name" class="form-input" placeholder="Enter author name" required>
             </div>
 
-            <!-- Sections -->
-            <div class="form-section">
-                <h3 class="text-xl font-bold academic-title"><i class="fas fa-list mr-2"></i>Article Sections</h3>
-                <p class="text-gray-600 mb-4">Add your article sections. Click "Add Section" to add more sections as needed.</p>
-                
-                <div id="sections-container">
-                    <!-- Section 1 (Introduction) -->
-                    <div class="section-item bg-gray-50 p-4 rounded mb-4">
-                        <div class="flex justify-between items-center mb-2">
-                            <h4 class="font-semibold">Section 1</h4>
-                            <button class="remove-section btn" style="background: #ef4444; color: white; padding: 0.25rem 0.5rem; font-size: 0.75rem;">Remove</button>
-                        </div>
-                        <div class="form-group">
-                            <label>Section Title</label>
-                            <input type="text" class="form-control section-title" placeholder="Introduction">
-                        </div>
-                        <div class="form-group">
-                            <label>Section Content</label>
-                            <textarea class="form-control section-content" rows="6" placeholder="Enter your section content here..."></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <button id="add-section" class="btn btn-primary">
-                    <i class="fas fa-plus mr-2"></i>Add Section
-                </button>
+            <div class="form-group">
+                <label class="form-label" for="author-email">Author Email</label>
+                <input type="email" id="author-email" class="form-input" placeholder="Enter author email">
             </div>
 
-            <!-- References -->
-            <div class="form-section">
-                <h3 class="text-xl font-bold academic-title"><i class="fas fa-book mr-2"></i>References</h3>
-                <p class="text-gray-600 mb-4">Add your references. Each reference should be on a new line.</p>
-                
-                <div class="form-group">
-                    <label for="references">References</label>
-                    <textarea id="references" class="form-control" rows="10" placeholder="al-Aṣfahānī, A. N. (n.d.). Ḥilyat al-Awliyā' wa Ṭabaqāt al-Aṣfiyā'. Beirut: Dār al-Kutub al-ʿIlmiyyah.
+            <div class="form-group">
+                <label class="form-label" for="author-affiliation">Author Affiliation</label>
+                <input type="text" id="author-affiliation" class="form-input" placeholder="Enter institution or affiliation">
+            </div>
 
-al-Baghdādī, A. B. (1997). Tārīkh Baghdād. Beirut: Dār al-Gharb al-Islāmī."></textarea>
+            <!-- Abstract -->
+            <div class="form-group">
+                <label class="form-label" for="abstract">Abstract</label>
+                <textarea id="abstract" class="form-textarea" placeholder="Enter article abstract" rows="6" required></textarea>
+            </div>
+
+            <!-- Keywords -->
+            <div class="form-group">
+                <label class="form-label" for="keywords">Keywords</label>
+                <input type="text" id="keywords" class="form-input" placeholder="Enter keywords separated by commas" required>
+            </div>
+
+            <!-- Article Content Sections -->
+            <div class="form-group">
+                <label class="form-label">Article Content</label>
+                <div id="content-sections">
+                    <!-- Sections will be added dynamically -->
+                </div>
+                <div class="section-controls">
+                    <button type="button" id="add-paragraph" class="btn btn-secondary">
+                        <i class="fas fa-paragraph"></i> Add Paragraph
+                    </button>
+                    <button type="button" id="add-heading" class="btn btn-secondary">
+                        <i class="fas fa-heading"></i> Add Heading
+                    </button>
+                    <button type="button" id="add-subheading" class="btn btn-secondary">
+                        <i class="fas fa-heading"></i> Add Subheading
+                    </button>
                 </div>
             </div>
 
             <!-- Footnotes -->
-            <div class="form-section">
-                <h3 class="text-xl font-bold academic-title"><i class="fas fa-sticky-note mr-2"></i>Footnotes</h3>
-                <p class="text-gray-600 mb-4">Add footnotes for your article. Each footnote should be on a new line.</p>
-                
-                <div class="form-group">
-                    <label for="footnotes">Footnotes</label>
-                    <textarea id="footnotes" class="form-control" rows="6" placeholder="¹ This refers to the classical methodology of Ḥadīth authentication.
-² The term kashf refers to mystical unveiling in Sufi terminology."></textarea>
+            <div class="form-group">
+                <label class="form-label">Footnotes</label>
+                <div id="footnotes-container">
+                    <!-- Footnotes will be added dynamically -->
                 </div>
+                <button type="button" id="add-footnote" class="btn btn-secondary mt-2">
+                    <i class="fas fa-plus"></i> Add Footnote
+                </button>
             </div>
-        </div>
 
-        <!-- Split View -->
-        <div id="split-view" class="split-view hidden">
-            <div class="editor-panel">
-                <div class="panel-header">
-                    <i class="fas fa-edit mr-2"></i>Editor
-                </div>
-                <div class="editor-content">
-                    <div class="p-4">
-                        <div class="form-group">
-                            <label for="quick-title">Title</label>
-                            <input type="text" id="quick-title" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="quick-author">Author</label>
-                            <input type="text" id="quick-author" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="quick-content">Content</label>
-                            <textarea id="quick-content" class="form-control" rows="20"></textarea>
-                        </div>
-                    </div>
-                </div>
+            <!-- References -->
+            <div class="form-group">
+                <label class="form-label" for="references">References</label>
+                <textarea id="references" class="form-textarea" placeholder="Enter references (one per line)" rows="8"></textarea>
+                <small class="text-gray-500">Enter each reference on a new line. Use APA, Chicago, or MLA format.</small>
             </div>
-            
-            <div class="preview-panel">
-                <div class="panel-header">
-                    <i class="fas fa-eye mr-2"></i>Live Preview
-                </div>
-                <div id="live-preview" class="preview-content">
-                </div>
-            </div>
-        </div>
 
-        <!-- Article Preview -->
-        <div id="article-preview" class="preview-container">
-            <div id="preview-content">
-                <!-- Generated content will appear here -->
+            <!-- Action Buttons -->
+            <div class="flex gap-4 mt-8">
+                <button type="button" id="preview-btn" class="btn btn-primary flex-1">
+                    <i class="fas fa-eye"></i> Preview Article
+                </button>
+                <button type="button" id="generate-btn" class="btn btn-success flex-1">
+                    <i class="fas fa-download"></i> Generate Document
+                </button>
+                <button type="button" id="reset-btn" class="btn btn-secondary">
+                    <i class="fas fa-redo"></i> Reset
+                </button>
             </div>
-            <div class="page-number" id="page-number">59</div>
+        </form>
+    </div>
+
+    <!-- Article Preview Modal -->
+    <div id="preview-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-screen overflow-hidden">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 class="text-lg font-semibold">Article Preview</h3>
+                <button id="close-preview" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-4 overflow-y-auto max-h-[80vh]">
+                <div id="article-preview" class="article-preview">
+                    <!-- Preview content will be generated here -->
+                </div>
+            </div>
+            <div class="flex justify-end gap-2 p-4 border-t">
+                <button id="close-preview-btn" class="btn btn-secondary">Close</button>
+                <button id="download-preview-btn" class="btn btn-success">
+                    <i class="fas fa-download"></i> Download as PDF
+                </button>
+            </div>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-8 mt-8">
+    <footer class="bg-gray-900 text-white py-8 mt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
                 <div class="logo-container justify-center mb-4">
@@ -586,5 +474,21 @@ al-Baghdādī, A. B. (1997). Tārīkh Baghdād. Beirut: Dār al-Gharb al-Islām�
     </footer>
 
     <script src="article-generator.js"></script>
+    <script>
+        // Mobile menu functionality
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!mobileMenu.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+    </script>
 </body>
 </html>
