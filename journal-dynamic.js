@@ -806,10 +806,13 @@ searchAllArticles(query) {
 
             <div class="article-description" style="${directionStyle}">
     <p class="text-gray-700 leading-relaxed mb-4" 
-       style="font-family: ${fontFamily}; font-size: ${isArabic ? '14px' : '15px'}; 
-              line-height: ${isArabic ? '1.6' : '1.5'}; text-align: justify; ${directionStyle}">
-        ${this.currentSearchTerm ? this.highlightSearchTerm(article.abstract, this.currentSearchTerm) : this.escapeHtml(article.abstract)}
+       style="font-family: ${fontFamily}; font-size: ${isArabic ? '11px' : '12px'}; 
+              line-height: ${isArabic ? '1.2' : '1.3'}; text-align: right; ${directionStyle}">
+        ${this.currentSearchTerm ? 
+            this.highlightSearchTerm(this.truncateText(article.abstract, 300), this.currentSearchTerm) : 
+            this.truncateText(article.abstract, 300)}${article.abstract.length > 300 ? '...' : ''}
     </p>
+
 
     <div class="mb-4">
         <div class="flex flex-wrap gap-2 ${isArabic ? 'justify-end' : 'justify-start'}" 
