@@ -14,9 +14,10 @@
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Times+New+Roman:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+/* Base Styles */
 body {
     font-family: 'Inter', sans-serif;
     line-height: 1.6;
@@ -27,7 +28,7 @@ body {
 }
 
 .academic-title {
-    font-family: 'Crimson Text', serif;
+    font-family: 'Times New Roman', serif;
 }
 
 .logo-container {
@@ -102,6 +103,7 @@ body {
     border-radius: 4px;
     font-size: 0.875rem;
     transition: border-color 0.15s ease-in-out;
+    font-family: 'Times New Roman', serif;
 }
 
 .form-control:focus {
@@ -113,6 +115,7 @@ body {
 textarea.form-control {
     resize: vertical;
     min-height: 100px;
+    line-height: 1.5;
 }
 
 .btn {
@@ -154,119 +157,185 @@ textarea.form-control {
     background-color: #4b5563;
 }
 
-/* Preview Container */
+/* Preview Container - Exact A4 dimensions and Islamic Insight formatting */
 .preview-container {
     max-width: 210mm;
     min-height: 297mm;
     margin: 2rem auto;
     background: white;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 20mm;
+    padding: 25mm 25mm 20mm 25mm; /* Top, Right, Bottom, Left margins */
     position: relative;
     display: none;
+    font-family: 'Times New Roman', serif;
+    font-size: 12pt;
+    line-height: 1.5;
 }
 
-/* Article Styles (Matching the Word document) */
+/* Header formatting matching the Word document */
 .article-header {
-    text-align: right;
+    font-family: 'Times New Roman', serif;
     font-size: 10pt;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid #000;
-    padding-bottom: 0.5rem;
+    line-height: 1.2;
+    margin-bottom: 20pt;
+    text-align: left;
+    border-bottom: 1pt solid #000;
+    padding-bottom: 10pt;
 }
 
+.header-right {
+    float: right;
+    text-align: right;
+}
+
+.header-clear {
+    clear: both;
+}
+
+/* Title formatting - exactly as in the Word document */
 .article-title {
-    font-family: 'Crimson Text', serif;
+    font-family: 'Times New Roman', serif;
     font-size: 14pt;
     font-weight: bold;
     text-align: center;
-    margin: 2rem 0 1rem 0;
+    margin: 30pt 0 15pt 0;
     line-height: 1.3;
+    text-transform: uppercase;
+    letter-spacing: 0.5pt;
 }
 
+/* Author formatting */
 .article-author {
+    font-family: 'Times New Roman', serif;
     font-size: 12pt;
     text-align: center;
-    margin-bottom: 2rem;
-    font-weight: 500;
+    margin-bottom: 25pt;
+    font-weight: bold;
 }
 
+/* Abstract and Keywords formatting */
 .article-abstract {
-    margin: 2rem 0;
+    margin: 20pt 0;
+    text-align: justify;
 }
 
 .article-abstract h4 {
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-.article-keywords {
-    margin: 1rem 0 2rem 0;
-}
-
-.article-keywords h4 {
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-.article-content {
-    text-align: justify;
-    line-height: 1.6;
-    font-size: 10pt;
-}
-
-.article-content h2 {
+    font-family: 'Times New Roman', serif;
     font-size: 12pt;
     font-weight: bold;
-    margin: 2rem 0 1rem 0;
+    margin-bottom: 8pt;
+    text-align: left;
 }
 
-.article-content h3 {
+.article-abstract p {
     font-size: 11pt;
-    font-weight: bold;
-    margin: 1.5rem 0 0.75rem 0;
-}
-
-.article-content p {
-    margin-bottom: 1rem;
-    text-indent: 0.5in;
-}
-
-.article-content p:first-child {
+    line-height: 1.4;
+    margin-bottom: 0;
     text-indent: 0;
 }
 
+.article-keywords {
+    margin: 15pt 0 25pt 0;
+    text-align: justify;
+}
+
+.article-keywords h4 {
+    font-family: 'Times New Roman', serif;
+    font-size: 12pt;
+    font-weight: bold;
+    margin-bottom: 5pt;
+    display: inline;
+}
+
+.article-keywords p {
+    display: inline;
+    font-size: 11pt;
+    line-height: 1.4;
+}
+
+/* Content formatting - matching the document structure */
+.article-content {
+    text-align: justify;
+    line-height: 1.5;
+    font-size: 12pt;
+    font-family: 'Times New Roman', serif;
+}
+
+.article-content h2 {
+    font-family: 'Times New Roman', serif;
+    font-size: 12pt;
+    font-weight: bold;
+    margin: 25pt 0 12pt 0;
+    text-align: left;
+    line-height: 1.3;
+}
+
+.article-content h3 {
+    font-family: 'Times New Roman', serif;
+    font-size: 11pt;
+    font-weight: bold;
+    margin: 20pt 0 10pt 0;
+    text-align: left;
+    line-height: 1.3;
+}
+
+.article-content p {
+    margin-bottom: 12pt;
+    text-indent: 0;
+    line-height: 1.5;
+    font-size: 12pt;
+    text-align: justify;
+}
+
+.article-content p:first-of-type {
+    text-indent: 0;
+}
+
+/* References formatting */
 .references {
-    margin-top: 2rem;
-    border-top: 1px solid #ccc;
-    padding-top: 1rem;
+    margin-top: 30pt;
+    page-break-inside: avoid;
 }
 
 .references h3 {
+    font-family: 'Times New Roman', serif;
     font-size: 12pt;
     font-weight: bold;
-    margin-bottom: 1rem;
+    margin-bottom: 15pt;
+    text-align: center;
+    text-transform: uppercase;
 }
 
 .reference-item {
-    margin-bottom: 0.5rem;
-    text-indent: -0.5in;
-    padding-left: 0.5in;
-    font-size: 9pt;
+    margin-bottom: 8pt;
+    text-indent: -36pt;
+    padding-left: 36pt;
+    font-size: 11pt;
+    line-height: 1.4;
+    text-align: justify;
 }
 
+/* Footnotes formatting */
 .footnote {
-    font-size: 8pt;
-    border-top: 1px solid #ccc;
-    margin-top: 1rem;
-    padding-top: 0.5rem;
+    font-size: 10pt;
+    border-top: 1pt solid #000;
+    margin-top: 20pt;
+    padding-top: 10pt;
+    line-height: 1.3;
 }
 
-/* Page numbering */
+.footnote-item {
+    margin-bottom: 5pt;
+    text-indent: -18pt;
+    padding-left: 18pt;
+}
+
+/* Page numbering - exactly as shown in document */
 .page-number {
     position: absolute;
     bottom: 15mm;
-    right: 20mm;
+    right: 25mm;
+    font-family: 'Times New Roman', serif;
     font-size: 10pt;
 }
 
@@ -303,6 +372,9 @@ textarea.form-control {
     max-height: 80vh;
     overflow-y: auto;
     padding: 2rem;
+    font-family: 'Times New Roman', serif;
+    font-size: 11pt;
+    line-height: 1.4;
 }
 
 /* Download button special styling */
@@ -334,6 +406,24 @@ textarea.form-control {
     100% { transform: rotate(360deg); }
 }
 
+/* Print styles */
+@media print {
+    .preview-container {
+        box-shadow: none;
+        margin: 0;
+        max-width: none;
+        page-break-inside: avoid;
+    }
+    
+    .article-content h2 {
+        page-break-after: avoid;
+    }
+    
+    .references {
+        page-break-before: auto;
+    }
+}
+
 /* Responsive */
 @media (max-width: 1200px) {
     .split-view {
@@ -342,7 +432,7 @@ textarea.form-control {
     
     .preview-container {
         max-width: 95%;
-        padding: 15mm;
+        padding: 20mm 15mm;
     }
 }
 
@@ -357,7 +447,7 @@ textarea.form-control {
     }
     
     .preview-container {
-        padding: 10mm;
+        padding: 15mm 10mm;
         margin: 1rem;
     }
 }
@@ -381,6 +471,48 @@ textarea.form-control {
 
 .mt-4 {
     margin-top: 1rem;
+}
+
+/* In-text citation styling */
+.citation {
+    font-style: normal;
+}
+
+/* Block quote styling for longer quotes */
+.block-quote {
+    margin: 15pt 36pt;
+    font-style: italic;
+    text-align: justify;
+}
+
+/* List styling within content */
+.article-content ul {
+    margin: 12pt 0;
+    padding-left: 36pt;
+}
+
+.article-content ol {
+    margin: 12pt 0;
+    padding-left: 36pt;
+}
+
+.article-content li {
+    margin-bottom: 6pt;
+    text-align: justify;
+}
+
+/* Special formatting for Islamic terms */
+.arabic-term {
+    font-style: italic;
+    direction: rtl;
+    unicode-bidi: bidi-override;
+}
+
+/* Section break styling */
+.section-break {
+    margin: 30pt 0;
+    border-top: 1pt solid #ccc;
+    padding-top: 15pt;
 }
 </style>
 </head>
@@ -428,6 +560,7 @@ textarea.form-control {
         <div class="text-center mb-8">
             <h1 class="text-3xl font-bold academic-title text-gray-900 mb-4">Article Format Generator</h1>
             <p class="text-gray-600">Create your academic article in Islamic Insight journal format</p>
+            <p class="text-sm text-gray-500 mt-2">This tool creates articles matching the exact formatting standards of Islamic Insight Journal</p>
         </div>
 
         <!-- Control Buttons -->
@@ -449,28 +582,28 @@ textarea.form-control {
 
         <!-- Form View -->
         <div id="form-view" class="form-container">
-            <!-- Article Information -->
+            <!-- Journal Information -->
             <div class="form-section">
-                <h3 class="text-xl font-bold academic-title"><i class="fas fa-info-circle mr-2"></i>Article Information</h3>
+                <h3 class="text-xl font-bold academic-title"><i class="fas fa-info-circle mr-2"></i>Journal Information</h3>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="form-group">
                         <label for="volume">Volume</label>
-                        <input type="text" id="volume" class="form-control" placeholder="Vol. 8">
+                        <input type="text" id="volume" class="form-control" placeholder="Vol. 8" value="Vol. 8">
                     </div>
                     <div class="form-group">
                         <label for="issue">Issue & Year</label>
-                        <input type="text" id="issue" class="form-control" placeholder="No. 1, 2025">
+                        <input type="text" id="issue" class="form-control" placeholder="No. 1, 2025" value="No. 1, 2025">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="form-group">
                         <label for="page-start">Starting Page</label>
-                        <input type="number" id="page-start" class="form-control" placeholder="59" min="1">
+                        <input type="number" id="page-start" class="form-control" placeholder="59" min="1" value="59">
                     </div>
                     <div class="form-group">
-                        <label for="header-title">Header Title (Short)</label>
+                        <label for="header-title">Header Title (Short version for header)</label>
                         <input type="text" id="header-title" class="form-control" placeholder="Ḥadīth of Self-Knowing">
                     </div>
                 </div>
@@ -481,7 +614,7 @@ textarea.form-control {
                 <h3 class="text-xl font-bold academic-title"><i class="fas fa-file-text mr-2"></i>Article Content</h3>
                 
                 <div class="form-group">
-                    <label for="article-title">Article Title</label>
+                    <label for="article-title">Article Title (Will appear in UPPERCASE in preview)</label>
                     <textarea id="article-title" class="form-control" rows="2" placeholder="ḤADĪTH OF SELF-KNOWING BETWEEN SUFIS AND ḤADĪTH SCHOLARS"></textarea>
                 </div>
 
@@ -491,12 +624,12 @@ textarea.form-control {
                 </div>
 
                 <div class="form-group">
-                    <label for="abstract">Abstract</label>
-                    <textarea id="abstract" class="form-control" rows="8" placeholder="This paper examines the 'Ḥadīth of Self-knowing,' often quoted as 'Whoever knows himself, knows his Lord,'..."></textarea>
+                    <label for="abstract">Abstract (Justified text, 11pt font in output)</label>
+                    <textarea id="abstract" class="form-control" rows="8" placeholder="This paper examines the 'Ḥadīth of Self-knowing,' often quoted as 'Whoever knows himself, knows his Lord,' a saying that has profoundly influenced Islamic thought, particularly within Sufi and Ḥadīth scholarship..."></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="keywords">Keywords (comma-separated)</label>
+                    <label for="keywords">Keywords (Will appear on same line as "Keywords:" heading)</label>
                     <input type="text" id="keywords" class="form-control" placeholder="Self-knowing, Ḥadīth authenticity, Sufi mysticism, kashf, ilhām, Takhrīj">
                 </div>
             </div>
@@ -504,7 +637,7 @@ textarea.form-control {
             <!-- Sections -->
             <div class="form-section">
                 <h3 class="text-xl font-bold academic-title"><i class="fas fa-list mr-2"></i>Article Sections</h3>
-                <p class="text-gray-600 mb-4">Add your article sections. Click "Add Section" to add more sections as needed.</p>
+                <p class="text-gray-600 mb-4">Add your article sections. Each section will be formatted as a main heading (12pt, bold). Use proper Islamic and academic terminology.</p>
                 
                 <div id="sections-container">
                     <!-- Section 1 (Introduction) -->
@@ -515,11 +648,11 @@ textarea.form-control {
                         </div>
                         <div class="form-group">
                             <label>Section Title</label>
-                            <input type="text" class="form-control section-title" placeholder="Introduction">
+                            <input type="text" class="form-control section-title" placeholder="Introduction" value="Introduction">
                         </div>
                         <div class="form-group">
-                            <label>Section Content</label>
-                            <textarea class="form-control section-content" rows="6" placeholder="Enter your section content here..."></textarea>
+                            <label>Section Content (Will be justified, 12pt font)</label>
+                            <textarea class="form-control section-content" rows="8" placeholder="Enter your section content here. Use proper academic writing style with in-text citations in format (Author, Year, p. X). For Islamic terms, use proper transliteration with diacritics where appropriate."></textarea>
                         </div>
                     </div>
                 </div>
@@ -532,25 +665,30 @@ textarea.form-control {
             <!-- References -->
             <div class="form-section">
                 <h3 class="text-xl font-bold academic-title"><i class="fas fa-book mr-2"></i>References</h3>
-                <p class="text-gray-600 mb-4">Add your references. Each reference should be on a new line.</p>
+                <p class="text-gray-600 mb-4">Add your references in proper academic format. Each reference should be on a new line. Use hanging indent formatting (automatically applied in output).</p>
                 
                 <div class="form-group">
-                    <label for="references">References</label>
-                    <textarea id="references" class="form-control" rows="10" placeholder="al-Aṣfahānī, A. N. (n.d.). Ḥilyat al-Awliyā' wa Ṭabaqāt al-Aṣfiyā'. Beirut: Dār al-Kutub al-ʿIlmiyyah.
+                    <label for="references">References (One per line, 11pt font with hanging indent in output)</label>
+                    <textarea id="references" class="form-control" rows="12" placeholder="al-Aṣfahānī, A. N. (n.d.). Ḥilyat al-Awliyā' wa Ṭabaqāt al-Aṣfiyā'. Beirut: Dār al-Kutub al-ʿIlmiyyah.
 
-al-Baghdādī, A. B. (1997). Tārīkh Baghdād. Beirut: Dār al-Gharb al-Islāmī."></textarea>
+al-Baghdādī, A. B. (1997). Tārīkh Baghdād. Beirut: Dār al-Gharb al-Islāmī.
+
+al-Ghazālī, A. Ḥ. M. (1988). Maʿārij al-Quds fī Madārij Maʿrifat al-Nafs. Cairo: Maktabat al-Jundī.
+
+Ibn Ḥibbān, M. (2012). Ṣaḥīḥ Ibn Ḥibbān. Beirut: Muʾassasat al-Risālah."></textarea>
                 </div>
             </div>
 
             <!-- Footnotes -->
             <div class="form-section">
-                <h3 class="text-xl font-bold academic-title"><i class="fas fa-sticky-note mr-2"></i>Footnotes</h3>
-                <p class="text-gray-600 mb-4">Add footnotes for your article. Each footnote should be on a new line.</p>
+                <h3 class="text-xl font-bold academic-title"><i class="fas fa-sticky-note mr-2"></i>Footnotes (Optional)</h3>
+                <p class="text-gray-600 mb-4">Add footnotes if needed. Each footnote should be on a new line with number. 10pt font with hanging indent will be applied.</p>
                 
                 <div class="form-group">
-                    <label for="footnotes">Footnotes</label>
-                    <textarea id="footnotes" class="form-control" rows="6" placeholder="¹ This refers to the classical methodology of Ḥadīth authentication.
-² The term kashf refers to mystical unveiling in Sufi terminology."></textarea>
+                    <label for="footnotes">Footnotes (Optional, 10pt font in output)</label>
+                    <textarea id="footnotes" class="form-control" rows="6" placeholder="¹ This refers to the classical methodology of Ḥadīth authentication as established by early scholars.
+² The term kashf refers to mystical unveiling or spiritual disclosure in Sufi terminology.
+³ Takhrīj methodology involves tracing and evaluating the chains of transmission for Ḥadīth authentication."></textarea>
                 </div>
             </div>
         </div>
@@ -559,7 +697,7 @@ al-Baghdādī, A. B. (1997). Tārīkh Baghdād. Beirut: Dār al-Gharb al-Islām�
         <div id="split-view" class="split-view hidden">
             <div class="editor-panel">
                 <div class="panel-header">
-                    <i class="fas fa-edit mr-2"></i>Editor
+                    <i class="fas fa-edit mr-2"></i>Quick Editor
                 </div>
                 <div class="editor-content">
                     <div class="p-4">
@@ -573,7 +711,7 @@ al-Baghdādī, A. B. (1997). Tārīkh Baghdād. Beirut: Dār al-Gharb al-Islām�
                         </div>
                         <div class="form-group">
                             <label for="quick-content">Content</label>
-                            <textarea id="quick-content" class="form-control" rows="20"></textarea>
+                            <textarea id="quick-content" class="form-control" rows="25" placeholder="Type your article content here. This will be formatted according to Islamic Insight journal standards."></textarea>
                         </div>
                     </div>
                 </div>
@@ -584,6 +722,7 @@ al-Baghdādī, A. B. (1997). Tārīkh Baghdād. Beirut: Dār al-Gharb al-Islām�
                     <i class="fas fa-eye mr-2"></i>Live Preview
                 </div>
                 <div id="live-preview" class="preview-content">
+                    <p class="text-gray-500">Start typing in the editor to see live preview...</p>
                 </div>
             </div>
         </div>
@@ -610,6 +749,9 @@ al-Baghdādī, A. B. (1997). Tārīkh Baghdād. Beirut: Dār al-Gharb al-Islām�
                 </div>
                 <p class="text-gray-300 text-sm">
                     &copy; 2024 Islamic Insight Journal. All rights reserved.
+                </p>
+                <p class="text-gray-400 text-xs mt-2">
+                    Article Generator v2.0 - Formatted according to Islamic Insight Journal standards
                 </p>
             </div>
         </div>
