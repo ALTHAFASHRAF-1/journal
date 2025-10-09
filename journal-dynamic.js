@@ -805,9 +805,9 @@ searchAllArticles(query) {
             </div>
 
             <div class="article-description" style="${directionStyle}">
-    <p class="text-gray-700 text-sm leading-relaxed mb-4" 
-       style="font-family: ${fontFamily}; font-size: ${isArabic ? '0.9em' : '0.95em'}; 
-              line-height: ${isArabic ? '1.8' : '1.7'}; text-align: justify; ${directionStyle}">
+    <p class="text-gray-700 leading-relaxed mb-4" 
+       style="font-family: ${fontFamily}; font-size: ${isArabic ? '0.85em' : '0.9em'}; 
+              line-height: ${isArabic ? '1.7' : '1.6'}; text-align: justify; ${directionStyle}">
         ${this.currentSearchTerm ? this.highlightSearchTerm(article.abstract, this.currentSearchTerm) : this.escapeHtml(article.abstract)}
     </p>
 
