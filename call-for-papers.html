@@ -99,6 +99,31 @@ body {
     margin-bottom: 0;
 }
 
+/* Loading spinner */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error-message {
+    background-color: #fee;
+    border: 1px solid #fcc;
+    color: #c33;
+    padding: 1rem;
+    border-radius: 4px;
+    margin: 1rem 0;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .page-container {
@@ -197,102 +222,104 @@ footer {
     <div class="page-container">
         <div class="content-wrapper">
             
-            <!-- Header -->
-            <div class="text-center section-spacing">
-                <h1 class="text-3xl sm:text-4xl font-bold academic-title text-gray-900 mb-4">Call for Papers</h1>
-                <h2 class="text-xl sm:text-2xl academic-title text-gray-700">Islamic Insight Journal of Islamic Studies</h2>
-                <p class="text-lg text-gray-600 mt-2">Vol. 8, No. 1 (2025)</p>
+            <!-- Loading State -->
+            <div id="loading-state" class="text-center section-spacing">
+                <div class="loading-spinner mx-auto mb-4"></div>
+                <p class="text-gray-600">Loading content...</p>
             </div>
 
-            <!-- Main Content -->
-            <div class="section-spacing">
-                <p class="text-gray-700 leading-relaxed text-justify mb-6">
-                    We are pleased to invite original research articles for the upcoming issue of Islamic Insight, 
-                    a biannual peer-reviewed journal published by the Kulliyyah of Qur'an and Sunnah, 
-                    Darul Huda Islamic University, Kerala, India.
-                </p>
-
-                <p class="text-gray-700 leading-relaxed text-justify mb-6">
-                    Islamic Insight welcomes high-quality, interdisciplinary research in areas related to Islamic 
-                    revealed knowledge and the Muslim world. This includes—but is not limited to—studies in the 
-                    Noble Qur'an, Hadith, Islamic Theology, Islamic Social Sciences, and Muslim History and Culture. 
-                    Unique and relevant contributions beyond the prescribed disciplines are also encouraged.
-                </p>
-
-                <p class="text-gray-700 leading-relaxed text-justify mb-6">
-                    All submissions will undergo a double-blind peer review process. Send your manuscripts by 
-                    <strong>mid-June 2025</strong> for consideration in Vol. 8, No. 1 (2025).
-                </p>
+            <!-- Error State -->
+            <div id="error-state" class="error-message section-spacing" style="display: none;">
+                <h3 class="font-bold text-lg mb-2">Error Loading Content</h3>
+                <p id="error-message">Unable to load content from Google Sheets. Please try again later.</p>
             </div>
 
-            <!-- Submission Guidelines -->
-            <div class="section-spacing">
-                <h3 class="text-2xl font-bold academic-title text-gray-900 mb-4">Submission Guidelines</h3>
-                
-                <ul class="space-y-3 text-gray-700 leading-relaxed">
-                    <li class="text-justify">• All submissions must be original, unpublished work not under consideration elsewhere.</li>
-                    <li class="text-justify">• Manuscripts may be submitted in English or Arabic.</li>
-                    <li class="text-justify">• Research articles should be between 6,000-8,000 words, including references.</li>
-                    <li class="text-justify">• Include a 200-250 word abstract with 5-7 keywords.</li>
-                    <li class="text-justify">• Provide a brief author biography (100-150 words).</li>
-                    <li class="text-justify">• Submit manuscripts in Microsoft Word (.docx) format.</li>
-                    <li class="text-justify">• Follow standard academic formatting with proper citations and bibliography.</li>
-                </ul>
-            </div>
+            <!-- Main Content (Hidden initially) -->
+            <div id="main-content" style="display: none;">
+                <!-- Header -->
+                <div class="text-center section-spacing">
+                    <h1 id="main-heading" class="text-3xl sm:text-4xl font-bold academic-title text-gray-900 mb-4">Call for Papers</h1>
+                    <h2 id="sub-heading" class="text-xl sm:text-2xl academic-title text-gray-700">Islamic Insight Journal of Islamic Studies</h2>
+                    <p id="edition" class="text-lg text-gray-600 mt-2">Vol. 8, No. 1 (2025)</p>
+                </div>
 
-            <!-- Research Areas -->
-            <div class="section-spacing">
-                <h3 class="text-2xl font-bold academic-title text-gray-900 mb-4">Research Areas</h3>
-                
-                <ul class="space-y-2 text-gray-700 leading-relaxed">
-                    <li>• Quranic Studies and Exegesis</li>
-                    <li>• Hadith Scholarship and Criticism</li>
-                    <li>• Islamic Theology and Philosophy</li>
-                    <li>• Islamic Law and Jurisprudence</li>
-                    <li>• Islamic History and Civilization</li>
-                    <li>• Muslim Societies and Cultures</li>
-                    <li>• Contemporary Islamic Thought</li>
-                    <li>• Comparative Religion</li>
-                </ul>
-            </div>
+                <!-- Main Content -->
+                <div class="section-spacing">
+                    <p id="paragraph-1" class="text-gray-700 leading-relaxed text-justify mb-6">
+                        We are pleased to invite original research articles for the upcoming issue of Islamic Insight, 
+                        a biannual peer-reviewed journal published by the Kulliyyah of Qur'an and Sunnah, 
+                        Darul Huda Islamic University, Kerala, India.
+                    </p>
 
-            <!-- Contact Information -->
-            <div class="section-spacing">
-                <h3 class="text-2xl font-bold academic-title text-gray-900 mb-4">Submission</h3>
-                
-                <p class="text-gray-700 leading-relaxed mb-4">
-                    For submission, please send your manuscript to:
-                </p>
-                
-                <div class="bg-gray-50 p-4 rounded border-l-4 border-blue-500 mb-6">
-                    <p class="font-semibold text-gray-900 mb-2">Email:</p>
-                    <a href="mailto:islamicinsight@dhiu.in" class="text-blue-600 hover:text-blue-800 font-medium text-lg">
-                        islamicinsight@dhiu.in
+                    <p id="paragraph-2" class="text-gray-700 leading-relaxed text-justify mb-6">
+                        Islamic Insight welcomes high-quality, interdisciplinary research in areas related to Islamic 
+                        revealed knowledge and the Muslim world. This includes—but is not limited to—studies in the 
+                        Noble Qur'an, Hadith, Islamic Theology, Islamic Social Sciences, and Muslim History and Culture. 
+                        Unique and relevant contributions beyond the prescribed disciplines are also encouraged.
+                    </p>
+
+                    <p id="paragraph-3" class="text-gray-700 leading-relaxed text-justify mb-6">
+                        All submissions will undergo a double-blind peer review process. Send your manuscripts by 
+                        <strong id="submission-date">mid-June 2025</strong> for consideration in <span id="edition-ref">Vol. 8, No. 1 (2025)</span>.
+                    </p>
+                </div>
+
+                <!-- Submission Guidelines -->
+                <div class="section-spacing">
+                    <h3 class="text-2xl font-bold academic-title text-gray-900 mb-4">Submission Guidelines</h3>
+                    
+                    <ul id="submission-guidelines" class="space-y-3 text-gray-700 leading-relaxed">
+                        <!-- Dynamic content will be loaded here -->
+                    </ul>
+                </div>
+
+                <!-- Research Areas -->
+                <div class="section-spacing">
+                    <h3 class="text-2xl font-bold academic-title text-gray-900 mb-4">Research Areas</h3>
+                    
+                    <ul id="research-areas" class="space-y-2 text-gray-700 leading-relaxed">
+                        <!-- Dynamic content will be loaded here -->
+                    </ul>
+                </div>
+
+                <!-- Contact Information (Static) -->
+                <div class="section-spacing">
+                    <h3 class="text-2xl font-bold academic-title text-gray-900 mb-4">Submission</h3>
+                    
+                    <p class="text-gray-700 leading-relaxed mb-4">
+                        For submission, please send your manuscript to:
+                    </p>
+                    
+                    <div class="bg-gray-50 p-4 rounded border-l-4 border-blue-500 mb-6">
+                        <p class="font-semibold text-gray-900 mb-2">Email:</p>
+                        <a href="mailto:islamicinsight@dhiu.in" class="text-blue-600 hover:text-blue-800 font-medium text-lg">
+                            islamicinsight@dhiu.in
+                        </a>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded mb-6">
+                        <p class="font-semibold text-gray-900 mb-2">Editorial Office:</p>
+                        <address class="text-gray-700 not-italic leading-relaxed">
+                            Editor, Islamic Insight Journal of Islamic Studies<br>
+                            Darul Huda Islamic University<br>
+                            Chemmad, P.B.NO. 3<br>
+                            Tirurangadi (PO), Malappuram (Dt.)<br>
+                            676306 (PIN), Kerala, India
+                        </address>
+                    </div>
+
+                    <p class="text-gray-700 leading-relaxed">
+                        <strong>Website:</strong> 
+                        <a href="https://www.islamicinsight.in" class="text-blue-600 hover:text-blue-800">www.islamicinsight.in</a>
+                    </p>
+                </div>
+
+                <!-- Back to Home -->
+                <div class="text-center section-spacing">
+                    <a href="index.html" class="inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors">
+                        Back to Home
                     </a>
                 </div>
-
-                <div class="bg-gray-50 p-4 rounded mb-6">
-                    <p class="font-semibold text-gray-900 mb-2">Editorial Office:</p>
-                    <address class="text-gray-700 not-italic leading-relaxed">
-                        Editor, Islamic Insight Journal of Islamic Studies<br>
-                        Darul Huda Islamic University<br>
-                        Chemmad, P.B.NO. 3<br>
-                        Tirurangadi (PO), Malappuram (Dt.)<br>
-                        676306 (PIN), Kerala, India
-                    </address>
-                </div>
-
-                <p class="text-gray-700 leading-relaxed">
-                    <strong>Website:</strong> 
-                    <a href="https://www.islamicinsight.in" class="text-blue-600 hover:text-blue-800">www.islamicinsight.in</a>
-                </p>
-            </div>
-
-            <!-- Back to Home -->
-            <div class="text-center section-spacing">
-                <a href="index.html" class="inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors">
-                    Back to Home
-                </a>
             </div>
         </div>
     </div>
@@ -315,6 +342,7 @@ footer {
         </div>
     </footer>
 
+    <script src="call-for-papers.js"></script>
     <script>
         // Mobile menu functionality
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
