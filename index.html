@@ -947,6 +947,9 @@ let isMobileSearchExpanded = false;
 document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
     loadJournalData();
+    
+    // Initialize current issue loader
+    currentIssueLoader = new CurrentIssueLoader();
 });
 
 // Load journal data from sheets
@@ -992,9 +995,12 @@ async function loadJournalData() {
 
 // Setup event listeners
 function setupEventListeners() {
-    // Mobile menu toggle
-    if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', function() {
+    // Mobile menu toggle - Fixed the event listener
+    if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Mobile menu button clicked'); // Debug log
             mobileMenu.classList.toggle('hidden');
         });
     }
@@ -1054,6 +1060,13 @@ function setupEventListeners() {
             !mobileSearchResults.contains(e.target) && 
             !mobileSearchToggleBtn.contains(e.target)) {
             mobileSearchResults.classList.add('hidden');
+        }
+
+        // Close mobile menu when clicking outside
+        if (mobileMenu && mobileMenuBtn && 
+            !mobileMenu.contains(e.target) && 
+            !mobileMenuBtn.contains(e.target)) {
+            mobileMenu.classList.add('hidden');
         }
     });
 
@@ -1443,15 +1456,6 @@ class CurrentIssueLoader {
 
 // Initialize Current Issue Loader
 let currentIssueLoader;
-
-// Update the existing DOMContentLoaded event listener
-document.addEventListener('DOMContentLoaded', function() {
-    setupEventListeners();
-    loadJournalData();
-    
-    // Initialize current issue loader
-    currentIssueLoader = new CurrentIssueLoader();
-});
 
 // Also listen for the journalDataLoaded event
 window.addEventListener('journalDataLoaded', async function() {
