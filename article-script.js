@@ -603,13 +603,13 @@ class ArabicStyler {
                     if (key === 'title') {
                         element.style.fontFamily = "'Amiri', 'Scheherazade New', serif";
                         element.style.fontSize = '2.5rem';
-                        element.style.fontWeight = '700';
+                        element.style.fontWeight = '600';
                         element.style.lineHeight = '1.5';
                     } else if (key === 'abstract' || key === 'articleContent') {
                         element.style.fontFamily = "'Amiri', serif";
                         element.style.fontSize = '1.15em';
                         element.style.lineHeight = '2.2';
-                        element.style.textAlign = 'justify';
+                        element.style.textAlign = 'right';
                     }
                 } else {
                     element.classList.add('english-content');
@@ -630,7 +630,7 @@ class ArabicStyler {
                         element.style.fontFamily = "'Crimson Text', serif";
                         element.style.fontSize = '1.05em';
                         element.style.lineHeight = '1.8';
-                        element.style.textAlign = 'justify';
+                        element.style.textAlign = 'left';
                     }
                 }
             }
@@ -640,7 +640,7 @@ class ArabicStyler {
         if (language === 'arabic') {
             const metadataGrid = document.querySelector('.article-metadata .grid');
             if (metadataGrid) {
-                metadataGrid.style.direction = 'rtl';
+                metadataGrid.style.direction = 'ltr';
             }
             
             // Style keywords container
