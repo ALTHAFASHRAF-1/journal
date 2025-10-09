@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Article Format Generator - Islamic Insight Journal">
+<meta name="keywords" content="article generator, academic formatting, Islamic studies, journal submission">
+<meta name="author" content="Islamic Insight Journal">
+<title>Article Format Generator - Islamic Insight</title>
+<link rel="icon" type="image/png" href="logo.png">
+
+<!-- CSS Libraries -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    color: #1a202c;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+.academic-title {
+    font-family: 'Crimson Text', serif;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo-image {
+    height: 40px;
+    width: auto;
+}
+
+.logo-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.logo-text {
+    line-height: 1;
+    margin: 0;
+}
+
+.logo-subtitle {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin: 0;
+    line-height: 1;
+    font-weight: 400;
+}
+
+/* Form Container */
+.form-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    background: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.form-section {
+    padding: 2rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.form-section:last-child {
+    border-bottom: none;
+}
+
+.form-section h3 {
+    margin-bottom: 1rem;
+    color: #1f2937;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    transition: border-color 0.15s ease-in-out;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #2563eb;
+}
+
+.btn-success {
+    background-color: #10b981;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #059669;
+}
+
+.btn-secondary {
+    background-color: #6b7280;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #4b5563;
+}
+
+/* Preview Container */
+.preview-container {
+    max-width: 210mm;
+    min-height: 297mm;
+    margin: 2rem auto;
+    background: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20mm;
+    position: relative;
+    display: none;
+}
+
+/* Article Styles (Matching the Word document) */
+.article-header {
+    text-align: right;
+    font-size: 10pt;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #000;
+    padding-bottom: 0.5rem;
+}
+
+.article-title {
+    font-family: 'Crimson Text', serif;
+    font-size: 14pt;
+    font-weight: bold;
+    text-align: center;
+    margin: 2rem 0 1rem 0;
+    line-height: 1.3;
+}
+
+.article-author {
+    font-size: 12pt;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-weight: 500;
+}
+
+.article-abstract {
+    margin: 2rem 0;
+}
+
+.article-abstract h4 {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.article-keywords {
+    margin: 1rem 0 2rem 0;
+}
+
+.article-keywords h4 {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.article-content {
+    text-align: justify;
+    line-height: 1.6;
+    font-size: 10pt;
+}
+
+.article-content h2 {
+    font-size: 12pt;
+    font-weight: bold;
+    margin: 2rem 0 1rem 0;
+}
+
+.article-content h3 {
+    font-size: 11pt;
+    font-weight: bold;
+    margin: 1.5rem 0 0.75rem 0;
+}
+
+.article-content p {
+    margin-bottom: 1rem;
+    text-indent: 0.5in;
+}
+
+.article-content p:first-child {
+    text-indent: 0;
+}
+
+.references {
+    margin-top: 2rem;
+    border-top: 1px solid #ccc;
+    padding-top: 1rem;
+}
+
+.references h3 {
+    font-size: 12pt;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.reference-item {
+    margin-bottom: 0.5rem;
+    text-indent: -0.5in;
+    padding-left: 0.5in;
+    font-size: 9pt;
+}
+
+.footnote {
+    font-size: 8pt;
+    border-top: 1px solid #ccc;
+    margin-top: 1rem;
+    padding-top: 0.5rem;
+}
+
+/* Page numbering */
+.page-number {
+    position: absolute;
+    bottom: 15mm;
+    right: 20mm;
+    font-size: 10pt;
+}
+
+/* Split view */
+.split-view {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    max-width: 1800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.editor-panel, .preview-panel {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.panel-header {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    font-weight: 600;
+}
+
+.editor-content {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.preview-content {
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .split-view {
+        grid-template-columns: 1fr;
+    }
+    
+    .preview-container {
+        max-width: 95%;
+        padding: 15mm;
+    }
+}
+
+@media (max-width: 768px) {
+    .form-container {
+        margin: 1rem;
+        border-radius: 0;
+    }
+    
+    .form-section {
+        padding: 1rem;
+    }
+    
+    .preview-container {
+        padding: 10mm;
+        margin: 1rem;
+    }
+}
+
+/* Utility classes */
+.hidden {
+    display: none !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.mt-4 {
+    margin-top: 1rem;
+}
+</style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <a href="index.html" class="logo-container">
+                            <img src="logo.png" alt="Islamic Insight Logo" class="logo-image">
+                            <div class="logo-text-container">
+                                <h1 class="logo-text text-xl font-bold text-gray-900 academic-title">
+                                    ISLAMIC INSIGHT
+                                </h1>
+                                <p class="logo-subtitle">Journal of Islamic Studies</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:block">
+                    <div class="flex items-center space-x-6">
+                        <a href="index.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Home</a>
+                        <a href="call-for-papers.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Call For Paper</a>
+                        <a href="#" class="text-blue-900 font-semibold px-3 py-2 text-sm font-medium">Article Generator</a>
+                    </div>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-900 focus:outline-none">
+                        <i class="fas fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold academic-title text-gray-900 mb-4">Article Format Generator</h1>
+            <p class="text-gray-600">Create your academic article in Islamic Insight journal format</p>
+        </div>
+
+        <!-- Control Buttons -->
+        <div class="flex justify-center space-x-4 mb-6">
+            <button id="form-view-btn" class="btn btn-primary">
+                <i class="fas fa-edit mr-2"></i>Form View
+            </button>
+            <button id="split-view-btn" class="btn btn-secondary">
+                <i class="fas fa-columns mr-2"></i>Split View
+            </button>
+            <button id="preview-btn" class="btn btn-success">
+                <i class="fas fa-eye mr-2"></i>Preview Article
+            </button>
+            <button id="download-btn" class="btn btn-secondary">
+                <i class="fas fa-download mr-2"></i>Download HTML
+            </button>
+        </div>
+
+        <!-- Form View -->
+        <div id="form-view" class="form-container">
+            <!-- Article Information -->
+            <div class="form-section">
+                <h3 class="text-xl font-bold academic-title"><i class="fas fa-info-circle mr-2"></i>Article Information</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="form-group">
+                        <label for="volume">Volume</label>
+                        <input type="text" id="volume" class="form-control" placeholder="Vol. 8">
+                    </div>
+                    <div class="form-group">
+                        <label for="issue">Issue & Year</label>
+                        <input type="text" id="issue" class="form-control" placeholder="No. 1, 2025">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="form-group">
+                        <label for="page-start">Starting Page</label>
+                        <input type="number" id="page-start" class="form-control" placeholder="59" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="header-title">Header Title (Short)</label>
+                        <input type="text" id="header-title" class="form-control" placeholder="Ḥadīth of Self-Knowing">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Article Content -->
+            <div class="form-section">
+                <h3 class="text-xl font-bold academic-title"><i class="fas fa-file-text mr-2"></i>Article Content</h3>
+                
+                <div class="form-group">
+                    <label for="article-title">Article Title</label>
+                    <textarea id="article-title" class="form-control" rows="2" placeholder="ḤADĪTH OF SELF-KNOWING BETWEEN SUFIS AND ḤADĪTH SCHOLARS"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="author-name">Author Name</label>
+                    <input type="text" id="author-name" class="form-control" placeholder="Muhammad Gufran-ul-Haque">
+                </div>
+
+                <div class="form-group">
+                    <label for="abstract">Abstract</label>
+                    <textarea id="abstract" class="form-control" rows="8" placeholder="This paper examines the 'Ḥadīth of Self-knowing,' often quoted as 'Whoever knows himself, knows his Lord,'..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="keywords">Keywords (comma-separated)</label>
+                    <input type="text" id="keywords" class="form-control" placeholder="Self-knowing, Ḥadīth authenticity, Sufi mysticism, kashf, ilhām, Takhrīj">
+                </div>
+            </div>
+
+            <!-- Sections -->
+            <div class="form-section">
+                <h3 class="text-xl font-bold academic-title"><i class="fas fa-list mr-2"></i>Article Sections</h3>
+                <p class="text-gray-600 mb-4">Add your article sections. Click "Add Section" to add more sections as needed.</p>
+                
+                <div id="sections-container">
+                    <!-- Section 1 (Introduction) -->
+                    <div class="section-item bg-gray-50 p-4 rounded mb-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-semibold">Section 1</h4>
+                            <button class="remove-section btn" style="background: #ef4444; color: white; padding: 0.25rem 0.5rem; font-size: 0.75rem;">Remove</button>
+                        </div>
+                        <div class="form-group">
+                            <label>Section Title</label>
+                            <input type="text" class="form-control section-title" placeholder="Introduction">
+                        </div>
+                        <div class="form-group">
+                            <label>Section Content</label>
+                            <textarea class="form-control section-content" rows="6" placeholder="Enter your section content here..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="add-section" class="btn btn-primary">
+                    <i class="fas fa-plus mr-2"></i>Add Section
+                </button>
+            </div>
+
+            <!-- References -->
+            <div class="form-section">
+                <h3 class="text-xl font-bold academic-title"><i class="fas fa-book mr-2"></i>References</h3>
+                <p class="text-gray-600 mb-4">Add your references. Each reference should be on a new line.</p>
+                
+                <div class="form-group">
+                    <label for="references">References</label>
+                    <textarea id="references" class="form-control" rows="10" placeholder="al-Aṣfahānī, A. N. (n.d.). Ḥilyat al-Awliyā' wa Ṭabaqāt al-Aṣfiyā'. Beirut: Dār al-Kutub al-ʿIlmiyyah.
+
+al-Baghdādī, A. B. (1997). Tārīkh Baghdād. Beirut: Dār al-Gharb al-Islāmī."></textarea>
+                </div>
+            </div>
+
+            <!-- Footnotes -->
+            <div class="form-section">
+                <h3 class="text-xl font-bold academic-title"><i class="fas fa-sticky-note mr-2"></i>Footnotes</h3>
+                <p class="text-gray-600 mb-4">Add footnotes for your article. Each footnote should be on a new line.</p>
+                
+                <div class="form-group">
+                    <label for="footnotes">Footnotes</label>
+                    <textarea id="footnotes" class="form-control" rows="6" placeholder="¹ This refers to the classical methodology of Ḥadīth authentication.
+² The term kashf refers to mystical unveiling in Sufi terminology."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Split View -->
+        <div id="split-view" class="split-view hidden">
+            <div class="editor-panel">
+                <div class="panel-header">
+                    <i class="fas fa-edit mr-2"></i>Editor
+                </div>
+                <div class="editor-content">
+                    <div class="p-4">
+                        <div class="form-group">
+                            <label for="quick-title">Title</label>
+                            <input type="text" id="quick-title" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="quick-author">Author</label>
+                            <input type="text" id="quick-author" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="quick-content">Content</label>
+                            <textarea id="quick-content" class="form-control" rows="20"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="preview-panel">
+                <div class="panel-header">
+                    <i class="fas fa-eye mr-2"></i>Live Preview
+                </div>
+                <div id="live-preview" class="preview-content">
+                </div>
+            </div>
+        </div>
+
+        <!-- Article Preview -->
+        <div id="article-preview" class="preview-container">
+            <div id="preview-content">
+                <!-- Generated content will appear here -->
+            </div>
+            <div class="page-number" id="page-number">59</div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="logo-container justify-center mb-4">
+                    <img src="logo.png" alt="Islamic Insight Logo" class="logo-image">
+                    <div class="logo-text-container">
+                        <h1 class="logo-text text-white">ISLAMIC INSIGHT</h1>
+                        <p class="logo-subtitle text-gray-300">Journal of Islamic Studies</p>
+                    </div>
+                </div>
+                <p class="text-gray-300 text-sm">
+                    &copy; 2024 Islamic Insight Journal. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="article-generator.js"></script>
+</body>
+</html>
