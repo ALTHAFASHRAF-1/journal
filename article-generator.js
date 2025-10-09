@@ -1,239 +1,285 @@
 // Article Generator JavaScript
 class ArticleGenerator {
     constructor() {
-        this.currentView = 'form';
-        this.sectionCount = 1;
-        this.initializeEventListeners();
-        this.loadFromLocalStorage();
+        this.sections = [];
+        this.footnotes = [];
+        this.currentFootnoteId = 1;
+        this.init();
     }
 
-    initializeEventListeners() {
-        // View switching
-        document.getElementById('form-view-btn').addEventListener('click', () => this.switchView('form'));
-        document.getElementById('split-view-btn').addEventListener('click', () => this.switchView('split'));
-        document.getElementById('preview-btn').addEventListener('click', () => this.generatePreview());
-        document.getElementById('download-btn').addEventListener('click', () => this.downloadHTML());
+    init() {
+        this.bindEvents();
+        this.addInitialSection();
+    }
 
+    bindEvents() {
         // Section management
-        document.getElementById('add-section').addEventListener('click', () => this.addSection());
-        
-        // Auto-save functionality
-        this.setupAutoSave();
+        document.getElementById('add-paragraph').addEventListener('click', () => this.addSection('paragraph'));
+        document.getElementById('add-heading').addEventListener('click', () => this.addSection('heading'));
+        document.getElementById('add-subheading').addEventListener('click', () => this.addSection('subheading'));
+        document.getElementById('add-footnote').addEventListener('click', () => this.addFootnote());
 
-        // Live preview in split view
-        this.setupLivePreview();
+        // Form actions
+        document.getElementById('preview-btn').addEventListener('click', () => this.previewArticle());
+        document.getElementById('generate-btn').addEventListener('click', () => this.generateDocument());
+        document.getElementById('reset-btn').addEventListener('click', () => this.resetForm());
 
-        // Remove section functionality
-        this.setupRemoveSectionListeners();
+        // Preview modal
+        document.getElementById('close-preview').addEventListener('click', () => this.closePreview());
+        document.getElementById('close-preview-btn').addEventListener('click', () => this.closePreview());
+        document.getElementById('download-preview-btn').addEventListener('click', () => this.downloadAsPDF());
     }
 
-    switchView(view) {
-        const formView = document.getElementById('form-view');
-        const splitView = document.getElementById('split-view');
-        const preview = document.getElementById('article-preview');
+    addInitialSection() {
+        this.addSection('heading', 'Introduction');
+        this.addSection('paragraph', '');
+    }
 
-        // Hide all views
-        formView.classList.add('hidden');
-        splitView.classList.add('hidden');
-        preview.style.display = 'none';
+    addSection(type, content = '') {
+        const sectionId = `section-${Date.now()}`;
+        const section = {
+            id: sectionId,
+            type: type,
+            content: content
+        };
 
-        // Show selected view
-        switch(view) {
-            case 'form':
-                formView.classList.remove('hidden');
+        this.sections.push(section);
+        this.renderSection(section);
+    }
+
+    renderSection(section) {
+        const container = document.getElementById('content-sections');
+        const sectionElement = document.createElement('div');
+        sectionElement.className = 'content-section';
+        sectionElement.id = section.id;
+
+        let inputElement;
+        switch (section.type) {
+            case 'heading':
+                inputElement = `<input type="text" class="form-input font-bold" value="${section.content}" placeholder="Enter heading text">`;
                 break;
-            case 'split':
-                splitView.classList.remove('hidden');
-                this.syncToSplitView();
+            case 'subheading':
+                inputElement = `<input type="text" class="form-input font-semibold" value="${section.content}" placeholder="Enter subheading text">`;
                 break;
-            case 'preview':
-                preview.style.display = 'block';
-                this.generatePreview();
+            case 'paragraph':
+                inputElement = `<textarea class="form-textarea" placeholder="Enter paragraph text" rows="4">${section.content}</textarea>`;
                 break;
         }
 
-        this.currentView = view;
-        this.updateButtonStates();
-    }
-
-    updateButtonStates() {
-        const buttons = {
-            'form-view-btn': 'form',
-            'split-view-btn': 'split',
-            'preview-btn': 'preview'
-        };
-
-        Object.keys(buttons).forEach(btnId => {
-            const btn = document.getElementById(btnId);
-            if (buttons[btnId] === this.currentView) {
-                btn.classList.remove('btn-secondary');
-                btn.classList.add('btn-primary');
-            } else {
-                btn.classList.remove('btn-primary');
-                btn.classList.add('btn-secondary');
-            }
-        });
-    }
-
-    addSection() {
-        this.sectionCount++;
-        const container = document.getElementById('sections-container');
-        
-        const sectionHTML = `
-            <div class="section-item bg-gray-50 p-4 rounded mb-4">
-                <div class="flex justify-between items-center mb-2">
-                    <h4 class="font-semibold">Section ${this.sectionCount}</h4>
-                    <button class="remove-section btn" style="background: #ef4444; color: white; padding: 0.25rem 0.5rem; font-size: 0.75rem;">Remove</button>
-                </div>
-                <div class="form-group">
-                    <label>Section Title</label>
-                    <input type="text" class="form-control section-title" placeholder="Section Title">
-                </div>
-                <div class="form-group">
-                    <label>Section Content</label>
-                    <textarea class="form-control section-content" rows="6" placeholder="Enter your section content here..."></textarea>
+        sectionElement.innerHTML = `
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium text-gray-600 capitalize">${section.type}</span>
+                <div class="flex gap-2">
+                    <button type="button" class="text-blue-600 hover:text-blue-800 text-sm" onclick="articleGenerator.moveSectionUp('${section.id}')">
+                        <i class="fas fa-arrow-up"></i>
+                    </button>
+                    <button type="button" class="text-blue-600 hover:text-blue-800 text-sm" onclick="articleGenerator.moveSectionDown('${section.id}')">
+                        <i class="fas fa-arrow-down"></i>
+                    </button>
+                    <button type="button" class="text-red-600 hover:text-red-800 text-sm" onclick="articleGenerator.removeSection('${section.id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
                 </div>
             </div>
+            ${inputElement}
         `;
 
-        container.insertAdjacentHTML('beforeend', sectionHTML);
-        this.setupRemoveSectionListeners();
-        this.setupAutoSave();
+        container.appendChild(sectionElement);
+
+        // Add event listener for content changes
+        const input = sectionElement.querySelector('input, textarea');
+        input.addEventListener('input', (e) => {
+            section.content = e.target.value;
+        });
     }
 
-    setupRemoveSectionListeners() {
-        document.querySelectorAll('.remove-section').forEach(btn => {
-            btn.replaceWith(btn.cloneNode(true)); // Remove existing listeners
-        });
+    removeSection(sectionId) {
+        this.sections = this.sections.filter(section => section.id !== sectionId);
+        document.getElementById(sectionId).remove();
+    }
 
-        document.querySelectorAll('.remove-section').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                if (document.querySelectorAll('.section-item').length > 1) {
-                    e.target.closest('.section-item').remove();
-                    this.renumberSections();
-                } else {
-                    alert('At least one section is required.');
+    moveSectionUp(sectionId) {
+        const index = this.sections.findIndex(section => section.id === sectionId);
+        if (index > 0) {
+            [this.sections[index], this.sections[index - 1]] = [this.sections[index - 1], this.sections[index]];
+            this.reorderSections();
+        }
+    }
+
+    moveSectionDown(sectionId) {
+        const index = this.sections.findIndex(section => section.id === sectionId);
+        if (index < this.sections.length - 1) {
+            [this.sections[index], this.sections[index + 1]] = [this.sections[index + 1], this.sections[index]];
+            this.reorderSections();
+        }
+    }
+
+    reorderSections() {
+        const container = document.getElementById('content-sections');
+        container.innerHTML = '';
+        this.sections.forEach(section => this.renderSection(section));
+    }
+
+    addFootnote() {
+        const footnoteId = this.currentFootnoteId++;
+        const footnote = {
+            id: footnoteId,
+            content: ''
+        };
+
+        this.footnotes.push(footnote);
+        this.renderFootnote(footnote);
+    }
+
+    renderFootnote(footnote) {
+        const container = document.getElementById('footnotes-container');
+        const footnoteElement = document.createElement('div');
+        footnoteElement.className = 'footnote-item';
+        footnoteElement.innerHTML = `
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium text-gray-600">Footnote [^${footnote.id}]</span>
+                <button type="button" class="text-red-600 hover:text-red-800 text-sm" onclick="articleGenerator.removeFootnote(${footnote.id})">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+            <textarea class="form-textarea" placeholder="Enter footnote content" rows="2" oninput="articleGenerator.updateFootnote(${footnote.id}, this.value)">${footnote.content}</textarea>
+        `;
+
+        container.appendChild(footnoteElement);
+    }
+
+    updateFootnote(id, content) {
+        const footnote = this.footnotes.find(fn => fn.id === id);
+        if (footnote) {
+            footnote.content = content;
+        }
+    }
+
+    removeFootnote(id) {
+        this.footnotes = this.footnotes.filter(fn => fn.id !== id);
+        this.renderFootnotes();
+    }
+
+    renderFootnotes() {
+        const container = document.getElementById('footnotes-container');
+        container.innerHTML = '';
+        this.footnotes.forEach(footnote => this.renderFootnote(footnote));
+    }
+
+    previewArticle() {
+        this.updateSectionContents();
+        this.generatePreview();
+        document.getElementById('preview-modal').classList.remove('hidden');
+    }
+
+    closePreview() {
+        document.getElementById('preview-modal').classList.add('hidden');
+    }
+
+    updateSectionContents() {
+        this.sections.forEach(section => {
+            const element = document.getElementById(section.id);
+            if (element) {
+                const input = element.querySelector('input, textarea');
+                if (input) {
+                    section.content = input.value;
                 }
-            });
+            }
         });
-    }
-
-    renumberSections() {
-        document.querySelectorAll('.section-item').forEach((section, index) => {
-            section.querySelector('h4').textContent = `Section ${index + 1}`;
-        });
-        this.sectionCount = document.querySelectorAll('.section-item').length;
     }
 
     generatePreview() {
-        const data = this.collectFormData();
-        const html = this.generateArticleHTML(data);
-        
-        document.getElementById('preview-content').innerHTML = html;
-        document.getElementById('page-number').textContent = data.pageStart || '59';
-        
-        this.switchView('preview');
-    }
+        const preview = document.getElementById('article-preview');
+        preview.innerHTML = '';
 
-    collectFormData() {
-        const sections = [];
-        document.querySelectorAll('.section-item').forEach(section => {
-            const title = section.querySelector('.section-title').value;
-            const content = section.querySelector('.section-content').value;
-            if (title || content) {
-                sections.push({ title, content });
-            }
-        });
+        // Title and Author
+        const title = document.getElementById('article-title').value || 'Article Title';
+        const author = document.getElementById('author-name').value || 'Author Name';
+        const email = document.getElementById('author-email').value;
+        const affiliation = document.getElementById('author-affiliation').value;
 
-        return {
-            volume: document.getElementById('volume').value || 'Vol. 8',
-            issue: document.getElementById('issue').value || 'No. 1, 2025',
-            pageStart: document.getElementById('page-start').value || '59',
-            headerTitle: document.getElementById('header-title').value || 'Article Title',
-            title: document.getElementById('article-title').value || 'Article Title',
-            author: document.getElementById('author-name').value || 'Author Name',
-            abstract: document.getElementById('abstract').value || '',
-            keywords: document.getElementById('keywords').value || '',
-            sections: sections,
-            references: document.getElementById('references').value || '',
-            footnotes: document.getElementById('footnotes').value || ''
-        };
-    }
-
-    generateArticleHTML(data) {
-        let sectionsHTML = '';
-        data.sections.forEach(section => {
-            if (section.title || section.content) {
-                sectionsHTML += `
-                    <h2>${this.escapeHtml(section.title)}</h2>
-                    ${this.formatContent(section.content)}
-                `;
-            }
-        });
-
-        let referencesHTML = '';
-        if (data.references) {
-            const refList = data.references.split('\n').filter(ref => ref.trim());
-            referencesHTML = `
-                <div class="references">
-                    <h3>References</h3>
-                    ${refList.map(ref => `<div class="reference-item">${this.escapeHtml(ref.trim())}</div>`).join('')}
-                </div>
-            `;
-        }
-
-        let footnotesHTML = '';
-        if (data.footnotes) {
-            const footnoteList = data.footnotes.split('\n').filter(note => note.trim());
-            footnotesHTML = `
-                <div class="footnote">
-                    ${footnoteList.map(note => `<div>${this.escapeHtml(note.trim())}</div>`).join('')}
-                </div>
-            `;
-        }
-
-        return `
-            <div class="article-header">
-                ${this.escapeHtml(data.headerTitle)} / ${this.escapeHtml(data.author)} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${data.pageStart}
-                <br><br>
-                Islamic Insight ${data.volume}, ${data.issue}
+        preview.innerHTML += `
+            <div class="text-center mb-8">
+                <h1 class="article-title">${this.escapeHtml(title)}</h1>
+                <p class="article-author">${this.escapeHtml(author)}${affiliation ? `<br>${this.escapeHtml(affiliation)}` : ''}${email ? `<br>${this.escapeHtml(email)}` : ''}</p>
             </div>
-
-            <h1 class="article-title">${this.escapeHtml(data.title)}</h1>
-            
-            <div class="article-author">${this.escapeHtml(data.author)}</div>
-
-            ${data.abstract ? `
-                <div class="article-abstract">
-                    <h4>Abstract:</h4>
-                    <p>${this.formatContent(data.abstract)}</p>
-                </div>
-            ` : ''}
-
-            ${data.keywords ? `
-                <div class="article-keywords">
-                    <h4>Keywords:</h4>
-                    <p>${this.escapeHtml(data.keywords)}</p>
-                </div>
-            ` : ''}
-
-            <div class="article-content">
-                ${sectionsHTML}
-            </div>
-
-            ${referencesHTML}
-            ${footnotesHTML}
         `;
+
+        // Abstract
+        const abstract = document.getElementById('abstract').value;
+        if (abstract) {
+            preview.innerHTML += `
+                <div class="article-section">
+                    <h2 class="article-heading">Abstract</h2>
+                    <p class="article-paragraph">${this.escapeHtml(abstract)}</p>
+                </div>
+            `;
+        }
+
+        // Keywords
+        const keywords = document.getElementById('keywords').value;
+        if (keywords) {
+            preview.innerHTML += `
+                <div class="article-section">
+                    <p class="article-keywords"><strong>Keywords:</strong> ${this.escapeHtml(keywords)}</p>
+                </div>
+            `;
+        }
+
+        // Content Sections
+        this.sections.forEach(section => {
+            if (section.content.trim()) {
+                let html = '';
+                switch (section.type) {
+                    case 'heading':
+                        html = `<h2 class="article-heading">${this.processContent(section.content)}</h2>`;
+                        break;
+                    case 'subheading':
+                        html = `<h3 class="article-subheading">${this.processContent(section.content)}</h3>`;
+                        break;
+                    case 'paragraph':
+                        html = `<p class="article-paragraph">${this.processContent(section.content)}</p>`;
+                        break;
+                }
+                preview.innerHTML += html;
+            }
+        });
+
+        // Footnotes
+        if (this.footnotes.some(fn => fn.content.trim())) {
+            preview.innerHTML += `<div class="article-footnotes">`;
+            this.footnotes.forEach(footnote => {
+                if (footnote.content.trim()) {
+                    preview.innerHTML += `
+                        <p><sup>[^${footnote.id}]</sup> ${this.escapeHtml(footnote.content)}</p>
+                    `;
+                }
+            });
+            preview.innerHTML += `</div>`;
+        }
+
+        // References
+        const references = document.getElementById('references').value;
+        if (references) {
+            preview.innerHTML += `
+                <div class="article-references">
+                    <h2 class="article-heading">References</h2>
+                    ${references.split('\n').filter(ref => ref.trim()).map(ref => 
+                        `<p class="article-paragraph" style="text-indent: -1.5rem; margin-left: 1.5rem;">${this.escapeHtml(ref)}</p>`
+                    ).join('')}
+                </div>
+            `;
+        }
     }
 
-    formatContent(content) {
-        if (!content) return '';
+    processContent(content) {
+        // Process footnotes in content
+        let processedContent = this.escapeHtml(content);
         
-        return content
-            .split('\n\n')
-            .filter(para => para.trim())
-            .map(para => `<p>${this.escapeHtml(para.trim())}</p>`)
-            .join('');
+        // Replace [^n] with superscript footnote references
+        processedContent = processedContent.replace(/\[\^(\d+)\]/g, '<sup class="footnote-ref">[$1]</sup>');
+        
+        return processedContent;
     }
 
     escapeHtml(text) {
@@ -242,271 +288,123 @@ class ArticleGenerator {
         return div.innerHTML;
     }
 
-    setupAutoSave() {
-        const inputs = document.querySelectorAll('.form-control');
-        inputs.forEach(input => {
-            input.addEventListener('input', () => this.saveToLocalStorage());
-        });
-    }
-
-    saveToLocalStorage() {
-        const data = this.collectFormData();
-        localStorage.setItem('islamicInsightArticle', JSON.stringify(data));
-    }
-
-    loadFromLocalStorage() {
-        const saved = localStorage.getItem('islamicInsightArticle');
-        if (saved) {
-            try {
-                const data = JSON.parse(saved);
-                this.populateForm(data);
-            } catch (e) {
-                console.error('Error loading saved data:', e);
-            }
-        }
-    }
-
-    populateForm(data) {
-        // Basic fields
-        document.getElementById('volume').value = data.volume || '';
-        document.getElementById('issue').value = data.issue || '';
-        document.getElementById('page-start').value = data.pageStart || '';
-        document.getElementById('header-title').value = data.headerTitle || '';
-        document.getElementById('article-title').value = data.title || '';
-        document.getElementById('author-name').value = data.author || '';
-        document.getElementById('abstract').value = data.abstract || '';
-        document.getElementById('keywords').value = data.keywords || '';
-        document.getElementById('references').value = data.references || '';
-        document.getElementById('footnotes').value = data.footnotes || '';
-
-        // Clear existing sections and add saved ones
-        const container = document.getElementById('sections-container');
-        container.innerHTML = '';
-        this.sectionCount = 0;
-
-        if (data.sections && data.sections.length > 0) {
-            data.sections.forEach(section => {
-                this.addSection();
-                const lastSection = container.lastElementChild;
-                lastSection.querySelector('.section-title').value = section.title || '';
-                lastSection.querySelector('.section-content').value = section.content || '';
-            });
-        } else {
-            this.addSection(); // Ensure at least one section
-        }
-    }
-
-    syncToSplitView() {
-        const data = this.collectFormData();
-        document.getElementById('quick-title').value = data.title;
-        document.getElementById('quick-author').value = data.author;
+    generateDocument() {
+        this.updateSectionContents();
         
-        // Combine all sections into quick content
-        let combinedContent = '';
-        if (data.abstract) {
-            combinedContent += `Abstract:\n${data.abstract}\n\n`;
-        }
+        // Create HTML document for printing/download
+        const htmlContent = this.generateHTMLDocument();
         
-        data.sections.forEach(section => {
-            if (section.title) {
-                combinedContent += `${section.title}\n\n`;
-            }
-            if (section.content) {
-                combinedContent += `${section.content}\n\n`;
-            }
-        });
-        
-        document.getElementById('quick-content').value = combinedContent;
-    }
-
-    setupLivePreview() {
-        const quickInputs = ['quick-title', 'quick-author', 'quick-content'];
-        quickInputs.forEach(id => {
-            const element = document.getElementById(id);
-            if (element) {
-                element.addEventListener('input', () => this.updateLivePreview());
-            }
-        });
-    }
-
-    updateLivePreview() {
-        const title = document.getElementById('quick-title').value || 'Article Title';
-        const author = document.getElementById('quick-author').value || 'Author Name';
-        const content = document.getElementById('quick-content').value || '';
-
-        const previewHTML = `
-            <div style="font-family: 'Crimson Text', serif; max-width: 800px; margin: 0 auto; padding: 2rem; line-height: 1.6;">
-                <div style="text-align: right; font-size: 10pt; margin-bottom: 2rem; border-bottom: 1px solid #000; padding-bottom: 0.5rem;">
-                    ${title} / ${author} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 59
-                    <br><br>
-                    Islamic Insight Vol. 8, No. 1, 2025
-                </div>
-                
-                <h1 style="font-size: 14pt; font-weight: bold; text-align: center; margin: 2rem 0 1rem 0;">${title}</h1>
-                <div style="font-size: 12pt; text-align: center; margin-bottom: 2rem; font-weight: 500;">${author}</div>
-                
-                <div style="text-align: justify; font-size: 10pt;">
-                    ${this.formatContent(content)}
-                </div>
-            </div>
-        `;
-
-        document.getElementById('live-preview').innerHTML = previewHTML;
-    }
-
-    downloadHTML() {
-        const data = this.collectFormData();
-        const html = this.generateCompleteHTML(data);
-        
-        const blob = new Blob([html], { type: 'text/html' });
+        // Create blob and download
+        const blob = new Blob([htmlContent], { type: 'text/html' });
         const url = URL.createObjectURL(blob);
-        
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${data.title.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'article'}.html`;
+        a.download = 'islamic-insight-article.html';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
     }
 
-    generateCompleteHTML(data) {
-        const articleContent = this.generateArticleHTML(data);
+    generateHTMLDocument() {
+        const title = document.getElementById('article-title').value || 'Article Title';
+        const author = document.getElementById('author-name').value || 'Author Name';
         
         return `<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${data.title} - Islamic Insight</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>${title} - Islamic Insight</title>
     <style>
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Times New Roman', serif;
             line-height: 1.6;
-            color: #1a202c;
-            background-color: #f5f5f5;
             margin: 0;
-            padding: 20px;
-        }
-        .article-container {
-            max-width: 210mm;
-            min-height: 297mm;
-            margin: 0 auto;
-            background: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 20mm;
-            position: relative;
-        }
-        .article-header {
-            text-align: right;
-            font-size: 10pt;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid #000;
-            padding-bottom: 0.5rem;
+            font-size: 12pt;
+            max-width: 210mm;
+            margin: 0 auto;
         }
         .article-title {
-            font-family: 'Crimson Text', serif;
-            font-size: 14pt;
+            font-size: 16pt;
             font-weight: bold;
             text-align: center;
-            margin: 2rem 0 1rem 0;
-            line-height: 1.3;
+            margin-bottom: 1rem;
         }
         .article-author {
             font-size: 12pt;
             text-align: center;
-            margin-bottom: 2rem;
-            font-weight: 500;
-        }
-        .article-abstract, .article-keywords {
-            margin: 2rem 0;
-        }
-        .article-abstract h4, .article-keywords h4 {
             font-weight: bold;
-            margin-bottom: 0.5rem;
+            margin-bottom: 2rem;
         }
-        .article-content {
-            text-align: justify;
-            line-height: 1.6;
-            font-size: 10pt;
+        .article-heading {
+            font-size: 14pt;
+            font-weight: bold;
+            margin: 1.5rem 0 0.5rem 0;
         }
-        .article-content h2 {
+        .article-subheading {
             font-size: 12pt;
             font-weight: bold;
-            margin: 2rem 0 1rem 0;
+            margin: 1rem 0 0.5rem 0;
         }
-        .article-content h3 {
-            font-size: 11pt;
-            font-weight: bold;
-            margin: 1.5rem 0 0.75rem 0;
+        .article-paragraph {
+            text-align: justify;
+            margin-bottom: 0.75rem;
+            text-indent: 1.5rem;
         }
-        .article-content p {
-            margin-bottom: 1rem;
-            text-indent: 0.5in;
+        .article-keywords {
+            font-style: italic;
+            margin: 1rem 0;
         }
-        .article-content p:first-child {
-            text-indent: 0;
-        }
-        .references {
+        .article-footnotes {
+            font-size: 10pt;
             margin-top: 2rem;
             border-top: 1px solid #ccc;
             padding-top: 1rem;
         }
-        .references h3 {
-            font-size: 12pt;
-            font-weight: bold;
-            margin-bottom: 1rem;
+        .article-references {
+            font-size: 11pt;
+            margin-top: 2rem;
         }
-        .reference-item {
-            margin-bottom: 0.5rem;
-            text-indent: -0.5in;
-            padding-left: 0.5in;
-            font-size: 9pt;
-        }
-        .footnote {
-            font-size: 8pt;
-            border-top: 1px solid #ccc;
-            margin-top: 1rem;
-            padding-top: 0.5rem;
-        }
-        .page-number {
-            position: absolute;
-            bottom: 15mm;
-            right: 20mm;
-            font-size: 10pt;
+        .footnote-ref {
+            vertical-align: super;
+            font-size: 0.7em;
         }
         @media print {
-            body { background: white; padding: 0; }
-            .article-container { box-shadow: none; margin: 0; }
+            body {
+                padding: 25mm;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="article-container">
-        ${articleContent}
-        <div class="page-number">${data.pageStart || '59'}</div>
-    </div>
+    ${document.getElementById('article-preview').innerHTML}
 </body>
 </html>`;
     }
+
+    downloadAsPDF() {
+        alert('PDF generation would typically require a server-side component. The HTML document has been optimized for printing. You can use "Print to PDF" from your browser.');
+        
+        // Alternative: Open print dialog
+        window.print();
+    }
+
+    resetForm() {
+        if (confirm('Are you sure you want to reset the form? All data will be lost.')) {
+            document.getElementById('article-form').reset();
+            this.sections = [];
+            this.footnotes = [];
+            this.currentFootnoteId = 1;
+            document.getElementById('content-sections').innerHTML = '';
+            document.getElementById('footnotes-container').innerHTML = '';
+            this.addInitialSection();
+        }
+    }
 }
 
-// Initialize the application
+// Initialize the article generator when the page loads
+let articleGenerator;
 document.addEventListener('DOMContentLoaded', function() {
-    new ArticleGenerator();
-});
-
-// Mobile menu functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-
-    if (mobileMenuBtn && mobileMenu) {
-        mobileMenuBtn.addEventListener('click', function() {
-            mobileMenu.classList.toggle('hidden');
-        });
-    }
+    articleGenerator = new ArticleGenerator();
 });
