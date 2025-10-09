@@ -690,9 +690,20 @@ searchAllArticles(query) {
     }
 
     truncateText(text, maxLength) {
-        if (!text || text.length <= maxLength) return text || '';
-        return text.substr(0, maxLength).replace(/\s+\S*$/, '');
+    if (!text || text.length <= maxLength) return text || '';
+    
+    // Truncate at maxLength and find the last complete word
+    let truncated = text.substr(0, maxLength);
+    const lastSpaceIndex = truncated.lastIndexOf(' ');
+    
+    // If we found a space and it's not too far back, cut at the last word
+    if (lastSpaceIndex > maxLength * 0.8) {
+        truncated = truncated.substr(0, lastSpaceIndex);
     }
+    
+    return truncated;
+}
+
 
     highlightSearchTerm(text, query) {
         if (!query || !text) return this.escapeHtml(text || '');
