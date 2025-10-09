@@ -784,9 +784,9 @@ searchAllArticles(query) {
          style="animation-delay: ${index * 0.1}s; ${directionStyle} font-family: ${fontFamily};" lang="${langAttr}">
         <div class="p-6 article-content">
             <h3 class="text-xl font-semibold academic-title text-gray-900 mb-3 leading-tight" 
-                style="font-family: ${fontFamily}; font-weight: ${isArabic ? '700' : '600'}; ${directionStyle}">
-                ${this.currentSearchTerm ? this.highlightSearchTerm(article.title, this.currentSearchTerm) : this.escapeHtml(article.title)}
-            </h3>
+    style="font-family: ${fontFamily}; font-weight: ${isArabic ? '700' : '600'}; font-size: ${isArabic ? '20px' : '20px'}; ${directionStyle}">
+    ${this.currentSearchTerm ? this.highlightSearchTerm(article.title, this.currentSearchTerm) : this.escapeHtml(article.title)}
+</h3>
 
             <div class="mb-3" style="${directionStyle}">
             <p class="text-sm font-medium text-blue-600" 
@@ -806,8 +806,8 @@ searchAllArticles(query) {
 
             <div class="article-description" style="${directionStyle}">
     <p class="text-gray-700 leading-relaxed mb-4" 
-       style="font-family: ${fontFamily}; font-size: ${isArabic ? '0.85em' : '0.9em'}; 
-              line-height: ${isArabic ? '1.7' : '1.6'}; text-align: justify; ${directionStyle}">
+       style="font-family: ${fontFamily}; font-size: ${isArabic ? '14px' : '15px'}; 
+              line-height: ${isArabic ? '1.6' : '1.5'}; text-align: justify; ${directionStyle}">
         ${this.currentSearchTerm ? this.highlightSearchTerm(article.abstract, this.currentSearchTerm) : this.escapeHtml(article.abstract)}
     </p>
 
