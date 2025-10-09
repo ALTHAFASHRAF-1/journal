@@ -688,7 +688,7 @@ ISLAMIC INSIGHT
 <div class="flex items-center space-x-6">
 <!-- Navigation Items -->
 <div id="nav-items" class="nav-items flex items-baseline space-x-6">
-<a href="#home" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Home</a>
+<a href="#home" class="text-blue-700 bg-blue-50 rounded px-3 py-2 text-sm font-medium transition-colors">Home</a>
 <a href="call-for-papers.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Call For Paper</a>
 <a href="#featured" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Current Issue</a>
 <a href="all-issues.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">All Issues</a>
@@ -746,7 +746,7 @@ class="navbar-search-input"
 <!-- Mobile Navigation -->
 <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
 <div class="px-2 pt-2 pb-3 space-y-1">
-<a href="#home" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Home</a>
+<a href="#home" class="block px-3 py-2 text-sm font-medium text-blue-700 bg-blue-50 rounded transition-colors">Home</a>
 <a href="call-for-papers.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Call For Paper</a>
 <a href="#featured" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Current Issue</a>
 <a href="all-issues.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">All Issues</a>
@@ -976,9 +976,17 @@ async function loadJournalData() {
         isDataLoaded = true;
         console.log('Articles loaded for search:', allArticles.length);
         
+        // Initialize current issue after data is loaded
+        if (currentIssueLoader) {
+            await currentIssueLoader.init();
+        }
+        
     } catch (error) {
         console.error('Error loading journal data:', error);
         isDataLoaded = false;
+        if (currentIssueLoader) {
+            currentIssueLoader.showError();
+        }
     }
 }
 
@@ -1445,47 +1453,6 @@ document.addEventListener('DOMContentLoaded', function() {
     currentIssueLoader = new CurrentIssueLoader();
 });
 
-// Update the existing loadJournalData function
-async function loadJournalData() {
-    try {
-        console.log('Loading journal data for search...');
-        
-        // Wait for the data to be loaded by sheets-loader.js
-        if (typeof sheetsDataManager !== 'undefined') {
-            await sheetsDataManager.loadFromSheets();
-            allArticles = await sheetsDataManager.getAllArticles();
-        } else {
-            // Fallback: wait for global data to be available
-            await new Promise((resolve) => {
-                const checkData = () => {
-                    if (window.journalData && window.articlesData) {
-                        allArticles = Object.values(window.articlesData);
-                        resolve();
-                    } else {
-                        setTimeout(checkData, 100);
-                    }
-                };
-                checkData();
-            });
-        }
-        
-        isDataLoaded = true;
-        console.log('Articles loaded for search:', allArticles.length);
-        
-        // Initialize current issue after data is loaded
-        if (currentIssueLoader) {
-            await currentIssueLoader.init();
-        }
-        
-    } catch (error) {
-        console.error('Error loading journal data:', error);
-        isDataLoaded = false;
-        if (currentIssueLoader) {
-            currentIssueLoader.showError();
-        }
-    }
-}
-
 // Also listen for the journalDataLoaded event
 window.addEventListener('journalDataLoaded', async function() {
     console.log('Journal data loaded event received');
@@ -1493,4 +1460,4 @@ window.addEventListener('journalDataLoaded', async function() {
 });    
 </script>
 </body>
-</html>  
+</html>
