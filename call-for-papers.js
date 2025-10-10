@@ -1,516 +1,360 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Call for Papers - Islamic Insight Journal of Islamic Studies">
-<meta name="keywords" content="call for papers, academic journal, research papers, Islamic studies, submission guidelines">
-<meta name="author" content="Islamic Insight Journal">
-<title>Call for Papers - Islamic Insight</title>
-<link rel="icon" type="image/png" href="logo.png">
+// Configuration - Replace this URL with your actual Google Sheets CSV export URL
+const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQyS3WXfgCUn_awTHYX9SgCC_QG2d3n49i_mMFMrHdPKgUbD4IQrBaLyS9mi8W4gwel9AnArlljcyX6/pub?gid=0&single=true&output=csv';
 
-<!-- CSS Libraries -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+// Alternative configuration for different CSV sources
+// const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-YOUR_PUBLISHED_SHEET_ID/pub?output=csv';
 
-<style>
-body {
-    font-family: 'Inter', sans-serif;
-    line-height: 1.6;
-    color: #1a202c;
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 0;
-}
+// Configuration for Google Doc template
+const TEMPLATE_DOC_ID = '1Cu_j4CcNIhh5qez3Xoqf0xCGn7QzaHLrX7rfTozw8Po';
 
-.academic-title {
-    font-family: 'Crimson Text', serif;
-}
+// Global variables to store the data
+let pageData = {};
 
-.logo-container {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
+// DOM elements
+const loadingState = document.getElementById('loading-state');
+const errorState = document.getElementById('error-state');
+const mainContent = document.getElementById('main-content');
+const errorMessage = document.getElementById('error-message');
 
-.logo-image {
-    height: 40px;
-    width: auto;
-}
+// Initialize the page
+document.addEventListener('DOMContentLoaded', function() {
+    loadDataFromGoogleSheets();
+});
 
-.logo-text-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.logo-text {
-    line-height: 1;
-    margin: 0;
-}
-
-.logo-subtitle {
-    font-size: 0.75rem;
-    color: #6b7280;
-    margin: 0;
-    line-height: 1;
-    font-weight: 400;
-}
-
-.mobile-menu {
-    transition: all 0.3s ease;
-}
-
-/* A4-like page container */
-.page-container {
-    max-width: 210mm; /* A4 width */
-    min-height: 297mm; /* A4 height */
-    margin: 2rem auto;
-    background: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 20mm 20mm; /* A4-like margins */
-    position: relative;
-}
-
-.content-wrapper {
-    width: 100%;
-    max-width: none;
-}
-
-.section-spacing {
-    margin-bottom: 2rem;
-}
-
-.text-justify {
-    text-align: justify;
-}
-
-/* Navigation adjustments */
-.nav-container {
-    background: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 40;
-    margin-bottom: 0;
-}
-
-/* Loading spinner */
-.loading-spinner {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #3498db;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.error-message {
-    background-color: #fee;
-    border: 1px solid #fcc;
-    color: #c33;
-    padding: 1rem;
-    border-radius: 4px;
-    margin: 1rem 0;
-}
-
-/* Button styling */
-.create-paper-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-}
-
-.create-paper-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-}
-
-.create-paper-btn:active {
-    transform: translateY(0);
-}
-
-.create-paper-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.button-loading {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    border: 2px solid #ffffff40;
-    border-top: 2px solid #ffffff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .page-container {
-        max-width: 95%;
-        margin: 1rem auto;
-        padding: 20mm 15mm;
-        min-height: auto;
+/**
+ * Load data from Google Sheets CSV
+ */
+async function loadDataFromGoogleSheets() {
+    try {
+        showLoading();
+        
+        // Fetch CSV data
+        const response = await fetch(GOOGLE_SHEETS_CSV_URL);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const csvText = await response.text();
+        
+        // Parse CSV data
+        const parsedData = parseCSV(csvText);
+        
+        // Process the parsed data
+        pageData = processData(parsedData);
+        
+        // Update the page content
+        updatePageContent();
+        
+        // Show the main content
+        showMainContent();
+        
+    } catch (error) {
+        console.error('Error loading data:', error);
+        showError('Failed to load content from Google Sheets. Please check your internet connection and try again.');
     }
+}
+
+/**
+ * Parse CSV text into an array of objects
+ */
+function parseCSV(csvText) {
+    const lines = csvText.trim().split('\n');
+    const headers = lines[0].split(',').map(header => header.trim().replace(/"/g, ''));
+    const data = [];
     
-    .logo-image {
-        height: 32px;
-    }
-
-    .logo-text {
-        font-size: 1rem;
-    }
-
-    .logo-subtitle {
-        font-size: 0.65rem;
-    }
-    
-    .create-paper-btn {
-        width: 100%;
-        justify-content: center;
-    }
-}
-
-@media (max-width: 480px) {
-    .page-container {
-        padding: 15mm 10mm;
-    }
-    
-    .logo-text {
-        font-size: 0.9rem;
-    }
-
-    .logo-subtitle {
-        font-size: 0.6rem;
-    }
-}
-
-/* Footer adjustments */
-footer {
-    margin-top: 0;
-}
-</style>
-</head>
-
-<body>
-    <!-- Navigation -->
-    <nav class="nav-container">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <a href="index.html" class="logo-container">
-                            <img src="logo.png" alt="Islamic Insight Logo" class="logo-image">
-                            <div class="logo-text-container">
-                                <h1 class="logo-text text-xl font-bold text-gray-900 academic-title">
-                                    ISLAMIC INSIGHT
-                                </h1>
-                                <p class="logo-subtitle">Journal of Islamic Studies</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Desktop Navigation -->
-                <div class="hidden md:block">
-                    <div class="flex items-center space-x-6">
-                        <a href="index.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Home</a>
-                        <a href="call-for-papers.html" class="text-blue-900 font-semibold px-3 py-2 text-sm font-medium">Call For Paper</a>
-                        <a href="index.html#featured" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Current Issue</a>
-                        <a href="all-issues.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">All Issues</a>
-                        <a href="index.html#about" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">About</a>
-                    </div>
-                </div>
-
-                <!-- Mobile menu button -->
-                <div class="md:hidden">
-                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-900 focus:outline-none">
-                        <i class="fas fa-bars text-lg"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Navigation -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200 mobile-menu">
-            <div class="px-2 pt-2 pb-3 space-y-1">
-                <a href="index.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Home</a>
-                <a href="call-for-papers.html" class="block px-3 py-2 text-sm font-medium text-blue-900 font-semibold">Call For Paper</a>
-                <a href="index.html#featured" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Current Issue</a>
-                <a href="all-issues.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">All Issues</a>
-                <a href="index.html#about" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">About</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- A4-like Page Container -->
-    <div class="page-container">
-        <div class="content-wrapper">
-            
-            <!-- Loading State -->
-            <div id="loading-state" class="text-center section-spacing">
-                <div class="loading-spinner mx-auto mb-4"></div>
-                <p class="text-gray-600">Loading content...</p>
-            </div>
-
-            <!-- Error State -->
-            <div id="error-state" class="error-message section-spacing" style="display: none;">
-                <h3 class="font-bold text-lg mb-2">Error Loading Content</h3>
-                <p id="error-message">Unable to load content from Google Sheets. Please try again later.</p>
-            </div>
-
-            <!-- Main Content (Hidden initially) -->
-            <div id="main-content" style="display: none;">
-                <!-- Header -->
-                <div class="text-center section-spacing">
-                    <h1 id="main-heading" class="text-3xl sm:text-4xl font-bold academic-title text-gray-900 mb-4">Call for Papers</h1>
-                    <h2 id="sub-heading" class="text-xl sm:text-2xl academic-title text-gray-700">Islamic Insight Journal of Islamic Studies</h2>
-                    <p id="edition" class="text-lg text-gray-600 mt-2">Vol. 8, No. 1 (2025)</p>
-                </div>
-
-                <!-- Main Content -->
-                <div class="section-spacing">
-                    <p id="paragraph-1" class="text-gray-700 leading-relaxed text-justify mb-6">
-                        We are pleased to invite original research articles for the upcoming issue of Islamic Insight, 
-                        a biannual peer-reviewed journal published by the Kulliyyah of Qur'an and Sunnah, 
-                        Darul Huda Islamic University, Kerala, India.
-                    </p>
-
-                    <p id="paragraph-2" class="text-gray-700 leading-relaxed text-justify mb-6">
-                        Islamic Insight welcomes high-quality, interdisciplinary research in areas related to Islamic 
-                        revealed knowledge and the Muslim world. This includes—but is not limited to—studies in the 
-                        Noble Qur'an, Hadith, Islamic Theology, Islamic Social Sciences, and Muslim History and Culture. 
-                        Unique and relevant contributions beyond the prescribed disciplines are also encouraged.
-                    </p>
-
-                    <p id="paragraph-3" class="text-gray-700 leading-relaxed text-justify mb-6">
-                        All submissions will undergo a double-blind peer review process. Send your manuscripts by 
-                        <strong id="submission-date">mid-June 2025</strong> for consideration in <span id="edition-ref">Vol. 8, No. 1 (2025)</span>.
-                    </p>
-                </div>
-
-                <!-- Submission Guidelines -->
-                <div class="section-spacing">
-                    <h3 class="text-2xl font-bold academic-title text-gray-900 mb-4">Submission Guidelines</h3>
-                    
-                    <ul id="submission-guidelines" class="space-y-3 text-gray-700 leading-relaxed">
-                        <!-- Dynamic content will be loaded here -->
-                    </ul>
-                </div>
-
-                <!-- Research Areas -->
-                <div class="section-spacing">
-                    <h3 class="text-2xl font-bold academic-title text-gray-900 mb-4">Research Areas</h3>
-                    
-                    <ul id="research-areas" class="space-y-2 text-gray-700 leading-relaxed">
-                        <!-- Dynamic content will be loaded here -->
-                    </ul>
-                </div>
-
-                <!-- Article Format Tools -->
-                <div class="section-spacing">
-                    <h3 class="text-2xl font-bold academic-title text-gray-900 mb-4">Article Format</h3>
-                    
-                    <p class="text-gray-700 leading-relaxed mb-6">
-                        To help authors format their submissions according to our journal standards, 
-                        we provide a pre-formatted Google Doc template. Click the button below to create 
-                        your own copy of the article format template:
-                    </p>
-                    
-                    <div class="text-center">
-                        <button id="create-paper-btn" class="create-paper-btn" onclick="createPaperCopy()">
-                            <i class="fas fa-file-alt"></i>
-                            <span id="btn-text">Create Full Paper</span>
-                        </button>
-                    </div>
-                    
-                    <p class="text-gray-600 text-sm text-center mt-4">
-                        <i class="fas fa-info-circle"></i>
-                        This will create a personal copy of our article template in your Google Drive
-                    </p>
-                </div>
-
-                <!-- Contact Information (Static) -->
-                <div class="section-spacing">
-                    <h3 class="text-2xl font-bold academic-title text-gray-900 mb-4">Submission</h3>
-                    
-                    <p class="text-gray-700 leading-relaxed mb-4">
-                        For submission, please send your manuscript to:
-                    </p>
-                    
-                    <div class="bg-gray-50 p-4 rounded border-l-4 border-blue-500 mb-6">
-                        <p class="font-semibold text-gray-900 mb-2">Email:</p>
-                        <a href="mailto:islamicinsight@dhiu.in" class="text-blue-600 hover:text-blue-800 font-medium text-lg">
-                            islamicinsight@dhiu.in
-                        </a>
-                    </div>
-
-                    <div class="bg-gray-50 p-4 rounded mb-6">
-                        <p class="font-semibold text-gray-900 mb-2">Editorial Office:</p>
-                        <address class="text-gray-700 not-italic leading-relaxed">
-                            Editor, Islamic Insight Journal of Islamic Studies<br>
-                            Darul Huda Islamic University<br>
-                            Chemmad, P.B.NO. 3<br>
-                            Tirurangadi (PO), Malappuram (Dt.)<br>
-                            676306 (PIN), Kerala, India
-                        </address>
-                    </div>
-
-                    <p class="text-gray-700 leading-relaxed">
-                        <strong>Website:</strong> 
-                        <a href="https://www.islamicinsight.in" class="text-blue-600 hover:text-blue-800">www.islamicinsight.in</a>
-                    </p>
-                </div>
-
-                <!-- Back to Home -->
-                <div class="text-center section-spacing">
-                    <a href="index.html" class="inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors">
-                        Back to Home
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <div class="logo-container justify-center mb-4">
-                    <img src="logo.png" alt="Islamic Insight Logo" class="logo-image">
-                    <div class="logo-text-container">
-                        <h1 class="logo-text text-white">ISLAMIC INSIGHT</h1>
-                        <p class="logo-subtitle text-gray-300">Journal of Islamic Studies</p>
-                    </div>
-                </div>
-                <p class="text-gray-300 text-sm">
-                    &copy; 2024 Islamic Insight Journal. All rights reserved.
-                </p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="call-for-papers.js"></script>
-    <script src="tracking.js"></script>
-    <script>
-        // Mobile menu functionality
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        mobileMenuBtn.addEventListener('click', function() {
-            mobileMenu.classList.toggle('hidden');
+    for (let i = 1; i < lines.length; i++) {
+        const values = parseCSVLine(lines[i]);
+        const row = {};
+        
+        headers.forEach((header, index) => {
+            row[header] = values[index] || '';
         });
+        
+        data.push(row);
+    }
+    
+    return data;
+}
 
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
+/**
+ * Parse a single CSV line, handling quoted values
+ */
+function parseCSVLine(line) {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+    
+    for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        
+        if (char === '"') {
+            inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+            result.push(current.trim());
+            current = '';
+        } else {
+            current += char;
+        }
+    }
+    
+    result.push(current.trim());
+    return result;
+}
 
-        // Google Doc Copy Functionality
-        async function createPaperCopy() {
-            const btn = document.getElementById('create-paper-btn');
-            const btnText = document.getElementById('btn-text');
-            const originalText = btnText.textContent;
-            
-            // Disable button and show loading state
-            btn.disabled = true;
-            btnText.innerHTML = '<span class="button-loading"></span> Creating copy...';
-            
-            try {
-                // Template document ID from your Google Doc URL
-                const templateDocId = '1Cu_j4CcNIhh5qez3Xoqf0xCGn7QzaHLrX7rfTozw8Po';
-                
-                // Create a copy using Google Drive API
-                const copyUrl = `https://www.googleapis.com/drive/v3/files/${templateDocId}/copy`;
-                
-                // Generate a unique name for the copy
-                const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
-                const copyName = `Islamic Insight Article Template - ${timestamp}`;
-                
-                // This approach uses a simple redirect to Google Drive's copy mechanism
-                // which will prompt the user to sign in and create a copy
-                const copyLink = `https://docs.google.com/document/d/${templateDocId}/copy?title=${encodeURIComponent(copyName)}`;
-                
-                // Open the copy link in a new tab
-                window.open(copyLink, '_blank');
-                
-                // Reset button after a short delay
-                setTimeout(() => {
-                    btn.disabled = false;
-                    btnText.textContent = originalText;
-                }, 2000);
-                
-                // Show success message
-                showMessage('Your copy is being created! A new tab will open with your personal copy of the article template.', 'success');
-                
-            } catch (error) {
-                console.error('Error creating copy:', error);
-                
-                // Reset button
-                btn.disabled = false;
-                btnText.textContent = originalText;
-                
-                // Show error message
-                showMessage('Unable to create copy automatically. Please try again or contact support.', 'error');
+/**
+ * Process the parsed CSV data into our page structure
+ */
+function processData(data) {
+    const processedData = {};
+    
+    // Assuming the first row contains our data
+    if (data.length > 0) {
+        const row = data[0];
+        
+        // Basic fields
+        processedData.heading = row.heading || 'Call for Papers';
+        processedData.subHeading = row['sub-heading'] || 'Islamic Insight Journal of Islamic Studies';
+        processedData.edition = row.edition || 'Vol. 8, No. 1 (2025)';
+        processedData.p1 = row.p1 || '';
+        processedData.p2 = row.p2 || '';
+        processedData.p3 = row.p3 || '';
+        processedData.date = row.date || 'mid-June 2025';
+        
+        // Submission Guidelines (SG1, SG2, etc.)
+        processedData.submissionGuidelines = [];
+        for (let i = 1; i <= 20; i++) { // Check up to SG20
+            const sgKey = `SG${i}`;
+            if (row[sgKey] && row[sgKey].trim()) {
+                processedData.submissionGuidelines.push(row[sgKey].trim());
             }
         }
-
-        // Show message function
-        function showMessage(message, type) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message-popup ${type === 'success' ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700'} border px-4 py-3 rounded fixed top-4 right-4 z-50 max-w-md shadow-lg`;
-            messageDiv.innerHTML = `
-                <div class="flex">
-                    <div class="flex-1">
-                        <p class="text-sm">${message}</p>
-                    </div>
-                    <div class="ml-4">
-                        <button onclick="this.parentElement.parentElement.parentElement.remove()" class="text-lg font-bold leading-none">&times;</button>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(messageDiv);
-            
-            // Auto remove after 5 seconds
-            setTimeout(() => {
-                if (messageDiv.parentElement) {
-                    messageDiv.remove();
-                }
-            }, 5000);
+        
+        // Research Areas (RA1, RA2, etc.)
+        processedData.researchAreas = [];
+        for (let i = 1; i <= 20; i++) { // Check up to RA20
+            const raKey = `RA${i}`;
+            if (row[raKey] && row[raKey].trim()) {
+                processedData.researchAreas.push(row[raKey].trim());
+            }
         }
-    </script>
-</body>
-</html>
+    }
+    
+    return processedData;
+}
+
+/**
+ * Update the page content with loaded data
+ */
+function updatePageContent() {
+    // Update basic fields
+    updateElementText('main-heading', pageData.heading);
+    updateElementText('sub-heading', pageData.subHeading);
+    updateElementText('edition', pageData.edition);
+    updateElementText('paragraph-1', pageData.p1);
+    updateElementText('paragraph-2', pageData.p2);
+    
+    // Update paragraph 3 with proper date formatting
+    updateParagraph3();
+    
+    // Update submission guidelines
+    updateSubmissionGuidelines();
+    
+    // Update research areas
+    updateResearchAreas();
+    
+    // Update edition reference in paragraph 3
+    updateElementText('edition-ref', pageData.edition);
+}
+
+/**
+ * Update paragraph 3 with formatted date
+ */
+function updateParagraph3() {
+    const paragraph3Element = document.getElementById('paragraph-3');
+    const submissionDateElement = document.getElementById('submission-date');
+    
+    if (paragraph3Element && pageData.p3) {
+        paragraph3Element.innerHTML = pageData.p3;
+    }
+    
+    if (submissionDateElement && pageData.date) {
+        submissionDateElement.innerHTML = `<strong>${pageData.date}</strong>`;
+    }
+}
+
+/**
+ * Update submission guidelines list
+ */
+function updateSubmissionGuidelines() {
+    const container = document.getElementById('submission-guidelines');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    pageData.submissionGuidelines.forEach(guideline => {
+        const li = document.createElement('li');
+        li.className = 'text-justify';
+        li.innerHTML = `• ${guideline}`;
+        container.appendChild(li);
+    });
+}
+
+/**
+ * Update research areas list
+ */
+function updateResearchAreas() {
+    const container = document.getElementById('research-areas');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    pageData.researchAreas.forEach(area => {
+        const li = document.createElement('li');
+        li.innerHTML = `• ${area}`;
+        container.appendChild(li);
+    });
+}
+
+/**
+ * Update text content of an element
+ */
+function updateElementText(elementId, text) {
+    const element = document.getElementById(elementId);
+    if (element && text) {
+        element.textContent = text;
+    }
+}
+
+/**
+ * Show loading state
+ */
+function showLoading() {
+    loadingState.style.display = 'block';
+    errorState.style.display = 'none';
+    mainContent.style.display = 'none';
+}
+
+/**
+ * Show error state
+ */
+function showError(message) {
+    loadingState.style.display = 'none';
+    errorState.style.display = 'block';
+    mainContent.style.display = 'none';
+    errorMessage.textContent = message;
+}
+
+/**
+ * Show main content
+ */
+function showMainContent() {
+    loadingState.style.display = 'none';
+    errorState.style.display = 'none';
+    mainContent.style.display = 'block';
+}
+
+/**
+ * Create a copy of the Google Doc template
+ */
+function createGoogleDocCopy() {
+    try {
+        // Generate a unique name for the copy
+        const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+        const copyName = `Islamic Insight Article Template - ${timestamp}`;
+        
+        // Create the copy URL that will prompt user to sign in and create a copy
+        const copyUrl = `https://docs.google.com/document/d/${TEMPLATE_DOC_ID}/copy?title=${encodeURIComponent(copyName)}`;
+        
+        // Open in new tab
+        window.open(copyUrl, '_blank');
+        
+        return true;
+    } catch (error) {
+        console.error('Error creating Google Doc copy:', error);
+        return false;
+    }
+}
+
+/**
+ * Handle the create paper button click
+ */
+function handleCreatePaper() {
+    const btn = document.getElementById('create-paper-btn');
+    const btnText = document.getElementById('btn-text');
+    const originalText = btnText.textContent;
+    
+    // Disable button and show loading state
+    btn.disabled = true;
+    btnText.innerHTML = '<span class="button-loading"></span> Creating copy...';
+    
+    try {
+        // Create the copy
+        const success = createGoogleDocCopy();
+        
+        if (success) {
+            // Show success message
+            showNotification('Your copy is being created! A new tab will open with your personal copy of the article template.', 'success');
+        } else {
+            throw new Error('Failed to create copy');
+        }
+        
+    } catch (error) {
+        console.error('Error:', error);
+        showNotification('Unable to create copy automatically. Please try again or contact support.', 'error');
+    } finally {
+        // Reset button after a short delay
+        setTimeout(() => {
+            btn.disabled = false;
+            btnText.textContent = originalText;
+        }, 2000);
+    }
+}
+
+/**
+ * Show notification message
+ */
+function showNotification(message, type) {
+    // Remove existing notifications
+    const existingNotifications = document.querySelectorAll('.notification-popup');
+    existingNotifications.forEach(notification => notification.remove());
+    
+    const notificationDiv = document.createElement('div');
+    notificationDiv.className = `notification-popup ${type === 'success' ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700'} border px-4 py-3 rounded fixed top-4 right-4 z-50 max-w-md shadow-lg`;
+    notificationDiv.innerHTML = `
+        <div class="flex">
+            <div class="flex-1">
+                <p class="text-sm">${message}</p>
+            </div>
+            <div class="ml-4">
+                <button onclick="this.parentElement.parentElement.parentElement.remove()" class="text-lg font-bold leading-none hover:text-gray-600">&times;</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(notificationDiv);
+    
+    // Auto remove after 8 seconds
+    setTimeout(() => {
+        if (notificationDiv.parentElement) {
+            notificationDiv.remove();
+        }
+    }, 8000);
+}
+
+/**
+ * Refresh data (can be called manually)
+ */
+function refreshData() {
+    loadDataFromGoogleSheets();
+}
+
+// Export functions for potential external use
+window.CallForPapersLoader = {
+    refresh: refreshData,
+    getData: () => pageData,
+    createPaper: handleCreatePaper
+};
+
+// Global function for the onclick handler
+window.createPaperCopy = handleCreatePaper;
