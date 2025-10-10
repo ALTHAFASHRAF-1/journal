@@ -4,6 +4,9 @@ const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1v
 // Alternative configuration for different CSV sources
 // const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-YOUR_PUBLISHED_SHEET_ID/pub?output=csv';
 
+// Configuration for Google Doc template
+const TEMPLATE_DOC_ID = '1Cu_j4CcNIhh5qez3Xoqf0xCGn7QzaHLrX7rfTozw8Po';
+
 // Global variables to store the data
 let pageData = {};
 
@@ -252,6 +255,94 @@ function showMainContent() {
 }
 
 /**
+ * Create a copy of the Google Doc template
+ */
+function createGoogleDocCopy() {
+    try {
+        // Generate a unique name for the copy
+        const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+        const copyName = `Islamic Insight Article Template - ${timestamp}`;
+        
+        // Create the copy URL that will prompt user to sign in and create a copy
+        const copyUrl = `https://docs.google.com/document/d/${TEMPLATE_DOC_ID}/copy?title=${encodeURIComponent(copyName)}`;
+        
+        // Open in new tab
+        window.open(copyUrl, '_blank');
+        
+        return true;
+    } catch (error) {
+        console.error('Error creating Google Doc copy:', error);
+        return false;
+    }
+}
+
+/**
+ * Handle the create paper button click
+ */
+function handleCreatePaper() {
+    const btn = document.getElementById('create-paper-btn');
+    const btnText = document.getElementById('btn-text');
+    const originalText = btnText.textContent;
+    
+    // Disable button and show loading state
+    btn.disabled = true;
+    btnText.innerHTML = '<span class="button-loading"></span> Creating copy...';
+    
+    try {
+        // Create the copy
+        const success = createGoogleDocCopy();
+        
+        if (success) {
+            // Show success message
+            showNotification('Your copy is being created! A new tab will open with your personal copy of the article template.', 'success');
+        } else {
+            throw new Error('Failed to create copy');
+        }
+        
+    } catch (error) {
+        console.error('Error:', error);
+        showNotification('Unable to create copy automatically. Please try again or contact support.', 'error');
+    } finally {
+        // Reset button after a short delay
+        setTimeout(() => {
+            btn.disabled = false;
+            btnText.textContent = originalText;
+        }, 2000);
+    }
+}
+
+/**
+ * Show notification message
+ */
+function showNotification(message, type) {
+    // Remove existing notifications
+    const existingNotifications = document.querySelectorAll('.notification-popup');
+    existingNotifications.forEach(notification => notification.remove());
+    
+    const notificationDiv = document.createElement('div');
+    notificationDiv.className = `notification-popup ${type === 'success' ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700'} border px-4 py-3 rounded fixed top-4 right-4 z-50 max-w-md shadow-lg`;
+    notificationDiv.innerHTML = `
+        <div class="flex">
+            <div class="flex-1">
+                <p class="text-sm">${message}</p>
+            </div>
+            <div class="ml-4">
+                <button onclick="this.parentElement.parentElement.parentElement.remove()" class="text-lg font-bold leading-none hover:text-gray-600">&times;</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(notificationDiv);
+    
+    // Auto remove after 8 seconds
+    setTimeout(() => {
+        if (notificationDiv.parentElement) {
+            notificationDiv.remove();
+        }
+    }, 8000);
+}
+
+/**
  * Refresh data (can be called manually)
  */
 function refreshData() {
@@ -261,5 +352,9 @@ function refreshData() {
 // Export functions for potential external use
 window.CallForPapersLoader = {
     refresh: refreshData,
-    getData: () => pageData
+    getData: () => pageData,
+    createPaper: handleCreatePaper
 };
+
+// Global function for the onclick handler
+window.createPaperCopy = handleCreatePaper;
