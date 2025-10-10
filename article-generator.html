@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Article Format Generator - Islamic Insight Journal">
+<meta name="description" content="Professional Academic Article Generator - Islamic Insight Journal">
 <meta name="keywords" content="article generator, academic formatting, Islamic studies, journal submission">
 <meta name="author" content="Islamic Insight Journal">
-<title>Article Format Generator - Islamic Insight</title>
+<title>Academic Article Generator - Islamic Insight</title>
 <link rel="icon" type="image/png" href="logo.png">
 
 <!-- CSS Libraries -->
@@ -18,6 +18,10 @@
 
 <style>
 /* Base Styles */
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Inter', sans-serif;
     line-height: 1.6;
@@ -63,17 +67,17 @@ body {
 
 /* Form Container */
 .form-container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 2rem auto;
     background: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
     overflow: hidden;
 }
 
 .form-section {
-    padding: 2rem;
-    border-bottom: 1px solid #e5e7eb;
+    padding: 2.5rem;
+    border-bottom: 2px solid #e5e7eb;
 }
 
 .form-section:last-child {
@@ -81,8 +85,10 @@ body {
 }
 
 .form-section h3 {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     color: #1f2937;
+    font-size: 1.5rem;
+    font-weight: 700;
 }
 
 .form-group {
@@ -91,131 +97,251 @@ body {
 
 .form-group label {
     display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
     color: #374151;
+    font-size: 0.95rem;
 }
 
 .form-control {
     width: 100%;
-    padding: 0.75rem;
+    padding: 0.875rem;
     border: 2px solid #d1d5db;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    transition: border-color 0.15s ease-in-out;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease-in-out;
     font-family: 'Times New Roman', serif;
+    background-color: #fafafa;
 }
 
 .form-control:focus {
     outline: none;
     border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    background-color: white;
 }
 
 textarea.form-control {
     resize: vertical;
-    min-height: 100px;
-    line-height: 1.5;
+    min-height: 120px;
+    line-height: 1.6;
 }
 
 .btn {
-    padding: 0.75rem 1.5rem;
+    padding: 0.875rem 1.75rem;
     border: none;
-    border-radius: 4px;
-    font-weight: 500;
+    border-radius: 8px;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.15s ease-in-out;
+    transition: all 0.2s ease-in-out;
     text-decoration: none;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+    font-size: 0.95rem;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .btn-primary {
-    background-color: #3b82f6;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
     color: white;
 }
 
 .btn-primary:hover {
-    background-color: #2563eb;
+    background: linear-gradient(135deg, #2563eb, #1e40af);
 }
 
 .btn-success {
-    background-color: #10b981;
+    background: linear-gradient(135deg, #10b981, #047857);
     color: white;
 }
 
 .btn-success:hover {
-    background-color: #059669;
+    background: linear-gradient(135deg, #059669, #065f46);
 }
 
 .btn-secondary {
-    background-color: #6b7280;
+    background: linear-gradient(135deg, #6b7280, #4b5563);
     color: white;
 }
 
 .btn-secondary:hover {
-    background-color: #4b5563;
+    background: linear-gradient(135deg, #4b5563, #374151);
 }
 
-/* Preview Container - Exact A4 dimensions and Islamic Insight formatting */
+.btn-download {
+    background: linear-gradient(135deg, #059669, #047857);
+    color: white;
+    border: 2px solid #047857;
+}
+
+.btn-download:hover {
+    background: linear-gradient(135deg, #047857, #065f46);
+    border-color: #065f46;
+}
+
+/* Page Management */
+.page-item {
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.page-item.active {
+    border-color: #3b82f6;
+    background: #eff6ff;
+}
+
+.page-header {
+    display: flex;
+    justify-content: between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #cbd5e1;
+}
+
+.page-number {
+    background: #3b82f6;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.remove-page {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.remove-page:hover {
+    background: #dc2626;
+}
+
+/* Content Sections */
+.content-section {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.content-section h4 {
+    margin-bottom: 1rem;
+    color: #1f2937;
+    font-weight: 600;
+}
+
+.section-controls {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.section-controls button {
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.add-content {
+    background: #10b981;
+    color: white;
+}
+
+.add-content:hover {
+    background: #059669;
+}
+
+.remove-content {
+    background: #ef4444;
+    color: white;
+}
+
+.remove-content:hover {
+    background: #dc2626;
+}
+
+/* Preview Container - Exact document formatting */
 .preview-container {
     max-width: 210mm;
     min-height: 297mm;
     margin: 2rem auto;
     background: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 25mm 25mm 20mm 25mm; /* Top, Right, Bottom, Left margins */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 25mm;
     position: relative;
     display: none;
     font-family: 'Times New Roman', serif;
-    font-size: 12pt;
-    line-height: 1.5;
+    font-size: 11pt;
+    line-height: 1.15;
+    color: #000;
 }
 
-/* Header formatting matching the Word document */
-.article-header {
+/* Header formatting - Page 1 (Special header) */
+.page-header-first {
     font-family: 'Times New Roman', serif;
     font-size: 10pt;
     line-height: 1.2;
-    margin-bottom: 20pt;
-    text-align: left;
-    border-bottom: 1pt solid #000;
-    padding-bottom: 10pt;
-}
-
-.header-right {
-    float: right;
+    margin-bottom: 25pt;
     text-align: right;
+    padding-bottom: 5pt;
 }
 
-.header-clear {
-    clear: both;
+/* Headers for other pages (odd/even same format) */
+.page-header-other {
+    font-family: 'Times New Roman', serif;
+    font-size: 10pt;
+    line-height: 1.2;
+    text-align: center;
+    margin-bottom: 20pt;
+    padding-bottom: 5pt;
 }
 
-/* Title formatting - exactly as in the Word document */
+/* Article Title - 13pt bold, center aligned */
 .article-title {
     font-family: 'Times New Roman', serif;
-    font-size: 14pt;
+    font-size: 13pt;
     font-weight: bold;
     text-align: center;
-    margin: 30pt 0 15pt 0;
+    margin: 20pt 0 15pt 0;
     line-height: 1.3;
-    text-transform: uppercase;
-    letter-spacing: 0.5pt;
+    color: #000;
 }
 
-/* Author formatting */
+/* Author - 11pt bold, center aligned */
 .article-author {
     font-family: 'Times New Roman', serif;
-    font-size: 12pt;
+    font-size: 11pt;
     text-align: center;
-    margin-bottom: 25pt;
+    margin-bottom: 20pt;
     font-weight: bold;
+    color: #000;
 }
 
-/* Abstract and Keywords formatting */
+/* Abstract and Keywords */
 .article-abstract {
-    margin: 20pt 0;
+    margin: 15pt 0;
     text-align: justify;
 }
 
@@ -225,13 +351,16 @@ textarea.form-control {
     font-weight: bold;
     margin-bottom: 8pt;
     text-align: left;
+    color: #000;
 }
 
 .article-abstract p {
     font-size: 11pt;
-    line-height: 1.4;
+    line-height: 1.15;
     margin-bottom: 0;
     text-indent: 0;
+    text-align: justify;
+    color: #000;
 }
 
 .article-keywords {
@@ -245,56 +374,74 @@ textarea.form-control {
     font-weight: bold;
     margin-bottom: 5pt;
     display: inline;
+    color: #000;
 }
 
 .article-keywords p {
     display: inline;
     font-size: 11pt;
-    line-height: 1.4;
+    line-height: 1.15;
+    color: #000;
 }
 
-/* Content formatting - matching the document structure */
-.article-content {
-    text-align: justify;
-    line-height: 1.5;
-    font-size: 12pt;
-    font-family: 'Times New Roman', serif;
-}
-
-.article-content h2 {
+/* Main Headings - 12pt bold */
+.main-heading {
     font-family: 'Times New Roman', serif;
     font-size: 12pt;
     font-weight: bold;
-    margin: 25pt 0 12pt 0;
+    margin: 20pt 0 12pt 0;
     text-align: left;
     line-height: 1.3;
+    color: #000;
 }
 
-.article-content h3 {
+/* Sub Headings - 12pt bold */
+.sub-heading {
+    font-family: 'Times New Roman', serif;
+    font-size: 12pt;
+    font-weight: bold;
+    margin: 15pt 0 8pt 0;
+    text-align: left;
+    line-height: 1.3;
+    color: #000;
+}
+
+/* Paragraphs - 11pt, justified, with tab indent except first paragraph under headings */
+.article-paragraph {
     font-family: 'Times New Roman', serif;
     font-size: 11pt;
-    font-weight: bold;
-    margin: 20pt 0 10pt 0;
-    text-align: left;
-    line-height: 1.3;
-}
-
-.article-content p {
-    margin-bottom: 12pt;
-    text-indent: 0;
-    line-height: 1.5;
-    font-size: 12pt;
+    margin-bottom: 0pt;
     text-align: justify;
+    line-height: 1.15;
+    color: #000;
 }
 
-.article-content p:first-of-type {
-    text-indent: 0;
+.article-paragraph:not(.first-paragraph) {
+    text-indent: 14pt; /* Tab indent for continuation paragraphs */
 }
 
-/* References formatting */
+.article-paragraph.first-paragraph {
+    text-indent: 0; /* No indent for first paragraph under headings */
+}
+
+/* List items */
+.article-list {
+    margin: 8pt 0;
+    padding-left: 20pt;
+}
+
+.article-list li {
+    font-family: 'Times New Roman', serif;
+    font-size: 11pt;
+    margin-bottom: 4pt;
+    text-align: justify;
+    line-height: 1.15;
+    color: #000;
+}
+
+/* References - 11pt with hanging indent */
 .references {
-    margin-top: 30pt;
-    page-break-inside: avoid;
+    margin-top: 25pt;
 }
 
 .references h3 {
@@ -302,41 +449,46 @@ textarea.form-control {
     font-size: 12pt;
     font-weight: bold;
     margin-bottom: 15pt;
-    text-align: center;
-    text-transform: uppercase;
+    text-align: left;
+    color: #000;
 }
 
 .reference-item {
-    margin-bottom: 8pt;
+    font-family: 'Times New Roman', serif;
+    font-size: 11pt;
+    margin-bottom: 0pt;
     text-indent: -36pt;
     padding-left: 36pt;
-    font-size: 11pt;
-    line-height: 1.4;
+    line-height: 1.15;
     text-align: justify;
+    color: #000;
 }
 
-/* Footnotes formatting */
-.footnote {
-    font-size: 10pt;
-    border-top: 1pt solid #000;
+/* Footnotes - 9pt */
+.footnotes {
     margin-top: 20pt;
     padding-top: 10pt;
-    line-height: 1.3;
+    border-top: 1pt solid #000;
 }
 
 .footnote-item {
-    margin-bottom: 5pt;
+    font-family: 'Times New Roman', serif;
+    font-size: 9pt;
+    margin-bottom: 3pt;
     text-indent: -18pt;
     padding-left: 18pt;
+    line-height: 1.1;
+    color: #000;
 }
 
-/* Page numbering - exactly as shown in document */
-.page-number {
+/* Page numbers */
+.page-number-display {
     position: absolute;
     bottom: 15mm;
     right: 25mm;
     font-family: 'Times New Roman', serif;
     font-size: 10pt;
+    color: #000;
 }
 
 /* Split view */
@@ -351,16 +503,17 @@ textarea.form-control {
 
 .editor-panel, .preview-panel {
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
 
 .panel-header {
-    background: #f8f9fa;
-    padding: 1rem;
-    border-bottom: 1px solid #e5e7eb;
-    font-weight: 600;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    padding: 1.25rem;
+    border-bottom: 2px solid #e5e7eb;
+    font-weight: 700;
+    color: #1f2937;
 }
 
 .editor-content {
@@ -374,22 +527,10 @@ textarea.form-control {
     padding: 2rem;
     font-family: 'Times New Roman', serif;
     font-size: 11pt;
-    line-height: 1.4;
+    line-height: 1.15;
 }
 
-/* Download button special styling */
-.btn-download {
-    background-color: #059669;
-    color: white;
-    border: 2px solid #059669;
-}
-
-.btn-download:hover {
-    background-color: #047857;
-    border-color: #047857;
-}
-
-/* Loading spinner for download */
+/* Loading spinner */
 .download-spinner {
     display: none;
     width: 16px;
@@ -404,24 +545,6 @@ textarea.form-control {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-}
-
-/* Print styles */
-@media print {
-    .preview-container {
-        box-shadow: none;
-        margin: 0;
-        max-width: none;
-        page-break-inside: avoid;
-    }
-    
-    .article-content h2 {
-        page-break-after: avoid;
-    }
-    
-    .references {
-        page-break-before: auto;
-    }
 }
 
 /* Responsive */
@@ -439,11 +562,11 @@ textarea.form-control {
 @media (max-width: 768px) {
     .form-container {
         margin: 1rem;
-        border-radius: 0;
+        border-radius: 8px;
     }
     
     .form-section {
-        padding: 1rem;
+        padding: 1.5rem;
     }
     
     .preview-container {
@@ -473,53 +596,47 @@ textarea.form-control {
     margin-top: 1rem;
 }
 
-/* In-text citation styling */
-.citation {
-    font-style: normal;
+/* Drag and drop styling */
+.dragging {
+    opacity: 0.5;
 }
 
-/* Block quote styling for longer quotes */
-.block-quote {
-    margin: 15pt 36pt;
-    font-style: italic;
-    text-align: justify;
+.drag-over {
+    border-color: #3b82f6;
+    background-color: #eff6ff;
 }
 
-/* List styling within content */
-.article-content ul {
-    margin: 12pt 0;
-    padding-left: 36pt;
+/* Content type indicators */
+.content-type-badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    background: #e5e7eb;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
 }
 
-.article-content ol {
-    margin: 12pt 0;
-    padding-left: 36pt;
+.content-type-badge.heading {
+    background: #dbeafe;
+    color: #1d4ed8;
 }
 
-.article-content li {
-    margin-bottom: 6pt;
-    text-align: justify;
+.content-type-badge.paragraph {
+    background: #ecfdf5;
+    color: #047857;
 }
 
-/* Special formatting for Islamic terms */
-.arabic-term {
-    font-style: italic;
-    direction: rtl;
-    unicode-bidi: bidi-override;
-}
-
-/* Section break styling */
-.section-break {
-    margin: 30pt 0;
-    border-top: 1pt solid #ccc;
-    padding-top: 15pt;
+.content-type-badge.list {
+    background: #fef3c7;
+    color: #92400e;
 }
 </style>
 </head>
 
 <body>
     <!-- Navigation -->
-    <nav class="bg-white shadow-md sticky top-0 z-40">
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
@@ -558,15 +675,15 @@ textarea.form-control {
     <!-- Main Content -->
     <div class="container mx-auto px-4 py-8">
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold academic-title text-gray-900 mb-4">Article Format Generator</h1>
-            <p class="text-gray-600">Create your academic article in Islamic Insight journal format</p>
-            <p class="text-sm text-gray-500 mt-2">This tool creates articles matching the exact formatting standards of Islamic Insight Journal</p>
+            <h1 class="text-4xl font-bold academic-title text-gray-900 mb-4">Professional Article Generator</h1>
+            <p class="text-lg text-gray-600 mb-2">Create your academic article with precise formatting</p>
+            <p class="text-sm text-gray-500">Multi-page support • Perfect formatting • Instant Word export</p>
         </div>
 
         <!-- Control Buttons -->
-        <div class="flex justify-center space-x-4 mb-6">
+        <div class="flex justify-center flex-wrap gap-4 mb-8">
             <button id="form-view-btn" class="btn btn-primary">
-                <i class="fas fa-edit mr-2"></i>Form View
+                <i class="fas fa-edit mr-2"></i>Form Editor
             </button>
             <button id="split-view-btn" class="btn btn-secondary">
                 <i class="fas fa-columns mr-2"></i>Split View
@@ -578,117 +695,107 @@ textarea.form-control {
                 <div class="download-spinner"></div>
                 <i class="fas fa-file-word mr-2"></i>Download Word
             </button>
+            <button id="print-btn" class="btn btn-secondary">
+                <i class="fas fa-print mr-2"></i>Print
+            </button>
         </div>
 
         <!-- Form View -->
         <div id="form-view" class="form-container">
             <!-- Journal Information -->
             <div class="form-section">
-                <h3 class="text-xl font-bold academic-title"><i class="fas fa-info-circle mr-2"></i>Journal Information</h3>
+                <h3 class="text-xl font-bold academic-title"><i class="fas fa-info-circle mr-2 text-blue-600"></i>Journal Information</h3>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="form-group">
-                        <label for="volume">Volume</label>
-                        <input type="text" id="volume" class="form-control" placeholder="Vol. 8" value="Vol. 8">
+                        <label for="journal-name">Journal Name</label>
+                        <input type="text" id="journal-name" class="form-control" value="Islamic Insight">
                     </div>
                     <div class="form-group">
-                        <label for="issue">Issue & Year</label>
-                        <input type="text" id="issue" class="form-control" placeholder="No. 1, 2025" value="No. 1, 2025">
+                        <label for="volume-issue">Volume & Issue</label>
+                        <input type="text" id="volume-issue" class="form-control" placeholder="Vol. 8, No. 1, 2025" value="Vol. 8, No. 1, 2025">
+                    </div>
+                    <div class="form-group">
+                        <label for="starting-page">Starting Page Number</label>
+                        <input type="number" id="starting-page" class="form-control" placeholder="33" min="1" value="33">
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="form-group">
-                        <label for="page-start">Starting Page</label>
-                        <input type="number" id="page-start" class="form-control" placeholder="59" min="1" value="59">
+                        <label for="header-title">Header Title (Short version)</label>
+                        <input type="text" id="header-title" class="form-control" placeholder="Western Sīrah Literature">
                     </div>
                     <div class="form-group">
-                        <label for="header-title">Header Title (Short version for header)</label>
-                        <input type="text" id="header-title" class="form-control" placeholder="Ḥadīth of Self-Knowing">
+                        <label for="header-author">Header Author</label>
+                        <input type="text" id="header-author" class="form-control" placeholder="Irshad EV">
                     </div>
                 </div>
             </div>
 
-            <!-- Article Content -->
+            <!-- Article Metadata -->
             <div class="form-section">
-                <h3 class="text-xl font-bold academic-title"><i class="fas fa-file-text mr-2"></i>Article Content</h3>
+                <h3 class="text-xl font-bold academic-title"><i class="fas fa-file-text mr-2 text-green-600"></i>Article Metadata</h3>
                 
                 <div class="form-group">
-                    <label for="article-title">Article Title (Will appear in UPPERCASE in preview)</label>
-                    <textarea id="article-title" class="form-control" rows="2" placeholder="ḤADĪTH OF SELF-KNOWING BETWEEN SUFIS AND ḤADĪTH SCHOLARS"></textarea>
+                    <label for="article-title">Article Title (Main Topic - 13pt bold)</label>
+                    <textarea id="article-title" class="form-control" rows="2" placeholder="TOPIC"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="author-name">Author Name</label>
-                    <input type="text" id="author-name" class="form-control" placeholder="Muhammad Gufran-ul-Haque">
+                    <label for="author-name">Author Name (11pt bold)</label>
+                    <input type="text" id="author-name" class="form-control" placeholder="Author name">
                 </div>
 
                 <div class="form-group">
-                    <label for="abstract">Abstract (Justified text, 11pt font in output)</label>
-                    <textarea id="abstract" class="form-control" rows="8" placeholder="This paper examines the 'Ḥadīth of Self-knowing,' often quoted as 'Whoever knows himself, knows his Lord,' a saying that has profoundly influenced Islamic thought, particularly within Sufi and Ḥadīth scholarship..."></textarea>
+                    <label for="abstract">Abstract (11pt justified)</label>
+                    <textarea id="abstract" class="form-control" rows="8" placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit..."></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="keywords">Keywords (Will appear on same line as "Keywords:" heading)</label>
-                    <input type="text" id="keywords" class="form-control" placeholder="Self-knowing, Ḥadīth authenticity, Sufi mysticism, kashf, ilhām, Takhrīj">
+                    <label for="keywords">Keywords (11pt, comma-separated)</label>
+                    <input type="text" id="keywords" class="form-control" placeholder="Sample1, Sample2, Sample3, Sample4, Sample5, Sample6, Sample7">
                 </div>
             </div>
 
-            <!-- Sections -->
+            <!-- Pages Management -->
             <div class="form-section">
-                <h3 class="text-xl font-bold academic-title"><i class="fas fa-list mr-2"></i>Article Sections</h3>
-                <p class="text-gray-600 mb-4">Add your article sections. Each section will be formatted as a main heading (12pt, bold). Use proper Islamic and academic terminology.</p>
+                <h3 class="text-xl font-bold academic-title"><i class="fas fa-file-alt mr-2 text-purple-600"></i>Article Pages</h3>
+                <p class="text-gray-600 mb-6">Add and organize your article content across multiple pages. Each page can contain main headings, sub-headings, paragraphs, and lists.</p>
                 
-                <div id="sections-container">
-                    <!-- Section 1 (Introduction) -->
-                    <div class="section-item bg-gray-50 p-4 rounded mb-4">
-                        <div class="flex justify-between items-center mb-2">
-                            <h4 class="font-semibold">Section 1</h4>
-                            <button class="remove-section btn" style="background: #ef4444; color: white; padding: 0.25rem 0.5rem; font-size: 0.75rem;">Remove</button>
-                        </div>
-                        <div class="form-group">
-                            <label>Section Title</label>
-                            <input type="text" class="form-control section-title" placeholder="Introduction" value="Introduction">
-                        </div>
-                        <div class="form-group">
-                            <label>Section Content (Will be justified, 12pt font)</label>
-                            <textarea class="form-control section-content" rows="8" placeholder="Enter your section content here. Use proper academic writing style with in-text citations in format (Author, Year, p. X). For Islamic terms, use proper transliteration with diacritics where appropriate."></textarea>
-                        </div>
-                    </div>
+                <div id="pages-container">
+                    <!-- Pages will be dynamically added here -->
                 </div>
 
-                <button id="add-section" class="btn btn-primary">
-                    <i class="fas fa-plus mr-2"></i>Add Section
-                </button>
+                <div class="flex gap-4 mt-6">
+                    <button id="add-page" class="btn btn-primary">
+                        <i class="fas fa-plus mr-2"></i>Add New Page
+                    </button>
+                    <button id="auto-paginate" class="btn btn-secondary">
+                        <i class="fas fa-magic mr-2"></i>Auto-Paginate Content
+                    </button>
+                </div>
             </div>
 
             <!-- References -->
             <div class="form-section">
-                <h3 class="text-xl font-bold academic-title"><i class="fas fa-book mr-2"></i>References</h3>
-                <p class="text-gray-600 mb-4">Add your references in proper academic format. Each reference should be on a new line. Use hanging indent formatting (automatically applied in output).</p>
+                <h3 class="text-xl font-bold academic-title"><i class="fas fa-book mr-2 text-red-600"></i>References</h3>
+                <p class="text-gray-600 mb-4">Add your references (11pt with hanging indent). Each reference should be on a new line.</p>
                 
                 <div class="form-group">
-                    <label for="references">References (One per line, 11pt font with hanging indent in output)</label>
-                    <textarea id="references" class="form-control" rows="12" placeholder="al-Aṣfahānī, A. N. (n.d.). Ḥilyat al-Awliyā' wa Ṭabaqāt al-Aṣfiyā'. Beirut: Dār al-Kutub al-ʿIlmiyyah.
-
-al-Baghdādī, A. B. (1997). Tārīkh Baghdād. Beirut: Dār al-Gharb al-Islāmī.
-
-al-Ghazālī, A. Ḥ. M. (1988). Maʿārij al-Quds fī Madārij Maʿrifat al-Nafs. Cairo: Maktabat al-Jundī.
-
-Ibn Ḥibbān, M. (2012). Ṣaḥīḥ Ibn Ḥibbān. Beirut: Muʾassasat al-Risālah."></textarea>
+                    <label for="references">References</label>
+                    <textarea id="references" class="form-control" rows="10" placeholder="Reference 1: Author, A. (Year). Title of work. Publisher.&#10;Reference 2: Author, B. (Year). Title of article. Journal Name, 10(2), 123-145."></textarea>
                 </div>
             </div>
 
             <!-- Footnotes -->
             <div class="form-section">
-                <h3 class="text-xl font-bold academic-title"><i class="fas fa-sticky-note mr-2"></i>Footnotes (Optional)</h3>
-                <p class="text-gray-600 mb-4">Add footnotes if needed. Each footnote should be on a new line with number. 10pt font with hanging indent will be applied.</p>
+                <h3 class="text-xl font-bold academic-title"><i class="fas fa-sticky-note mr-2 text-yellow-600"></i>Footnotes</h3>
+                <p class="text-gray-600 mb-4">Add footnotes (9pt with hanging indent). Each footnote should be on a new line with number.</p>
                 
                 <div class="form-group">
-                    <label for="footnotes">Footnotes (Optional, 10pt font in output)</label>
-                    <textarea id="footnotes" class="form-control" rows="6" placeholder="¹ This refers to the classical methodology of Ḥadīth authentication as established by early scholars.
-² The term kashf refers to mystical unveiling or spiritual disclosure in Sufi terminology.
-³ Takhrīj methodology involves tracing and evaluating the chains of transmission for Ḥadīth authentication."></textarea>
+                    <label for="footnotes">Footnotes (Optional)</label>
+                    <textarea id="footnotes" class="form-control" rows="6" placeholder="¹ This is the first footnote.&#10;² This is the second footnote."></textarea>
                 </div>
             </div>
         </div>
@@ -700,7 +807,7 @@ Ibn Ḥibbān, M. (2012). Ṣaḥīḥ Ibn Ḥibbān. Beirut: Muʾassasat al-Ris
                     <i class="fas fa-edit mr-2"></i>Quick Editor
                 </div>
                 <div class="editor-content">
-                    <div class="p-4">
+                    <div class="p-6">
                         <div class="form-group">
                             <label for="quick-title">Title</label>
                             <input type="text" id="quick-title" class="form-control">
@@ -711,7 +818,7 @@ Ibn Ḥibbān, M. (2012). Ṣaḥīḥ Ibn Ḥibbān. Beirut: Muʾassasat al-Ris
                         </div>
                         <div class="form-group">
                             <label for="quick-content">Content</label>
-                            <textarea id="quick-content" class="form-control" rows="25" placeholder="Type your article content here. This will be formatted according to Islamic Insight journal standards."></textarea>
+                            <textarea id="quick-content" class="form-control" rows="30" placeholder="Type your article content here..."></textarea>
                         </div>
                     </div>
                 </div>
@@ -732,32 +839,32 @@ Ibn Ḥibbān, M. (2012). Ṣaḥīḥ Ibn Ḥibbān. Beirut: Muʾassasat al-Ris
             <div id="preview-content">
                 <!-- Generated content will appear here -->
             </div>
-            <div class="page-number" id="page-number">59</div>
+            <div class="page-number-display" id="page-number-display">33</div>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-8 mt-8">
+    <footer class="bg-gray-900 text-white py-12 mt-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <div class="logo-container justify-center mb-4">
+                <div class="logo-container justify-center mb-6">
                     <img src="logo.png" alt="Islamic Insight Logo" class="logo-image">
                     <div class="logo-text-container">
-                        <h1 class="logo-text text-white">ISLAMIC INSIGHT</h1>
+                        <h1 class="logo-text text-white text-xl">ISLAMIC INSIGHT</h1>
                         <p class="logo-subtitle text-gray-300">Journal of Islamic Studies</p>
                     </div>
                 </div>
-                <p class="text-gray-300 text-sm">
+                <p class="text-gray-300 text-base mb-2">
                     &copy; 2024 Islamic Insight Journal. All rights reserved.
                 </p>
-                <p class="text-gray-400 text-xs mt-2">
-                    Article Generator v2.0 - Formatted according to Islamic Insight Journal standards
+                <p class="text-gray-400 text-sm">
+                    Professional Article Generator v3.0 - Advanced Multi-Page Support
                 </p>
             </div>
         </div>
     </footer>
 
-    <!-- Include the docx library -->
+    <!-- Include required libraries -->
     <script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
     <script src="https://unpkg.com/file-saver@2.0.5/dist/FileSaver.min.js"></script>
     <script src="article-generator.js"></script>
