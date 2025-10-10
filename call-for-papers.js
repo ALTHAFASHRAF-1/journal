@@ -1,9 +1,6 @@
 // Configuration - Replace this URL with your actual Google Sheets CSV export URL
 const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQyS3WXfgCUn_awTHYX9SgCC_QG2d3n49i_mMFMrHdPKgUbD4IQrBaLyS9mi8W4gwel9AnArlljcyX6/pub?gid=0&single=true&output=csv';
 
-// Alternative configuration for different CSV sources
-// const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-YOUR_PUBLISHED_SHEET_ID/pub?output=csv';
-
 // Configuration for Google Doc template
 const TEMPLATE_DOC_ID = '1Cu_j4CcNIhh5qez3Xoqf0xCGn7QzaHLrX7rfTozw8Po';
 
@@ -11,13 +8,17 @@ const TEMPLATE_DOC_ID = '1Cu_j4CcNIhh5qez3Xoqf0xCGn7QzaHLrX7rfTozw8Po';
 let pageData = {};
 
 // DOM elements
-const loadingState = document.getElementById('loading-state');
-const errorState = document.getElementById('error-state');
-const mainContent = document.getElementById('main-content');
-const errorMessage = document.getElementById('error-message');
+let loadingState, errorState, mainContent, errorMessage;
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize DOM elements
+    loadingState = document.getElementById('loading-state');
+    errorState = document.getElementById('error-state');
+    mainContent = document.getElementById('main-content');
+    errorMessage = document.getElementById('error-message');
+    
+    // Load data from Google Sheets
     loadDataFromGoogleSheets();
 });
 
@@ -28,8 +29,19 @@ async function loadDataFromGoogleSheets() {
     try {
         showLoading();
         
-        // Fetch CSV data
-        const response = await fetch(GOOGLE_SHEETS_CSV_URL);
+        // Add timestamp to prevent caching
+        const url = `${GOOGLE_SHEETS_CSV_URL}&t=${Date.now()}`;
+        
+        // Fetch CSV data with timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+        
+        const response = await fetch(url, {
+            signal: controller.signal,
+            cache: 'no-cache'
+        });
+        
+        clearTimeout(timeoutId);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -37,8 +49,16 @@ async function loadDataFromGoogleSheets() {
         
         const csvText = await response.text();
         
+        if (!csvText || csvText.trim().length === 0) {
+            throw new Error('Empty response from Google Sheets');
+        }
+        
         // Parse CSV data
         const parsedData = parseCSV(csvText);
+        
+        if (!parsedData || parsedData.length === 0) {
+            throw new Error('No data found in the spreadsheet');
+        }
         
         // Process the parsed data
         pageData = processData(parsedData);
@@ -49,9 +69,22 @@ async function loadDataFromGoogleSheets() {
         // Show the main content
         showMainContent();
         
+        console.log('Data loaded successfully:', pageData);
+        
     } catch (error) {
         console.error('Error loading data:', error);
-        showError('Failed to load content from Google Sheets. Please check your internet connection and try again.');
+        
+        let errorMsg = 'Failed to load content from Google Sheets.';
+        
+        if (error.name === 'AbortError') {
+            errorMsg = 'Request timeout. Please check your internet connection and try again.';
+        } else if (error.message.includes('HTTP error')) {
+            errorMsg = 'Unable to access the data source. Please try again later.';
+        } else if (error.message.includes('Empty response')) {
+            errorMsg = 'The data source appears to be empty. Please contact the administrator.';
+        }
+        
+        showError(errorMsg);
     }
 }
 
@@ -59,46 +92,74 @@ async function loadDataFromGoogleSheets() {
  * Parse CSV text into an array of objects
  */
 function parseCSV(csvText) {
-    const lines = csvText.trim().split('\n');
-    const headers = lines[0].split(',').map(header => header.trim().replace(/"/g, ''));
-    const data = [];
-    
-    for (let i = 1; i < lines.length; i++) {
-        const values = parseCSVLine(lines[i]);
-        const row = {};
+    try {
+        const lines = csvText.trim().split('\n');
         
-        headers.forEach((header, index) => {
-            row[header] = values[index] || '';
-        });
+        if (lines.length < 2) {
+            throw new Error('Insufficient data in CSV');
+        }
         
-        data.push(row);
+        const headers = parseCSVLine(lines[0]);
+        const data = [];
+        
+        for (let i = 1; i < lines.length; i++) {
+            if (lines[i].trim()) { // Skip empty lines
+                const values = parseCSVLine(lines[i]);
+                const row = {};
+                
+                headers.forEach((header, index) => {
+                    row[header.trim()] = values[index] ? values[index].trim() : '';
+                });
+                
+                data.push(row);
+            }
+        }
+        
+        return data;
+        
+    } catch (error) {
+        console.error('Error parsing CSV:', error);
+        throw new Error('Failed to parse data format');
     }
-    
-    return data;
 }
 
 /**
- * Parse a single CSV line, handling quoted values
+ * Parse a single CSV line, handling quoted values and commas
  */
 function parseCSVLine(line) {
     const result = [];
     let current = '';
     let inQuotes = false;
+    let i = 0;
     
-    for (let i = 0; i < line.length; i++) {
+    while (i < line.length) {
         const char = line[i];
+        const nextChar = line[i + 1];
         
         if (char === '"') {
-            inQuotes = !inQuotes;
+            if (inQuotes && nextChar === '"') {
+                // Handle escaped quote
+                current += '"';
+                i += 2;
+                continue;
+            } else {
+                // Toggle quote state
+                inQuotes = !inQuotes;
+            }
         } else if (char === ',' && !inQuotes) {
-            result.push(current.trim());
+            // End of field
+            result.push(current);
             current = '';
         } else {
             current += char;
         }
+        
+        i++;
     }
     
-    result.push(current.trim());
+    // Add the last field
+    result.push(current);
+    
     return result;
 }
 
@@ -112,32 +173,45 @@ function processData(data) {
     if (data.length > 0) {
         const row = data[0];
         
-        // Basic fields
-        processedData.heading = row.heading || 'Call for Papers';
-        processedData.subHeading = row['sub-heading'] || 'Islamic Insight Journal of Islamic Studies';
-        processedData.edition = row.edition || 'Vol. 8, No. 1 (2025)';
-        processedData.p1 = row.p1 || '';
-        processedData.p2 = row.p2 || '';
-        processedData.p3 = row.p3 || '';
-        processedData.date = row.date || 'mid-June 2025';
+        // Basic fields with fallbacks
+        processedData.heading = row.heading || row.Heading || 'Call for Papers';
+        processedData.subHeading = row['sub-heading'] || row['Sub-heading'] || row['sub_heading'] || 'Islamic Insight Journal of Islamic Studies';
+        processedData.edition = row.edition || row.Edition || 'Vol. 8, No. 1 (2025)';
+        processedData.p1 = row.p1 || row.P1 || '';
+        processedData.p2 = row.p2 || row.P2 || '';
+        processedData.p3 = row.p3 || row.P3 || '';
+        processedData.date = row.date || row.Date || 'mid-June 2025';
         
         // Submission Guidelines (SG1, SG2, etc.)
         processedData.submissionGuidelines = [];
-        for (let i = 1; i <= 20; i++) { // Check up to SG20
+        for (let i = 1; i <= 30; i++) { // Check up to SG30
             const sgKey = `SG${i}`;
-            if (row[sgKey] && row[sgKey].trim()) {
-                processedData.submissionGuidelines.push(row[sgKey].trim());
+            const sgKeyLower = `sg${i}`;
+            const value = row[sgKey] || row[sgKeyLower] || '';
+            if (value && value.trim()) {
+                processedData.submissionGuidelines.push(value.trim());
             }
         }
         
         // Research Areas (RA1, RA2, etc.)
         processedData.researchAreas = [];
-        for (let i = 1; i <= 20; i++) { // Check up to RA20
+        for (let i = 1; i <= 30; i++) { // Check up to RA30
             const raKey = `RA${i}`;
-            if (row[raKey] && row[raKey].trim()) {
-                processedData.researchAreas.push(row[raKey].trim());
+            const raKeyLower = `ra${i}`;
+            const value = row[raKey] || row[raKeyLower] || '';
+            if (value && value.trim()) {
+                processedData.researchAreas.push(value.trim());
             }
         }
+    }
+    
+    // Set defaults if no data found
+    if (Object.keys(processedData).length === 0) {
+        processedData.heading = 'Call for Papers';
+        processedData.subHeading = 'Islamic Insight Journal of Islamic Studies';
+        processedData.edition = 'Vol. 8, No. 1 (2025)';
+        processedData.submissionGuidelines = ['Please check back later for submission guidelines.'];
+        processedData.researchAreas = ['Please check back later for research areas.'];
     }
     
     return processedData;
@@ -147,35 +221,40 @@ function processData(data) {
  * Update the page content with loaded data
  */
 function updatePageContent() {
-    // Update basic fields
-    updateElementText('main-heading', pageData.heading);
-    updateElementText('sub-heading', pageData.subHeading);
-    updateElementText('edition', pageData.edition);
-    updateElementText('paragraph-1', pageData.p1);
-    updateElementText('paragraph-2', pageData.p2);
-    
-    // Update paragraph 3 with proper date formatting
-    updateParagraph3();
-    
-    // Update submission guidelines
-    updateSubmissionGuidelines();
-    
-    // Update research areas
-    updateResearchAreas();
-    
-    // Update edition reference in paragraph 3
-    updateElementText('edition-ref', pageData.edition);
+    try {
+        // Update basic fields
+        updateElementContent('main-heading', pageData.heading);
+        updateElementContent('sub-heading', pageData.subHeading);
+        updateElementContent('edition', pageData.edition);
+        updateElementContent('paragraph-1', pageData.p1);
+        updateElementContent('paragraph-2', pageData.p2);
+        
+        // Update paragraph 3 with proper date formatting
+        updateParagraph3();
+        
+        // Update submission guidelines
+        updateSubmissionGuidelines();
+        
+        // Update research areas
+        updateResearchAreas();
+        
+        // Update edition reference in paragraph 3
+        updateElementContent('edition-ref', pageData.edition);
+        
+    } catch (error) {
+        console.error('Error updating page content:', error);
+    }
 }
 
 /**
  * Update paragraph 3 with formatted date
  */
 function updateParagraph3() {
-    const paragraph3Element = document.getElementById('paragraph-3');
+    const paragraph3Container = document.getElementById('paragraph-3');
     const submissionDateElement = document.getElementById('submission-date');
     
-    if (paragraph3Element && pageData.p3) {
-        paragraph3Element.innerHTML = pageData.p3;
+    if (paragraph3Container && pageData.p3) {
+        paragraph3Container.innerHTML = `<p>${pageData.p3}</p>`;
     }
     
     if (submissionDateElement && pageData.date) {
@@ -192,12 +271,18 @@ function updateSubmissionGuidelines() {
     
     container.innerHTML = '';
     
-    pageData.submissionGuidelines.forEach(guideline => {
+    if (pageData.submissionGuidelines && pageData.submissionGuidelines.length > 0) {
+        pageData.submissionGuidelines.forEach(guideline => {
+            const li = document.createElement('li');
+            li.className = 'text-justify mb-2';
+            li.innerHTML = `• ${guideline}`;
+            container.appendChild(li);
+        });
+    } else {
         const li = document.createElement('li');
-        li.className = 'text-justify';
-        li.innerHTML = `• ${guideline}`;
+        li.innerHTML = '• Submission guidelines will be updated soon.';
         container.appendChild(li);
-    });
+    }
 }
 
 /**
@@ -209,20 +294,27 @@ function updateResearchAreas() {
     
     container.innerHTML = '';
     
-    pageData.researchAreas.forEach(area => {
+    if (pageData.researchAreas && pageData.researchAreas.length > 0) {
+        pageData.researchAreas.forEach(area => {
+            const li = document.createElement('li');
+            li.className = 'mb-1';
+            li.innerHTML = `• ${area}`;
+            container.appendChild(li);
+        });
+    } else {
         const li = document.createElement('li');
-        li.innerHTML = `• ${area}`;
+        li.innerHTML = '• Research areas will be updated soon.';
         container.appendChild(li);
-    });
+    }
 }
 
 /**
- * Update text content of an element
+ * Update text content of an element safely
  */
-function updateElementText(elementId, text) {
+function updateElementContent(elementId, content) {
     const element = document.getElementById(elementId);
-    if (element && text) {
-        element.textContent = text;
+    if (element && content && content.trim()) {
+        element.textContent = content;
     }
 }
 
@@ -230,34 +322,34 @@ function updateElementText(elementId, text) {
  * Show loading state
  */
 function showLoading() {
-    loadingState.style.display = 'block';
-    errorState.style.display = 'none';
-    mainContent.style.display = 'none';
+    if (loadingState) loadingState.style.display = 'block';
+    if (errorState) errorState.style.display = 'none';
+    if (mainContent) mainContent.style.display = 'none';
 }
 
 /**
  * Show error state
  */
 function showError(message) {
-    loadingState.style.display = 'none';
-    errorState.style.display = 'block';
-    mainContent.style.display = 'none';
-    errorMessage.textContent = message;
+    if (loadingState) loadingState.style.display = 'none';
+    if (errorState) errorState.style.display = 'block';
+    if (mainContent) mainContent.style.display = 'none';
+    if (errorMessage) errorMessage.textContent = message;
 }
 
 /**
  * Show main content
  */
 function showMainContent() {
-    loadingState.style.display = 'none';
-    errorState.style.display = 'none';
-    mainContent.style.display = 'block';
+    if (loadingState) loadingState.style.display = 'none';
+    if (errorState) errorState.style.display = 'none';
+    if (mainContent) mainContent.style.display = 'block';
 }
 
 /**
  * Create a copy of the Google Doc template
  */
-function createGoogleDocCopy() {
+async function createGoogleDocCopy() {
     try {
         // Generate a unique name for the copy
         const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
@@ -267,21 +359,28 @@ function createGoogleDocCopy() {
         const copyUrl = `https://docs.google.com/document/d/${TEMPLATE_DOC_ID}/copy?title=${encodeURIComponent(copyName)}`;
         
         // Open in new tab
-        window.open(copyUrl, '_blank');
+        const newWindow = window.open(copyUrl, '_blank');
+        
+        if (!newWindow) {
+            throw new Error('Popup blocked. Please allow popups for this site.');
+        }
         
         return true;
     } catch (error) {
         console.error('Error creating Google Doc copy:', error);
-        return false;
+        throw error;
     }
 }
 
 /**
  * Handle the create paper button click
  */
-function handleCreatePaper() {
+async function handleCreatePaper() {
     const btn = document.getElementById('create-paper-btn');
     const btnText = document.getElementById('btn-text');
+    
+    if (!btn || !btnText) return;
+    
     const originalText = btnText.textContent;
     
     // Disable button and show loading state
@@ -290,18 +389,25 @@ function handleCreatePaper() {
     
     try {
         // Create the copy
-        const success = createGoogleDocCopy();
+        await createGoogleDocCopy();
         
-        if (success) {
-            // Show success message
-            showNotification('Your copy is being created! A new tab will open with your personal copy of the article template.', 'success');
-        } else {
-            throw new Error('Failed to create copy');
+        // Show success message
+        showNotification('Your copy is being created! A new tab will open with your personal copy of the article template.', 'success');
+        
+        // Track the copy creation (if tracker is available)
+        if (window.userTracker) {
+            window.userTracker.trackCopyCreated();
         }
         
     } catch (error) {
         console.error('Error:', error);
-        showNotification('Unable to create copy automatically. Please try again or contact support.', 'error');
+        let errorMsg = 'Unable to create copy automatically. Please try again or contact support.';
+        
+        if (error.message.includes('Popup blocked')) {
+            errorMsg = 'Please allow popups for this site and try again.';
+        }
+        
+        showNotification(errorMsg, 'error');
     } finally {
         // Reset button after a short delay
         setTimeout(() => {
@@ -320,14 +426,14 @@ function showNotification(message, type) {
     existingNotifications.forEach(notification => notification.remove());
     
     const notificationDiv = document.createElement('div');
-    notificationDiv.className = `notification-popup ${type === 'success' ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700'} border px-4 py-3 rounded fixed top-4 right-4 z-50 max-w-md shadow-lg`;
+    notificationDiv.className = `notification-popup ${type === 'success' ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700'} border px-4 py-3 rounded shadow-lg`;
     notificationDiv.innerHTML = `
         <div class="flex">
             <div class="flex-1">
-                <p class="text-sm">${message}</p>
+                <p class="text-sm font-medium">${message}</p>
             </div>
             <div class="ml-4">
-                <button onclick="this.parentElement.parentElement.parentElement.remove()" class="text-lg font-bold leading-none hover:text-gray-600">&times;</button>
+                <button onclick="this.parentElement.parentElement.parentElement.remove()" class="text-lg font-bold leading-none hover:opacity-70 transition-opacity" title="Close">&times;</button>
             </div>
         </div>
     `;
