@@ -124,21 +124,47 @@ body {
     margin: 1rem 0;
 }
 
-/* Button container for dual buttons */
-.button-container {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
+/* Button styling */
+.create-paper-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
-.button-container a {
-    flex: 1;
-    min-width: 200px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.create-paper-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.create-paper-btn:active {
+    transform: translateY(0);
+}
+
+.create-paper-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.button-loading {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #ffffff40;
+    border-top: 2px solid #ffffff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
 
 /* Responsive adjustments */
@@ -162,12 +188,9 @@ body {
         font-size: 0.65rem;
     }
     
-    .button-container {
-        flex-direction: column;
-    }
-    
-    .button-container a {
-        min-width: 100%;
+    .create-paper-btn {
+        width: 100%;
+        justify-content: center;
     }
 }
 
@@ -311,21 +334,23 @@ footer {
                 <div class="section-spacing">
                     <h3 class="text-2xl font-bold academic-title text-gray-900 mb-4">Article Format</h3>
                     
-                    <p class="text-gray-700 leading-relaxed mb-4">
+                    <p class="text-gray-700 leading-relaxed mb-6">
                         To help authors format their submissions according to our journal standards, 
-                        we provide the following tools:
+                        we provide a pre-formatted Google Doc template. Click the button below to create 
+                        your own copy of the article format template:
                     </p>
                     
-                    <div class="button-container">
-                        <a href="article-generator.html" class="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 transition-colors font-medium">
-                            <i class="fas fa-file-alt mr-2"></i>
-                            Article Format Generator
-                        </a>
-                        <a href="article-model.docx" download class="bg-purple-600 text-white px-6 py-3 rounded hover:bg-purple-700 transition-colors font-medium">
-                            <i class="fas fa-download mr-2"></i>
-                            Download Article Format
-                        </a>
+                    <div class="text-center">
+                        <button id="create-paper-btn" class="create-paper-btn" onclick="createPaperCopy()">
+                            <i class="fas fa-file-alt"></i>
+                            <span id="btn-text">Create Full Paper</span>
+                        </button>
                     </div>
+                    
+                    <p class="text-gray-600 text-sm text-center mt-4">
+                        <i class="fas fa-info-circle"></i>
+                        This will create a personal copy of our article template in your Google Drive
+                    </p>
                 </div>
 
                 <!-- Contact Information (Static) -->
@@ -411,6 +436,80 @@ footer {
                 }
             });
         });
+
+        // Google Doc Copy Functionality
+        async function createPaperCopy() {
+            const btn = document.getElementById('create-paper-btn');
+            const btnText = document.getElementById('btn-text');
+            const originalText = btnText.textContent;
+            
+            // Disable button and show loading state
+            btn.disabled = true;
+            btnText.innerHTML = '<span class="button-loading"></span> Creating copy...';
+            
+            try {
+                // Template document ID from your Google Doc URL
+                const templateDocId = '1Cu_j4CcNIhh5qez3Xoqf0xCGn7QzaHLrX7rfTozw8Po';
+                
+                // Create a copy using Google Drive API
+                const copyUrl = `https://www.googleapis.com/drive/v3/files/${templateDocId}/copy`;
+                
+                // Generate a unique name for the copy
+                const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+                const copyName = `Islamic Insight Article Template - ${timestamp}`;
+                
+                // This approach uses a simple redirect to Google Drive's copy mechanism
+                // which will prompt the user to sign in and create a copy
+                const copyLink = `https://docs.google.com/document/d/${templateDocId}/copy?title=${encodeURIComponent(copyName)}`;
+                
+                // Open the copy link in a new tab
+                window.open(copyLink, '_blank');
+                
+                // Reset button after a short delay
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btnText.textContent = originalText;
+                }, 2000);
+                
+                // Show success message
+                showMessage('Your copy is being created! A new tab will open with your personal copy of the article template.', 'success');
+                
+            } catch (error) {
+                console.error('Error creating copy:', error);
+                
+                // Reset button
+                btn.disabled = false;
+                btnText.textContent = originalText;
+                
+                // Show error message
+                showMessage('Unable to create copy automatically. Please try again or contact support.', 'error');
+            }
+        }
+
+        // Show message function
+        function showMessage(message, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message-popup ${type === 'success' ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700'} border px-4 py-3 rounded fixed top-4 right-4 z-50 max-w-md shadow-lg`;
+            messageDiv.innerHTML = `
+                <div class="flex">
+                    <div class="flex-1">
+                        <p class="text-sm">${message}</p>
+                    </div>
+                    <div class="ml-4">
+                        <button onclick="this.parentElement.parentElement.parentElement.remove()" class="text-lg font-bold leading-none">&times;</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(messageDiv);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (messageDiv.parentElement) {
+                    messageDiv.remove();
+                }
+            }, 5000);
+        }
     </script>
 </body>
 </html>
