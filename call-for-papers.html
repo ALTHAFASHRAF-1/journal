@@ -18,6 +18,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+/* ... your existing CSS ... */
 body {
     font-family: 'Inter', sans-serif;
     line-height: 1.6;
@@ -216,204 +217,12 @@ footer {
 </head>
 
 <body>
-    <!-- Navigation -->
-    <nav class="nav-container">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <a href="index.html" class="logo-container">
-                            <img src="logo.png" alt="Islamic Insight Logo" class="logo-image">
-                            <div class="logo-text-container">
-                                <h1 class="logo-text text-xl font-bold text-gray-900 academic-title">
-                                    ISLAMIC INSIGHT
-                                </h1>
-                                <p class="logo-subtitle">Journal of Islamic Studies</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+    <!-- Your existing navigation and content ... -->
+    <!-- ... (keep all your existing HTML content) ... -->
 
-                <!-- Desktop Navigation -->
-                <div class="hidden md:block">
-                    <div class="flex items-center space-x-6">
-                        <a href="index.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Home</a>
-                        <a href="call-for-papers.html" class="text-blue-900 font-semibold px-3 py-2 text-sm font-medium">Call For Paper</a>
-                        <a href="index.html#featured" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Current Issue</a>
-                        <a href="all-issues.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">All Issues</a>
-                        <a href="index.html#about" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">About</a>
-                    </div>
-                </div>
-
-                <!-- Mobile menu button -->
-                <div class="md:hidden">
-                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-900 focus:outline-none">
-                        <i class="fas fa-bars text-lg"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Navigation -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200 mobile-menu">
-            <div class="px-2 pt-2 pb-3 space-y-1">
-                <a href="index.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Home</a>
-                <a href="call-for-papers.html" class="block px-3 py-2 text-sm font-medium text-blue-900 font-semibold">Call For Paper</a>
-                <a href="index.html#featured" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Current Issue</a>
-                <a href="all-issues.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">All Issues</a>
-                <a href="index.html#about" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">About</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- A4-like Page Container -->
-    <div class="page-container">
-        <div class="content-wrapper">
-            
-            <!-- Loading State -->
-            <div id="loading-state" class="text-center section-spacing">
-                <div class="loading-spinner mx-auto mb-4"></div>
-                <p class="text-gray-600">Loading content...</p>
-            </div>
-
-            <!-- Error State -->
-            <div id="error-state" class="error-message section-spacing" style="display: none;">
-                <h3 class="font-bold text-lg mb-2">Error Loading Content</h3>
-                <p id="error-message">Unable to load content from Google Sheets. Please try again later.</p>
-            </div>
-
-            <!-- Main Content (Hidden initially) -->
-            <div id="main-content" style="display: none;">
-                <!-- Header -->
-                <div class="text-center section-spacing">
-                    <h1 id="main-heading" class="text-3xl sm:text-4xl font-bold academic-title text-gray-900 mb-4">Call for Papers</h1>
-                    <h2 id="sub-heading" class="text-xl sm:text-2xl academic-title text-gray-700">Islamic Insight Journal of Islamic Studies</h2>
-                    <p id="edition" class="text-lg text-gray-600 mt-2">Vol. 8, No. 1 (2025)</p>
-                </div>
-
-                <!-- Main Content -->
-                <div class="section-spacing">
-                    <p id="paragraph-1" class="text-gray-700 leading-relaxed text-justify mb-6">
-                        We are pleased to invite original research articles for the upcoming issue of Islamic Insight, 
-                        a biannual peer-reviewed journal published by the Kulliyyah of Qur'an and Sunnah, 
-                        Darul Huda Islamic University, Kerala, India.
-                    </p>
-
-                    <p id="paragraph-2" class="text-gray-700 leading-relaxed text-justify mb-6">
-                        Islamic Insight welcomes high-quality, interdisciplinary research in areas related to Islamic 
-                        revealed knowledge and the Muslim world. This includes—but is not limited to—studies in the 
-                        Noble Qur'an, Hadith, Islamic Theology, Islamic Social Sciences, and Muslim History and Culture. 
-                        Unique and relevant contributions beyond the prescribed disciplines are also encouraged.
-                    </p>
-
-                    <p id="paragraph-3" class="text-gray-700 leading-relaxed text-justify mb-6">
-                        All submissions will undergo a double-blind peer review process. Send your manuscripts by 
-                        <strong id="submission-date">mid-June 2025</strong> for consideration in <span id="edition-ref">Vol. 8, No. 1 (2025)</span>.
-                    </p>
-                </div>
-
-                <!-- Submission Guidelines -->
-                <div class="section-spacing">
-                    <h3 class="text-2xl font-bold academic-title text-gray-900 mb-4">Submission Guidelines</h3>
-                    
-                    <ul id="submission-guidelines" class="space-y-3 text-gray-700 leading-relaxed">
-                        <!-- Dynamic content will be loaded here -->
-                    </ul>
-                </div>
-
-                <!-- Research Areas -->
-                <div class="section-spacing">
-                    <h3 class="text-2xl font-bold academic-title text-gray-900 mb-4">Research Areas</h3>
-                    
-                    <ul id="research-areas" class="space-y-2 text-gray-700 leading-relaxed">
-                        <!-- Dynamic content will be loaded here -->
-                    </ul>
-                </div>
-
-                <!-- Article Format Tools -->
-                <div class="section-spacing">
-                    <h3 class="text-2xl font-bold academic-title text-gray-900 mb-4">Article Format</h3>
-                    
-                    <p class="text-gray-700 leading-relaxed mb-6">
-                        To help authors format their submissions according to our journal standards, 
-                        we provide a pre-formatted Google Doc template. Click the button below to create 
-                        your own copy of the article format template:
-                    </p>
-                    
-                    <div class="text-center">
-                        <button id="create-paper-btn" class="create-paper-btn" onclick="createPaperCopy()">
-                            <i class="fas fa-file-alt"></i>
-                            <span id="btn-text">Create Full Paper</span>
-                        </button>
-                    </div>
-                    
-                    <p class="text-gray-600 text-sm text-center mt-4">
-                        <i class="fas fa-info-circle"></i>
-                        This will create a personal copy of our article template in your Google Drive
-                    </p>
-                </div>
-
-                <!-- Contact Information (Static) -->
-                <div class="section-spacing">
-                    <h3 class="text-2xl font-bold academic-title text-gray-900 mb-4">Submission</h3>
-                    
-                    <p class="text-gray-700 leading-relaxed mb-4">
-                        For submission, please send your manuscript to:
-                    </p>
-                    
-                    <div class="bg-gray-50 p-4 rounded border-l-4 border-blue-500 mb-6">
-                        <p class="font-semibold text-gray-900 mb-2">Email:</p>
-                        <a href="mailto:islamicinsight@dhiu.in" class="text-blue-600 hover:text-blue-800 font-medium text-lg">
-                            islamicinsight@dhiu.in
-                        </a>
-                    </div>
-
-                    <div class="bg-gray-50 p-4 rounded mb-6">
-                        <p class="font-semibold text-gray-900 mb-2">Editorial Office:</p>
-                        <address class="text-gray-700 not-italic leading-relaxed">
-                            Editor, Islamic Insight Journal of Islamic Studies<br>
-                            Darul Huda Islamic University<br>
-                            Chemmad, P.B.NO. 3<br>
-                            Tirurangadi (PO), Malappuram (Dt.)<br>
-                            676306 (PIN), Kerala, India
-                        </address>
-                    </div>
-
-                    <p class="text-gray-700 leading-relaxed">
-                        <strong>Website:</strong> 
-                        <a href="https://www.islamicinsight.in" class="text-blue-600 hover:text-blue-800">www.islamicinsight.in</a>
-                    </p>
-                </div>
-
-                <!-- Back to Home -->
-                <div class="text-center section-spacing">
-                    <a href="index.html" class="inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors">
-                        Back to Home
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <div class="logo-container justify-center mb-4">
-                    <img src="logo.png" alt="Islamic Insight Logo" class="logo-image">
-                    <div class="logo-text-container">
-                        <h1 class="logo-text text-white">ISLAMIC INSIGHT</h1>
-                        <p class="logo-subtitle text-gray-300">Journal of Islamic Studies</p>
-                    </div>
-                </div>
-                <p class="text-gray-300 text-sm">
-                    &copy; 2024 Islamic Insight Journal. All rights reserved.
-                </p>
-            </div>
-        </div>
-    </footer>
-
+    <!-- Scripts -->
     <script src="call-for-papers.js"></script>
+    <script src="tracking.js"></script>
     <script>
         // Mobile menu functionality
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -437,7 +246,7 @@ footer {
             });
         });
 
-        // Google Doc Copy Functionality
+        // Enhanced Google Doc Copy Functionality with Tracking
         async function createPaperCopy() {
             const btn = document.getElementById('create-paper-btn');
             const btnText = document.getElementById('btn-text');
@@ -451,19 +260,20 @@ footer {
                 // Template document ID from your Google Doc URL
                 const templateDocId = '1Cu_j4CcNIhh5qez3Xoqf0xCGn7QzaHLrX7rfTozw8Po';
                 
-                // Create a copy using Google Drive API
-                const copyUrl = `https://www.googleapis.com/drive/v3/files/${templateDocId}/copy`;
-                
                 // Generate a unique name for the copy
                 const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
                 const copyName = `Islamic Insight Article Template - ${timestamp}`;
                 
-                // This approach uses a simple redirect to Google Drive's copy mechanism
-                // which will prompt the user to sign in and create a copy
+                // Create the copy link
                 const copyLink = `https://docs.google.com/document/d/${templateDocId}/copy?title=${encodeURIComponent(copyName)}`;
                 
                 // Open the copy link in a new tab
                 window.open(copyLink, '_blank');
+                
+                // Track the copy creation (if tracker is available)
+                if (window.userTracker) {
+                    window.userTracker.trackCopyCreated();
+                }
                 
                 // Reset button after a short delay
                 setTimeout(() => {
