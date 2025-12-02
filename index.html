@@ -1,3085 +1,943 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grace - Quality Clothes</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            overflow-x: hidden;
-            background: #f8f9fa;
-        }
-
-        /* Header & Navigation */
-        header {
-            background: #fff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 5%;
-            max-width: 1400px;
-            margin: 0 auto;
-            height: 70px;
-        }
-
-        .logo-section {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .logo {
-            font-size: 32px;
-            font-weight: bold;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-decoration: none;
-            letter-spacing: 1px;
-        }
-
-        .tagline {
-            font-size: 11px;
-            color: #666;
-            font-style: italic;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-top: -5px;
-        }
-
-        .nav-center {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .dropdown {
-            position: relative;
-        }
-
-        .dropdown-btn {
-            padding: 10px 20px;
-            background: #fff;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
-            font-size: 14px;
-        }
-
-        .dropdown-btn:hover {
-            border-color: #667eea;
-            color: #667eea;
-        }
-
-        .dropdown-content {
-            position: absolute;
-            bottom: -140px;
-            left: 0;
-            background: #fff;
-            min-width: 180px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            border-radius: 10px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.3s;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .dropdown.active .dropdown-content {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .dropdown-item {
-            padding: 12px 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-            color: #333;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .dropdown-item:last-child {
-            border-bottom: none;
-        }
-
-        .dropdown-item:hover,
-        .dropdown-item.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-        }
-
-        .nav-icons {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .nav-icon {
-            position: relative;
-            cursor: pointer;
-            font-size: 20px;
-            color: #333;
-            transition: all 0.3s;
-            padding: 8px;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .nav-icon:hover {
-            background: #f8f9fa;
-            color: #667eea;
-            transform: translateY(-2px);
-        }
-
-        .badge {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background: #e74c3c;
-            color: #fff;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: bold;
-        }
-
-        /* Search Modal */
-        .search-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.9);
-            display: none;
-            justify-content: center;
-            align-items: flex-start;
-            z-index: 3000;
-            padding-top: 100px;
-        }
-
-        .search-modal.active {
-            display: flex;
-        }
-
-        .search-container {
-            background: #fff;
-            width: 90%;
-            max-width: 700px;
-            border-radius: 15px;
-            overflow: hidden;
-            max-height: 80vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .search-header {
-            padding: 20px;
-            border-bottom: 2px solid #f0f0f0;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .search-input {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            font-size: 16px;
-            outline: none;
-        }
-
-        .close-search {
-            font-size: 28px;
-            cursor: pointer;
-            color: #666;
-            transition: all 0.3s;
-        }
-
-        .close-search:hover {
-            color: #e74c3c;
-            transform: rotate(90deg);
-        }
-
-        .search-results {
-            padding: 20px;
-            overflow-y: auto;
-            max-height: 60vh;
-        }
-
-        .search-result-item {
-            display: flex;
-            gap: 15px;
-            padding: 15px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-bottom: 10px;
-        }
-
-        .search-result-item:hover {
-            background: #f8f9fa;
-        }
-
-        .search-result-image {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-
-        .search-result-info {
-            flex: 1;
-        }
-
-        .search-result-name {
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #2c3e50;
-        }
-
-        .search-result-category {
-            font-size: 12px;
-            color: #667eea;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-        }
-
-        .search-result-price {
-            font-weight: bold;
-            color: #e74c3c;
-        }
-
-        .no-results {
-            text-align: center;
-            padding: 40px;
-            color: #999;
-        }
-
-        /* Side Menu */
-        .side-menu {
-            position: fixed;
-            right: -300px;
-            top: 0;
-            width: 300px;
-            height: 100%;
-            background: #fff;
-            box-shadow: -5px 0 25px rgba(0,0,0,0.2);
-            transition: right 0.3s;
-            z-index: 2500;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .side-menu.active {
-            right: 0;
-        }
-
-        .side-menu-header {
-            padding: 25px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .side-menu-header h2 {
-            font-size: 1.3rem;
-        }
-
-        .close-menu {
-            font-size: 28px;
-            cursor: pointer;
-            border: none;
-            background: none;
-            color: #fff;
-            transition: transform 0.3s;
-        }
-
-        .close-menu:hover {
-            transform: rotate(90deg);
-        }
-
-        .side-menu-items {
-            padding: 20px;
-        }
-
-        .menu-item {
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-weight: 500;
-            color: #333;
-        }
-
-        .menu-item:hover {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            transform: translateX(5px);
-        }
-
-        .menu-item i {
-            font-size: 18px;
-            width: 25px;
-        }
-
-        /* Banner Section with Background Images */
-        .banner {
-            margin-top: 70px;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 400px;
-        }
-
-        /* Desktop Banner Background - Hidden on mobile */
-        .desktop-banner {
-            display: block;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: -2;
-        }
-
-        /* Mobile Banner Background - Hidden on desktop */
-        .mobile-banner {
-            display: none;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: -2;
-        }
-
-        /* Overlay for better text readability */
-        .banner::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.3);
-            z-index: -1;
-        }
-
-        .banner-content {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            color: white;
-            padding: 0 20px;
-        }
-
-        .banner-content h1 {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            font-weight: 700;
-        }
-
-        .banner-content p {
-            font-size: 1.1rem;
-            opacity: 0.95;
-            margin-bottom: 25px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-        }
-
-        .banner-btn {
-            padding: 12px 35px;
-            background: #fff;
-            color: #667eea;
-            border: none;
-            border-radius: 30px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .banner-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-        }
-
-        /* Products Section */
-        .products {
-            padding: 40px 5%;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 30px;
-            color: #2c3e50;
-            position: relative;
-            padding-bottom: 15px;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 2px;
-        }
-
-        /* Product Grid - Reduced spacing */
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 15px;
-        }
-
-        .product-card {
-            background: #fff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
-            transition: all 0.3s;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
-
-        .product-badge {
-            position: absolute;
-            top: 8px;
-            left: 8px;
-            background: #e74c3c;
-            color: #fff;
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-size: 9px;
-            font-weight: bold;
-            z-index: 1;
-            text-transform: uppercase;
-        }
-
-        .product-badge.new {
-            background: #27ae60;
-        }
-
-        .product-image {
-            position: relative;
-            overflow: hidden;
-            height: 180px;
-            flex-shrink: 0;
-        }
-
-        .product-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            background: #f8f9fa;
-            transition: transform 0.5s;
-        }
-
-        .product-card:hover .product-image img {
-            transform: scale(1.05);
-        }
-
-        .quick-view {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0,0,0,0.7);
-            color: #fff;
-            padding: 8px;
-            text-align: center;
-            transform: translateY(100%);
-            transition: all 0.3s;
-            font-weight: 600;
-            font-size: 11px;
-        }
-
-        .product-card:hover .quick-view {
-            transform: translateY(0);
-        }
-
-        .product-info {
-            padding: 10px 12px; /* Reduced padding */
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            min-height: 120px; /* Fixed minimum height */
-        }
-
-        .product-category {
-            font-size: 9px;
-            color: #667eea;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 600;
-            margin-bottom: 4px; /* Reduced margin */
-        }
-
-        .product-name {
-            font-size: 13px;
-            font-weight: bold;
-            margin-bottom: 6px; /* Reduced margin */
-            color: #2c3e50;
-            line-height: 1.3;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            min-height: 34px;
-            flex-grow: 1;
-        }
-
-        .product-rating {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            margin-bottom: 6px; /* Reduced margin */
-            font-size: 11px;
-        }
-
-        .stars {
-            color: #f39c12;
-            font-size: 11px;
-        }
-
-        .rating-count {
-            font-size: 10px;
-            color: #999;
-        }
-
-        .product-price {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px; /* Reduced margin */
-        }
-
-        .current-price {
-            font-size: 16px;
-            font-weight: bold;
-            color: #e74c3c;
-        }
-
-        .original-price {
-            font-size: 12px;
-            color: #999;
-            text-decoration: line-through;
-        }
-
-        .cart-icon-btn {
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: auto;
-            margin-top: auto;
-        }
-
-        .cart-icon-btn:hover {
-            transform: scale(1.1) rotate(15deg);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        /* Cart Sidebar */
-        .cart-sidebar {
-            position: fixed;
-            right: -420px;
-            top: 0;
-            width: 420px;
-            height: 100%;
-            background: #fff;
-            box-shadow: -5px 0 25px rgba(0,0,0,0.2);
-            transition: right 0.3s;
-            z-index: 2000;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .cart-sidebar.active {
-            right: 0;
-        }
-
-        .cart-header {
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .cart-header h2 {
-            font-size: 1.3rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .close-cart {
-            font-size: 24px;
-            cursor: pointer;
-            border: none;
-            background: none;
-            color: #fff;
-            transition: transform 0.3s;
-        }
-
-        .close-cart:hover {
-            transform: rotate(90deg);
-        }
-
-        .cart-items {
-            flex: 1;
-            overflow-y: auto;
-            padding: 15px;
-        }
-
-        .cart-item {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .cart-item-image {
-            width: 70px;
-            height: 70px;
-            object-fit: contain;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
-
-        .cart-item-info {
-            flex: 1;
-        }
-
-        .cart-item-name {
-            font-weight: bold;
-            margin-bottom: 6px;
-            color: #2c3e50;
-            font-size: 14px;
-        }
-
-        .cart-item-price {
-            color: #e74c3c;
-            font-weight: bold;
-            margin-bottom: 10px;
-            font-size: 15px;
-        }
-
-        .quantity-controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .qty-btn {
-            width: 28px;
-            height: 28px;
-            border: 2px solid #ddd;
-            background: #fff;
-            border-radius: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            transition: all 0.3s;
-            font-size: 14px;
-        }
-
-        .qty-btn:hover {
-            background: #667eea;
-            color: #fff;
-            border-color: #667eea;
-        }
-
-        .remove-item {
-            background: none;
-            border: none;
-            color: #e74c3c;
-            cursor: pointer;
-            font-size: 18px;
-            transition: transform 0.3s;
-        }
-
-        .remove-item:hover {
-            transform: scale(1.2);
-        }
-
-        .cart-footer {
-            padding: 20px;
-            border-top: 2px solid #eee;
-            background: #f8f9fa;
-        }
-
-        .cart-total {
-            display: flex;
-            justify-content: space-between;
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #2c3e50;
-        }
-
-        .buy-now-btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .buy-now-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(39, 174, 96, 0.3);
-        }
-
-        .empty-cart {
-            text-align: center;
-            padding: 60px 20px;
-            color: #999;
-        }
-
-        .empty-cart i {
-            font-size: 80px;
-            margin-bottom: 20px;
-            opacity: 0.4;
-        }
-
-        .empty-cart h3 {
-            font-size: 1.3rem;
-            margin-bottom: 8px;
-        }
-
-        /* Product Detail Modal */
-        .product-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 3000;
-            padding: 20px;
-        }
-
-        .product-modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: #fff;
-            border-radius: 15px;
-            max-width: 900px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #fff;
-            border: none;
-            font-size: 28px;
-            cursor: pointer;
-            color: #333;
-            z-index: 1;
-            transition: all 0.3s;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-        }
-
-        .close-modal:hover {
-            transform: rotate(90deg);
-            color: #e74c3c;
-        }
-
-        .modal-body {
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        .modal-image {
-            flex: 1;
-            min-width: 350px;
-            height: 500px;
-        }
-
-        .modal-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            background: #f8f9fa;
-            border-radius: 15px 0 0 15px;
-        }
-
-        .modal-details {
-            flex: 1;
-            min-width: 350px;
-            padding: 40px 30px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .modal-details h2 {
-            font-size: 1.8rem;
-            margin-bottom: 12px;
-            color: #2c3e50;
-            line-height: 1.3;
-        }
-
-        .modal-details .product-category {
-            margin-bottom: 12px;
-            font-size: 12px;
-        }
-
-        .modal-details .product-rating {
-            margin-bottom: 15px;
-        }
-
-        .modal-details .product-price {
-            margin-bottom: 20px;
-        }
-
-        .modal-details .current-price {
-            font-size: 1.8rem;
-        }
-
-        .modal-details .original-price {
-            font-size: 1.1rem;
-        }
-
-        .product-description {
-            margin-bottom: 25px;
-            line-height: 1.6;
-            color: #555;
-            font-size: 14px;
-        }
-
-        .size-selector, .color-selector {
-            margin-bottom: 20px;
-        }
-
-        .size-selector h3, .color-selector h3 {
-            margin-bottom: 10px;
-            font-size: 1rem;
-            color: #2c3e50;
-        }
-
-        .size-options, .color-options {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .size-option, .color-option {
-            padding: 8px 15px;
-            border: 2px solid #e9ecef;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .size-option:hover, .size-option.active {
-            border-color: #667eea;
-            background: #667eea;
-            color: #fff;
-        }
-
-        .color-option {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            position: relative;
-            padding: 0;
-        }
-
-        .color-option:hover {
-            transform: scale(1.1);
-        }
-
-        .color-option.active {
-            border-color: #333;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
-        }
-
-        .color-option.active::after {
-            content: '✓';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            text-shadow: 0 0 3px rgba(0,0,0,0.5);
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 25px;
-        }
-
-        .add-to-cart-btn {
-            flex: 2;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .add-to-cart-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-secondary {
-            flex: 1;
-            padding: 15px;
-            background: #fff;
-            color: #e74c3c;
-            border: 2px solid #e74c3c;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-
-        .btn-secondary:hover {
-            background: #e74c3c;
-            color: #fff;
-            transform: translateY(-2px);
-        }
-
-        /* Checkout Modal */
-        .checkout-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 3500;
-            padding: 20px;
-        }
-
-        .checkout-modal.active {
-            display: flex;
-        }
-
-        .checkout-content {
-            background: #fff;
-            border-radius: 15px;
-            max-width: 550px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .checkout-header {
-            padding: 25px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            border-radius: 15px 15px 0 0;
-        }
-
-        .checkout-header h2 {
-            font-size: 1.6rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .checkout-body {
-            padding: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #2c3e50;
-            font-size: 14px;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: all 0.3s;
-            font-family: inherit;
-        }
-
-        .form-control:focus {
-            border-color: #667eea;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .checkout-footer {
-            padding: 25px 30px;
-            border-top: 2px solid #eee;
-            background: #f8f9fa;
-            border-radius: 0 0 15px 15px;
-        }
-
-        .checkout-total {
-            display: flex;
-            justify-content: space-between;
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #2c3e50;
-        }
-
-        .submit-order-btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .submit-order-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(39, 174, 96, 0.3);
-        }
-
-        /* Success Modal */
-        .success-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.9);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 4000;
-            padding: 20px;
-        }
-
-        .success-modal.active {
-            display: flex;
-            animation: fadeIn 0.3s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .success-content {
-            background: #fff;
-            border-radius: 15px;
-            padding: 35px 30px;
-            max-width: 420px;
-            width: 100%;
-            text-align: center;
-            animation: slideUp 0.4s;
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .success-icon {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            animation: scaleUp 0.5s;
-        }
-
-        @keyframes scaleUp {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        .success-icon i {
-            font-size: 35px;
-            color: #fff;
-        }
-
-        .success-content h2 {
-            font-size: 1.5rem;
-            color: #2c3e50;
-            margin-bottom: 12px;
-        }
-
-        .success-content p {
-            color: #666;
-            margin-bottom: 20px;
-            line-height: 1.5;
-            font-size: 14px;
-        }
-
-        .order-id-box {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border: 2px dashed #ddd;
-        }
-
-        .order-id-label {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 6px;
-        }
-
-        .order-id-value {
-            font-size: 16px;
-            font-weight: bold;
-            color: #667eea;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .copy-btn {
-            background: #667eea;
-            color: #fff;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .copy-btn:hover {
-            background: #5568d3;
-            transform: translateY(-2px);
-        }
-
-        .success-close-btn {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .success-close-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        /* Profile/Track Order Modal */
-        .profile-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 3500;
-            padding: 20px;
-        }
-
-        .profile-modal.active {
-            display: flex;
-        }
-
-        .profile-content {
-            background: #fff;
-            border-radius: 15px;
-            max-width: 550px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .profile-header {
-            padding: 25px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            border-radius: 15px 15px 0 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .profile-header h2 {
-            font-size: 1.6rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .close-profile {
-            font-size: 28px;
-            cursor: pointer;
-            border: none;
-            background: none;
-            color: #fff;
-            transition: transform 0.3s;
-        }
-
-        .close-profile:hover {
-            transform: rotate(90deg);
-        }
-
-        .profile-body {
-            padding: 30px;
-        }
-
-        .track-form {
-            margin-bottom: 25px;
-        }
-
-        .track-input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .track-input {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-
-        .track-input:focus {
-            border-color: #667eea;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .track-btn {
-            padding: 12px 25px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 14px;
-        }
-
-        .track-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .order-results {
-            display: none;
-        }
-
-        .order-results.active {
-            display: block;
-        }
-
-        .order-card {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            border-left: 4px solid #667eea;
-        }
-
-        .order-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #e9ecef;
-        }
-
-        .order-id-display {
-            font-weight: bold;
-            color: #2c3e50;
-            font-size: 14px;
-        }
-
-        .order-status {
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 11px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        .order-status.pending {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .order-status.processing {
-            background: #cfe2ff;
-            color: #084298;
-        }
-
-        .order-status.shipped {
-            background: #d1ecf1;
-            color: #0c5460;
-        }
-
-        .order-status.delivered {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .order-info-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 13px;
-        }
-
-        .order-info-label {
-            color: #666;
-            font-weight: 500;
-        }
-
-        .order-info-value {
-            color: #2c3e50;
-            font-weight: 600;
-            text-align: right;
-            max-width: 60%;
-            word-wrap: break-word;
-        }
-
-        .order-products {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 2px solid #e9ecef;
-        }
-
-        .order-products h4 {
-            font-size: 13px;
-            margin-bottom: 10px;
-            color: #2c3e50;
-        }
-
-        .order-product-item {
-            background: #fff;
-            padding: 8px;
-            border-radius: 6px;
-            margin-bottom: 6px;
-            font-size: 12px;
-            word-break: break-all;
-        }
-
-        .no-orders {
-            text-align: center;
-            padding: 40px 20px;
-            color: #999;
-        }
-
-        .no-orders i {
-            font-size: 60px;
-            margin-bottom: 15px;
-            opacity: 0.4;
-        }
-
-        /* Footer */
-        footer {
-            background: #2c3e50;
-            color: #fff;
-            padding: 50px 5% 25px;
-        }
-
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 35px;
-            margin-bottom: 25px;
-        }
-
-        .footer-section h3 {
-            margin-bottom: 20px;
-            font-size: 1.2rem;
-            color: #fff;
-        }
-
-        .footer-section p {
-            line-height: 1.7;
-            color: #bdc3c7;
-            font-size: 14px;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 10px;
-        }
-
-        .footer-section a {
-            color: #bdc3c7;
-            text-decoration: none;
-            transition: color 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-        }
-
-        .footer-section a:hover {
-            color: #667eea;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 12px;
-            margin-top: 15px;
-        }
-
-        .social-icon {
-            width: 42px;
-            height: 42px;
-            background: #34495e;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-
-        .social-icon:hover {
-            background: #667eea;
-            transform: translateY(-3px);
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 25px;
-            border-top: 1px solid #34495e;
-            color: #bdc3c7;
-            max-width: 1400px;
-            margin: 0 auto;
-            font-size: 14px;
-        }
-
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
-            color: #fff;
-            padding: 12px 25px;
-            border-radius: 30px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-            z-index: 5000;
-            animation: slideInUp 0.4s;
-            display: none;
-            font-weight: 600;
-            font-size: 13px;
-            max-width: 90%;
-        }
-
-        .toast.active {
-            display: block;
-        }
-
-        @keyframes slideInUp {
-            from {
-                transform: translateX(-50%) translateY(100px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(-50%) translateY(0);
-                opacity: 1;
-            }
-        }
-
-        /* Loading Spinner */
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 60px;
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            nav {
-                padding: 10px 4%;
-                height: 60px;
-            }
-
-            .logo {
-                font-size: 24px;
-            }
-
-            .tagline {
-                font-size: 9px;
-                letter-spacing: 1px;
-            }
-
-            /* Show dropdowns in mobile view */
-            .nav-center {
-                display: flex;
-                gap: 10px;
-                position: absolute;
-                top: 60px;
-                left: 0;
-                width: 100%;
-                background: #fff;
-                padding: 10px 4%;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-                z-index: 1000;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .dropdown {
-                flex: 1;
-                min-width: 45%;
-            }
-
-            .dropdown-btn {
-                padding: 8px 12px;
-                font-size: 12px;
-                width: 100%;
-                justify-content: center;
-            }
-
-            .dropdown-content {
-                bottom: auto;
-                top: 100%;
-                min-width: 100%;
-            }
-
-            /* Banner - Switch to mobile image */
-            .banner {
-                margin-top: 100px; /* Account for dropdowns */
-                min-height: 300px;
-            }
-
-            .desktop-banner {
-                display: none;
-            }
-
-            .mobile-banner {
-                display: block;
-            }
-
-            .banner-content h1 {
-                font-size: 1.8rem;
-            }
-
-            .banner-content p {
-                font-size: 0.95rem;
-            }
-
-            .banner-btn {
-                padding: 10px 25px;
-                font-size: 13px;
-            }
-
-            .section-title {
-                font-size: 1.6rem;
-            }
-
-            .product-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-
-            .product-image {
-                height: 150px;
-            }
-
-            .product-info {
-                padding: 8px 10px;
-                min-height: 110px;
-            }
-
-            .product-name {
-                font-size: 12px;
-                min-height: 31px;
-                margin-bottom: 4px;
-            }
-
-            .product-rating {
-                margin-bottom: 4px;
-                font-size: 10px;
-            }
-
-            .product-price {
-                margin-bottom: 6px;
-            }
-
-            .current-price {
-                font-size: 15px;
-            }
-
-            .cart-icon-btn {
-                width: 32px;
-                height: 32px;
-                font-size: 13px;
-            }
-
-            .cart-sidebar {
-                width: 100%;
-                right: -100%;
-            }
-
-            .modal-body {
-                flex-direction: column;
-            }
-
-            .modal-image {
-                min-width: 100%;
-                height: 300px;
-            }
-
-            .modal-image img {
-                border-radius: 15px 15px 0 0;
-            }
-
-            .modal-details {
-                min-width: 100%;
-                padding: 25px 20px;
-            }
-
-            .modal-details h2 {
-                font-size: 1.4rem;
-            }
-
-            .modal-details .current-price {
-                font-size: 1.5rem;
-            }
-
-            .modal-actions {
-                flex-direction: column;
-            }
-
-            .checkout-content {
-                max-width: 100%;
-            }
-
-            .checkout-header h2 {
-                font-size: 1.4rem;
-            }
-
-            .success-content {
-                padding: 30px 20px;
-            }
-
-            .success-content h2 {
-                font-size: 1.3rem;
-            }
-
-            .order-id-value {
-                font-size: 14px;
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            .profile-content {
-                max-width: 100%;
-            }
-
-            .track-input-group {
-                flex-direction: column;
-            }
-
-            .track-btn {
-                width: 100%;
-            }
-        }
-
-        @media (min-width: 769px) {
-            .mobile-banner {
-                display: none;
-            }
-            .desktop-banner {
-                display: block;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .product-info {
-                padding: 8px;
-                min-height: 100px;
-            }
-
-            .product-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-
-            .dropdown {
-                min-width: 100%;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .nav-center {
-                flex-direction: column;
-                gap: 8px;
-            }
-            
-            .dropdown {
-                width: 100%;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Academic Research Journal - Peer-reviewed scholarly publications across multiple disciplines">
+<meta name="keywords" content="academic journal, research papers, scholarly articles, peer review, scientific publications">
+<meta name="author" content="Academic Research Journal">
+<title>Islamic Insight</title>
+<link rel="icon" type="image/png" href="logo.png">
+
+<meta name="title" content="Islamic Insight">
+<meta name="description" content="Journal of Islamic Studies">
+
+<!-- Open Graph / Facebook / WhatsApp -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dqdhiu.netlify.app/">
+<meta property="og:title" content="Islamic Insight">
+<meta property="og:description" content="Journal of Islamic Studies">
+<meta property="og:image" content="https://dqdhiu.netlify.app/banner.jpg">
+<meta property="og:image:alt" content="Islamic Insight Logo">    
+
+<!-- CSS Libraries -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- JavaScript Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+<style>
+body {
+font-family: 'Inter', sans-serif;
+line-height: 1.6;
+color: #1a202c;
+}
+
+.academic-title {
+font-family: 'Crimson Text', serif;
+}
+
+.article-content h1, .article-content h2, .article-content h3 {
+font-family: 'Crimson Text', serif;
+font-weight: 600;
+}
+
+.article-content p {
+margin-bottom: 1rem;
+text-align: justify;
+line-height: 1.7;
+}
+
+.article-content h2 {
+margin-top: 2rem;
+margin-bottom: 1rem;
+font-size: 1.5rem;
+color: #2d3748;
+}
+
+.article-content h3 {
+margin-top: 1.5rem;
+margin-bottom: 0.75rem;
+font-size: 1.25rem;
+color: #4a5568;
+}
+
+.citation-box {
+background: #f7fafc;
+border-left: 4px solid #4299e1;
+padding: 1rem;
+margin: 1rem 0;
+font-style: italic;
+}
+
+@media (max-width: 768px) {
+.article-content {
+font-size: 0.95rem;
+}
+
+.article-content h2 {
+font-size: 1.3rem;
+}
+
+.article-content h3 {
+font-size: 1.1rem;
+}
+}
+
+.mobile-menu {
+transition: all 0.3s ease;
+}
+
+.article-card {
+transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.article-card:hover {
+transform: translateY(-2px);
+box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.modal {
+backdrop-filter: blur(4px);
+}
+
+.search-container {
+position: relative;
+}
+
+.search-results {
+position: absolute;
+top: 100%;
+left: 0;
+right: 0;
+background: white;
+border: 1px solid #e2e8f0;
+border-radius: 0.5rem;
+box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+max-height: 400px;
+overflow-y: auto;
+z-index: 50;
+}
+
+.badge {
+display: inline-block;
+padding: 0.25rem 0.75rem;
+border-radius: 9999px;
+font-size: 0.75rem;
+font-weight: 600;
+margin-right: 0.5rem;
+margin-bottom: 0.25rem;
+}
+
+.badge-blue { background: #ebf8ff; color: #2b6cb0; }
+.badge-green { background: #f0fff4; color: #2f855a; }
+.badge-red { background: #fff5f5; color: #c53030; }
+.badge-purple { background: #faf5ff; color: #6b46c1; }
+.badge-yellow { background: #fffaf0; color: #b7791f; }
+
+.pdf-content {
+display: none;
+}
+
+.article-image {
+height: 200px;
+background-size: cover;
+background-position: center;
+border-radius: 8px 8px 0 0;
+}
+
+.featured-article-image {
+width: 100%;
+height: 200px;
+object-fit: cover;
+border-radius: 8px 8px 0 0;
+}
+
+.logo-container {
+display: flex;
+align-items: center;
+gap: 0.75rem;
+}
+
+.logo-image {
+height: 40px;
+width: auto;
+}
+
+.logo-text-container {
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+}
+
+.logo-text {
+line-height: 1;
+margin: 0;
+}
+
+.logo-subtitle {
+font-size: 0.75rem;
+color: #6b7280;
+margin: 0;
+line-height: 1;
+font-weight: 400;
+}
+
+@media (max-width: 768px) {
+.logo-image {
+height: 32px;
+}
+
+.logo-text {
+font-size: 1rem;
+}
+
+.logo-subtitle {
+font-size: 0.65rem;
+}
+}
+
+.dropdown {
+position: relative;
+}
+
+.dropdown-content {
+display: none;
+position: absolute;
+top: 100%;
+right: 0;
+background-color: white;
+min-width: 160px;
+box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+border-radius: 0.5rem;
+z-index: 1000;
+border: 1px solid #e2e8f0;
+}
+
+.dropdown:hover .dropdown-content {
+display: block;
+}
+
+.dropdown-content a {
+color: #374151;
+padding: 12px 16px;
+text-decoration: none;
+display: block;
+transition: background-color 0.2s;
+}
+
+.dropdown-content a:hover {
+background-color: #f3f4f6;
+}
+
+.dropdown-content a:first-child {
+border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.dropdown-content a:last-child {
+border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.current-issue-card {
+transition: all 0.3s ease;
+}
+
+.current-issue-card:hover {
+transform: translateY(-2px);
+box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.journal-cover-container {
+background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+@media (max-width: 1024px) {
+.journal-cover-container {
+background: #f8fafc;
+}
+}
+
+.current-issue-image-container {
+    width: 100%;
+    height: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.current-issue-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 1024px) {
+    .current-issue-image-container {
+        height: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    .current-issue-image-container {
+        height: 250px;
+    }
+    
+    .current-issue-image {
+        object-fit: cover;
+        transform: scale(1.1);
+    }
+}
+
+@media (max-width: 480px) {
+    .current-issue-image-container {
+        height: 220px;
+    }
+    
+    .current-issue-image {
+        object-fit: cover;
+        transform: scale(1.2);
+    }
+}
+
+.nav-right {
+    margin-left: auto;
+}
+
+/* Enhanced Search Styles */
+.search-icon {
+    color: #2563eb;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+}
+
+.search-icon:hover {
+    color: #1d4ed8;
+    background-color: #f3f4f6;
+}
+
+.navbar-search-container {
+    position: relative;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-search-input {
+    width: 0;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.875rem;
+}
+
+.navbar-search-input.expanded {
+    width: 280px;
+    opacity: 1;
+    padding: 0.75rem 1rem;
+    border: 2px solid #3b82f6;
+    border-radius: 0.5rem;
+    background: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.navbar-search-results {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    max-height: 350px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+/* Mobile Search Enhancements */
+.mobile-nav-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.mobile-search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.mobile-search-input {
+    width: 0;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.875rem;
+}
+
+.mobile-search-input.expanded {
+    width: 200px;
+    opacity: 1;
+    padding: 0.625rem 0.875rem;
+    border: 2px solid #3b82f6;
+    border-radius: 0.5rem;
+    background: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    position: relative;
+    right: 0;
+    top: 0;
+    transform: none;
+}
+
+.mobile-search-results {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    left: -120px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+/* Responsive Search Adjustments */
+@media (max-width: 1200px) {
+    .navbar-search-input.expanded {
+        width: 240px;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-search-input.expanded {
+        width: 180px;
+    }
+    
+    .mobile-search-results {
+        left: -100px;
+    }
+}
+
+@media (max-width: 640px) {
+    .mobile-search-input.expanded {
+        width: 160px;
+    }
+    
+    .mobile-search-results {
+        left: -80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .mobile-search-input.expanded {
+        width: 140px;
+    }
+    
+    .mobile-search-results {
+        left: -60px;
+    }
+}
+
+/* Hide navigation items when search is expanded */
+.nav-items.hidden-for-search {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+/* Search Results Styling */
+.search-result-item {
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid #f3f4f6;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.search-result-item:hover {
+    background-color: #f8fafc;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+    border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.search-result-item:first-child {
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+/* Mobile Menu Button Enhancement */
+.mobile-menu-btn {
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+}
+
+.mobile-menu-btn:hover {
+    background-color: #f3f4f6;
+}
+
+/* Updated Hero and About/Call for Papers Layout */
+.hero-about-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Updated Hero Section with Banner Background - Same Dimensions as Original */
+.hero-section {
+    color: white;
+    padding: 2rem 0;
+    min-height: 25vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Desktop Banner Background */
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://dqdhiu.netlify.app/desktop-banner.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -2;
+}
+
+/* Optional overlay for better text readability */
+.hero-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  /*  background: rgba(30, 58, 138, 0.6);  */
+    z-index: -1;
+}
+
+/* About and Call for Papers Section */
+.about-callforpapers-section {
+    background: white;
+    padding: 3rem 0;
+    flex: 1;
+}
+
+.about-content h3 {
+    font-size: 1.875rem;
+    margin-bottom: 1.5rem;
+}
+
+.about-content h4 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Updated layout: 75% left (About) and 25% right (Call for Papers) */
+.about-callforpapers-grid {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+.about-content-wrapper {
+    padding-right: 1rem;
+}
+
+.callforpapers-content {
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+}
+
+/* Ensure equal height finishing line */
+.callforpapers-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Enhanced text positioning for banner */
+.hero-content {
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 1024px) {
+    .hero-section {
+        padding: 2rem 0;
+        min-height: 20vh;
+    }
+    
+    .about-callforpapers-section {
+        padding: 2rem 0;
+    }
+    
+    .about-callforpapers-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .about-content-wrapper {
+        padding-right: 0;
+    }
+    
+    .callforpapers-content {
+        position: static;
+        margin-top: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 1.5rem 0;
+        min-height: 18vh;
+    }
+    
+    .hero-section::before {
+        background-image: url('https://dqdhiu.netlify.app/mobile-banner.jpg');
+    }
+    
+    .hero-section h2 {
+        font-size: 2rem !important;
+    }
+    
+    .hero-section p {
+        font-size: 1rem !important;
+    }
+}
+
+/* Enhanced Responsive Typography */
+@media (max-width: 768px) {
+    .logo-text {
+        font-size: 0.9rem;
+    }
+    
+    .logo-subtitle {
+        font-size: 0.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-text {
+        font-size: 0.85rem;
+    }
+    
+    .logo-subtitle {
+        font-size: 0.55rem;
+    }
+}
+
+/* Loading spinner for search */
+.search-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.spinner {
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #3b82f6;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+
 </head>
-<body>
-    <!-- Header -->
-    <header>
-        <nav>
-            <div class="logo-section">
-                <a href="https://dqdhiu.netlify.app/logo.png" class="logo">Grace</a>
-                <div class="tagline">Quality Clothes</div>
-            </div>
 
-            <div class="nav-center">
-                <!-- Category Dropdown -->
-                <div class="dropdown" id="categoryDropdown">
-                    <button class="dropdown-btn">
-                        <i class="fas fa-th-large"></i>
-                        <span>Categories</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <div class="dropdown-content">
-                        <div class="dropdown-item active" data-filter="all">All Products</div>
-                        <div class="dropdown-item" data-filter="men">Men</div>
-                        <div class="dropdown-item" data-filter="women">Women</div>
-                        <div class="dropdown-item" data-filter="kids">Kids</div>
-                    </div>
-                </div>
+<body class="bg-gray-50">
+<!-- Navigation -->
+<nav class="bg-white shadow-sm sticky top-0 z-40">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-16">
+<div class="flex items-center">
+<div class="flex-shrink-0"> 
+<a href="index.html" class="logo-container">
+<img src="logo.png" alt="Islamic Insight Logo" class="logo-image">
+<div class="logo-text-container">
+<h1 class="logo-text text-xl font-bold text-black-900 academic-title">
+ISLAMIC INSIGHT
+</h1>
+<p class="logo-subtitle">Journal of Islamic Studies</p>
+</div>
+</a> 
+</div>
+</div>
 
-                <!-- Sort Dropdown -->
-                <div class="dropdown" id="sortDropdown">
-                    <button class="dropdown-btn">
-                        <i class="fas fa-sort-amount-down"></i>
-                        <span>Sort By</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <div class="dropdown-content">
-                        <div class="dropdown-item active" data-sort="featured">Featured</div>
-                        <div class="dropdown-item" data-sort="price-low">Price: Low to High</div>
-                        <div class="dropdown-item" data-sort="price-high">Price: High to Low</div>
-                        <div class="dropdown-item" data-sort="newest">Newest First</div>
-                    </div>
-                </div>
-            </div>
+<!-- Desktop Navigation - Moved to right -->
+<div class="hidden md:block nav-right">
+<div class="flex items-center space-x-6">
+<!-- Navigation Items -->
+<div id="nav-items" class="nav-items flex items-baseline space-x-6">
+<a href="#home" class="text-blue-700 bg-blue-50 rounded px-3 py-2 text-sm font-medium transition-colors">Home</a>
+<a href="call-for-papers.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Call For Paper</a>
+<a href="#featured" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">Current Issue</a>
+<a href="all-issues.html" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">All Issues</a>
+<div class="dropdown">
+<a href="#about" class="text-gray-700 hover:text-blue-900 px-3 py-2 text-sm font-medium transition-colors">About</a>
+<div class="dropdown-content">
+<a href="editors.html">Editorial Team</a>
+<a href="#contact">Contact</a>
+</div>
+</div>
+</div>
 
-            <div class="nav-icons">
-                <div class="nav-icon" id="searchIcon">
-                    <i class="fas fa-search"></i>
-                </div>
-                <div class="nav-icon" id="cartIcon">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="badge" id="cartCount">0</span>
-                </div>
-                <div class="nav-icon" id="profileIcon">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="nav-icon" id="menuIcon">
-                    <i class="fas fa-bars"></i>
-                </div>
-            </div>
-        </nav>
-    </header>
+<!-- Search Container -->
+<div class="navbar-search-container">
+<input
+type="text"
+id="navbar-search-input"
+placeholder="Search articles, authors..."
+class="navbar-search-input"
+>
+<button id="search-toggle-btn" class="search-icon">
+<i id="search-icon" class="fas fa-search text-lg"></i>
+</button>
+<div id="navbar-search-results" class="navbar-search-results hidden"></div>
+</div>
+</div>
+</div>
 
-    <!-- Banner Section with Background Images -->
-    <section class="banner" id="home">
-        <!-- Desktop Banner -->
-        <img src="https://dqdhiu.netlify.app/desktop-banner.jpg" alt="Desktop Banner" class="desktop-banner">
-        <!-- Mobile Banner -->
-        <img src="https://dqdhiu.netlify.app/mobile-banner.jpg" alt="Mobile Banner" class="mobile-banner">
-        
-        <div class="banner-content">
-            <h1>Discover Your Style</h1>
-            <p>Premium Quality Clothing for Everyone</p>
-            <button class="banner-btn" onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})">
-                Shop Now
+<!-- Mobile menu button and search - Moved to right -->
+<div class="md:hidden nav-right">
+    <div class="mobile-nav-container">
+        <!-- Mobile Search Container -->
+        <div class="mobile-search-container">
+            <input
+                type="text"
+                id="mobile-search-input"
+                placeholder="Search..."
+                class="mobile-search-input"
+            >
+            <button id="mobile-search-toggle-btn" class="search-icon">
+                <i id="mobile-search-icon" class="fas fa-search text-lg"></i>
             </button>
-        </div>
-    </section>
-
-    <!-- Products Section -->
-    <section class="products" id="products">
-        <h2 class="section-title">Our Collection</h2>
-
-        <div class="product-grid" id="productGrid">
-            <!-- Products will be loaded here by JavaScript -->
+            <div id="mobile-search-results" class="mobile-search-results hidden"></div>
         </div>
         
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>Loading products...</p>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Grace</h3>
-                <p>Your premier destination for quality clothing. We bring you the latest fashion trends with exceptional quality and affordable prices.</p>
-                <div class="social-links">
-                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-pinterest"></i></a>
-                </div>
-            </div>
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="#home"><i class="fas fa-chevron-right"></i> Home</a></li>
-                    <li><a href="#about"><i class="fas fa-chevron-right"></i> About Us</a></li>
-                    <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Blog</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Customer Service</h3>
-                <ul>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Shipping & Returns</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Track Order</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Size Guide</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> FAQ</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Contact Info</h3>
-                <ul>
-                    <li><i class="fas fa-map-marker-alt"></i> 123 Fashion Street, NY 10001</li>
-                    <li><i class="fas fa-phone"></i> +1 234 567 890</li>
-                    <li><i class="fas fa-envelope"></i> info@grace.com</li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 Grace - Quality Clothes. All Rights Reserved.</p>
-        </div>
-    </footer>
-
-    <!-- Search Modal -->
-    <div class="search-modal" id="searchModal">
-        <div class="search-container">
-            <div class="search-header">
-                <i class="fas fa-search" style="font-size: 20px; color: #667eea;"></i>
-                <input type="text" class="search-input" id="searchInput" placeholder="Search for products...">
-                <button class="close-search" id="closeSearch">&times;</button>
-            </div>
-            <div class="search-results" id="searchResults">
-                <div class="no-results">
-                    <i class="fas fa-search"></i>
-                    <p>Start typing to search products...</p>
-                </div>
-            </div>
-        </div>
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="mobile-menu-btn text-gray-700 hover:text-blue-900 focus:outline-none">
+            <i class="fas fa-bars text-lg"></i>
+        </button>
     </div>
+</div>
+</div>
+</div>
 
-    <!-- Side Menu -->
-    <div class="side-menu" id="sideMenu">
-        <div class="side-menu-header">
-            <h2>Menu</h2>
-            <button class="close-menu" id="closeMenu">&times;</button>
-        </div>
-        <div class="side-menu-items">
-            <div class="menu-item" onclick="scrollToSection('home')">
-                <i class="fas fa-home"></i>
-                <span>Home</span>
-            </div>
-            <div class="menu-item" onclick="scrollToSection('about')">
-                <i class="fas fa-info-circle"></i>
-                <span>About</span>
-            </div>
-            <div class="menu-item" onclick="scrollToSection('contact')">
-                <i class="fas fa-envelope"></i>
-                <span>Contact</span>
-            </div>
-        </div>
+<!-- Mobile Navigation -->
+<div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+<div class="px-2 pt-2 pb-3 space-y-1">
+<a href="#home" class="block px-3 py-2 text-sm font-medium text-blue-700 bg-blue-50 rounded transition-colors">Home</a>
+<a href="call-for-papers.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Call For Paper</a>
+<a href="#featured" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">Current Issue</a>
+<a href="all-issues.html" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">All Issues</a>
+<a href="#about" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-900 transition-colors">About</a>
+<a href="editors.html" class="block px-3 py-2 pl-6 text-sm font-medium text-gray-600 hover:text-blue-900 transition-colors">Editorial Team</a>
+<a href="#contact" class="block px-3 py-2 pl-6 text-sm font-medium text-gray-600 hover:text-blue-900 transition-colors">Contact</a>
+</div>
+</div>
+</nav>
+
+<!-- Updated Home Section with Banner Background -->
+<section id="home" class="hero-about-container">
+    <!-- Hero Section - Now with Banner Background -->
+    <div class="hero-section">
+
     </div>
-
-    <!-- Cart Sidebar -->
-    <div class="cart-sidebar" id="cartSidebar">
-        <div class="cart-header">
-            <h2><i class="fas fa-shopping-cart"></i> My Cart</h2>
-            <button class="close-cart" id="closeCart">&times;</button>
-        </div>
-        <div class="cart-items" id="cartItems">
-            <div class="empty-cart">
-                <i class="fas fa-shopping-cart"></i>
-                <h3>Your cart is empty</h3>
-                <p>Add some products to get started!</p>
-            </div>
-        </div>
-        <div class="cart-footer" id="cartFooter" style="display: none;">
-            <div class="cart-total">
-                <span>Total:</span>
-                <span id="cartTotal">$0.00</span>
-            </div>
-            <button class="buy-now-btn" id="buyNowBtn">
-                <i class="fas fa-credit-card"></i>
-                Buy Now
-            </button>
-        </div>
-    </div>
-
-    <!-- Product Detail Modal -->
-    <div class="product-modal" id="productModal">
-        <div class="modal-content">
-            <button class="close-modal" id="closeModal">&times;</button>
-            <div class="modal-body">
-                <div class="modal-image">
-                    <img id="modalImage" src="" alt="Product Image">
-                </div>
-                <div class="modal-details">
-                    <h2 id="modalTitle">Product Name</h2>
-                    <div class="product-category" id="modalCategory">Category</div>
-                    <div class="product-rating" id="modalRating">
-                        <div class="stars">★★★★☆</div>
-                        <span class="rating-count">(128)</span>
-                    </div>
-                    <div class="product-price">
-                        <span class="current-price" id="modalPrice">$89.99</span>
-                        <span class="original-price" id="modalOriginalPrice">$129.99</span>
-                    </div>
-                    <p class="product-description" id="modalDescription">
-                        Premium quality product with excellent craftsmanship and attention to detail.
-                    </p>
-                    
-                    <div class="size-selector">
-                        <h3>Select Size</h3>
-                        <div class="size-options">
-                            <div class="size-option active">S</div>
-                            <div class="size-option">M</div>
-                            <div class="size-option">L</div>
-                            <div class="size-option">XL</div>
-                        </div>
-                    </div>
-                    
-                    <div class="color-selector">
-                        <h3>Select Color</h3>
-                        <div class="color-options">
-                            <div class="color-option active" style="background-color: #000;"></div>
-                            <div class="color-option" style="background-color: #667eea;"></div>
-                            <div class="color-option" style="background-color: #e74c3c;"></div>
-                            <div class="color-option" style="background-color: #27ae60;"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="modal-actions">
-                        <button class="add-to-cart-btn" id="modalAddToCart">
-                            <i class="fas fa-shopping-cart"></i>
-                            Add to Cart
-                        </button>
-                        <button class="btn-secondary">
-                            <i class="fas fa-heart"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Checkout Modal -->
-    <div class="checkout-modal" id="checkoutModal">
-        <div class="checkout-content">
-            <div class="checkout-header">
-                <h2><i class="fas fa-shopping-bag"></i> Checkout</h2>
-            </div>
-            <form id="checkoutForm">
-                <div class="checkout-body">
-                    <div class="form-group">
-                        <label for="customerName"><i class="fas fa-user"></i> Full Name *</label>
-                        <input type="text" id="customerName" class="form-control" required placeholder="Enter your full name">
-                    </div>
-                    <div class="form-group">
-                        <label for="email"><i class="fas fa-envelope"></i> Email Address *</label>
-                        <input type="email" id="email" class="form-control" required placeholder="your.email@example.com">
-                    </div>
-                    <div class="form-group">
-                        <label for="phone"><i class="fas fa-phone"></i> Phone Number *</label>
-                        <input type="tel" id="phone" class="form-control" required placeholder="+1 234 567 8900">
-                    </div>
-                    <div class="form-group">
-                        <label for="address"><i class="fas fa-map-marker-alt"></i> Shipping Address *</label>
-                        <textarea id="address" class="form-control" rows="3" required placeholder="Enter your complete shipping address"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="paymentMethod"><i class="fas fa-credit-card"></i> Payment Method *</label>
-                        <select id="paymentMethod" class="form-control" required> 
-                            <option value="">Select Payment Method</option>
-                            <option value="Credit Card">Credit Card</option>
-                            <option value="Debit Card">Debit Card</option>
-                            <option value="PayPal">PayPal</option>
-                            <option value="Cash on Delivery">Cash on Delivery</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="checkout-footer">
-                    <div class="checkout-total">
-                        Total: <span id="checkoutTotal">$0.00</span>
-                    </div>
-                    <button type="submit" class="submit-order-btn">
-                        <i class="fas fa-check-circle"></i>
-                        Place Order
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Success Modal -->
-    <div class="success-modal" id="successModal">
-        <div class="success-content">
-            <div class="success-icon">
-                <i class="fas fa-check"></i>
-            </div>
-            <h2>Order Placed!</h2>
-            <p>Thank you for your purchase. Your order has been confirmed.</p>
-            <div class="order-id-box">
-                <div class="order-id-label">Your Order ID:</div>
-                <div class="order-id-value">
-                    <span id="displayOrderId">ORD-123456</span>
-                    <button class="copy-btn" onclick="copyOrderId()">
-                        <i class="fas fa-copy"></i> Copy
-                    </button>
-                </div>
-            </div>
-            <p style="font-size: 13px; color: #999;">You will receive a confirmation email shortly.</p>
-            <button class="success-close-btn" onclick="closeSuccessModal()">
-                Continue Shopping
-            </button>
-        </div>
-    </div>
-
-    <!-- Profile/Track Order Modal -->
-    <div class="profile-modal" id="profileModal">
-        <div class="profile-content">
-            <div class="profile-header">
-                <h2><i class="fas fa-box"></i> Track Orders</h2>
-                <button class="close-profile" id="closeProfile">&times;</button>
-            </div>
-            <div class="profile-body">
-                <div class="track-form">
-                    <p style="color: #666; margin-bottom: 15px; font-size: 14px;">
-                        Enter your phone number to view your order details
-                    </p>
-                    <div class="track-input-group">
-                        <input type="tel" id="trackPhone" class="track-input" placeholder="Enter phone number" required>
-                        <button class="track-btn" onclick="trackOrders()">
-                            <i class="fas fa-search"></i> Track
-                        </button>
-                    </div>
-                </div>
+    
+    <!-- About and Call for Papers Section - 75% / 25% Layout -->
+    <div id="about" class="about-callforpapers-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="about-callforpapers-grid">
                 
-                <div class="order-results" id="orderResults">
-                    <!-- Order results will be displayed here -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast Notification -->
-    <div class="toast" id="toast"></div>
-
-    <script>
-    // Configuration
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwbxP0c4eI1KvjrFYazyaqXTOpxF2X0tLuPuDtCmbczOA1V2yMs8aWMc115GMQNA8WIcA/exec';
-    const PRODUCTS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRuxfN3pkRvY7gU6w474iyADXj69wz4jVQI0qWMFqqJe0lmKBqSe8Z5yIwNZ5wnPmq_MNWaIjIWE6vo/pub?gid=512772452&single=true&output=csv';
-    const ORDERS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRuxfN3pkRvY7gU6w474iyADXj69wz4jVQI0qWMFqqJe0lmKBqSe8Z5yIwNZ5wnPmq_MNWaIjIWE6vo/pub?gid=1214934860&single=true&output=csv';
-
-    // Global variables
-    let cart = [];
-    let products = [];
-    let currentFilter = 'all';
-    let currentSort = 'featured';
-    let currentProductId = null;
-    let generatedOrderId = '';
-
-    // Load Products from Google Sheets CSV
-    async function loadProducts() {
-        const productGrid = document.getElementById('productGrid');
-        const loading = document.getElementById('loading');
-        
-        loading.style.display = 'block';
-        productGrid.innerHTML = '';
-
-        try {
-            const response = await fetch(PRODUCTS_CSV_URL);
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-            }
-
-            const csvText = await response.text();
-            products = parseCSV(csvText);
-            
-            if (products.length === 0) {
-                throw new Error('No products found in CSV');
-            }
-            
-            console.log('Products loaded:', products.length);
-            displayProducts();
-            
-        } catch (error) {
-            console.error('Error loading products:', error);
-            showToast('Error loading products. Using sample data.');
-            loadSampleProducts();
-        } finally {
-            loading.style.display = 'none';
-        }
-    }
-
-    // Parse CSV function
-    function parseCSV(csvText) {
-        const lines = csvText.trim().split('\n');
-        if (lines.length < 2) return [];
-
-        const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
-        const data = [];
-
-        for (let i = 1; i < lines.length; i++) {
-            const values = parseCSVLine(lines[i]);
-            if (values.length === headers.length) {
-                const row = {};
-                headers.forEach((header, index) => {
-                    row[header] = values[index] ? values[index].replace(/"/g, '').trim() : '';
-                });
-                
-                const product = {
-                    ID: i,
-                    Name: row.name || row.Name || '',
-                    Category: row.category || row.Category || '',
-                    Price: row.price || row.Price || '0',
-                    OriginalPrice: row.originalPrice || row.OriginalPrice || '',
-                    Image: row.imageUrl || row.Image || row.image || 'https://images.unsplash.com/photo-1560769669-975ec94e6a86?w=500',
-                    Badge: row.badge || row.Badge || '',
-                    Rating: parseFloat(row.rating || row.Rating || '4'),
-                    Reviews: parseInt(row.reviews || row.Reviews || '0'),
-                    Description: row.description || row.Description || 'Premium quality product.',
-                    Stock: parseInt(row.stock || row.Stock || '0'),
-                    Status: row.status || row.Status || 'Active'
-                };
-                
-                if (product.Stock > 0 && product.Status === 'Active') {
-                    data.push(product);
-                }
-            }
-        }
-
-        return data;
-    }
-
-    function parseCSVLine(line) {
-        const result = [];
-        let current = '';
-        let inQuotes = false;
-        
-        for (let i = 0; i < line.length; i++) {
-            const char = line[i];
-            
-            if (char === '"') {
-                inQuotes = !inQuotes;
-            } else if (char === ',' && !inQuotes) {
-                result.push(current.trim());
-                current = '';
-            } else {
-                current += char;
-            }
-        }
-        
-        result.push(current.trim());
-        return result;
-    }
-
-    function displayProducts() {
-        const productGrid = document.getElementById('productGrid');
-        productGrid.innerHTML = '';
-
-        let filteredProducts = currentFilter === 'all' 
-            ? products 
-            : products.filter(p => p.Category.toLowerCase() === currentFilter.toLowerCase());
-
-        filteredProducts = sortProducts(filteredProducts, currentSort);
-
-        if (filteredProducts.length === 0) {
-            productGrid.innerHTML = `
-                <div style="text-align: center; grid-column: 1/-1; padding: 60px; color: #666;">
-                    <i class="fas fa-search" style="font-size: 50px; margin-bottom: 20px; opacity: 0.4;"></i>
-                    <h3 style="font-size: 1.3rem; margin-bottom: 8px;">No products found</h3>
-                    <p style="font-size: 14px;">Try adjusting your filters or browse other categories</p>
-                </div>
-            `;
-            return;
-        }
-
-        filteredProducts.forEach(product => {
-            const productCard = createProductCard(product);
-            productGrid.appendChild(productCard);
-        });
-    }
-
-    function sortProducts(productsArray, sortBy) {
-        switch(sortBy) {
-            case 'price-low':
-                return [...productsArray].sort((a, b) => parseFloat(a.Price) - parseFloat(b.Price));
-            case 'price-high':
-                return [...productsArray].sort((a, b) => parseFloat(b.Price) - parseFloat(a.Price));
-            case 'newest':
-                return [...productsArray].reverse();
-            default:
-                return productsArray;
-        }
-    }
-
-    function createProductCard(product) {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        
-        const stars = '★'.repeat(Math.floor(product.Rating)) + '☆'.repeat(5 - Math.floor(product.Rating));
-        const hasDiscount = product.OriginalPrice && parseFloat(product.OriginalPrice) > parseFloat(product.Price);
-        
-        card.innerHTML = `
-            ${product.Badge ? `<div class="product-badge ${product.Badge === 'New' ? 'new' : ''}">${product.Badge}</div>` : ''}
-            <div class="product-image">
-                <img src="${product.Image}" alt="${product.Name}" onerror="this.src='https://images.unsplash.com/photo-1560769669-975ec94e6a86?w=500'">
-                <div class="quick-view">Quick View</div>
-            </div>
-            <div class="product-info">
-                <div class="product-category">${product.Category}</div>
-                <div class="product-name">${product.Name}</div>
-                <div class="product-rating">
-                    <div class="stars">${stars}</div>
-                    <span class="rating-count">(${product.Reviews})</span>
-                </div>
-                <div class="product-price">
-                    <span class="current-price">$${parseFloat(product.Price).toFixed(2)}</span>
-                    ${hasDiscount ? `<span class="original-price">$${parseFloat(product.OriginalPrice).toFixed(2)}</span>` : ''}
-                </div>
-                <button class="cart-icon-btn" onclick="event.stopPropagation(); addToCart(${product.ID})">
-                    <i class="fas fa-shopping-cart"></i>
-                </button>
-            </div>
-        `;
-        
-        card.addEventListener('click', (e) => {
-            if (!e.target.closest('.cart-icon-btn')) {
-                viewProductDetails(product.ID);
-            }
-        });
-        
-        return card;
-    }
-
-    function viewProductDetails(productId) {
-        const product = products.find(p => p.ID === productId);
-        if (product) {
-            currentProductId = productId;
-            
-            document.getElementById('modalImage').src = product.Image;
-            document.getElementById('modalTitle').textContent = product.Name;
-            document.getElementById('modalCategory').textContent = product.Category;
-            document.getElementById('modalPrice').textContent = `$${parseFloat(product.Price).toFixed(2)}`;
-            
-            const hasDiscount = product.OriginalPrice && parseFloat(product.OriginalPrice) > parseFloat(product.Price);
-            const originalPriceEl = document.getElementById('modalOriginalPrice');
-            if (hasDiscount) {
-                originalPriceEl.textContent = `$${parseFloat(product.OriginalPrice).toFixed(2)}`;
-                originalPriceEl.style.display = 'inline';
-            } else {
-                originalPriceEl.style.display = 'none';
-            }
-            
-            const stars = '★'.repeat(Math.floor(product.Rating)) + '☆'.repeat(5 - Math.floor(product.Rating));
-            document.querySelector('#modalRating .stars').textContent = stars;
-            document.querySelector('#modalRating .rating-count').textContent = `(${product.Reviews})`;
-            
-            document.getElementById('modalDescription').textContent = product.Description || 'Premium quality product with excellent craftsmanship.';
-            
-            document.getElementById('productModal').classList.add('active');
-        }
-    }
-
-    function loadSampleProducts() {
-        const sampleProducts = [
-            {
-                ID: 1,
-                Name: "Classic Denim Jacket",
-                Category: "men",
-                Price: 89.99,
-                OriginalPrice: 129.99,
-                Image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500",
-                Badge: "Sale",
-                Rating: 4.5,
-                Reviews: 128,
-                Description: "Premium quality denim jacket with classic fit.",
-                Stock: 50,
-                Status: "Active"
-            },
-            {
-                ID: 2,
-                Name: "Elegant Summer Dress",
-                Category: "women",
-                Price: 59.99,
-                OriginalPrice: 79.99,
-                Image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500",
-                Badge: "New",
-                Rating: 4.8,
-                Reviews: 256,
-                Description: "Beautiful summer dress with floral pattern.",
-                Stock: 75,
-                Status: "Active"
-            }
-        ];
-        
-        products = sampleProducts;
-        displayProducts();
-    }
-
-    function addToCart(productId) {
-        const product = products.find(p => p.ID == productId);
-        
-        if (!product) {
-            showToast('Product not found!');
-            return;
-        }
-        
-        const existingItem = cart.find(item => item.ID == productId);
-
-        if (existingItem) {
-            existingItem.quantity++;
-        } else {
-            cart.push({
-                ...product,
-                quantity: 1,
-                size: 'M',
-                color: 'Black'
-            });
-        }
-
-        updateCart();
-        showToast(`${product.Name} added!`);
-    }
-
-    function updateCart() {
-        const cartCount = document.getElementById('cartCount');
-        const cartItems = document.getElementById('cartItems');
-        const cartFooter = document.getElementById('cartFooter');
-        const cartTotal = document.getElementById('cartTotal');
-
-        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-        cartCount.textContent = totalItems;
-
-        if (cart.length === 0) {
-            cartItems.innerHTML = `
-                <div class="empty-cart">
-                    <i class="fas fa-shopping-cart"></i>
-                    <h3>Your cart is empty</h3>
-                    <p>Add some products to get started!</p>
-                </div>
-            `;
-            cartFooter.style.display = 'none';
-        } else {
-            cartItems.innerHTML = cart.map(item => `
-                <div class="cart-item">
-                    <img src="${item.Image}" alt="${item.Name}" class="cart-item-image" onerror="this.src='https://images.unsplash.com/photo-1560769669-975ec94e6a86?w=500'">
-                    <div class="cart-item-info">
-                        <div class="cart-item-name">${item.Name}</div>
-                        <div class="cart-item-price">$${parseFloat(item.Price).toFixed(2)}</div>
-                        <div class="quantity-controls">
-                            <button class="qty-btn" onclick="updateQuantity(${item.ID}, -1)">-</button>
-                            <span style="min-width: 30px; text-align: center; font-weight: 600;">${item.quantity}</span>
-                            <button class="qty-btn" onclick="updateQuantity(${item.ID}, 1)">+</button>
+                <!-- About Journal - Left Side (75%) -->
+                <div class="about-content-wrapper">
+                    <div class="about-content">
+                        <div class="text-left">
+                            <h4 class="text-2xl sm:text-3xl font-bold academic-title text-gray-900 mb-6">
+                                About Our Journal
+                            </h4>
                         </div>
-                    </div>
-                    <button class="remove-item" onclick="removeFromCart(${item.ID})">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            `).join('');
-            
-            const total = cart.reduce((sum, item) => sum + (parseFloat(item.Price) * item.quantity), 0);
-            cartTotal.textContent = `$${total.toFixed(2)}`;
-            document.getElementById('checkoutTotal').textContent = `$${total.toFixed(2)}`;
-            cartFooter.style.display = 'block';
-        }
-    }
-
-    function updateQuantity(productId, change) {
-        const item = cart.find(item => item.ID == productId);
-        if (item) {
-            item.quantity += change;
-            if (item.quantity <= 0) {
-                removeFromCart(productId);
-            } else {
-                updateCart();
-            }
-        }
-    }
-
-    function removeFromCart(productId) {
-        cart = cart.filter(item => item.ID != productId);
-        updateCart();
-        showToast('Item removed');
-    }
-
-    function generateOrderId() {
-        const timestamp = Date.now().toString(36);
-        const randomStr = Math.random().toString(36).substring(2, 8).toUpperCase();
-        return `ORD-${timestamp}-${randomStr}`;
-    }
-
-    async function submitOrder(orderData) {
-        try {
-            console.log('Submitting order:', orderData);
-            
-            const params = new URLSearchParams({
-                action: 'submitOrder',
-                orderId: orderData.orderId,
-                customerName: orderData.customerName,
-                email: orderData.email,
-                phone: orderData.phone,
-                address: orderData.address,
-                paymentMethod: orderData.paymentMethod,
-                products: orderData.products,
-                total: orderData.total,
-                status: orderData.status
-            });
-
-            const url = `${GOOGLE_SCRIPT_URL}?${params.toString()}`;
-            
-            const response = await fetch(url, {
-                method: 'GET',
-                redirect: 'follow'
-            });
-
-            const text = await response.text();
-            const result = JSON.parse(text);
-
-            if (result.status === 'success') {
-                return {
-                    success: true,
-                    orderId: result.orderId
-                };
-            } else {
-                throw new Error(result.message || 'Order submission failed');
-            }
-        } catch (error) {
-            console.error('Error submitting order:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    async function trackOrders() {
-        const phoneInput = document.getElementById('trackPhone');
-        const phone = phoneInput.value.trim();
-        const orderResults = document.getElementById('orderResults');
-
-        if (!phone) {
-            showToast('Please enter a phone number');
-            return;
-        }
-
-        orderResults.innerHTML = '<div style="text-align: center; padding: 30px;"><div class="spinner"></div><p>Searching orders...</p></div>';
-        orderResults.classList.add('active');
-
-        try {
-            const response = await fetch(ORDERS_CSV_URL);
-            if (!response.ok) {
-                throw new Error('Failed to fetch orders');
-            }
-
-            const csvText = await response.text();
-            const orders = parseOrdersCSV(csvText);
-            
-            // Filter orders by phone number
-            const userOrders = orders.filter(order => order.phone === phone);
-
-            if (userOrders.length === 0) {
-                orderResults.innerHTML = `
-                    <div class="no-orders">
-                        <i class="fas fa-inbox"></i>
-                        <h3>No Orders Found</h3>
-                        <p>No orders found for this phone number</p>
-                    </div>
-                `;
-                return;
-            }
-
-            // Display orders with raw products data
-            orderResults.innerHTML = userOrders.map(order => {
-                // Display the raw products data from CSV
-                const productsRaw = order.products || '';
-                
-                return `
-                    <div class="order-card">
-                        <div class="order-header">
-                            <span class="order-id-display">${order.orderId}</span>
-                            <span class="order-status ${order.status.toLowerCase()}">${order.status}</span>
-                        </div>
-                        <div class="order-info-row">
-                            <span class="order-info-label">Name:</span>
-                            <span class="order-info-value">${order.customerName}</span>
-                        </div>
-                        <div class="order-info-row">
-                            <span class="order-info-label">Email:</span>
-                            <span class="order-info-value">${order.email}</span>
-                        </div>
-                        <div class="order-info-row">
-                            <span class="order-info-label">Address:</span>
-                            <span class="order-info-value">${order.address}</span>
-                        </div>
-                        <div class="order-info-row">
-                            <span class="order-info-label">Payment:</span>
-                            <span class="order-info-value">${order.paymentMethod}</span>
-                        </div>
-                        <div class="order-info-row">
-                            <span class="order-info-label">Total:</span>
-                            <span class="order-info-value">$${parseFloat(order.total).toFixed(2)}</span>
-                        </div>
-                        <div class="order-products">
-                            <h4>Products:</h4>
-                            <div class="order-product-item">
-                                ${productsRaw.replace(/\n/g, '<br>')}
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <p class="text-gray-700 text-base leading-relaxed text-justify mb-4">
+                                    Islamic Insight is an international, peer-reviewed cross-disciplinary journal dedicated to publishing original scholarship of exceptional quality on all aspects of Islam and the Muslim world. Inasmuch as it caters for a robust scholarly engagement with Islam in light of cutting-edge developments in the humanities and social sciences, the journal provides a forum for high quality research works that contribute substantively to contemporary discourse in Islamic studies in all its richness and complexities.
+                                </p>
+                                <p class="text-gray-700 text-base leading-relaxed text-justify mb-4">
+                                    The journal is very keen on articles, research communications, and book reviews that deal with Islam and the Islamic tradition in its many facets and manifestations and exploit perspectives and analytics that straddle disciplines and frontiers of knowledge.
+                                </p>
+                                <p class="text-gray-700 text-base leading-relaxed text-justify">
+                                    We welcome submissions across various disciplines including Quranic studies, Hadith scholarship, Islamic theology and philosophy, Islamic law and jurisprudence, Islamic history and civilization, Muslim societies and cultures, comparative religion, and contemporary Islamic thought. Our commitment to scholarly excellence is reflected in our rigorous peer-review process and our dedication to advancing knowledge in Islamic studies through innovative research and critical analysis.
+                                </p>
                             </div>
                         </div>
                     </div>
-                `;
-            }).join('');
-
-        } catch (error) {
-            console.error('Error tracking orders:', error);
-            orderResults.innerHTML = `
-                <div class="no-orders">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <h3>Error</h3>
-                    <p>Failed to load orders. Please try again.</p>
                 </div>
-            `;
-        }
-    }
 
-    function parseOrdersCSV(csvText) {
-        const lines = csvText.trim().split('\n');
-        if (lines.length < 2) return [];
-
-        const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
-        const data = [];
-
-        for (let i = 1; i < lines.length; i++) {
-            const values = parseCSVLine(lines[i]);
-            if (values.length >= headers.length) {
-                const row = {};
-                headers.forEach((header, index) => {
-                    // Keep the raw value, don't trim quotes
-                    row[header] = values[index] || '';
-                });
-                
-                const order = {
-                    orderId: row.orderId || row.OrderId || row['Order ID'] || '',
-                    customerName: row.customerName || row.CustomerName || row['Customer Name'] || '',
-                    email: row.email || row.Email || '',
-                    phone: row.phone || row.Phone || '',
-                    address: row.address || row.Address || '',
-                    paymentMethod: row.paymentMethod || row.PaymentMethod || row['Payment Method'] || '',
-                    products: row.products || row.Products || '',
-                    total: row.total || row.Total || row['Total Amount'] || '0',
-                    status: row.status || row.Status || 'Pending'
-                };
-                
-                data.push(order);
-            }
-        }
-
-        return data;
-    }
-
-    function searchProducts(query) {
-        const searchResults = document.getElementById('searchResults');
-        
-        if (!query.trim()) {
-            searchResults.innerHTML = `
-                <div class="no-results">
-                    <i class="fas fa-search"></i>
-                    <p>Start typing to search products...</p>
-                </div>
-            `;
-            return;
-        }
-
-        const results = products.filter(product => 
-            product.Name.toLowerCase().includes(query.toLowerCase()) ||
-            product.Category.toLowerCase().includes(query.toLowerCase()) ||
-            product.Description.toLowerCase().includes(query.toLowerCase())
-        );
-
-        if (results.length === 0) {
-            searchResults.innerHTML = `
-                <div class="no-results">
-                    <i class="fas fa-search"></i>
-                    <p>No products found for "${query}"</p>
-                </div>
-            `;
-            return;
-        }
-
-        searchResults.innerHTML = results.map(product => `
-            <div class="search-result-item" onclick="viewProductDetails(${product.ID}); closeSearch();">
-                <img src="${product.Image}" alt="${product.Name}" class="search-result-image" onerror="this.src='https://images.unsplash.com/photo-1560769669-975ec94e6a86?w=500'">
-                <div class="search-result-info">
-                    <div class="search-result-category">${product.Category}</div>
-                    <div class="search-result-name">${product.Name}</div>
-                    <div class="search-result-price">$${parseFloat(product.Price).toFixed(2)}</div>
+                <!-- Call for Papers - Right Side (25%) -->
+                <div class="callforpapers-content">
+                    <div class="bg-blue-50 border-l-4 border-blue-500 rounded-lg p-6 callforpapers-card">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-bullhorn text-blue-500 text-xl mr-3"></i>
+                            <h3 class="text-xl font-bold academic-title text-blue-900">Call For Papers</h3>
+                        </div>
+                        
+                        <div class="flex-grow">
+                            <p class="text-gray-700 mb-4 leading-relaxed text-sm">
+                                We are pleased to invite original research articles for the upcoming issue of Islamic Insight, a biannual peer-reviewed journal published by the Kulliyyah of Qur'an and Sunnah, Darul Huda Islamic University, Kerala, India.
+                            </p>
+                            <p class="text-gray-700 mb-4 leading-relaxed text-sm">
+                                Islamic Insight welcomes high-quality, interdisciplinary research in areas related to Islamic revealed knowledge and the Muslim world.
+                            </p>
+                        </div>
+                        
+                        <div class="mt-auto">
+                            <div class="text-sm text-gray-600 mb-4">
+                                <i class="far fa-calendar-alt mr-2"></i> <strong>Deadline:</strong> Mid-June 2025
+                            </div>
+                            <button 
+                                onclick="location.href='call-for-papers.html'" 
+                                class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm w-full">
+                                Read More Details <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        `).join('');
-    }
+        </div>
+    </div>
+</section>
 
-    function copyOrderId() {
-        const orderIdText = document.getElementById('displayOrderId').textContent;
-        navigator.clipboard.writeText(orderIdText).then(() => {
-            showToast('Order ID copied!');
-        });
-    }
+<!-- Current Issue Section -->
+<section id="featured" class="py-12 sm:py-16 lg:py-20 bg-gray-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-8">
+<h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold academic-title text-gray-900 mb-4">
+Current Issue
+</h2>
+</div>
 
-    function closeSuccessModal() {
-        document.getElementById('successModal').classList.remove('active');
-    }
+<!-- Loading State -->
+<div id="current-issue-loading" class="text-center py-12">
+    <div class="inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+    <p class="mt-4 text-gray-600">Loading current issue...</p>
+</div>
 
-    function closeSearch() {
-        document.getElementById('searchModal').classList.remove('active');
-        document.getElementById('searchInput').value = '';
-    }
+<!-- Error State -->
+<div id="current-issue-error" class="text-center py-12" style="display: none;">
+    <div class="text-red-500 mb-4">
+        <i class="fas fa-exclamation-triangle text-4xl"></i>
+    </div>
+    <h3 class="text-lg font-medium text-gray-900 mb-2">Error Loading Current Issue</h3>
+    <p class="text-gray-600">Failed to load the latest issue. Please try again later.</p>
+</div>
 
-    function scrollToSection(section) {
-        document.getElementById('sideMenu').classList.remove('active');
-        if (section === 'home') {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    }
+<!-- Dynamic Current Issue Container -->
+<div id="current-issue-container" style="display: none;">
+    <!-- Content will be dynamically populated -->
+</div>
 
-    function showToast(message) {
-        const toast = document.getElementById('toast');
-        toast.textContent = message;
-        toast.classList.add('active');
-        setTimeout(() => {
-            toast.classList.remove('active');
-        }, 2500);
-    }
+</div>
+</section>
 
-    // Event Listeners
-    document.addEventListener('DOMContentLoaded', () => {
-        loadProducts();
-        
-        // Dropdowns
-        document.getElementById('categoryDropdown').addEventListener('click', function(e) {
-            e.stopPropagation();
-            this.classList.toggle('active');
-            document.getElementById('sortDropdown').classList.remove('active');
-        });
 
-        document.getElementById('sortDropdown').addEventListener('click', function(e) {
-            e.stopPropagation();
-            this.classList.toggle('active');
-            document.getElementById('categoryDropdown').classList.remove('active');
-        });
+ <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="logo-container mb-4">
+                        <img src="logo.png" alt="Islamic Insight Logo" class="logo-image">
+                        <div class="logo-text-container">
+                            <h1 class="logo-text text-white">ISLAMIC INSIGHT</h1>
+                            <p class="logo-subtitle text-gray-300">Journal of Islamic Studies</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-4">
+                     <strong> MAILING ADDRESS:</strong><br>Editor, Islamic Insight Journal of Islamic Studies, Darul Huda Islamic <br> University, Chemmad, P.B.NO. 3, Tirurangadi (PO), Malappuram (Dt.),<br>676306 (PIN), Kerala, India.<br><br>Email: islamicinsight@dhiu.in <br><br>Website: www.islamicinsight.in
+                    </p>
+                </div>
 
-        // Category filter
-        document.querySelectorAll('#categoryDropdown .dropdown-item').forEach(item => {
-            item.addEventListener('click', function() {
-                document.querySelectorAll('#categoryDropdown .dropdown-item').forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
-                currentFilter = this.dataset.filter;
-                displayProducts();
-            });
-        });
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#about" class="text-gray-300 hover:text-white transition-colors">About Journal</a></li>
+                        <li><a href="editors.html" class="text-gray-300 hover:text-white transition-colors">Editorial Board</a></li>
+                        <li><a href="call-for-papers.html" class="text-gray-300 hover:text-white transition-colors">Submission Guidelines</a></li>
+                        <li><a href="#contact" class="text-gray-300 hover:text-white transition-colors">Contact Us</a></li>
+                    </ul>
+                </div>
 
-        // Sort filter
-        document.querySelectorAll('#sortDropdown .dropdown-item').forEach(item => {
-            item.addEventListener('click', function() {
-                document.querySelectorAll('#sortDropdown .dropdown-item').forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
-                currentSort = this.dataset.sort;
-                displayProducts();
-            });
-        });
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fas fa-envelope text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
-        // Close dropdowns when clicking outside
-        document.addEventListener('click', () => {
-            document.querySelectorAll('.dropdown').forEach(dropdown => {
-                dropdown.classList.remove('active');
-            });
-        });
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
+                <p>&copy; 2024 Islamic Insight Journal. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
-        // Search
-        document.getElementById('searchIcon').addEventListener('click', () => {
-            document.getElementById('searchModal').classList.add('active');
-            document.getElementById('searchInput').focus();
-        });
+<!-- Include the unified data loader -->
+<script src="sheets-loader.js"></script>
+<script src="index.js"></script>    
 
-        document.getElementById('closeSearch').addEventListener('click', closeSearch);
-
-        document.getElementById('searchModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('searchModal')) {
-                closeSearch();
-            }
-        });
-
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            searchProducts(e.target.value);
-        });
-
-        // Cart
-        document.getElementById('cartIcon').addEventListener('click', () => {
-            document.getElementById('cartSidebar').classList.add('active');
-        });
-
-        document.getElementById('closeCart').addEventListener('click', () => {
-            document.getElementById('cartSidebar').classList.remove('active');
-        });
-
-        // Menu
-        document.getElementById('menuIcon').addEventListener('click', () => {
-            document.getElementById('sideMenu').classList.add('active');
-        });
-
-        document.getElementById('closeMenu').addEventListener('click', () => {
-            document.getElementById('sideMenu').classList.remove('active');
-        });
-
-        // Profile - Track Orders
-        document.getElementById('profileIcon').addEventListener('click', () => {
-            document.getElementById('profileModal').classList.add('active');
-        });
-
-        document.getElementById('closeProfile').addEventListener('click', () => {
-            document.getElementById('profileModal').classList.remove('active');
-            document.getElementById('orderResults').classList.remove('active');
-            document.getElementById('trackPhone').value = '';
-        });
-
-        document.getElementById('profileModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('profileModal')) {
-                document.getElementById('profileModal').classList.remove('active');
-                document.getElementById('orderResults').classList.remove('active');
-                document.getElementById('trackPhone').value = '';
-            }
-        });
-
-        // Product modal
-        document.getElementById('closeModal').addEventListener('click', () => {
-            document.getElementById('productModal').classList.remove('active');
-        });
-
-        document.getElementById('productModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('productModal')) {
-                document.getElementById('productModal').classList.remove('active');
-            }
-        });
-
-        document.getElementById('modalAddToCart').addEventListener('click', () => {
-            if (currentProductId) {
-                addToCart(currentProductId);
-                document.getElementById('productModal').classList.remove('active');
-            }
-        });
-
-        // Size and color selection
-        document.querySelectorAll('.size-option').forEach(option => {
-            option.addEventListener('click', function() {
-                document.querySelectorAll('.size-option').forEach(o => o.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-
-        document.querySelectorAll('.color-option').forEach(option => {
-            option.addEventListener('click', function() {
-                document.querySelectorAll('.color-option').forEach(o => o.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-
-        // Buy Now
-        document.getElementById('buyNowBtn').addEventListener('click', () => {
-            if (cart.length === 0) {
-                showToast('Your cart is empty!');
-                return;
-            }
-            document.getElementById('checkoutModal').classList.add('active');
-            document.getElementById('cartSidebar').classList.remove('active');
-        });
-
-        // Checkout modal
-        document.getElementById('checkoutModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('checkoutModal')) {
-                document.getElementById('checkoutModal').classList.remove('active');
-            }
-        });
-
-        // Submit order
-        document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const customerName = document.getElementById('customerName').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const address = document.getElementById('address').value.trim();
-            const paymentMethod = document.getElementById('paymentMethod').value;
-            
-            if (!customerName || !email || !phone || !address || !paymentMethod) {
-                showToast('Please fill all fields!');
-                return;
-            }
-
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showToast('Please enter a valid email!');
-                return;
-            }
-
-            const orderId = generateOrderId();
-            generatedOrderId = orderId;
-            const total = cart.reduce((sum, item) => sum + (parseFloat(item.Price) * item.quantity), 0);
-
-            const orderData = {
-                orderId: orderId,
-                customerName: customerName,
-                email: email,
-                phone: phone, 
-                address: address,
-                paymentMethod: paymentMethod,
-                products: JSON.stringify(cart),
-                total: total.toFixed(2),
-                status: 'Pending'
-            };
-
-            const submitBtn = e.target.querySelector('.submit-order-btn');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-            submitBtn.disabled = true;
-
-            try {
-                const result = await submitOrder(orderData);
-
-                if (result.success) {
-                    document.getElementById('displayOrderId').textContent = orderId;
-                    document.getElementById('checkoutModal').classList.remove('active');
-                    document.getElementById('successModal').classList.add('active');
-                    
-                    cart = [];
-                    updateCart();
-                    
-                    document.getElementById('checkoutForm').reset();
-                } else {
-                    throw new Error(result.error || 'Order submission failed');
-                }
-            } catch (error) {
-                console.error('Order submission error:', error);
-                showToast('Error submitting order. Please try again.');
-            } finally {
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }
-        });
-
-        // Close modals when clicking outside
-        document.addEventListener('click', (e) => {
-            const cartSidebar = document.getElementById('cartSidebar');
-            const cartIcon = document.getElementById('cartIcon');
-            if (cartSidebar.classList.contains('active') && 
-                !cartSidebar.contains(e.target) && 
-                !cartIcon.contains(e.target)) {
-                cartSidebar.classList.remove('active');
-            }
-
-            const sideMenu = document.getElementById('sideMenu');
-            const menuIcon = document.getElementById('menuIcon');
-            if (sideMenu.classList.contains('active') && 
-                !sideMenu.contains(e.target) && 
-                !menuIcon.contains(e.target)) {
-                sideMenu.classList.remove('active');
-            }
-        });
-    });
-</script>
 </body>
 </html>
