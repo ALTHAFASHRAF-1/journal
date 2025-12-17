@@ -118,27 +118,27 @@
   .nav-menu {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1.5rem;
   }
 
   .nav-link {
-    color: var(--gray-700);
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.75rem;
-    padding: 0.5rem 0.75rem;
-    border-radius: 6px;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    white-space: nowrap;
-    background: var(--gray-50);
-    border: 1px solid var(--gray-200);
-    min-height: 32px;
-    justify-content: center;
-  }
+  color: var(--gray-700);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.75rem;
+  padding: 0.5rem 0.85rem; /* Slightly increased horizontal padding */
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  min-height: 32px;
+  justify-content: center;
+}
 
   .nav-link:hover {
     color: var(--primary-color);
@@ -176,35 +176,35 @@
   }
 
   .mobile-nav {
-    display: none;
-    background: white;
-    border-top: 1px solid var(--gray-200);
-    padding: 0.75rem;
-    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.08);
-  }
+  display: none;
+  background: white;
+  border-top: 1px solid var(--gray-200);
+  padding: 0.75rem;
+  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.08);
+}
 
   .mobile-nav.active {
     display: block;
   }
 
   .mobile-nav .nav-link {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    color: var(--gray-700);
-    text-decoration: none;
-    padding: 0.7rem 0.75rem;
-    border-bottom: none;
-    font-weight: 500;
-    cursor: pointer;
-    border-radius: 6px;
-    margin-bottom: 0.4rem;
-    transition: all 0.2s;
-    background: var(--gray-50);
-    border: 1px solid var(--gray-200);
-    min-height: 38px;
-    justify-content: flex-start;
-  }
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--gray-700);
+  text-decoration: none;
+  padding: 0.7rem 0.85rem; /* Slightly increased horizontal padding */
+  border-bottom: none;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 6px;
+  margin-bottom: 0.5rem; /* Slightly increased from 0.4rem */
+  transition: all 0.2s;
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  min-height: 38px;
+  justify-content: flex-start;
+}
 
   .mobile-nav .nav-link:hover {
     background: var(--gray-100);
