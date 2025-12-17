@@ -1208,9 +1208,9 @@
                   <input type="date" id="issue_published_date" name="issue_published_date" value="2025-06-15" required>
                 </div>
                 <div class="form-group">
-                  <label for="issue_cover_image">Issue Cover Image <span class="required">*</span></label>
+                  <label for="issue_cover_image">Issue Cover Image <span class="optional">(Optional)</span></label>
                   <div class="file-upload-container" ondrop="handleDrop(event, 'cover')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
-                    <input type="file" id="issue_cover_image" name="issue_cover_image" class="file-input" accept="image/*" onchange="handleFileChange(event, 'cover')" required>
+                    <input type="file" id="issue_cover_image" name="issue_cover_image" class="file-input" accept="image/*" onchange="handleFileChange(event, 'cover')">
                     <div class="file-upload-content">
                       <div class="file-upload-icon">
                         <i class="fas fa-cloud-upload-alt"></i>
